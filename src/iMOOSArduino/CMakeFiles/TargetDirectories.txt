@@ -1,0 +1,3 @@
+/home/mbogochow/moos-ivp-extend/src/iMOOSArduino/uMOOSArduinoLib/CMakeFiles/comm_lib.dir
+/home/mbogochow/moos-ivp-extend/src/iMOOSArduino/iMOOSArduino/CMakeFiles/iMOOSArduino.dir
+/home/mbogochow/moos-ivp-extend/src/iMOOSArduino/pMOOSArduinoTester/CMakeFiles/pMOOSArduinoTester.dir

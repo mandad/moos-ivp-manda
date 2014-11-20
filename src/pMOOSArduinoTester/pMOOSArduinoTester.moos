@@ -1,0 +1,9 @@
+//------------------------------------------------
+// pMOOSArduinoTester config block
+
+ProcessConfig = pMOOSArduinoTester
+{
+   AppTick   = 4
+   CommsTick = 4
+}
+

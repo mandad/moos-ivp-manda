@@ -1,0 +1,7 @@
+
+#ifndef SONARMAP_H
+#define SONARMAP_H
+
+enum SonarMap = { FRONTLEFT, FRONTRIGHT, SIDELEFT, SIDERIGHT };
+
+#endif /* SONARMAP_H */

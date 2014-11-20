@@ -1,0 +1,14 @@
+//------------------------------------------------
+// iMOOSArduino config block
+
+ProcessConfig = iMOOSArduino
+{
+  AppTick   = 4
+  CommsTick = 4
+
+  CommType = "ARDUINO"    // Valid values: FIFO, ARDUINO, NETSERVER, NETCLIENT
+  SerialPort = "tty/ACM0" // The serial port for ARDUINO communications
+  BaudRate = 115200       // The serial baud rate for ARDUINO communications
+  debugOutput = false     // Whether debug output should be written to console
+}
+
