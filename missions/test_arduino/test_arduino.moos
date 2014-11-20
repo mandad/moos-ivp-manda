@@ -1,0 +1,34 @@
+ServerHost = localhost
+ServerPort = 9000
+Community  = test_arduino
+
+//------------------------------------------
+// Antler configuration  block
+ProcessConfig = ANTLER
+{
+  MSBetweenLaunches = 200
+
+  Run = MOOSDB	 @ NewConsole = false
+//  Run = pLogger	 @ NewConsole = false
+  Run = iMOOSArduino @ NewConsole = false
+}
+
+//------------------------------------------
+// pLogger config block
+
+//ProcessConfig = pLogger
+//{
+//  AsyncLog = true
+//  WildCardLogging = true
+//}
+
+ProcessConfig = iMOOSArduino
+{
+  AppTick = 4
+  CommsTick = 4
+
+  CommType = "ARDUINO"
+  SerialPort = "/dev/ttyO1"
+  BaudRate = 115200
+  debugOutput = true
+}

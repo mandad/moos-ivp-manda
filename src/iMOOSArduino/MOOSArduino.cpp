@@ -333,9 +333,6 @@ bool MOOSArduino::OnStartUp()
     f_comms = new FIFOComm(READ_FIFO_NAME, WRITE_FIFO_NAME, delim);
     break;
   case ARDUINO:
-    f_comms = new ArduinoComm(serialPortName.c_str(), baudRate, delim);
-    MOOSTrace("Com port is: %s \n", serialPortName.c_str());
-
     if (!m_MissionReader.GetConfigurationParam("SerialPort", serialPortName))
     {
       MOOSTrace("Warning: parameter 'SerialPort' not specified.\n");
@@ -348,6 +345,10 @@ bool MOOSArduino::OnStartUp()
       MOOSTrace("Warning: parameter 'BaudRate' not specified.  Using "
         "default baud rate (%i)\n", defaultBaudRate);
     }
+
+    f_comms = new ArduinoComm(serialPortName.c_str(), baudRate, delim);
+    MOOSTrace("Com port is: %s, baud %i \n", serialPortName.c_str(), baudRate);
+
     break;
   } /* no default since should have valid commType if default set correctly */
 
