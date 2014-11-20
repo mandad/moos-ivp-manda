@@ -334,7 +334,8 @@ bool MOOSArduino::OnStartUp()
     break;
   case ARDUINO:
     f_comms = new ArduinoComm(serialPortName.c_str(), baudRate, delim);
-    
+    MOOSTrace("Com port is: %s \n", serialPortName.c_str());
+
     if (!m_MissionReader.GetConfigurationParam("SerialPort", serialPortName))
     {
       MOOSTrace("Warning: parameter 'SerialPort' not specified.\n");
