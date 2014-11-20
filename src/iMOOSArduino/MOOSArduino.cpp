@@ -66,26 +66,26 @@ bool MOOSArduino::OnNewMail(MOOSMSG_LIST &NewMail)
   if (m_Comms.PeekMail(NewMail, DESIRED_SPEED, Msg, false, true))
   {
     desiredSpeed = Msg.GetDouble();
-    dprintf("Got DESIRED_SPEED mail: %f\n", desiredSpeed);    
+    //dprintf("Got DESIRED_SPEED mail: %f\n", desiredSpeed);    
   }
 
   if (m_Comms.PeekMail(NewMail, DESIRED_HEADING, Msg, false, true))
   {
     desiredHeading = Msg.GetDouble();
-    dprintf("Got DESIRED_HEADING mail: %f\n", desiredHeading);
+    //dprintf("Got DESIRED_HEADING mail: %f\n", desiredHeading);
   }
 
-  // PUBLISHED By: iRemote    <<<<< Look this up
+  // PUBLISHED By: pMarinePID    <<<<< Look this up
   if (m_Comms.PeekMail(NewMail, DESIRED_RUDDER, Msg, false, true))
   {
     desiredRudder = (int)Msg.GetDouble();
-    dprintf("Got DESIRED_RUDDER mail: %i\n", desiredRudder);
+    //dprintf("Got DESIRED_RUDDER mail: %i\n", desiredRudder);
   }
   
   if (m_Comms.PeekMail(NewMail, DESIRED_THRUST, Msg, false, true))
   {
     desiredThrust = (int)Msg.GetDouble();
-    dprintf("Got DESIRED_THRUST mail: %i\n", desiredThrust);
+    //dprintf("Got DESIRED_THRUST mail: %i\n", desiredThrust);
   }
 
   return true;
@@ -257,11 +257,17 @@ bool MOOSArduino::Iterate()
 
   // Send variables to frontseat
   // Maybe only send if they were updated in last call to OnNewMail() ?
-  if (!f_comms->writeMsg(DESIRED_SPEED, desiredSpeed))
-    MOOSTrace("Could not write %s to frontseat\n", DESIRED_SPEED);
+//  if (!f_comms->writeMsg(DESIRED_SPEED, desiredSpeed))
+//    MOOSTrace("Could not write %s to frontseat\n", DESIRED_SPEED);
 
-  if (!f_comms->writeMsg(DESIRED_HEADING, desiredHeading))
-    MOOSTrace("Could not write %s to frontseat\n", DESIRED_HEADING);
+//  if (!f_comms->writeMsg(DESIRED_HEADING, desiredHeading))
+//    MOOSTrace("Could not write %s to frontseat\n", DESIRED_HEADING);
+
+  if (!f_comms->writeMsg(DESIRED_THRUST, desiredThrust))
+    MOOSTrace("Could not write %s to frontseat\n", DESIRED_THRUST);
+
+  if (!f_comms->writeMsg(DESIRED_RUDDER, desiredRudder))
+    MOOSTrace("Could not write %s to frontseat\n", DESIRED_RUDDER);
 
   return true;
 } /* Iterate */
