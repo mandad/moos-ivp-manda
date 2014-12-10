@@ -1,6 +1,6 @@
 //-------------------------------------------------
 // NAME: Damian Manda
-// FILE: mendums_local.moos
+// FILE: mendums_beaglebone.moos
 //-------------------------------------------------
 
 ServerHost = localhost		
@@ -29,9 +29,20 @@ ProcessConfig = ANTLER
   //Run = pMarineViewer	  @ NewConsole = false
   Run = uProcessWatch	  @ NewConsole = false
   Run = pNodeReporter	  @ NewConsole = false
-  //Run = iSay	          @ NewConsole = true
-  //Run = uTimerScript    @ NewConsole = false
-}                                                              
+  Run = iMOOSArduino    @ NewConsole = false
+}
+
+//------------------------------------------
+ProcessConfig = iMOOSArduino
+{
+  AppTick = 4
+  CommsTick = 4
+  
+  CommType = "ARDUINO"
+  SerialPort = "/dev/ttyO1"
+  BaudRate = 115200
+  debugOutput = true
+}                                                             
 
 //------------------------------------------
 // uProcessWatch config block
