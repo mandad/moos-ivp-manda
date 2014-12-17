@@ -32,7 +32,23 @@ ProcessConfig = ANTLER
   //Run = pNodeReporter	  @ NewConsole = false
   //Run = iSay	          @ NewConsole = true
   //Run = uTimerScript    @ NewConsole = false
+  Run = pShare            @ NewConsole = false
 }                                                              
+
+//------------------------------------------                                                            
+ProcessConfig = pShare
+{
+  AppTick   = 4
+  CommsTick = 4
+
+  Input = route = multicast_1
+
+  Output = MOOS_MANUAL_OVERRIDE->multicast_2
+  Output = DEPLOY->multicast_2
+  Output = RETURN->multicast_2
+  //Output = src_name = NODE_REPORT_LOCAL, dest_dname=NODE_REPORT, route=multicast_1
+  //Output = VIEW_*->multicast_1
+}
 
 //------------------------------------------
 // uProcessWatch config block

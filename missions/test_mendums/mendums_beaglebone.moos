@@ -30,6 +30,7 @@ ProcessConfig = ANTLER
   Run = uProcessWatch	  @ NewConsole = false
   Run = pNodeReporter	  @ NewConsole = false
   Run = iMOOSArduino    @ NewConsole = false
+  Run = pShare          @ NewConsole = false
 }
 
 //------------------------------------------
@@ -42,7 +43,20 @@ ProcessConfig = iMOOSArduino
   SerialPort = "/dev/ttyO1"
   BaudRate = 115200
   debugOutput = true
-}                                                             
+} 
+
+//------------------------------------------                                                            
+ProcessConfig = pShare
+{
+  AppTick   = 4
+  CommsTick = 4
+
+  Input = route = localhost:9000
+  Input = route = multicast_2
+
+  Output = src_name = NODE_REPORT_LOCAL, dest_dname=NODE_REPORT, route=multicast_1
+  Output = VIEW_*->multicast_1
+}
 
 //------------------------------------------
 // uProcessWatch config block
@@ -116,7 +130,7 @@ ProcessConfig = pHelmIvP
   term_report_interval=0
 
   bhv_dir_not_found_ok = true
-  ivp_behavior_dir = /Users/damian/Documents/Code
+  ivp_behavior_dir = /home/ubuntu/moos-ivp-emily
 
   behaviors  = mendums.bhv
   domain     = course:0:359:360
@@ -232,6 +246,8 @@ ProcessConfig = pNodeReporter
 
   platform_type   = KAYAK
   platform_length = 4
+
+  node_report_output = NODE_REPORT_LOCAL
 }
 
 
