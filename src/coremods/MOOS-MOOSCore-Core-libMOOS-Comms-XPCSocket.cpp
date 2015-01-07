@@ -52,7 +52,7 @@ XPCSocket::XPCSocket(const char *_sProtocol, int _iPort)
                 throw socketExcept;
                 return;
             } else {
-                cout<<"Opened UDP Protocol Socket\n";
+                std::cout<<"Opened UDP Protocol Socket\n";
             }
         }
 
@@ -68,7 +68,7 @@ XPCSocket::XPCSocket(const char *_sProtocol, int _iPort)
                 throw socketExcept;
                 return;
             } else {
-                cout<<"Opened TCP Protocol Socket\n";
+                std::cout<<"Opened TCP Protocol Socket\n";
             }
         }
     }
