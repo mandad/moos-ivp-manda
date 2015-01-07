@@ -30,7 +30,7 @@ ProcessConfig = ANTLER
   Run = uProcessWatch	  @ NewConsole = false
   Run = pNodeReporter	  @ NewConsole = false
   Run = iMOOSArduino    @ NewConsole = false
-  Run = pShare          @ NewConsole = false
+  //Run = pShare          @ NewConsole = false
 }
 
 //------------------------------------------
