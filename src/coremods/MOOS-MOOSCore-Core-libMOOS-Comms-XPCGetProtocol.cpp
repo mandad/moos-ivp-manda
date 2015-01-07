@@ -39,6 +39,9 @@ XPCGetProtocol::XPCGetProtocol(const char *_sName)
 {
     MOOS::ScopedLock L(_ProtocolLock);
 
+    int iUdpProtocolNumber = -1;
+    int iTcpProtocolNumber = -1;
+
 #ifdef UNIX
        cIteratorFlag = 0;
 #endif
@@ -53,6 +56,11 @@ XPCGetProtocol::XPCGetProtocol(const char *_sName)
               }
               protocolPtr = getprotobyname(_sName);
               std::cout<<"Trying again, Protocol: "<<_sName<<"\n";
+       }
+       if (strcmp(_sName, "tcp")) {
+               iTcpProtocolNumber = iGetProtocolNumber();
+       } else if (strcmp(_sName, "udp")) {
+               iUdpProtocolNumber = iGetProtocolNumber();
        }
        std::cout<<"Protocol Used: "<<sGetProtocolName()<<"\n";
        std::cout<<"Protocol Num: "<<iGetProtocolNumber()<<"\n";
@@ -110,6 +118,25 @@ XPCGetProtocol::~XPCGetProtocol()
         return 0;
     }
 #endif
+
+int XPCGetProtocol::iGetProtocolNumber(const char *_sName) {
+    if (strcmp(_sName,"tcp")) {
+        if (iTcpProtocolNumber == -1) {
+              XPCException exceptObject("No TCP Socket Probed before getting Protocol number");
+              throw exceptObject;
+              return -1;
+        }
+        return iTcpProtocolNumber;
+    } else if (strcmp(_sName,"udp")) {
+        if (iUdpProtocolNumber == -1) {
+              XPCException exceptObject("No UDP Socket Probed before getting Protocol number");
+              throw exceptObject;
+              return -1;
+        }
+        return iUdpProtocolNumber;
+    }
+    return -1;
+}
 
 
 

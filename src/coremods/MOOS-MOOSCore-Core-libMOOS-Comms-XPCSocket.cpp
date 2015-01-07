@@ -41,9 +41,9 @@ XPCSocket::XPCSocket(const char *_sProtocol, int _iPort)
         XPCGetProtocol socketProtocol(_sProtocol);
 
         // If the protocol is UDP a UDP socket is created
-        if (strcmp(socketProtocol.sGetProtocolName(), "udp") == 0)
+        if (strcmp(_sProtocol, "udp") == 0)
         {
-            if ((iSocket = socket(AF_INET, SOCK_DGRAM, socketProtocol.iGetProtocolNumber())) == -1)
+            if ((iSocket = socket(AF_INET, SOCK_DGRAM, socketProtocol.iGetProtocolNumber(_sProtocol))) == -1)
             {
                 char sMsg[512];
 
@@ -57,9 +57,9 @@ XPCSocket::XPCSocket(const char *_sProtocol, int _iPort)
         }
 
         // If the protocol is TCP a TCP socket is created
-        else if (strcmp(socketProtocol.sGetProtocolName(), "tcp") == 0)
+        else if (strcmp(_sProtocol, "tcp") == 0)
         {
-            if ((iSocket = socket(AF_INET, SOCK_STREAM, socketProtocol.iGetProtocolNumber())) == -1)
+            if ((iSocket = socket(AF_INET, SOCK_STREAM, socketProtocol.iGetProtocolNumber(_sProtocol))) == -1)
             {
                 char sMsg[512];
 
