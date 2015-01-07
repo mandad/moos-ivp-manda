@@ -39,8 +39,8 @@ XPCGetProtocol::XPCGetProtocol(const char *_sName)
 {
     MOOS::ScopedLock L(_ProtocolLock);
 
-    int iUdpProtocolNumber = -1;
-    int iTcpProtocolNumber = -1;
+    iUdpProtocolNumber = -1;
+    iTcpProtocolNumber = -1;
 
 #ifdef UNIX
        cIteratorFlag = 0;
