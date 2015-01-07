@@ -52,9 +52,10 @@ XPCGetProtocol::XPCGetProtocol(const char *_sName)
                   return;
               }
               protocolPtr = getprotobyname(_sName);
-              std::cout<<"Trying again, protocol: "<<_sName<<"\n";
+              std::cout<<"Trying again, Protocol: "<<_sName<<"\n";
        }
        std::cout<<"Protocol Used: "<<sGetProtocolName()<<"\n";
+       std::cout<<"Protocol Num: "<<iGetProtocolNumber()<<"\n";
 }
 
 XPCGetProtocol::XPCGetProtocol(int _iProtocol)
