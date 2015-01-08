@@ -30,7 +30,7 @@ ProcessConfig = ANTLER
   Run = uProcessWatch	  @ NewConsole = false
   Run = pNodeReporter	  @ NewConsole = false
   Run = iMOOSArduino    @ NewConsole = false
-  //Run = pShare          @ NewConsole = false
+  Run = pShare          @ NewConsole = false
 }
 
 //------------------------------------------
@@ -54,7 +54,7 @@ ProcessConfig = pShare
   Input = route = localhost:9000
   Input = route = multicast_2
 
-  Output = src_name = NODE_REPORT_LOCAL, dest_dname=NODE_REPORT, route=multicast_1
+  Output = src_name = NODE_REPORT_LOCAL, dest_name=NODE_REPORT, route=multicast_1
   Output = VIEW_*->multicast_1
 }
 
