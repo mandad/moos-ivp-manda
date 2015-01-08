@@ -51,11 +51,18 @@ ProcessConfig = pShare
   AppTick   = 4
   CommsTick = 4
 
-  Input = route = localhost:9000
+  //Input = route = localhost:9000
   Input = route = multicast_2
 
   Output = src_name = NODE_REPORT_LOCAL, dest_name=NODE_REPORT, route=multicast_1
-  Output = VIEW_*->multicast_1
+  Output = src_name = VIEW_*, route = multicast_1
+  Output = src_name = APPCAST, route = multicast_1
+
+  //BRIDGE = src=VIEW_POLYGON
+  //BRIDGE = src=VIEW_CIRCLE
+  //BRIDGE = src=VIEW_POINT
+  //BRIDGE = src=VIEW_SEGLIST
+  //BRIDGE = src=APPCAST
 }
 
 //------------------------------------------
