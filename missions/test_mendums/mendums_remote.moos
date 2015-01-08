@@ -13,7 +13,7 @@ ServerHost = localhost
 ServerPort = 9000
 Community  = shoreside
 
-MOOSTimeWarp = 1
+MOOSTimeWarp = 5
 TERM_REPORTING = true
 
 // Mendums_pond
@@ -48,9 +48,10 @@ ProcessConfig = pShare
 
   Input = route = multicast_1
 
-  Output = src_name = MOOS_MANUAL_OVERRIDE, route = multicast_2
+  Output = src_name = MOOS_MANUAL_OVERIDE, route = multicast_2
   Output = src_name = DEPLOY, route = multicast_2
   Output = src_name = RETURN, route = multicast_2
+  Output = src_name = APPCAST_REQ, route = multicast_2
   //Output = src_name = NODE_REPORT_LOCAL, dest_name=NODE_REPORT, route=multicast_1
   //Output = VIEW_*->multicast_1
 }
