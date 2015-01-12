@@ -58,7 +58,7 @@ ProcessConfig = pHostInfo
   TEMP_FILE_DIR  = ./                                           
   DEFAULT_HOSTIP = 192.168.200.223    // default is "localhost"  
                                                                 
-  //DEFAULT_HOSTIP_FORCE = 192.168.0.55                           
+  DEFAULT_HOSTIP_FORCE = 192.168.200.223
 }       
 
 ProcessConfig = uFldNodeBroker
@@ -66,8 +66,8 @@ ProcessConfig = uFldNodeBroker
   AppTick   = 4
   CommsTick = 4
 
-  TRY_SHORE_HOST = pshare_route=multicast_2
-  TRY_SHORE_HOST = pshare_route=192.168.200.172:9000
+  //TRY_SHORE_HOST = pshare_route=multicast_2
+  TRY_SHORE_HOST = pshare_route=192.168.200.172:9300
 
   BRIDGE = src=VIEW_POLYGON
   BRIDGE = src=VIEW_POINT
@@ -81,6 +81,8 @@ ProcessConfig = pShare
 {
   AppTick   = 4
   CommsTick = 4
+
+  Input = route = localhost:9301
 
   //Input = route = localhost:9000
   //Input = route = multicast_2
