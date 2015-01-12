@@ -33,13 +33,24 @@ ProcessConfig = ANTLER
   //Run = uProcessWatch	  @ NewConsole = false
   //Run = uTimerScript    @ NewConsole = false
   Run = pHostInfo       @ NewConsole = false
-  Run = uFldNodeBroker  @ NewConsole = false
+  Run = uFldShoreBroker  @ NewConsole = false
   Run = pShare            @ NewConsole = false
 }
 
 //------------------------------------------
 // Vehicle Communication Config
 //------------------------------------------
+
+ProcessConfig = pHostInfo                                       
+{                                                               
+  AppTick   = 4                                                 
+  CommsTick = 4                                                 
+                                                                
+  TEMP_FILE_DIR  = ./                                           
+  DEFAULT_HOSTIP = 192.168.200.172    // default is "localhost"  
+                                                                
+  //DEFAULT_HOSTIP_FORCE = 192.168.0.55                           
+} 
 
 ProcessConfig = uFldShoreBroker                                 
 {                                                               
@@ -49,11 +60,11 @@ ProcessConfig = uFldShoreBroker
   //bridge = src=DEPLOY_ALL, alias=DEPLOY
   //bridge = src=DEPLOY_$V,  alias=DEPLOY
                                                                 
-  bridge = src=RETURN
-  bridge = src=DEPLOY
+  bridge = src=RETURN, alias=RETURN
+  bridge = src=DEPLOY, alias=DEPLOY
   bridge = src=NODE_REPORT_LOCAL, alias=NODE_REPORT
-  bridge  = src=APPCAST_REQ
-  bridge  = src=MOOS_MANUAL_OVERIDE
+  bridge  = src=APPCAST_REQ, alias=APPCAST_REQ
+  bridge  = src=MOOS_MANUAL_OVERIDE, alias=MOOS_MANUAL_OVERIDE
                                                                 
   // Note: [qbridge = FOO]  is shorthand for
   //       [bridge = src=FOO_$V,  alias=FOO] and
@@ -65,6 +76,8 @@ ProcessConfig = pShare
 {
   AppTick   = 4
   CommsTick = 4
+
+  input = route = localhost:9300
 
   //Input = route = multicast_1
 
