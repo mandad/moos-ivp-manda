@@ -56,9 +56,9 @@ ProcessConfig = pHostInfo
   CommsTick = 4                                                 
                                                                 
   TEMP_FILE_DIR  = ./                                           
-  DEFAULT_HOSTIP = 192.168.200.223    // default is "localhost"  
+  //DEFAULT_HOSTIP = 192.168.200.223    // default is "localhost"  
                                                                 
-  DEFAULT_HOSTIP_FORCE = 192.168.200.223
+  //DEFAULT_HOSTIP_FORCE = 192.168.200.223
 }       
 
 ProcessConfig = uFldNodeBroker
@@ -215,7 +215,7 @@ ProcessConfig = pNodeReporter
   AppTick    = 2
   CommsTick	 = 2
 
-  platform_type   = BOAT
+  platform_type   = SHIP
   platform_length = 4
 
   node_report_output = NODE_REPORT_LOCAL
