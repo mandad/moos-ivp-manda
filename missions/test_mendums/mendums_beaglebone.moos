@@ -19,17 +19,18 @@ LongOrigin = -71.0612336
 // Antler configuration  block
 ProcessConfig = ANTLER
 {
-  MSBetweenLaunches = 200
+  MSBetweenLaunches = 400
 
   Run = MOOSDB          @ NewConsole = false
   //Run = pLogger         @ NewConsole = false
   Run = uSimMarine	    @ NewConsole = false
   Run = pMarinePID      @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
-  //Run = pMarineViewer	  @ NewConsole = false
   Run = uProcessWatch	  @ NewConsole = false
   Run = pNodeReporter	  @ NewConsole = false
   Run = iMOOSArduino    @ NewConsole = false
+  Run = pHostInfo       @ NewConsole = false
+  Run = uFldNodeBroker  @ NewConsole = false
   Run = pShare          @ NewConsole = false
 }
 
@@ -45,24 +46,48 @@ ProcessConfig = iMOOSArduino
   debugOutput = true
 } 
 
-//------------------------------------------                                                            
+//------------------------------------------
+// Find the shoreside and share variables
+//------------------------------------------
+
+ProcessConfig = pHostInfo                                       
+{                                                               
+  AppTick   = 4                                                 
+  CommsTick = 4                                                 
+                                                                
+  TEMP_FILE_DIR  = ./                                           
+  DEFAULT_HOSTIP = 192.168.200.223    // default is "localhost"  
+                                                                
+  //DEFAULT_HOSTIP_FORCE = 192.168.0.55                           
+}       
+
+ProcessConfig = uFldNodeBroker
+{
+  AppTick   = 4
+  CommsTick = 4
+
+  TRY_SHORE_HOST = pshare_route=multicast_2
+  TRY_SHORE_HOST = pshare_route=192.168.200.172:9000
+
+  BRIDGE = src=VIEW_POLYGON
+  BRIDGE = src=VIEW_POINT
+  BRIDGE = src=VIEW_SEGLIST
+  BRIDGE = src=APPCAST
+  BRIDGE = src=NODE_REPORT_LOCAL,  alias=NODE_REPORT
+  BRIDGE = src=NODE_MESSAGE_LOCAL, alias=NODE_MESSAGE
+}
+                                                           
 ProcessConfig = pShare
 {
   AppTick   = 4
   CommsTick = 4
 
   //Input = route = localhost:9000
-  Input = route = multicast_2
+  //Input = route = multicast_2
 
-  Output = src_name = NODE_REPORT_LOCAL, dest_name=NODE_REPORT, route=multicast_1
-  Output = src_name = VIEW_*, route = multicast_1
-  Output = src_name = APPCAST, route = multicast_1
-
-  //BRIDGE = src=VIEW_POLYGON
-  //BRIDGE = src=VIEW_CIRCLE
-  //BRIDGE = src=VIEW_POINT
-  //BRIDGE = src=VIEW_SEGLIST
-  //BRIDGE = src=APPCAST
+  //Output = src_name = NODE_REPORT_LOCAL, dest_name=NODE_REPORT, route=multicast_1
+  //Output = src_name = VIEW_*, route = multicast_1
+  //Output = src_name = APPCAST, route = multicast_1
 }
 
 //------------------------------------------
@@ -181,71 +206,6 @@ ProcessConfig = pMarinePID
 }
 
 //------------------------------------------
-// pMarineViewer config block
-
-ProcessConfig = pMarineViewer
-{
-  AppTick    = 4
-  CommsTick  = 4
-
-  tiff_file            = mendums_full.tif
-
-  set_pan_x            = 0
-  set_pan_y            = 0
-  zoom                 = 0.65
-  vehicle_shape_scale  = 1.5
-  hash_delta           = 100
-  hash_shade           = 0.4
-  hash_viewable        = true
-
-  trails_point_size   = 2
-
-  // Appcast configuration
-  appcast_height       = 75
-  appcast_width        = 30
-  appcast_viewable     = true
-  appcast_color_scheme = indigo
-  nodes_font_size      = medium
-  procs_font_size      = medium
-  appcast_font_size    = small
-  
-  //datum_viewable = true
-  //datum_size     = 18
-  //gui_size = small
-
-  left_context[survey-point] = DEPLOY=true
-  left_context[survey-point] = MOOS_MANUAL_OVERIDE=false
-  left_context[survey-point] = RETURN=false
-
-  right_context[return] = DEPLOY=true
-  right_context[return] = MOOS_MANUAL_OVERIDE=false
-  right_context[return] = RETURN=false
-
-  left_context[polyvert] = POLY_VERT=x=$(XPOS),y=$(YPOS)
-
-  scope  = WPT_EFFICIENCY_LEG
-  scope  = WPT_EFFICIENCY_SUM
-  scope  = WPT_EFFICIENCY_VAL
-  scope  = RETURN
-  scope  = WPT_STAT
-  scope  = VIEW_SEGLIST
-  scope  = VIEW_POINT
-  scope  = VIEW_POLYGON
-  scope  = MVIEWER_LCLICK
-  scope  = MVIEWER_RCLICK
-
-  button_one = DEPLOY # DEPLOY=true
-  button_one = MOOS_MANUAL_OVERIDE=false # RETURN=false
-  button_two = RETURN # RETURN=true
-  button_three = CONTINUE # CONTINUE=true
-
-  action  = MENU_KEY=deploy # DEPLOY = true # RETURN = false
-  action+ = MENU_KEY=deploy # MOOS_MANUAL_OVERIDE=false
-  action  = RETURN=true
-  action  = UPDATES_RETURN=speed=1.4
-}
-
-//------------------------------------------
 // pNodeReporter config block
 
 ProcessConfig = pNodeReporter
@@ -253,7 +213,7 @@ ProcessConfig = pNodeReporter
   AppTick    = 2
   CommsTick	 = 2
 
-  platform_type   = KAYAK
+  platform_type   = BOAT
   platform_length = 4
 
   node_report_output = NODE_REPORT_LOCAL

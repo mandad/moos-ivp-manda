@@ -29,16 +29,36 @@ ProcessConfig = ANTLER
 
   Run = MOOSDB          @ NewConsole = false
   //Run = pLogger         @ NewConsole = false
-  //Run = uSimMarine	    @ NewConsole = false
-  //Run = pMarinePID      @ NewConsole = false
-  //Run = pHelmIvP        @ NewConsole = false
   Run = pMarineViewer	  @ NewConsole = false
   //Run = uProcessWatch	  @ NewConsole = false
-  //Run = pNodeReporter	  @ NewConsole = false
-  //Run = iSay	          @ NewConsole = true
   //Run = uTimerScript    @ NewConsole = false
+  Run = pHostInfo       @ NewConsole = false
+  Run = uFldNodeBroker  @ NewConsole = false
   Run = pShare            @ NewConsole = false
-}                                                              
+}
+
+//------------------------------------------
+// Vehicle Communication Config
+//------------------------------------------
+
+ProcessConfig = uFldShoreBroker                                 
+{                                                               
+  AppTick   = 4
+  CommsTick = 4                   
+                                                                
+  //bridge = src=DEPLOY_ALL, alias=DEPLOY
+  //bridge = src=DEPLOY_$V,  alias=DEPLOY
+                                                                
+  bridge = src=RETURN
+  bridge = src=DEPLOY
+  bridge = src=NODE_REPORT_LOCAL, alias=NODE_REPORT
+  bridge  = src=APPCAST_REQ
+  bridge  = src=MOOS_MANUAL_OVERIDE
+                                                                
+  // Note: [qbridge = FOO]  is shorthand for
+  //       [bridge = src=FOO_$V,  alias=FOO] and
+  //       [bridge = src=FOO_ALL, alias=FOO]
+}                                                                          
 
 //------------------------------------------                                                            
 ProcessConfig = pShare
@@ -46,14 +66,12 @@ ProcessConfig = pShare
   AppTick   = 4
   CommsTick = 4
 
-  Input = route = multicast_1
+  //Input = route = multicast_1
 
-  Output = src_name = MOOS_MANUAL_OVERIDE, route = multicast_2
-  Output = src_name = DEPLOY, route = multicast_2
-  Output = src_name = RETURN, route = multicast_2
-  Output = src_name = APPCAST_REQ, route = multicast_2
-  //Output = src_name = NODE_REPORT_LOCAL, dest_name=NODE_REPORT, route=multicast_1
-  //Output = VIEW_*->multicast_1
+  //Output = src_name = MOOS_MANUAL_OVERIDE, route = multicast_2
+  //Output = src_name = DEPLOY, route = multicast_2
+  //Output = src_name = RETURN, route = multicast_2
+  //Output = src_name = APPCAST_REQ, route = multicast_2
 }
 
 //------------------------------------------
@@ -95,78 +113,6 @@ ProcessConfig = pLogger
   WildCardOmitPattern = DB_VARSUMMARY
   WildCardOmitPattern = DB_RWSUMMARY
   WildCardExclusionLog = true
-}
-
-//------------------------------------------
-// uSimMarine config block
-
-ProcessConfig = uSimMarine
-{
-  AppTick	= 4
-  CommsTick	= 4
-
-  start_x       = 0
-  start_y       = 0
-  start_heading = 0
-  start_speed   = 0
-
-  prefix        = NAV
-
-  turn_rate     = 40
-  thrust_map    = 0:0, 20:1, 40:2, 60:3, 80:4, 100:5
-}
-
-//------------------------------------------
-// pHelmIvP config block
-
-ProcessConfig = pHelmIvP
-{
-  AppTick    = 10
-  AppTick    = 4
-  CommsTick  = 4
-
-  term_report_interval=0
-
-  bhv_dir_not_found_ok = true
-  ivp_behavior_dir = /Users/damian/Documents/Code
-
-  behaviors  = mendums.bhv
-  domain     = course:0:359:360
-  domain     = speed:0:4:21
-}
-
-//------------------------------------------
-// pMarinePID config block
-
-ProcessConfig = pMarinePID
-{
-  AppTick    = 20
-  CommsTick  = 20
-
-  verbose       = true
-  depth_control = false
-
-  // SIM_INSTABILITY = 20
-
-  // Yaw PID controller
-  yaw_pid_kp		 = 1.2
-  yaw_pid_kd		 = 0.0
-  yaw_pid_ki		 = 0.3
-  yaw_pid_integral_limit = 0.07
-
-  // Speed PID controller
-  speed_pid_kp		 = 1.0
-  speed_pid_kd		 = 0.0
-  speed_pid_ki		 = 0.0
-  speed_pid_integral_limit = 0.07
-
-  //MAXIMUMS
-  maxrudder    = 100
-  maxthrust    = 100
-
-  // A non-zero SPEED_FACTOR overrides use of SPEED_PID
-  // Will set DESIRED_THRUST = DESIRED_SPEED * SPEED_FACTOR
-  speed_factor = 0
 }
 
 //------------------------------------------
@@ -232,18 +178,6 @@ ProcessConfig = pMarineViewer
   action+ = MENU_KEY=deploy # MOOS_MANUAL_OVERIDE=false
   action  = RETURN=true
   action  = UPDATES_RETURN=speed=1.4
-}
-
-//------------------------------------------
-// pNodeReporter config block
-
-ProcessConfig = pNodeReporter
-{
-  AppTick    = 2
-  CommsTick	 = 2
-
-  platform_type   = KAYAK
-  platform_length = 4
 }
 
 
