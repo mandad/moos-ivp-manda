@@ -47,7 +47,7 @@ ProcessConfig = pHostInfo
   CommsTick = 4                                                 
                                                                 
   TEMP_FILE_DIR  = ./                                           
-  DEFAULT_HOSTIP = 192.168.200.172    // default is "localhost"  
+  DEFAULT_HOSTIP = localhost    // default is "localhost"  
                                                                 
   //DEFAULT_HOSTIP_FORCE = 192.168.0.55                           
 } 

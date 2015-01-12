@@ -1,0 +1,490 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"MOOS",
+				"MOOSTrace"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "GP9_Info.cpp",
+			"settings":
+			{
+				"buffer_size": 5475,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "GP9_Info.h",
+			"settings":
+			{
+				"buffer_size": 594,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "GP9.cpp",
+			"settings":
+			{
+				"buffer_size": 3405,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "GP9.h",
+			"settings":
+			{
+				"buffer_size": 946,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "main.cpp",
+			"settings":
+			{
+				"buffer_size": 1501,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "iGP9.moos",
+			"settings":
+			{
+				"buffer_size": 133,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "CMakeLists.txt",
+			"settings":
+			{
+				"buffer_size": 388,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 187.0,
+		"selected_items":
+		[
+			[
+				":w",
+				":w - Save"
+			]
+		],
+		"width": 392.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/damian/Documents/Code/moos-ivp/ivp/src/pHostInfo/HostInfo.cpp",
+		"/Users/damian/Documents/Code/asv-dev/moos-ivp-emily/missions/s1_alpha_beaglebone/alpha.moos",
+		"/Users/damian/Documents/Code/asv-dev/moos-ivp-emily/missions/test_mendums/mendums_local.moos",
+		"/Users/damian/Documents/Code/moos-ivp/MOOS_V10.0.2_July1614/MOOSCore/Core/libMOOS/Comms/XPCGetProtocol.cpp",
+		"/Users/damian/Library/Application Support/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/Users/damian/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/damian/Documents/Code/moos-ivp/ivp/src/lib_behaviors-marine/BHV_Loiter.h",
+		"/Users/damian/Documents/Code/moos-ivp/ivp/src/lib_behaviors-marine/BHV_Loiter.cpp",
+		"/Users/damian/Documents/Code/asv-dev/moos-ivp-emily/missions/test_mendums/mendums_beaglebone.moos",
+		"/Users/damian/Documents/Code/moos-ivp/ivp/missions/s1_alpha/alpha.moos",
+		"/Users/damian/Documents/Code/moos-ivp/ivp/missions/s7_golf/golf.moos",
+		"/Users/damian/Documents/Code/moos-ivp/ivp/missions/s7_golf/golf.bhv",
+		"/Users/damian/Documents/Code/asv-dev/moos-ivp-emily/missions/test_mendums/mendums.bhv",
+		"/Users/damian/Documents/Code/asv-dev/moos-ivp-emily/missions/test_mendums/launch.sh",
+		"/Users/damian/Documents/Code/moos-ivp/ivp/missions/s4_delta/delta.moos",
+		"/Users/damian/Documents/Code/moos-ivp/ivp/missions/s4_delta/delta.bhv",
+		"/Users/damian/Documents/Code/moos-ivp/ivp/missions/xrelay/xrelay.moos",
+		"/Users/damian/Documents/Code/moos-ivp/ivp/missions/ufld_generic_sensor/plug_pMOOSBridgeV.moos",
+		"/Users/damian/Documents/Code/moos-ivp/ivp/data/forrest19.info",
+		"/Users/damian/Documents/Code/asv-dev/moos-ivp-emily/data/mendums_full.info",
+		"/Users/damian/Documents/Code/moos-ivp/ivp/data/Default.info",
+		"/Users/damian/Documents/Code/moos-ivp/ivp/data/datums.txt",
+		"/Users/damian/Documents/Code/asv-dev/moos-ivp-emily/missions/test_mendums/mendums.moos",
+		"/Users/damian/Documents/Code/moos-ivp/ivp/missions/s1_alpha/alpha_local.moos",
+		"/Users/damian/Documents/Code/moos-ivp/ivp/missions/MISSIONS",
+		"/Users/damian/Documents/Code/moos-ivp/ivp/src/uSimMarine/USM_MOOSApp.h",
+		"/Users/damian/Documents/Code/moos-ivp/ivp/src/uSimMarine/ThrustMap.cpp",
+		"/Users/damian/Documents/Code/asv-dev/moos-ivp-emily/src/iMOOSArduino/MOOSArduino.cpp",
+		"/Users/damian/Documents/Code/asv-dev/MOOS/uMOOSArduinoLib/ArduinoComm.cpp",
+		"/Users/damian/Documents/Code/moos-ivp/ivp/src/uSimMarine/SimEngine.h",
+		"/Users/damian/Documents/School/Research/ASV Team/ASV_Code/src/ArduinoSketches/ASV/ASV.ino",
+		"/Users/damian/.profile",
+		"/Users/damian/Documents/Code/moos-ivp-release/ivp/missions/s1_alpha/alpha_local.moos",
+		"/Users/damian/Documents/Code/asv-dev/MOOS/iMOOSArduino/MOOSArduino.cpp",
+		"/Users/damian/Documents/Code/asv-dev/moos-ivp-emily/build.sh",
+		"/Users/damian/Documents/Code/moos-ivp-extend/src/pExampleApp/main.cpp",
+		"/Users/damian/Documents/Code/asv-dev/MOOS/iMOOSArduino/iMOOSArduino.moos",
+		"/Users/damian/Documents/Code/moos-ivp/build-moos.sh",
+		"/Users/damian/Documents/Code/asv-dev/moos-ivp-emily/CMakeLists.txt",
+		"/Users/damian/Documents/Code/asv-dev/moos-ivp-emily/src/iMOOSArduino/iMOOSArduino.moos",
+		"/Users/damian/Documents/Code/asv-dev/MOOS/Readme.md",
+		"/Users/damian/Documents/Code/moos-ivp/MOOS_V10.0.2_July1614/MOOSCore/MOOSConfig.cmake",
+		"/Users/damian/Documents/Code/asv-dev/moos-ivp-emily/src/Readme.md",
+		"/Users/damian/Documents/Code/asv-dev/moos-ivp-emily/src/pExampleApp/ExampleApp.h",
+		"/Users/damian/Documents/Code/moos-ivp-release/MOOS_V10.0.2_July1614/MOOSMatlab/iMatlab/iMatlab.cpp",
+		"/Users/damian/Documents/Code/moos-ivp-extend/src/pXRelayTest/Relayer.cpp",
+		"/Users/damian/Documents/Code/asv-dev/MOOS/iMOOSArduino/main.cpp",
+		"/Users/damian/Documents/Code/moos-ivp-release/ivp/missions/s3_charlie/charlie.bhv",
+		"/Users/damian/Documents/Code/moos-ivp-release/ivp/missions/s3_charlie/charlie.moos",
+		"/Users/damian/Documents/Code/moos-ivp-release/ivp/missions/s1_alpha/alpha.moos",
+		"/Users/damian/Documents/Code/moos-ivp-release/ivp/missions/s1_alpha/alpha.bhv",
+		"/etc/paths",
+		"/Users/damian/Documents/Code/moos-ivp-release/README-OS-X.txt",
+		"/Users/damian/.bash_profile",
+		"/Users/damian/Documents/Code/Arduino/libraries/TimerOne/config/known_16bit_timers.h",
+		"/Users/damian/Documents/Code/Arduino/SimplePPM/ClassPPM.ino",
+		"/Users/damian/Documents/Code/Arduino/SimplePPM/ClassPPM.pde",
+		"/Users/damian/Documents/Code/Arduino/SimplePPM/InputPin.cpp"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"clearTem",
+			"getprotobyname",
+			"lawnm",
+			"apha",
+			"vname",
+			"m_turn_rate",
+			"f_comms",
+			"SerialComm",
+			"_GT",
+			"clockSelectBits"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "GP9_Info.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5475,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								271,
+								284
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "GP9_Info.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 594,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								288,
+								288
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "GP9.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3405,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								296,
+								296
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "GP9.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 946,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								294,
+								294
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "main.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1501,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								277,
+								277
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "iGP9.moos",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 133,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "CMakeLists.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 388,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								110,
+								110
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"project": "iGP9.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

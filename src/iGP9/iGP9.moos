@@ -1,0 +1,9 @@
+//------------------------------------------------
+// iGP9 config block
+
+ProcessConfig = iGP9
+{
+   AppTick   = 4
+   CommsTick = 4
+}
+
