@@ -52,8 +52,8 @@ ProcessConfig = iMOOSArduino
 
 ProcessConfig = pHostInfo                                       
 {                                                               
-  AppTick   = 4                                                 
-  CommsTick = 4                                                 
+  AppTick   = 1                                                 
+  CommsTick = 1                                                 
                                                                 
   TEMP_FILE_DIR  = ./                                           
   //DEFAULT_HOSTIP = 192.168.200.223    // default is "localhost"  
@@ -63,8 +63,8 @@ ProcessConfig = pHostInfo
 
 ProcessConfig = uFldNodeBroker
 {
-  AppTick   = 4
-  CommsTick = 4
+  AppTick   = 1
+  CommsTick = 1
 
   //TRY_SHORE_HOST = pshare_route=multicast_2
   TRY_SHORE_HOST = pshare_route=192.168.200.172:9300
@@ -79,8 +79,8 @@ ProcessConfig = uFldNodeBroker
                                                            
 ProcessConfig = pShare
 {
-  AppTick   = 4
-  CommsTick = 4
+  AppTick   = 2
+  CommsTick = 2
 
   Input = route = localhost:9301
 

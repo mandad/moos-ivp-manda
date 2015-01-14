@@ -43,8 +43,8 @@ ProcessConfig = ANTLER
 
 ProcessConfig = pHostInfo                                       
 {                                                               
-  AppTick   = 4                                                 
-  CommsTick = 4                                                 
+  AppTick   = 1                                                 
+  CommsTick = 1                                                 
                                                                 
   TEMP_FILE_DIR  = ./                                           
   DEFAULT_HOSTIP = localhost    // default is "localhost"  
@@ -54,8 +54,8 @@ ProcessConfig = pHostInfo
 
 ProcessConfig = uFldShoreBroker                                 
 {                                                               
-  AppTick   = 4
-  CommsTick = 4                   
+  AppTick   = 1
+  CommsTick = 1                   
                                                                 
   //bridge = src=DEPLOY_ALL, alias=DEPLOY
   //bridge = src=DEPLOY_$V,  alias=DEPLOY
@@ -74,10 +74,10 @@ ProcessConfig = uFldShoreBroker
 //------------------------------------------                                                            
 ProcessConfig = pShare
 {
-  AppTick   = 4
-  CommsTick = 4
+  AppTick   = 2
+  CommsTick = 2
 
-  input = route = localhost:9300
+  input = route = localhost:9300 // & multicast_1
 
   //Input = route = multicast_1
 

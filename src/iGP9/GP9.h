@@ -8,7 +8,16 @@
 #ifndef GP9_HEADER
 #define GP9_HEADER
 
+#include <iostream>
+#include <math.h>
+#include <cstring>
+
+#include "MOOS/libMOOS/MOOSLib.h"
+#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
+#include "SerialComms.h"
+
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
+
 
 class GP9 : public AppCastingMOOSApp
 {
