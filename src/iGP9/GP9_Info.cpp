@@ -20,8 +20,8 @@ void showSynopsis()
 {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
-  blk("  The iGP9 application is used for               ");
-  blk("                                                                ");
+  blk("The iGP9 application reads position and orientation data        ");
+  blk("from the CHRobotics GP9 GPS device                              ");
   blk("                                                                ");
   blk("                                                                ");
   blk("                                                                ");
