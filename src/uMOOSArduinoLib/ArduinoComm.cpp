@@ -84,9 +84,9 @@ bool ArduinoComm::openComm()
   options.c_cflag &= ~CSTOPB;
   options.c_cflag &= ~CSIZE;
   options.c_cflag |= CS8;
-  options.c_cflag &= ~CRTSCTS;  // no flow control
-  //toptions.c_cflag &= ~HUPCL; // disable hang-up-on-close to avoid reset
+  options.c_cflag &= ~CRTSCTS;  // no flow control 
   options.c_cflag |= CREAD | CLOCAL;  // turn on READ & ignore ctrl lines
+  options.c_cflag &= ~HUPCL; // disable hang-up-on-close to avoid reset
   options.c_iflag &= ~(IXON | IXOFF | IXANY); // turn off s/w flow ctrl
   options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG); // make raw
   options.c_oflag &= ~OPOST; // make raw
