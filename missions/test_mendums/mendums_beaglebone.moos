@@ -7,7 +7,7 @@ ServerHost = localhost
 ServerPort = 9000
 Community  = emily
 
-MOOSTimeWarp = 5
+MOOSTimeWarp = 2
 TERM_REPORTING = true
 
 // Mendums_pond
