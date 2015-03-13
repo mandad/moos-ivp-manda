@@ -13,7 +13,7 @@ ServerHost = localhost
 ServerPort = 9000
 Community  = shoreside
 
-MOOSTimeWarp = 5
+MOOSTimeWarp = 2
 TERM_REPORTING = true
 
 // Mendums_pond
