@@ -41,7 +41,7 @@ ProcessConfig = iMOOSArduino
   CommsTick = 4
   
   CommType = "ARDUINO"
-  SerialPort = "/dev/ttyO1"
+  SerialPort = "/dev/ttyACM0"
   BaudRate = 115200
   debugOutput = true
 } 
@@ -69,6 +69,7 @@ ProcessConfig = uFldNodeBroker
   //TRY_SHORE_HOST = pshare_route=multicast_2
   TRY_SHORE_HOST = pshare_route=192.168.200.130:9300
   TRY_SHORE_HOST = pshare_route=192.168.8.202:9300
+  TRY_SHORE_HOST = pshare_route=192.168.42.10:9300
 
   BRIDGE = src=VIEW_POLYGON
   BRIDGE = src=VIEW_POINT
