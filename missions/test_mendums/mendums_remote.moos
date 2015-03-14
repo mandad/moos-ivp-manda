@@ -32,8 +32,8 @@ ProcessConfig = ANTLER
   Run = pMarineViewer	  @ NewConsole = false
   //Run = uProcessWatch	  @ NewConsole = false
   //Run = uTimerScript    @ NewConsole = false
-  //Run = pHostInfo       @ NewConsole = false
-  //Run = uFldShoreBroker  @ NewConsole = false
+  Run = pHostInfo       @ NewConsole = false
+  Run = uFldShoreBroker  @ NewConsole = false
   Run = pShare            @ NewConsole = false
 }
 
@@ -81,12 +81,12 @@ ProcessConfig = pShare
 
   //Input = route = multicast_1
 
-  Output = src_name = MOOS_MANUAL_OVERIDE, route = 192.168.42.1:9301
+  //Output = src_name = MOOS_MANUAL_OVERIDE, route = 192.168.42.1:9301
   //Output = src_name = MOOS_MANUAL_OVERRIDE, route = 192.168.42.1:9301
-  Output = src_name = DEPLOY, route = 192.168.42.1:9301
-  Output = src_name = RETURN, route = 192.168.42.1:9301
-  Output = src_name = APPCAST_REQ, route = 192.168.42.1:9301
-  Output = src_name = NODE_REPORT_LOCAL, dest_name=NODE_REPORT, route=192.168.42.1:9301
+  // Output = src_name = DEPLOY, route = 192.168.42.1:9301
+  // Output = src_name = RETURN, route = 192.168.42.1:9301
+  // Output = src_name = APPCAST_REQ, route = 192.168.42.1:9301
+  // Output = src_name = NODE_REPORT_LOCAL, dest_name=NODE_REPORT, route=192.168.42.1:9301
 }
 
 //------------------------------------------
