@@ -32,8 +32,8 @@ ProcessConfig = ANTLER
   Run = pMarineViewer	  @ NewConsole = false
   //Run = uProcessWatch	  @ NewConsole = false
   //Run = uTimerScript    @ NewConsole = false
-  Run = pHostInfo       @ NewConsole = false
-  Run = uFldShoreBroker  @ NewConsole = false
+  //Run = pHostInfo       @ NewConsole = false
+  //Run = uFldShoreBroker  @ NewConsole = false
   Run = pShare            @ NewConsole = false
 }
 
@@ -81,10 +81,12 @@ ProcessConfig = pShare
 
   //Input = route = multicast_1
 
-  //Output = src_name = MOOS_MANUAL_OVERIDE, route = multicast_2
-  //Output = src_name = DEPLOY, route = multicast_2
-  //Output = src_name = RETURN, route = multicast_2
-  //Output = src_name = APPCAST_REQ, route = multicast_2
+  Output = src_name = MOOS_MANUAL_OVERIDE, route = 192.168.42.1:9301
+  //Output = src_name = MOOS_MANUAL_OVERRIDE, route = 192.168.42.1:9301
+  Output = src_name = DEPLOY, route = 192.168.42.1:9301
+  Output = src_name = RETURN, route = 192.168.42.1:9301
+  Output = src_name = APPCAST_REQ, route = 192.168.42.1:9301
+  Output = src_name = NODE_REPORT_LOCAL, dest_name=NODE_REPORT, route=192.168.42.1:9301
 }
 
 //------------------------------------------
@@ -182,10 +184,11 @@ ProcessConfig = pMarineViewer
   scope  = MVIEWER_LCLICK
   scope  = MVIEWER_RCLICK
 
-  button_one = DEPLOY # DEPLOY=true
+  button_one = DEPLOY # DEPLOY=true 
   button_one = MOOS_MANUAL_OVERIDE=false # RETURN=false
   button_two = RETURN # RETURN=true
   button_three = CONTINUE # CONTINUE=true
+  button_four = OVERRIDE_OFF # MOOS_MANUAL_OVERIDE=false
 
   action  = MENU_KEY=deploy # DEPLOY = true # RETURN = false
   action+ = MENU_KEY=deploy # MOOS_MANUAL_OVERIDE=false
@@ -200,8 +203,8 @@ ProcessConfig = pMarineViewer
 
 ProcessConfig = uTermCommandFoo
 {
-  cmd  = override_true  -->  MOOS_MANUAL_OVERRIDE --> true
-  cmd  = override_false -->  MOOS_MANUAL_OVERRIDE --> false
+  cmd  = override_true  -->  MOOS_MANUAL_OVERIDE --> true
+  cmd  = override_false -->  MOOS_MANUAL_OVERIDE --> false
   cmd  = deploy_true    -->  DEPLOY --> true
   cmd  = deploy_false   -->  DEPLOY --> false
   cmd  = return_true    -->  RETURN --> true
