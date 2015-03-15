@@ -116,7 +116,7 @@ Behavior=BHV_Loiter
   acquire_dist = 5
   capture_radius = 3
   slip_radius = 5
-  polygon = format=radial, label=home, x=0, y=0, radius=15, pts=12
+  polygon = format=radial, label=Fault_Loc, x=0, y=0, radius=15, pts=12
   
   //----- Visual Display -----
   visual_hints = vertex_size  = 1             // default
