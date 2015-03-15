@@ -28,9 +28,9 @@ ProcessConfig = ANTLER
   Run = pHelmIvP        @ NewConsole = false
   Run = uProcessWatch	  @ NewConsole = false
   Run = pNodeReporter	  @ NewConsole = false
-  Run = iMOOSArduino    @ NewConsole = false
-  Run = pHostInfo       @ NewConsole = false
-  Run = uFldNodeBroker  @ NewConsole = false
+  //Run = iMOOSArduino    @ NewConsole = false
+  //Run = pHostInfo       @ NewConsole = false
+  //Run = uFldNodeBroker  @ NewConsole = false
   Run = pShare          @ NewConsole = false
 }
 
@@ -70,6 +70,7 @@ ProcessConfig = uFldNodeBroker
   //TRY_SHORE_HOST = pshare_route=192.168.200.130:9300
   //TRY_SHORE_HOST = pshare_route=192.168.8.202:9300
   TRY_SHORE_HOST = pshare_route=10.0.0.3:9300
+  TRY_SHORE_HOST = pshare_route=192.168.42.10:9300
 
   BRIDGE = src=VIEW_POLYGON
   BRIDGE = src=VIEW_POINT
@@ -89,9 +90,11 @@ ProcessConfig = pShare
   //Input = route = localhost:9000
   //Input = route = multicast_2
 
-  //Output = src_name = NODE_REPORT_LOCAL, dest_name=NODE_REPORT, route=multicast_1
-  //Output = src_name = VIEW_*, route = multicast_1
-  //Output = src_name = APPCAST, route = multicast_1
+  Output = src_name = NODE_REPORT_LOCAL, dest_name=NODE_REPORT, route=192.168.42.10:9300
+  Output = src_name = NODE_MESSAGE_LOCAL, dest_name=NODE_MESSAGE, route=192.168.42.10:9300
+  Output = src_name = VIEW_*, route = 192.168.42.10:9300
+  Output = src_name = APPCAST, route = 192.168.42.10:9300
+
 }
 
 //------------------------------------------
@@ -104,7 +107,7 @@ ProcessConfig = uProcessWatch
 
   summary_wait = 5
 
-  //nowatch   = uXMS*
+  nowatch   = uXMS*
   nowatch   = uMAC*
   nowatch   = uPokeDB*
   nowatch   = uTermCommand*
@@ -164,6 +167,8 @@ ProcessConfig = pHelmIvP
   CommsTick  = 4
 
   term_report_interval=0
+
+  start_in_drive = true
 
   bhv_dir_not_found_ok = true
   ivp_behavior_dir = /home/ubuntu/moos-ivp-emily
