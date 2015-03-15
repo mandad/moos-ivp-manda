@@ -13,7 +13,7 @@ ServerHost = localhost
 ServerPort = 9000
 Community  = shoreside
 
-MOOSTimeWarp = 2
+MOOSTimeWarp = 4
 TERM_REPORTING = true
 
 // Mendums_pond
@@ -32,8 +32,8 @@ ProcessConfig = ANTLER
   Run = pMarineViewer	  @ NewConsole = false
   //Run = uProcessWatch	  @ NewConsole = false
   //Run = uTimerScript    @ NewConsole = false
-  Run = pHostInfo       @ NewConsole = false
-  Run = uFldShoreBroker  @ NewConsole = false
+  //Run = pHostInfo       @ NewConsole = false
+  //Run = uFldShoreBroker  @ NewConsole = false
   Run = pShare            @ NewConsole = false
 }
 
@@ -81,12 +81,13 @@ ProcessConfig = pShare
 
   //Input = route = multicast_1
 
-  //Output = src_name = MOOS_MANUAL_OVERIDE, route = 192.168.42.1:9301
-  //Output = src_name = MOOS_MANUAL_OVERRIDE, route = 192.168.42.1:9301
-  // Output = src_name = DEPLOY, route = 192.168.42.1:9301
-  // Output = src_name = RETURN, route = 192.168.42.1:9301
-  // Output = src_name = APPCAST_REQ, route = 192.168.42.1:9301
-  // Output = src_name = NODE_REPORT_LOCAL, dest_name=NODE_REPORT, route=192.168.42.1:9301
+  Output = src_name = MOOS_MANUAL_OVERIDE, route = 192.168.42.1:9301
+  // Output = src_name = MOOS_MANUAL_OVERRIDE, route = 192.168.42.1:9301
+  Output = src_name = DEPLOY, route = 192.168.42.1:9301
+  Output = src_name = RETURN, route = 192.168.42.1:9301
+  Output = src_name = APPCAST_REQ, route = 192.168.42.1:9301
+  Output = src_name = NODE_REPORT_LOCAL, dest_name=NODE_REPORT, route=192.168.42.1:9301
+  Output = src_name = FAULT, dest_name=FAULT, route=192.168.42.1:9301
 }
 
 //------------------------------------------
@@ -187,8 +188,8 @@ ProcessConfig = pMarineViewer
   button_one = DEPLOY # DEPLOY=true 
   button_one = MOOS_MANUAL_OVERIDE=false # RETURN=false
   button_two = RETURN # RETURN=true
-  button_three = CONTINUE # CONTINUE=true
-  button_four = OVERRIDE_OFF # MOOS_MANUAL_OVERIDE=false
+  button_three = CONTINUE # FAULT=false
+  button_four = FAULT # FAULT=true
 
   action  = MENU_KEY=deploy # DEPLOY = true # RETURN = false
   action+ = MENU_KEY=deploy # MOOS_MANUAL_OVERIDE=false
