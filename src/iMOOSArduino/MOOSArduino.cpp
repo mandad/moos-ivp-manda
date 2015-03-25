@@ -266,19 +266,15 @@ bool MOOSArduino::Iterate()
 //    MOOSTrace("Could not write %s to frontseat\n", DESIRED_HEADING);
 
 
-  if (desiredThrust != lastDesiredThrust) {
-    if (!f_comms->writeMsg(DESIRED_THRUST, desiredThrust)) {
-      MOOSTrace("Could not write %s to frontseat\n", DESIRED_THRUST);
-      lastDesiredThrust = desiredThrust;
-    }
-  }
+	if (!f_comms->writeMsg(DESIRED_THRUST, desiredThrust)) {
+		MOOSTrace("Could not write %s to frontseat\n", DESIRED_THRUST);
+		//lastDesiredThrust = desiredThrust;
+	}
 
-  if (desiredRudder != lastDesiredRudder) {
-    if (!f_comms->writeMsg(DESIRED_RUDDER, desiredRudder)) {
-      MOOSTrace("Could not write %s to frontseat\n", DESIRED_RUDDER);
-      lastDesiredRudder = desiredRudder;
-    }
-  }
+	if (!f_comms->writeMsg(DESIRED_RUDDER, desiredRudder)) {
+		MOOSTrace("Could not write %s to frontseat\n", DESIRED_RUDDER);
+		//lastDesiredRudder = desiredRudder;
+	}
 
   return true;
 } /* Iterate */
