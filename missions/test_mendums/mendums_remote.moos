@@ -13,7 +13,7 @@ ServerHost = localhost
 ServerPort = 9000
 Community  = shoreside
 
-MOOSTimeWarp = 2
+MOOSTimeWarp = 5
 TERM_REPORTING = true
 
 // Mendums_pond
@@ -25,16 +25,16 @@ LongOrigin = -71.0612336
 // Antler configuration  block
 ProcessConfig = ANTLER
 {
-  MSBetweenLaunches = 200
+  MSBetweenLaunches = 400
 
   Run = MOOSDB          @ NewConsole = false
   //Run = pLogger         @ NewConsole = false
   Run = pMarineViewer	  @ NewConsole = false
   //Run = uProcessWatch	  @ NewConsole = false
   //Run = uTimerScript    @ NewConsole = false
+  Run = pShare            @ NewConsole = false
   Run = pHostInfo       @ NewConsole = false
   Run = uFldShoreBroker  @ NewConsole = false
-  Run = pShare            @ NewConsole = false
 }
 
 //------------------------------------------
@@ -62,9 +62,12 @@ ProcessConfig = uFldShoreBroker
                                                                 
   bridge = src=RETURN, alias=RETURN
   bridge = src=DEPLOY, alias=DEPLOY
+  bridge = src=FAULT
   bridge = src=NODE_REPORT_LOCAL, alias=NODE_REPORT
   bridge  = src=APPCAST_REQ, alias=APPCAST_REQ
   bridge  = src=MOOS_MANUAL_OVERIDE, alias=MOOS_MANUAL_OVERIDE
+  bridge  = src=MOOS_MANUAL_OVERRIDE, alias=MOOS_MANUAL_OVERRIDE
+
                                                                 
   // Note: [qbridge = FOO]  is shorthand for
   //       [bridge = src=FOO_$V,  alias=FOO] and
@@ -81,12 +84,13 @@ ProcessConfig = pShare
 
   //Input = route = multicast_1
 
-  //Output = src_name = MOOS_MANUAL_OVERIDE, route = 192.168.42.1:9301
-  //Output = src_name = MOOS_MANUAL_OVERRIDE, route = 192.168.42.1:9301
-  // Output = src_name = DEPLOY, route = 192.168.42.1:9301
-  // Output = src_name = RETURN, route = 192.168.42.1:9301
-  // Output = src_name = APPCAST_REQ, route = 192.168.42.1:9301
-  // Output = src_name = NODE_REPORT_LOCAL, dest_name=NODE_REPORT, route=192.168.42.1:9301
+  // Output = src_name = MOOS_MANUAL_OVERIDE, route = 10.0.0.22:9301
+  // Output = src_name = MOOS_MANUAL_OVERRIDE, route = 10.0.0.22:9301
+  // Output = src_name = DEPLOY, route = 10.0.0.22:9301
+  // Output = src_name = RETURN, route = 10.0.0.22:9301
+  // Output = src_name = APPCAST_REQ, route = 10.0.0.22:9301
+  // Output = src_name = NODE_REPORT_LOCAL, dest_name=NODE_REPORT, route=10.0.0.22:9301
+  // Output = src_name = FAULT, dest_name=FAULT, route=10.0.0.22:9301
 }
 
 //------------------------------------------
@@ -181,14 +185,13 @@ ProcessConfig = pMarineViewer
   scope  = VIEW_SEGLIST
   scope  = VIEW_POINT
   scope  = VIEW_POLYGON
-  scope  = MVIEWER_LCLICK
-  scope  = MVIEWER_RCLICK
+  scope  = MODE
 
   button_one = DEPLOY # DEPLOY=true 
   button_one = MOOS_MANUAL_OVERIDE=false # RETURN=false
-  button_two = RETURN # RETURN=true
-  button_three = CONTINUE # CONTINUE=true
-  button_four = OVERRIDE_OFF # MOOS_MANUAL_OVERIDE=false
+  button_two = RETURN # RETURN=true # FAULT=false
+  button_three = CONTINUE # FAULT=false
+  button_four = FAULT # FAULT=true
 
   action  = MENU_KEY=deploy # DEPLOY = true # RETURN = false
   action+ = MENU_KEY=deploy # MOOS_MANUAL_OVERIDE=false

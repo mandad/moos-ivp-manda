@@ -2,18 +2,40 @@
 
 initialize   DEPLOY = false
 initialize   RETURN = false
+initialize   FAULT = false
+initialize   REACHED_HOME = false
+
+Set MODE = ACTIVE {
+  DEPLOY = true
+} INACTIVE
+
+Set MODE = SURVEY {
+  MODE = ACTIVE
+  RETURN != true
+  FAULT != true
+}
+
+SET MODE = INPLACE {
+  MODE = ACTIVE
+  FAULT = true
+} HOME
+
+SET MODE = TRANSIT_HOME {
+  MODE = ACTIVE:HOME
+  REACHED_HOME != true
+} HOME_HOLD
 
 //----------------------------------------------
 Behavior = BHV_Waypoint
 { 
   name      = waypt_survey
   pwt       = 100
-  condition = RETURN = false
-  condition = DEPLOY = true
-  endflag   = RETURN = true
+  condition = MODE == SURVEY
+  endflag   = FAULT = true
 
   idleflag  = WPTING = idle
   runflag   = WPTING = running
+  runflag   = REACHED_HOME = false
   endflag   = WPTING = end
   inactiveflag = WPTING = inactive
 
@@ -24,34 +46,85 @@ Behavior = BHV_Waypoint
         lead_damper = 1
               speed = 3   // meters per second
        capture_line = true
-     capture_radius = 5.0
-        slip_radius = 15.0
+     capture_radius = 3.0
+        slip_radius = 8.0
              //points = 60,-40 : 60,-160 : 150,-160 : 180,-100 : 150,-40
-             points = format=lawnmower, label=emily_survey, x=-200, y=200, width=400, height=200, lane_width=25, rows=north-south, degs=0
-             repeat = 100
+             points = format=lawnmower, label=emily_survey, x=-50, y=200, width=100, height=200, lane_width=50, rows=north-south, degs=0
+             repeat = 0
 
     visual_hints = nextpt_color=yellow
     visual_hints = nextpt_vertex_size=8
     visual_hints = nextpt_lcolor=gray70
     visual_hints = vertex_color=dodger_blue, edge_color=white
-    visual_hints = vertex_size=5, edge_size=1
+    visual_hints = vertex_size=5, edge_size=1.5
 }
 
 //----------------------------------------------
 Behavior=BHV_Waypoint
 {
-  name       = waypt_return
-  pwt        = 100
-  condition  = RETURN = true
-  condition  = DEPLOY = true
+  name       = waypt_home
+  pwt        = 100  
+  condition  = MODE == TRANSIT_HOME
   perpetual  = true
-  endflag    = RETURN = false
-  endflag    = DEPLOY = false
-  endflag    = MISSION = complete
+  endflag    = REACHED_HOME = true
+  //endflag    = DEPLOY = false
+  //endflag    = MISSION = complete
 
-           speed = 2.0
+           speed = 5.0
   capture_radius = 2.0
      slip_radius = 8.0
-          points = 0,0
+          points = -10,45
 }
 
+Behavior=BHV_Loiter
+{
+  name = loiter_home
+  pwt  = 100
+  condition = MODE == HOME_HOLD
+  
+  //----- Specific To This Behavior -----
+  speed = 1 // idle
+  clockwise = best
+  center_activate = false
+  acquire_dist = 10
+  capture_radius = 3
+  slip_radius = 8
+  polygon = format=radial, label=home, x=-10, y=0, radius=25, pts=12
+  
+  //----- Visual Display -----
+  visual_hints = vertex_size  = 1             // default
+  visual_hints = edge_size    = 1             // default
+  visual_hints = vertex_color = dodger_blue   // default
+  visual_hints = edge_color   = white         // default
+  visual_hints = nextpt_color = yellow        // default
+  visual_hints = nextpt_lcolor = aqua         // default
+  visual_hints = nextpt_vertex_size = 5       // default
+  visual_hints = label        = Home
+}
+
+Behavior=BHV_Loiter
+{
+  name = loiter_fault
+  pwt  = 100
+  condition = MODE == INPLACE
+  endflag   = WPTING = end
+  
+  //----- Specific To This Behavior -----
+  speed = 1 // idle
+  clockwise = best
+  center_activate = true
+  acquire_dist = 5
+  capture_radius = 3
+  slip_radius = 5
+  polygon = format=radial, label=Fault_Loc, x=0, y=0, radius=15, pts=12
+  
+  //----- Visual Display -----
+  visual_hints = vertex_size  = 1             // default
+  visual_hints = edge_size    = 1             // default
+  visual_hints = vertex_color = dodger_blue   // default
+  visual_hints = edge_color   = red         
+  visual_hints = nextpt_color = yellow        // default
+  visual_hints = nextpt_lcolor = aqua         // default
+  visual_hints = nextpt_vertex_size = 5       // default
+  visual_hints = label        = Fault_Loc
+}
