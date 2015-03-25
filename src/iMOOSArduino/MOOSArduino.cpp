@@ -42,7 +42,9 @@ MOOSArduino::MOOSArduino()
   desiredSpeed = 0;
   desiredHeading = 0;
   desiredThrust = 0;
+  lastDesiredThrust = 0;
   desiredRudder = 0;
+  lastDesiredRudder = 0;
 
   baudRate = defaultBaudRate;
 } /* MOOSArduino */
@@ -78,13 +80,13 @@ bool MOOSArduino::OnNewMail(MOOSMSG_LIST &NewMail)
   // PUBLISHED By: pMarinePID    <<<<< Look this up
   if (m_Comms.PeekMail(NewMail, DESIRED_RUDDER, Msg, false, true))
   {
-    desiredRudder = (int)Msg.GetDouble();
+    desiredRudder = Msg.GetDouble();
     //dprintf("Got DESIRED_RUDDER mail: %i\n", desiredRudder);
   }
   
   if (m_Comms.PeekMail(NewMail, DESIRED_THRUST, Msg, false, true))
   {
-    desiredThrust = (int)Msg.GetDouble();
+    desiredThrust = Msg.GetDouble();
     //dprintf("Got DESIRED_THRUST mail: %i\n", desiredThrust);
   }
 
@@ -263,11 +265,20 @@ bool MOOSArduino::Iterate()
 //  if (!f_comms->writeMsg(DESIRED_HEADING, desiredHeading))
 //    MOOSTrace("Could not write %s to frontseat\n", DESIRED_HEADING);
 
-  if (!f_comms->writeMsg(DESIRED_THRUST, desiredThrust))
-    MOOSTrace("Could not write %s to frontseat\n", DESIRED_THRUST);
 
-  if (!f_comms->writeMsg(DESIRED_RUDDER, desiredRudder))
-    MOOSTrace("Could not write %s to frontseat\n", DESIRED_RUDDER);
+  if (desiredThrust != lastDesiredThrust) {
+    if (!f_comms->writeMsg(DESIRED_THRUST, desiredThrust)) {
+      MOOSTrace("Could not write %s to frontseat\n", DESIRED_THRUST);
+      lastDesiredThrust = desiredThrust;
+    }
+  }
+
+  if (desiredRudder != lastDesiredRudder) {
+    if (!f_comms->writeMsg(DESIRED_RUDDER, desiredRudder)) {
+      MOOSTrace("Could not write %s to frontseat\n", DESIRED_RUDDER);
+      lastDesiredRudder = desiredRudder;
+    }
+  }
 
   return true;
 } /* Iterate */
@@ -379,8 +390,8 @@ void MOOSArduino::RegisterVariables()
   // m_Comms.Register("IVPHELM_ENGAGED", 0);
   // m_Comms.Register("VEHICLE_UNDERWAY", 0);
 
-  m_Comms.Register(DESIRED_SPEED, 0);
-  m_Comms.Register(DESIRED_HEADING, 0);
+  //m_Comms.Register(DESIRED_SPEED, 0);
+  //m_Comms.Register(DESIRED_HEADING, 0);
 
   m_Comms.Register(DESIRED_RUDDER, 0);
   m_Comms.Register(DESIRED_THRUST, 0);

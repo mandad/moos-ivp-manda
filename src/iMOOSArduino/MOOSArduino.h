@@ -54,8 +54,10 @@ private: // State variables
 //  double dfTimeNow;
   double desiredSpeed;      // specified in meters/sec
   double desiredHeading;    // specified in radians
-  int desiredThrust;     // specified as a signed percentage
-  int desiredRudder;     // specified as a signed degree
+  double desiredThrust;     // specified as a signed percentage
+  double lastDesiredThrust;
+  double desiredRudder;     // specified as a signed degree
+  double lastDesiredRudder;
 
   double nav_x;
   double nav_y;
