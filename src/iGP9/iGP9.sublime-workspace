@@ -15,7 +15,7 @@
 			"file": "GP9_Info.cpp",
 			"settings":
 			{
-				"buffer_size": 5475,
+				"buffer_size": 5490,
 				"line_ending": "Unix"
 			}
 		},
@@ -55,7 +55,7 @@
 			"file": "iGP9.moos",
 			"settings":
 			{
-				"buffer_size": 133,
+				"buffer_size": 163,
 				"line_ending": "Unix"
 			}
 		},
@@ -69,9 +69,14 @@
 		}
 	],
 	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
 	"command_palette":
 	{
 		"height": 187.0,
+		"last_filter": "",
 		"selected_items":
 		[
 			[
@@ -99,6 +104,7 @@
 	},
 	"file_history":
 	[
+		"/Users/damian/Documents/Code/asv-dev/moos-ivp-emily/src/CMakeLists.txt",
 		"/Users/damian/Documents/Code/asv-dev/moos-ivp-emily/src/uMOOSArduinoLib/ArduinoComm.cpp",
 		"/Users/damian/Documents/Code/moos-ivp/ivp/src/pHostInfo/HostInfo.cpp",
 		"/Users/damian/Documents/Code/asv-dev/moos-ivp-emily/missions/s1_alpha_beaglebone/alpha.moos",
@@ -211,15 +217,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5475,
+						"buffer_size": 5490,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4824,
-								4824
+								869,
+								869
 							]
 						],
 						"settings":
@@ -229,10 +235,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1125.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -260,7 +266,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -276,8 +282,8 @@
 						"selection":
 						[
 							[
-								296,
-								296
+								2860,
+								2860
 							]
 						],
 						"settings":
@@ -287,7 +293,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 298.0,
+						"translation.y": 858.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -318,7 +324,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -334,8 +340,8 @@
 						"selection":
 						[
 							[
-								277,
-								277
+								475,
+								475
 							]
 						],
 						"settings":
@@ -348,7 +354,7 @@
 						"translation.y": 180.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -357,15 +363,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 133,
+						"buffer_size": 163,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								158,
+								158
 							]
 						],
 						"settings":
@@ -392,8 +398,8 @@
 						"selection":
 						[
 							[
-								110,
-								110
+								270,
+								270
 							]
 						],
 						"settings":
@@ -445,6 +451,7 @@
 	{
 		"height": 0.0
 	},
+	"pinned_build_system": "",
 	"project": "iGP9.sublime-project",
 	"replace":
 	{
@@ -454,6 +461,7 @@
 	"select_file":
 	{
 		"height": 0.0,
+		"last_filter": "",
 		"selected_items":
 		[
 		],
@@ -462,6 +470,7 @@
 	"select_project":
 	{
 		"height": 0.0,
+		"last_filter": "",
 		"selected_items":
 		[
 		],
@@ -470,6 +479,7 @@
 	"select_symbol":
 	{
 		"height": 0.0,
+		"last_filter": "",
 		"selected_items":
 		[
 		],
