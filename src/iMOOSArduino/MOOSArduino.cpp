@@ -77,7 +77,7 @@ bool MOOSArduino::OnNewMail(MOOSMSG_LIST &NewMail)
     //dprintf("Got DESIRED_HEADING mail: %f\n", desiredHeading);
   }
 
-  // PUBLISHED By: pMarinePID    <<<<< Look this up
+  // PUBLISHED By: pMarinePID
   if (m_Comms.PeekMail(NewMail, DESIRED_RUDDER, Msg, false, true))
   {
     desiredRudder = Msg.GetDouble();
