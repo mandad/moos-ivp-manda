@@ -38,6 +38,7 @@
 
 #include <stdint.h>
 #include <string>
+#include "MOOS/libMOOS/MOOSLib.h"
 
 namespace serial {
   class Serial;

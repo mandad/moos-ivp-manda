@@ -59,7 +59,7 @@ int16_t Comms::receive(Registers* registers = NULL)
     size_t available = serial_->available();
     if (available > 255)
     {
-      ROS_WARN_STREAM("Serial read buffer is " << available << ", now flushing in an attempt to catch up.");
+      MOOSTrace("Serial read buffer is " << available << ", now flushing in an attempt to catch up.");
       serial_->flushInput();
     }
 
@@ -82,8 +82,10 @@ int16_t Comms::receive(Registers* registers = NULL)
       if (!boost::algorithm::ends_with(snp, "snp")) throw SerialTimeout();
       if (snp.length() > 3)
       {
-        ROS_WARN_STREAM_COND(!first_spin_,
-          "Discarded " << 5 + snp.length() - 3 << " junk byte(s) preceeding packet.");
+        if (!first_spin_)
+        {
+          MOOSTrace("Discarded " << 5 + snp.length() - 3 << " junk byte(s) preceeding packet.");
+        }
       }
       if (serial_->read(&type, 1) != 1) throw SerialTimeout();
       if (serial_->read(&address, 1) != 1) throw SerialTimeout();
@@ -99,11 +101,11 @@ int16_t Comms::receive(Registers* registers = NULL)
       if (type & PACKET_IS_BATCH)
       {
         data_length = (type >> PACKET_BATCH_LENGTH_OFFSET) & PACKET_BATCH_LENGTH_MASK;
-        ROS_DEBUG("Received packet %02x with batched (%d) data.", address, data_length);
+        MOOSTrace("Received packet %02x with batched (%d) data.", address, data_length);
       }
       else
       {
-        ROS_DEBUG("Received packet %02x with non-batched data.", address);
+        MOOSTrace("Received packet %02x with non-batched data.", address);
       }
 
       // Read data bytes initially into a buffer so that we can compute the checksum.
@@ -115,7 +117,7 @@ int16_t Comms::receive(Registers* registers = NULL)
     }
     else
     {
-      ROS_DEBUG("Received packet %02x without data.", address);
+      MOOSTrace("Received packet %02x without data.", address);
     }
 
     // Compare computed checksum with transmitted value.
@@ -142,11 +144,11 @@ int16_t Comms::receive(Registers* registers = NULL)
   }
   catch(const SerialTimeout& e)
   {
-    ROS_WARN("Timed out waiting for packet from device.");
+    MOOSTrace("Timed out waiting for packet from device.");
   }
   catch(const BadChecksum& e)
   {
-    ROS_WARN("Discarding packet due to bad checksum.");
+    MOOSTrace("Discarding packet due to bad checksum.");
   }
   return -1;
 }
@@ -159,7 +161,7 @@ std::string Comms::checksum(const std::string& s)
     checksum += ch;
   }
   checksum = htons(checksum);
-  ROS_DEBUG("Computed checksum on string of length %zd as %04x.", s.length(), checksum);
+  MOOSTrace("Computed checksum on string of length %zd as %04x.", s.length(), checksum);
   std::string out(2, 0);
   memcpy(&out[0], &checksum, 2);
   return out;
@@ -184,7 +186,7 @@ std::string Comms::message(uint8_t address, std::string data)
   std::string c = checksum(output);
   ss << c;
   output = ss.str();
-  ROS_DEBUG("Generated message %02x of overall length %zd.", address, output.length());
+  MOOSTrace("Generated message %02x of overall length %zd.", address, output.length());
   return output;
 }
 
@@ -207,12 +209,12 @@ bool Comms::sendWaitAck(const Accessor_& r)
       int16_t received = receive();
       if (received == r.index)
       {
-        ROS_DEBUG("Message %02x ack received.", received);
+        MOOSTrace("Message %02x ack received.", received);
         return true;
       }
       else if (received == -1)
       {
-        ROS_DEBUG("Serial read timed out waiting for ack. Attempting to retransmit.");
+        MOOSTrace("Serial read timed out waiting for ack. Attempting to retransmit.");
         break;
       }
     }

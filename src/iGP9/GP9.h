@@ -40,20 +40,29 @@ class GP9 : public AppCastingMOOSApp
  protected:
    void registerVariables();
    // Fuctions from ROS library
-   bool handleResetService(gp9::Comms* sensor, const gp9::Reset::Request& req, 
-      const gp9::Reset::Response& resp);
-   void publishMsgs(gp9::Registers& r, ros::NodeHandle* n, const std_msgs::Header& header);
+   // bool handleResetService(gp9::Comms* sensor, const gp9::Reset::Request& req, 
+   //    const gp9::Reset::Response& resp);
+   void publishMsgs(gp9::Registers& r);
    void configureSensor(gp9::Comms* sensor);
    template<typename RegT>
    void sendCommand(gp9::Comms* sensor, const gp9::Accessor<RegT>& reg, std::string human_name);
-   template<typename RegT>
-   void configureVector3(gp9::Comms* sensor, const gp9::Accessor<RegT>& reg,
-      std::string param, std::string human_name);
-   
+   // template<typename RegT>
+   // void configureVector3(gp9::Comms* sensor, const gp9::Accessor<RegT>& reg,
+   //    std::string param, std::string human_name);
+
 
  private: // Configuration variables
+    std::string serialPort;
+    int32_t baudRate;
+    const int defaultBaudRate;
 
  private: // State variables
+    serial::Serial ser;
+    float covar[9];     // orientation covariance values
+    bool first_failure;
+    gp9::Comms sensor;
+    gp9::Registers registers;
+
 };
 
 #endif 
