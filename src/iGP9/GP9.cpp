@@ -23,7 +23,8 @@ const uint8_t TRIGGER_PACKET = DREG_EULER_PHI_THETA;
 // Constructor
 
 GP9::GP9()
-  : defaultBaudRate(115200)
+  : defaultBaudRate(115200),
+  sensor(NULL)
 {
   baudRate = defaultBaudRate;
 }
@@ -53,7 +54,7 @@ bool GP9::OnNewMail(MOOSMSG_LIST &NewMail)
      //if(key == "FOO") 
      //  cout << "great!";
 
-     else if(key != "APPCAST_REQ") // handle by AppCastingMOOSApp
+     if(key != "APPCAST_REQ") // handle by AppCastingMOOSApp
        reportRunWarning("Unhandled Mail: " + key);
    }
 	
@@ -79,9 +80,12 @@ bool GP9::Iterate()
   // Do your thing here!
 
   // triggered by arrival of last message packet
-  if (sensor.receive(&registers) == TRIGGER_PACKET)
+  if (ser.isOpen())
   {
-    publishMsgs(registers, &n, header);
+    if (sensor.receive(&registers) == TRIGGER_PACKET)
+    {
+      publishMsgs(registers);
+    }
   }
   AppCastingMOOSApp::PostReport();
   return(true);
@@ -152,7 +156,7 @@ bool GP9::OnStartUp()
   if (!m_MissionReader.GetConfigurationParam("Covariance", covariance))
   {
     MOOSTrace("Using Default Covariance");
-    covariancene = "0 0 0 0 0 0 0 0 0";
+    covariance = "0 0 0 0 0 0 0 0 0";
   }
   snprintf(cov, sizeof(cov), "%s", covariance.c_str());
 
@@ -181,7 +185,7 @@ bool GP9::OnStartUp()
     try
     {
       //Configure the comms rates/options
-      sensor(&ser);
+      sensor = gp9::Comms(&ser);
       configureSensor(&sensor);
     }
     catch(const std::exception& e)
@@ -195,8 +199,8 @@ bool GP9::OnStartUp()
   {
     if (first_failure)
     {
-    MOOSFail("Could not connect to serial device "
-        << serialPort << ". Trying again on next iteration");
+    MOOSTrace("Could not connect to serial device "
+        + serialPort + ". Trying again on next iteration");
     }
     first_failure = false;
   }
@@ -277,7 +281,7 @@ bool GP9::buildReport()
 template<typename RegT>
 void GP9::sendCommand(gp9::Comms* sensor, const gp9::Accessor<RegT>& reg, std::string human_name)
 {
-  MOOSTrace("Sending command: " << human_name);
+  MOOSTrace("Sending command: " + human_name);
   if (!sensor->sendWaitAck(reg))
   {
     throw std::runtime_error("Command to device failed.");
@@ -330,7 +334,7 @@ void GP9::configureSensor(gp9::Comms* sensor)
 
 
   // Options available using parameters)
-  uint32_t misc_config_reg = 0;  // initialize all options off
+  // uint32_t misc_config_reg = 0;  // initialize all options off
 
   // Optionally disable mag updates in the sensor's EKF.
   /*

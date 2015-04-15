@@ -45,7 +45,6 @@
 #include <endian.h>
 #endif
 
-#include <endian.h>
 #include <math.h>
 #include <stdint.h>
 #include <string.h>
@@ -153,56 +152,56 @@ class Accessor : public Accessor_ {
 class Registers {
   public:
     Registers() :
-      health(this, DREG_HEALTH, 1)
+      health(this, DREG_HEALTH, 1),
       // Raw Data
       gyro_raw(this, DREG_GYRO_RAW_XY, 3),
       accel_raw(this, DREG_ACCEL_RAW_XY, 3),
       mag_raw(this, DREG_MAG_RAW_XY, 3),
-      pressure_raw(this, DREG_PRESSURE_RAW, 1)
-      temperature_raw1(this, DREG_TEMPERATURE_RAW1, 1)
-      temperature_raw2(this, DREG_TEMPERATURE_RAW2, 1)
+      pressure_raw(this, DREG_PRESSURE_RAW, 1),
+      temperature_raw1(this, DREG_TEMPERATURE_RAW1, 1),
+      temperature_raw2(this, DREG_TEMPERATURE_RAW2, 1),
       // Processed Data
       gyro(this, DREG_GYRO_PROC_X, 3, 1.0 * TO_RADIANS),
       accel(this, DREG_ACCEL_PROC_X, 3, 9.80665),              
       mag(this, DREG_MAG_PROC_X, 3,1.0),
-      pressure(this, DREG_PRESSURE_PROC, 1)
+      pressure(this, DREG_PRESSURE_PROC, 1),
       temperature1(this, DREG_TEMPERATURE_PROC1, 1),
       temperature2(this, DREG_TEMPERATURE_PROC2, 1),
       quat(this, DREG_QUAT_AB, 4, 0.000033569336),
       euler(this, DREG_EULER_PHI_THETA, 3, 0.00019174759868),   //Check if this is in radians
-      euler_time(this, DREG_EULER_TIME, 1)
+      euler_time(this, DREG_EULER_TIME, 1),
       // GPS Data
-      pos_n(this, DREG_POSITION_N, 1)
-      pos_e(this, DREG_POSITION_E, 1)
-      pos_up(this, DREG_POSITION_UP, 1)
-      pos_time(this, DREG_POSITION_TIME, 1)
-      velocity_n(this, DREG_VELOCITY_N, 1)
-      velocity_e(this, DREG_VELOCITY_E, 1)
-      velocity_up(this, DREG_VELOCITY_UP, 1)
-      velocity_time(this, DREG_VELOCITY_TIME, 1)
-      latitude(this, DREG_GPS_LATITUDE, 1)
-      longitude(this, DREG_GPS_LONGITUDE, 1)
-      gps_course(this, DREG_GPS_COURSE, 1)
-      gps_speed(this, DREG_GPS_SPEED, 1)
-      gps_time(this, DREG_GPS_TIME, 1)
-      gps_date(this, DREG_GPS_DATE, 1)
+      pos_n(this, DREG_POSITION_NORTH, 1),
+      pos_e(this, DREG_POSITION_EAST, 1),
+      pos_up(this, DREG_POSITION_UP, 1),
+      pos_time(this, DREG_POSITION_TIME, 1),
+      velocity_n(this, DREG_VELOCITY_NORTH, 1),
+      velocity_e(this, DREG_VELOCITY_EAST, 1),
+      velocity_up(this, DREG_VELOCITY_UP, 1),
+      velocity_time(this, DREG_VELOCITY_TIME, 1),
+      latitude(this, DREG_GPS_LATITUDE, 1),
+      longitude(this, DREG_GPS_LONGITUDE, 1),
+      gps_course(this, DREG_GPS_COURSE, 1),
+      gps_speed(this, DREG_GPS_SPEED, 1),
+      gps_time(this, DREG_GPS_TIME, 1),
+      gps_date(this, DREG_GPS_DATE, 1),
       // Settings
       communication(this, CREG_COM_SETTINGS, 1),
-      comrate1(this, CREG_COM_RATES1, 1)
+      comrate1(this, CREG_COM_RATES1, 1),
       comrate2(this, CREG_COM_RATES2, 1),
       comrate4(this, CREG_COM_RATES4, 1),
       comrate5(this, CREG_COM_RATES5, 1), 
       comrate6(this, CREG_COM_RATES6, 1),
-      comrate7(this, CREG_COM_RATES7, 1)
+      comrate7(this, CREG_COM_RATES7, 1),
       filter_config(this, CREG_FILTER_SETTINGS, 1),
-      home_north(this, CREG_HOME_NORTH, 1)
-      home_east(this, CREG_HOME_EAST, 1)
-      zero_pressure(this, CREG_ZERO_PRESSURE, 1)
+      home_north(this, CREG_HOME_NORTH, 1),
+      home_east(this, CREG_HOME_EAST, 1),
+      zero_pressure(this, CREG_ZERO_PRESSURE, 1),
       // Commands
       cmd_zero_gyros(this, CHR_ZERO_GYROS),
       cmd_reset_ekf(this, CHR_RESET_EKF),
-      cmd_set_mag_ref(this, CHR_SET_MAG_REFERENCE)
-      cmd_save_settings(this, CHR_FLASH_COMMIT)
+      cmd_save_settings(this, CHR_FLASH_COMMIT),
+      cmd_set_home_pos(this, CHR_SET_HOME_POSITION)
     {
       memset(raw_, 0, sizeof(raw_));
     }
@@ -212,22 +211,23 @@ class Registers {
     const Accessor<int16_t> gyro_raw, accel_raw, euler, mag_raw, quat;
                              
     const Accessor<float> gyro, accel, mag, temperature1, temperature2,
-                          temperature_raw1, temperature_raw2, pressure euler_time,
-                          ;
+                          temperature_raw1, temperature_raw2, pressure, euler_time;
+
     const Accessor<float> latitude, longitude, gps_course, pos_n, pos_e, pos_up,
                           pos_time, velocity_n, velocity_e, velocity_up, 
                           velocity_time, gps_speed, gps_time;
 
     // Configs
-    const Accessor<uint32_t> communication, filter_config, status, comrate1, comrate2,
+    const Accessor<uint32_t> communication, filter_config, comrate1, comrate2,
                             comrate4, comrate5, comrate6, comrate7;
 
     const Accessor<float> home_north, home_east, zero_pressure; 
 
-    const Accessor<float>  mag_bias, gps_time;  
+    //const Accessor<float>  mag_bias;  
 
     // Commands
-    const Accessor<uint32_t> cmd_zero_gyros, cmd_reset_ekf, cmd_set_mag_ref, cmd_save_settings;
+    const Accessor<uint32_t> cmd_zero_gyros, cmd_reset_ekf, 
+                            cmd_save_settings, cmd_set_home_pos;
 
     void write_raw(uint8_t register_index, std::string data) {
       if ((register_index - 1) + (data.length()/4 - 1) >= NUM_REGISTERS) {

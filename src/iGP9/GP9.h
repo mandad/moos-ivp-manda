@@ -13,7 +13,7 @@
 #include <cstring>
 
 #include "MOOS/libMOOS/MOOSLib.h"
-#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
+// #include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
 //#include "SerialComms.h"
 #include  "comms.h"
 #include  "registers.h"

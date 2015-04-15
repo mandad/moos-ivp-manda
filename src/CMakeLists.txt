@@ -17,7 +17,7 @@ INCLUDE_DIRECTORIES(${LOCAL_LIBRARY_DIRS})
 ADD_SUBDIRECTORY(iMOOSArduino)
 ADD_SUBDIRECTORY(pMOOSArduinoTester)
 ADD_SUBDIRECTORY(uMOOSArduinoLib)
-#ADD_SUBDIRECTORY(iGP9)
+ADD_SUBDIRECTORY(iGP9)
 
 ##############################################################################
 #                           END of CMakeLists.txt

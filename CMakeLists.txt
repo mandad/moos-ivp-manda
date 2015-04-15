@@ -23,6 +23,7 @@ SET( LIBRARY_OUTPUT_DIRECTORY "${IVP_EXTEND_LIB_DIR}" CACHE PATH "" )
 SET( EXECUTABLE_OUTPUT_PATH    "${IVP_EXTEND_BIN_DIR}" CACHE PATH "" )
 SET( RUNTIME_OUTPUT_DIRECTORY "${IVP_EXTEND_BIN_DIR}"  CACHE PATH "" )
 
+
 #=============================================================================
 # Find MOOS
 #=============================================================================
@@ -57,6 +58,11 @@ INCLUDE_DIRECTORIES(${IVP_INCLUDE_DIRS})
 FILE(GLOB IVP_LIBRARY_DIRS ${MOOSIVP_SOURCE_TREE_BASE}/lib )
 LINK_DIRECTORIES(${IVP_LIBRARY_DIRS})
 
+# Set MacPorts Packages in path
+set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} /opt/local/lib)
+set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} /opt/local/include)
+INCLUDE_DIRECTORIES(/opt/local/include)
+LINK_DIRECTORIES(/opt/local/lib)
 #=============================================================================
 # Specify Compiler Flags
 #=============================================================================

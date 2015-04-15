@@ -57,6 +57,7 @@ class Comms {
   public:
     explicit Comms(serial::Serial* s) : serial_(s), first_spin_(true) {
     }
+    explicit Comms() : serial_(NULL), first_spin_(true) {}
 
     /**
      * Returns -1 if the serial port timed out before receiving a packet

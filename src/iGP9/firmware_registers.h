@@ -45,7 +45,7 @@
 #define CREG_COM_RATES5				5
 #define CREG_COM_RATES6				6
 #define CREG_COM_RATES7				7
-#define CREG_MISC_SETTINGS			8
+#define CREG_FILTER_SETTINGS		8
 #define CREG_HOME_NORTH				9
 #define CREG_HOME_EAST				10
 #define CREG_HOME_UP				11
@@ -213,7 +213,7 @@
 #define DREG_GYRO_BIAS_Z            147
 #define DREG_BIAS_X_VARIANCE        148
 #define DREG_BIAS_Y_VARIANCE        149
-#define DREG_BIAS_X_VARIANCE        150
+#define DREG_BIAS_Z_VARIANCE        150
 #define DREG_QUAT_A_VARIANCE        151
 #define DREG_QUAT_B_VARIANCE        152
 #define DREG_QUAT_C_VARIANCE        153
@@ -288,7 +288,7 @@
 #define PRESSURE_ZERO_SAMPLES	250
 #define AIRSPEED_ZERO_SAMPLES	500
 
-#define PI						3.14159265f
+//#define PI						3.14159265f
 #define PIx2                    6.28318530f
 #define PId2                    1.57079633f
 #define GRAVITY					9.80665f
