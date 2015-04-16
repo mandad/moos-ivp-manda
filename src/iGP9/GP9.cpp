@@ -83,7 +83,7 @@ bool GP9::Iterate()
   //MOOSTrace("GP9 Loop Run");
   if (ser.isOpen())
   {
-    MOOSTrace("GP9 Serial Open Loop");
+    //MOOSTrace("GP9 Serial Open Loop");
     if (sensor.receive(&registers) == TRIGGER_PACKET)
     {
       publishMsgs(registers);
@@ -179,6 +179,7 @@ bool GP9::OnStartUp()
   catch(const serial::IOException& e)
   {
       MOOSTrace("gp9_driver ver %s unable to connect to port.", VERSION);
+      MOOSTrace(e.what());
   }
   if (ser.isOpen())
   {
