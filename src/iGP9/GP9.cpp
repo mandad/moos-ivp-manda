@@ -231,10 +231,12 @@ bool GP9::buildReport()
   m_msgs << "GP9 Driver:                                  \n";
   m_msgs << "============================================ \n";
 
-  ACTable actab(4);
-  actab << "Alpha | Bravo | Charlie | Delta";
+  ACTable actab(5);
+  actab << "Lat | Lon | Roll | Pitch | Yaw";
   actab.addHeaderLines();
-  actab << "one" << "two" << "three" << "four";
+  actab << registers.latitude.get_scaled(0) << registers.longitude.get_scaled(0) 
+    << registers.euler.get_scaled(0) << registers.euler.get_scaled(1) 
+    << registers.euler.get_scaled(2);
   m_msgs << actab.getFormattedString();
 
   return(true);
