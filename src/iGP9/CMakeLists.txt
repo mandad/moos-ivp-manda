@@ -6,6 +6,8 @@
 SET(SRC
   GP9.cpp
   GP9_Info.cpp
+  comms.cpp
+  registers.cpp
   main.cpp
 )
 
@@ -16,5 +18,6 @@ TARGET_LINK_LIBRARIES(iGP9
    apputil
    mbutil
    m
-   pthread)
+   pthread
+   serial)
 

@@ -59,7 +59,7 @@ int16_t Comms::receive(Registers* registers = NULL)
     size_t available = serial_->available();
     if (available > 255)
     {
-      MOOSTrace("Serial read buffer is " << available << ", now flushing in an attempt to catch up.");
+      MOOSTrace("Serial read buffer is " + std::to_string(available) + ", now flushing in an attempt to catch up.");
       serial_->flushInput();
     }
 
@@ -84,7 +84,7 @@ int16_t Comms::receive(Registers* registers = NULL)
       {
         if (!first_spin_)
         {
-          MOOSTrace("Discarded " << 5 + snp.length() - 3 << " junk byte(s) preceeding packet.");
+          MOOSTrace("Discarded " + std::to_string(5 + snp.length() - 3) + " junk byte(s) preceeding packet.");
         }
       }
       if (serial_->read(&type, 1) != 1) throw SerialTimeout();

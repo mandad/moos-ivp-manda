@@ -3,9 +3,11 @@
 
 ProcessConfig = iGP9
 {
-   AppTick   = 4
-   CommsTick = 4
+   AppTick   = 20
+   CommsTick = 5
 
-   SerialPort = "\dev\ttyO2"
+   SerialPort = "\dev\ttyO1"
+   BaudRate = 115200
+   Covariance = "0 0 0 0 0 0 0 0 0"
 }
 
