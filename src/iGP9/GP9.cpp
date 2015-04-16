@@ -80,8 +80,10 @@ bool GP9::Iterate()
   // Do your thing here!
 
   // triggered by arrival of last message packet
+  //MOOSTrace("GP9 Loop Run");
   if (ser.isOpen())
   {
+    MOOSTrace("GP9 Serial Open Loop");
     if (sensor.receive(&registers) == TRIGGER_PACKET)
     {
       publishMsgs(registers);
@@ -176,7 +178,7 @@ bool GP9::OnStartUp()
   }
   catch(const serial::IOException& e)
   {
-      MOOSFail("gp9_driver ver %s unable to connect to port.", VERSION);
+      MOOSTrace("gp9_driver ver %s unable to connect to port.", VERSION);
   }
   if (ser.isOpen())
   {
@@ -192,7 +194,7 @@ bool GP9::OnStartUp()
     {
       if (ser.isOpen()) ser.close();
       MOOSTrace(e.what());
-      MOOSTrace("Attempting reconnection after error.");
+      MOOSTrace("GP9: Attempting reconnection after error.");
     }
   }
   else

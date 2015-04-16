@@ -21,3 +21,7 @@ TARGET_LINK_LIBRARIES(iGP9
    pthread
    serial)
 
+add_custom_command(TARGET iGP9
+    POST_BUILD COMMAND 
+    ${CMAKE_INSTALL_NAME_TOOL} -change libserial.dylib @executable_path/libserial.dylib $<TARGET_FILE:iGP9>
+    )
