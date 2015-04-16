@@ -5,4 +5,11 @@ This driver provides an interface to a MOOS database for a CHRobotics GP9 integr
 
 At the moment, only basic position and orientation are reported to the MOOSDB.
 
+Installation Requirements
+-------------------------
+In order to complile the interface, the [serial library](http://wjwwood.io/serial/) by William Woodall is required.  The current linking expects the dynamic library file from the serial library to be in the moos-ivp/bin directory, although the path could be changed in CMakeLists.txt.
+
+
+Author Information
+------------------
 Ported from a ROS Interface for the UM7 by Damian Manda - NOAA & University of New Hampshire
