@@ -208,6 +208,8 @@ bool GP9::OnStartUp()
     first_failure = false;
   }
 
+  GeodesySetup();
+
   registerVariables();
 
   return(true);
