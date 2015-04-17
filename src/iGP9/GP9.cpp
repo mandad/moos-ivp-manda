@@ -212,6 +212,26 @@ bool GP9::OnStartUp()
   return(true);
 }
 
+bool GP9::GeodesySetup()
+{
+  double dLatOrigin = 0.0;
+  double dLonOrigin = 0.0;
+  bool geoOK = m_MissionReader.GetValue("LatOrigin", dLatOrigin);
+  if (!geoOK) {
+    reportConfigWarning("Latitude origin missing in MOOS file. Could not configure geodesy.");
+    return false; }
+  else {
+    geoOK = m_MissionReader.GetValue("LongOrigin", dLonOrigin);
+    if (!geoOK) {
+      reportConfigWarning("Longitude origin missing in MOOS file. Could not configure geodesy.");
+      return false; } }
+  geoOK = m_geodesy.Initialise(dLatOrigin, dLonOrigin);
+  if (!geoOK) {
+    reportConfigWarning("Could not initialize geodesy with given origin.");
+    return false; }
+  return true;
+}
+
 //---------------------------------------------------------
 // Procedure: registerVariables
 
@@ -454,7 +474,19 @@ void GP9::publishMsgs(gp9::Registers& r)
   // Temperature
   m_Comms.Notify("GP9_Temp1", r.temperature1.get_scaled(0), MOOSTime());
 
-  m_Comms.Notify("GP9_Lat", r.latitude.get_scaled(0), MOOSTime());
-  m_Comms.Notify("GP9_Lon", r.longitude.get_scaled(0), MOOSTime());
-  m_Comms.Notify("GP9_Speed", r.gps_speed.get_scaled(0), MOOSTime());
+  // Position
+  m_Comms.Notify("NAV_LAT", r.latitude.get_scaled(0), MOOSTime());
+  m_Comms.Notify("NAV_LON", r.longitude.get_scaled(0), MOOSTime());
+  //convert to x,y
+  double curX = BAD_DOUBLE;
+  double curY = BAD_DOUBLE;
+  bool bGeoSuccess = m_geodesy.LatLong2LocalUTM(r.latitude.get_scaled(0), 
+    r.longitude.get_scaled(0), curX, curY);
+  if (bGeoSuccess) {
+    m_Comms.Notify("NAV_X", curX, MOOSTime());
+    m_Comms.Notify("NAV_Y", curY, MOOSTime());
+  }
+
+  m_Comms.Notify("NAV_SPEED", r.gps_speed.get_scaled(0), MOOSTime());
+  m_Comms.Notify("NAV_HEADING", r.gps_course.get_scaled(0), MOOSTime());
 }

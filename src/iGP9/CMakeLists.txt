@@ -11,10 +11,13 @@ SET(SRC
   main.cpp
 )
 
+#FILE(GLOB SRC *.cpp)
+
 ADD_EXECUTABLE(iGP9 ${SRC})
 
 TARGET_LINK_LIBRARIES(iGP9
    ${MOOS_LIBRARIES}
+   ${MOOSGeodesy_LIBRARIES}
    apputil
    mbutil
    m

@@ -13,7 +13,7 @@
 #include <cstring>
 
 #include "MOOS/libMOOS/MOOSLib.h"
-// #include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
+#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
 //#include "SerialComms.h"
 #include  "comms.h"
 #include  "registers.h"
@@ -46,6 +46,7 @@ class GP9 : public AppCastingMOOSApp
    void configureSensor(gp9::Comms* sensor);
    template<typename RegT>
    void sendCommand(gp9::Comms* sensor, const gp9::Accessor<RegT>& reg, std::string human_name);
+   bool GP9::GeodesySetup();
    // template<typename RegT>
    // void configureVector3(gp9::Comms* sensor, const gp9::Accessor<RegT>& reg,
    //    std::string param, std::string human_name);
@@ -57,11 +58,12 @@ class GP9 : public AppCastingMOOSApp
     const int defaultBaudRate;
 
  private: // State variables
-    serial::Serial ser;
-    float covar[9];     // orientation covariance values
-    bool first_failure;
-    gp9::Comms sensor;
-    gp9::Registers registers;
+    serial::Serial  ser;
+    float           covar[9];     // orientation covariance values
+    bool            first_failure;
+    gp9::Comms      sensor;
+    gp9::Registers  registers;
+    CMOOSGeodesy    m_geodesy;
 
 };
 
