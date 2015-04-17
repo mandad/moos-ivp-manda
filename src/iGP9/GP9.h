@@ -46,7 +46,7 @@ class GP9 : public AppCastingMOOSApp
    void configureSensor(gp9::Comms* sensor);
    template<typename RegT>
    void sendCommand(gp9::Comms* sensor, const gp9::Accessor<RegT>& reg, std::string human_name);
-   bool GP9::GeodesySetup();
+   bool GeodesySetup();
    // template<typename RegT>
    // void configureVector3(gp9::Comms* sensor, const gp9::Accessor<RegT>& reg,
    //    std::string param, std::string human_name);

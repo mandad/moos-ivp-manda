@@ -479,8 +479,8 @@ void GP9::publishMsgs(gp9::Registers& r)
   m_Comms.Notify("NAV_LAT", r.latitude.get_scaled(0), MOOSTime());
   m_Comms.Notify("NAV_LON", r.longitude.get_scaled(0), MOOSTime());
   //convert to x,y
-  double curX = BAD_DOUBLE;
-  double curY = BAD_DOUBLE;
+  double curX = 0.0;
+  double curY = 0.0;
   bool bGeoSuccess = m_geodesy.LatLong2LocalUTM(r.latitude.get_scaled(0), 
     r.longitude.get_scaled(0), curX, curY);
   if (bGeoSuccess) {
