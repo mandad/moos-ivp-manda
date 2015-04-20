@@ -202,7 +202,7 @@ ProcessConfig = pMarinePID
   speed_pid_integral_limit = 0.07
 
   //MAXIMUMS
-  maxrudder    = 100
+  maxrudder    = 45
   maxthrust    = 100
 
   // A non-zero SPEED_FACTOR overrides use of SPEED_PID

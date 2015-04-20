@@ -11,9 +11,9 @@ Community  = emily
 MOOSTimeWarp = 1
 TERM_REPORTING = true
 
-// Mendums_pond
-LatOrigin  = 43.1689413
-LongOrigin = -71.0612336
+// Chase Tank
+LatOrigin  = 43.1358694
+LongOrigin = -70.9391542
 
 
 //------------------------------------------

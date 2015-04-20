@@ -478,16 +478,24 @@ void GP9::publishMsgs(gp9::Registers& r)
   m_Comms.Notify("GP9_Temp1", r.temperature1.get_scaled(0), MOOSTime());
 
   // Position
-  m_Comms.Notify("NAV_LAT", r.latitude.get_scaled(0), MOOSTime());
-  m_Comms.Notify("NAV_LON", r.longitude.get_scaled(0), MOOSTime());
+  double lat = r.latitude.get_scaled(0);
+  double lon = r.longitude.get_scaled(0);
+  m_Comms.Notify("NAV_LAT", lat, MOOSTime());
+  m_Comms.Notify("NAV_LON", lon, MOOSTime());
   //convert to x,y
-  double curX = 0.0;
-  double curY = 0.0;
-  bool bGeoSuccess = m_geodesy.LatLong2LocalUTM(r.latitude.get_scaled(0), 
-    r.longitude.get_scaled(0), curX, curY);
-  if (bGeoSuccess) {
-    m_Comms.Notify("NAV_X", curX, MOOSTime());
-    m_Comms.Notify("NAV_Y", curY, MOOSTime());
+  if (lat != 0 && lon != 0) {
+    double curX = 0.0;
+    double curY = 0.0;
+    bool bGeoSuccess = m_geodesy.LatLong2LocalUTM(lat, 
+      lon, curX, curY);
+    if (bGeoSuccess) {
+      m_Comms.Notify("NAV_X", curX, MOOSTime());
+      m_Comms.Notify("NAV_Y", curY, MOOSTime());
+    }
+  } else {
+    //Pretend we are stationary at origin if no GPS signal
+    m_Comms.Notify("NAV_X", 0, MOOSTime());
+    m_Comms.Notify("NAV_Y", 0, MOOSTime());
   }
 
   m_Comms.Notify("NAV_SPEED", r.gps_speed.get_scaled(0), MOOSTime());
