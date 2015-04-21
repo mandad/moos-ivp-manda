@@ -89,7 +89,7 @@ ProcessConfig = pNodeReporter
 
 ProcessConfig = iGP9
 {
-   AppTick   = 20
+   AppTick   = 40
    CommsTick = 5
 
    SerialPort = /dev/ttyO1

@@ -494,8 +494,8 @@ void GP9::publishMsgs(gp9::Registers& r)
     }
   } else {
     //Pretend we are stationary at origin if no GPS signal
-    m_Comms.Notify("NAV_X", 0, MOOSTime());
-    m_Comms.Notify("NAV_Y", 0, MOOSTime());
+    m_Comms.Notify("NAV_X", 0.0, MOOSTime());
+    m_Comms.Notify("NAV_Y", 0.0, MOOSTime());
   }
 
   m_Comms.Notify("NAV_SPEED", r.gps_speed.get_scaled(0), MOOSTime());
