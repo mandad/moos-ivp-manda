@@ -56,6 +56,8 @@ class GP9 : public AppCastingMOOSApp
     std::string serialPort;
     int32_t baudRate;
     const int defaultBaudRate;
+    double m_dLatOrigin;
+    double m_dLonOrigin;
 
  private: // State variables
     serial::Serial  ser;

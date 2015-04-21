@@ -123,6 +123,10 @@ bool GP9::OnStartUp()
 
   // }
 
+  if (!GeodesySetup()) {
+	return(false);
+  }
+
   // Set Up Serial Port
   if(!m_MissionReader.GetConfiguration(GetAppName(), sParams))
     reportConfigWarning("No config block found for " + GetAppName());
@@ -208,7 +212,6 @@ bool GP9::OnStartUp()
     first_failure = false;
   }
 
-  GeodesySetup();
 
   registerVariables();
 
@@ -217,18 +220,18 @@ bool GP9::OnStartUp()
 
 bool GP9::GeodesySetup()
 {
-  double dLatOrigin = 0.0;
-  double dLonOrigin = 0.0;
-  bool geoOK = m_MissionReader.GetValue("LatOrigin", dLatOrigin);
+  m_dLatOrigin = 0.0;
+  m_dLonOrigin = 0.0;
+  bool geoOK = m_MissionReader.GetValue("LatOrigin", m_dLatOrigin);
   if (!geoOK) {
     reportConfigWarning("Latitude origin missing in MOOS file. Could not configure geodesy.");
     return false; }
   else {
-    geoOK = m_MissionReader.GetValue("LongOrigin", dLonOrigin);
+    geoOK = m_MissionReader.GetValue("LongOrigin", m_dLonOrigin);
     if (!geoOK) {
       reportConfigWarning("Longitude origin missing in MOOS file. Could not configure geodesy.");
       return false; } }
-  geoOK = m_geodesy.Initialise(dLatOrigin, dLonOrigin);
+  geoOK = m_geodesy.Initialise(m_dLatOrigin, m_dLonOrigin);
   if (!geoOK) {
     reportConfigWarning("Could not initialize geodesy with given origin.");
     return false; }
@@ -254,12 +257,13 @@ bool GP9::buildReport()
   m_msgs << "GP9 Driver:                                  \n";
   m_msgs << "============================================ \n";
 
-  ACTable actab(5);
-  actab << "Lat | Lon | Roll | Pitch | Yaw";
+  ACTable actab(7);
+  actab << "Lat | Lon | Yaw | E | N | Vel E | Vel N";
   actab.addHeaderLines();
   actab << registers.latitude.get_scaled(0) << registers.longitude.get_scaled(0) 
-    << registers.euler.get_scaled(0) << registers.euler.get_scaled(1) 
-    << registers.euler.get_scaled(2);
+    << registers.euler.get_scaled(2) << registers.pos_e.get_scaled(0)
+    << registers.pos_n.get_scaled(0) << registers.velocity_e.get_scaled(0)
+    << registers.velocity_n.get_scaled(0);
   m_msgs << actab.getFormattedString();
 
   return(true);
@@ -338,27 +342,39 @@ void GP9::configureSensor(gp9::Comms* sensor)
       throw std::runtime_error("Unable to set CREG_COM_RATES2.");
     }
 
-    uint32_t proc_rate = (20 << RATE4_ALL_PROC_START);
+    uint32_t proc_rate = (1 << RATE4_ALL_PROC_START);
     r.comrate4.set(0, proc_rate);
     if (!sensor->sendWaitAck(r.comrate4))
     {
       throw std::runtime_error("Unable to set CREG_COM_RATES4.");
     }
 
-    uint32_t misc_rate = (20 << RATE5_EULER_START) | (0 << RATE5_QUAT_START);
+    uint32_t misc_rate = (20 << RATE5_EULER_START) | (10 << RATE5_POSITION_START)
+             | (10 << RATE5_VELOCITY_START) | (0 << RATE5_QUAT_START);
     r.comrate5.set(0, misc_rate);
     if (!sensor->sendWaitAck(r.comrate5))
     {
       throw std::runtime_error("Unable to set CREG_COM_RATES5.");
     }
 
-    uint32_t health_rate = (5 << RATE6_HEALTH_START);  // note:  5 gives 2 hz rate
+    uint32_t health_rate = (0 << RATE6_POSE_START) | (5 << RATE6_HEALTH_START);  // note:  5 gives 2 hz rate
     r.comrate6.set(0, health_rate);
     if (!sensor->sendWaitAck(r.comrate6))
     {
       throw std::runtime_error("Unable to set CREG_COM_RATES6.");
     }
 
+    r.home_north.set(0, (float)m_dLatOrigin);
+    if (!sensor->sendWaitAck(r.home_north))
+    {
+      throw std::runtime_error("Unable to set CREG_HOME_NORTH.");
+    }
+
+    r.home_east.set(0, (float)m_dLonOrigin);
+    if (!sensor->sendWaitAck(r.home_east))
+    {
+      throw std::runtime_error("Unable to set CREG_HOME_EAST.");
+    }
 
   // Options available using parameters)
   // uint32_t misc_config_reg = 0;  // initialize all options off
@@ -474,6 +490,11 @@ void GP9::publishMsgs(gp9::Registers& r)
   m_Comms.Notify("GP9_Pitch", r.euler.get_scaled(1), MOOSTime());
   m_Comms.Notify("GP9_Yaw", r.euler.get_scaled(2), MOOSTime());
 
+  m_Comms.Notify("GP9_VelE", r.velocity_e.get_scaled(1), MOOSTime());
+  m_Comms.Notify("GP9_VelN", r.velocity_n.get_scaled(1), MOOSTime());
+  m_Comms.Notify("GP9_PosE", r.pos_e.get_scaled(1), MOOSTime());
+  m_Comms.Notify("GP9_PosN", r.pos_n.get_scaled(1), MOOSTime());
+
   // Temperature
   m_Comms.Notify("GP9_Temp1", r.temperature1.get_scaled(0), MOOSTime());
 
@@ -487,7 +508,7 @@ void GP9::publishMsgs(gp9::Registers& r)
     double curX = 0.0;
     double curY = 0.0;
     bool bGeoSuccess = m_geodesy.LatLong2LocalUTM(lat, 
-      lon, curX, curY);
+      lon, curY, curX);
     if (bGeoSuccess) {
       m_Comms.Notify("NAV_X", curX, MOOSTime());
       m_Comms.Notify("NAV_Y", curY, MOOSTime());

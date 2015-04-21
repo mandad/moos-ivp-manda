@@ -26,7 +26,7 @@ Behavior = BHV_Waypoint
        capture_line = true
      capture_radius = 5.0
         slip_radius = 15.0
-             points = -20,24 : 12,14
+             points = -20,24 : 8,17
              repeat = 100
 
     visual_hints = nextpt_color=yellow
@@ -49,7 +49,7 @@ Behavior=BHV_Waypoint
   endflag    = MISSION = complete
 
            speed = 2.0
-  capture_radius = 2.0
+  capture_radius = 5.0
      slip_radius = 8.0
-          points = -14,15
+          points = -20,28
 }
