@@ -328,53 +328,53 @@ void GP9::configureSensor(gp9::Comms* sensor)
 {
   gp9::Registers r;
 
-    uint32_t comm_reg = (BAUD_115200 << COM_BAUD_START);
-    r.communication.set(0, comm_reg);
-    if (!sensor->sendWaitAck(r.comrate2))
-    {
-      throw std::runtime_error("Unable to set CREG_COM_SETTINGS.");
-    }
+  uint32_t comm_reg = (BAUD_115200 << COM_BAUD_START);
+  r.communication.set(0, comm_reg);
+  if (!sensor->sendWaitAck(r.comrate2))
+  {
+    throw std::runtime_error("Unable to set CREG_COM_SETTINGS.");
+  }
 
-    uint32_t raw_rate = (0 << RATE2_ALL_RAW_START);
-    r.comrate2.set(0, raw_rate);
-    if (!sensor->sendWaitAck(r.comrate2))
-    {
-      throw std::runtime_error("Unable to set CREG_COM_RATES2.");
-    }
+  uint32_t raw_rate = (0 << RATE2_ALL_RAW_START);
+  r.comrate2.set(0, raw_rate);
+  if (!sensor->sendWaitAck(r.comrate2))
+  {
+    throw std::runtime_error("Unable to set CREG_COM_RATES2.");
+  }
 
-    uint32_t proc_rate = (1 << RATE4_ALL_PROC_START);
-    r.comrate4.set(0, proc_rate);
-    if (!sensor->sendWaitAck(r.comrate4))
-    {
-      throw std::runtime_error("Unable to set CREG_COM_RATES4.");
-    }
+  uint32_t proc_rate = (1 << RATE4_ALL_PROC_START);
+  r.comrate4.set(0, proc_rate);
+  if (!sensor->sendWaitAck(r.comrate4))
+  {
+    throw std::runtime_error("Unable to set CREG_COM_RATES4.");
+  }
 
-    uint32_t misc_rate = (20 << RATE5_EULER_START) | (10 << RATE5_POSITION_START)
-             | (10 << RATE5_VELOCITY_START) | (0 << RATE5_QUAT_START);
-    r.comrate5.set(0, misc_rate);
-    if (!sensor->sendWaitAck(r.comrate5))
-    {
-      throw std::runtime_error("Unable to set CREG_COM_RATES5.");
-    }
+  uint32_t misc_rate = (20 << RATE5_EULER_START) | (10 << RATE5_POSITION_START)
+           | (10 << RATE5_VELOCITY_START) | (0 << RATE5_QUAT_START);
+  r.comrate5.set(0, misc_rate);
+  if (!sensor->sendWaitAck(r.comrate5))
+  {
+    throw std::runtime_error("Unable to set CREG_COM_RATES5.");
+  }
 
-    uint32_t health_rate = (0 << RATE6_POSE_START) | (5 << RATE6_HEALTH_START);  // note:  5 gives 2 hz rate
-    r.comrate6.set(0, health_rate);
-    if (!sensor->sendWaitAck(r.comrate6))
-    {
-      throw std::runtime_error("Unable to set CREG_COM_RATES6.");
-    }
+  uint32_t health_rate = (0 << RATE6_POSE_START) | (5 << RATE6_HEALTH_START);  // note:  5 gives 2 hz rate
+  r.comrate6.set(0, health_rate);
+  if (!sensor->sendWaitAck(r.comrate6))
+  {
+    throw std::runtime_error("Unable to set CREG_COM_RATES6.");
+  }
 
-    r.home_north.set(0, (float)m_dLatOrigin);
-    if (!sensor->sendWaitAck(r.home_north))
-    {
-      throw std::runtime_error("Unable to set CREG_HOME_NORTH.");
-    }
+  r.home_north.set(0, (float)m_dLatOrigin);
+  if (!sensor->sendWaitAck(r.home_north))
+  {
+    throw std::runtime_error("Unable to set CREG_HOME_NORTH.");
+  }
 
-    r.home_east.set(0, (float)m_dLonOrigin);
-    if (!sensor->sendWaitAck(r.home_east))
-    {
-      throw std::runtime_error("Unable to set CREG_HOME_EAST.");
-    }
+  r.home_east.set(0, (float)m_dLonOrigin);
+  if (!sensor->sendWaitAck(r.home_east))
+  {
+    throw std::runtime_error("Unable to set CREG_HOME_EAST.");
+  }
 
   // Options available using parameters)
   // uint32_t misc_config_reg = 0;  // initialize all options off

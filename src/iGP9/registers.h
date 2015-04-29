@@ -168,7 +168,7 @@ class Registers {
       temperature1(this, DREG_TEMPERATURE_PROC1, 1),
       temperature2(this, DREG_TEMPERATURE_PROC2, 1),
       quat(this, DREG_QUAT_AB, 4, 0.000033569336),
-      euler(this, DREG_EULER_PHI_THETA, 3, 0.00019174759868),   //Check if this is in radians
+      euler(this, DREG_EULER_PHI_THETA, 3, 0.00019174759868),   //in radians
       euler_time(this, DREG_EULER_TIME, 1),
       // GPS Data
       pos_n(this, DREG_POSITION_NORTH, 1),
