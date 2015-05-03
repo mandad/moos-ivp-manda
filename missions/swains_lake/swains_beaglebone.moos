@@ -23,13 +23,13 @@ ProcessConfig = ANTLER
 
   Run = MOOSDB          @ NewConsole = false
   Run = pLogger         @ NewConsole = false
-  //Run = uSimMarine	    @ NewConsole = false
+  Run = uSimMarine	    @ NewConsole = false
   Run = pMarinePID      @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
   Run = uProcessWatch	  @ NewConsole = false
   Run = pNodeReporter	  @ NewConsole = false
-  Run = iMOOSArduino    @ NewConsole = false
-  Run = iGP9            @ NewConsole = false
+  //Run = iMOOSArduino    @ NewConsole = false
+  //Run = iGP9            @ NewConsole = false
   Run = pShare          @ NewConsole = false
   Run = pHostInfo       @ NewConsole = false
   Run = uFldNodeBroker  @ NewConsole = false
@@ -160,7 +160,7 @@ ProcessConfig = uSimMarine
 
   start_x       = 0
   start_y       = 0
-  start_heading = 0
+  start_heading = 180
   start_speed   = 0
 
   prefix        = NAV
