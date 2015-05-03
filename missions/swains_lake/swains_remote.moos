@@ -143,8 +143,8 @@ ProcessConfig = pMarineViewer
 
   tiff_file            = Swains_Aerial.tif
 
-  set_pan_x            = 0
-  set_pan_y            = 100
+  set_pan_x            = 300
+  set_pan_y            = -1300
   zoom                 = 0.65
   vehicle_shape_scale  = 1.5
   hash_delta           = 100
