@@ -41,7 +41,7 @@ ProcessConfig = iMOOSArduino
   CommsTick = 4
   
   CommType = "ARDUINO"
-  SerialPort = "/dev/ttyACM1"
+  SerialPort = "/dev/ttyACM0"
   BaudRate = 115200
   debugOutput = true
 } 
