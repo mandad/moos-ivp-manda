@@ -5,13 +5,13 @@
 //-------------------------------------------------
 
 //Beaglebone direct connection
-ServerHost = 192.168.42.1
-Community = emily
+//ServerHost = 192.168.42.1
+//Community = emily
 
 //Local server with pShare
-//ServerHost = localhost
-//ServerPort = 9000
-//Community  = shoreside
+ServerHost = localhost
+ServerPort = 9000
+Community  = shoreside
 
 MOOSTimeWarp = 1
 TERM_REPORTING = true
@@ -33,7 +33,7 @@ ProcessConfig = ANTLER
   Run = uProcessWatch   @ NewConsole = false
   Run = pShare            @ NewConsole = false
   Run = pHostInfo       @ NewConsole = false
-  //Run = uFldShoreBroker  @ NewConsole = false
+  Run = uFldShoreBroker  @ NewConsole = false
 }
 
 //------------------------------------------
@@ -46,7 +46,7 @@ ProcessConfig = pHostInfo
   CommsTick = 1                                                 
                                                                 
   TEMP_FILE_DIR  = ./                                           
-  DEFAULT_HOSTIP = localhost    // default is "localhost"  
+  DEFAULT_HOSTIP = 192.168.42.13    // default is "localhost"  
                                                                 
   //DEFAULT_HOSTIP_FORCE = 192.168.0.55                           
 } 
