@@ -177,7 +177,6 @@ ProcessConfig = uSimMarine
 ProcessConfig = pHelmIvP
 {
   AppTick    = 10
-  AppTick    = 4
   CommsTick  = 4
 
   term_report_interval=0
