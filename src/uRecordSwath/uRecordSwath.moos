@@ -1,0 +1,9 @@
+//------------------------------------------------
+// uRecordSwath config block
+
+ProcessConfig = uRecordSwath
+{
+   AppTick   = 4
+   CommsTick = 4
+}
+
