@@ -61,7 +61,7 @@ Behavior = BHV_Waypoint
   endflag   = LINE_END = true
   inactiveflag = WPTING = inactive
 
-  UPDATES   = WPT_UPDATE
+  UPDATES   = SURVEY_UPDATE
   perpetual = true
 
                lead = 8
