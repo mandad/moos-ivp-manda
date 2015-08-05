@@ -89,7 +89,8 @@ ProcessConfig = uSimMarine
   prefix        = NAV
 
   turn_rate     = 40
-  thrust_map    = 0:0, 20:2, 40:4, 60:6, 80:8, 100:10
+  thrust_map    = 0:0, 20:1, 40:2, 60:3, 80:4, 100:5
+  thrust_reflect = true
 }
 
 //------------------------------------------
@@ -126,24 +127,24 @@ ProcessConfig = pMarinePID
   // SIM_INSTABILITY = 20
 
   // Yaw PID controller
-  yaw_pid_kp		 = 1.2
-  yaw_pid_kd		 = 0.0
-  yaw_pid_ki		 = 0.3
+  yaw_pid_kp     = 1.2
+  yaw_pid_kd     = 0.0
+  yaw_pid_ki     = 0.3
   yaw_pid_integral_limit = 0.07
 
   // Speed PID controller
-  speed_pid_kp		 = 1.0
-  speed_pid_kd		 = 0.0
-  speed_pid_ki		 = 0.0
+  speed_pid_kp     = 1.0
+  speed_pid_kd     = 0.0
+  speed_pid_ki     = 0.0
   speed_pid_integral_limit = 0.07
 
   //MAXIMUMS
-  maxrudder    = 45
+  maxrudder    = 100
   maxthrust    = 100
 
   // A non-zero SPEED_FACTOR overrides use of SPEED_PID
   // Will set DESIRED_THRUST = DESIRED_SPEED * SPEED_FACTOR
-  speed_factor = 0
+  speed_factor = 20
 }
 
 //------------------------------------------

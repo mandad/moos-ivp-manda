@@ -4,6 +4,8 @@ initialize   DEPLOY = false
 initialize   RETURN = false
 initialize   FAULT = false
 initialize   REACHED_HOME = false
+initialize   LINE_TURN = false
+initialize   LINE_START = true
 
 Set MODE = ACTIVE {
   DEPLOY = true
@@ -13,6 +15,24 @@ Set MODE = SURVEY {
   MODE = ACTIVE
   RETURN != true
   FAULT != true
+  LINE_TURN != true
+  LINE_START != true
+}
+
+Set MODE = LINESTART {
+  MODE = ACTIVE
+  RETURN != true
+  FAULT != true
+  LINE_TURN != true
+  LINE_START = true
+}
+
+Set MODE = TURN {
+  MODE = ACTIVE
+  RETURN != true
+  FAULT != true
+  LINE_TURN = true
+  LINE_START != true
 }
 
 SET MODE = INPLACE {
@@ -31,7 +51,7 @@ Behavior = BHV_Waypoint
   name      = waypt_survey
   pwt       = 100
   condition = MODE == SURVEY
-  endflag   = FAULT = true
+  endflag   = LINE_TURN = true
 
   idleflag  = WPTING = idle
   runflag   = WPTING = running
@@ -51,7 +71,7 @@ Behavior = BHV_Waypoint
      capture_radius = 3.0
         slip_radius = 8.0
              //points = 60,-40 : 60,-160 : 150,-160 : 180,-100 : 150,-40
-             point = 16,-45 : 50,-150//100,-325
+             points = 16,-45 : 50,-150 //100,-325
              //points = format=lawnmower, label=emily_survey, x=35, y=-225, width=60, height=200, lane_width=30, rows=east-west, degs=-20
              repeat = 0
 
@@ -60,6 +80,46 @@ Behavior = BHV_Waypoint
     visual_hints = nextpt_lcolor=gray70
     visual_hints = vertex_color=dodger_blue, edge_color=white
     visual_hints = vertex_size=5, edge_size=1.5
+}
+
+//----------------------------------------------
+Behavior=BHV_Waypoint
+{
+  name       = waypt_line_start
+  pwt        = 100  
+  condition  = MODE == LINESTART
+  perpetual  = true
+  endflag    = LINE_START = false
+
+  UPDATES   = START_UPDATE
+  //endflag    = DEPLOY = false
+  //endflag    = MISSION = complete
+
+           speed = 3.0
+  capture_radius = 2.0
+     slip_radius = 8.0
+          points = 10,-26:16,-45
+}
+
+//----------------------------------------------
+Behavior=BHV_Waypoint
+{
+  name       = waypt_turn
+  pwt        = 100  
+  condition  = MODE == TURN
+  perpetual  = true
+  endflag    = LINE_TURN = false
+  endflag    = TURN_REACHED = true
+  endflag    = LINE_START = true
+
+  UPDATES   = TURN_UPDATE
+  //endflag    = DEPLOY = false
+  //endflag    = MISSION = complete
+
+           speed = 3.0
+  capture_radius = 2.0
+     slip_radius = 8.0
+          point = 40, -170
 }
 
 //----------------------------------------------
