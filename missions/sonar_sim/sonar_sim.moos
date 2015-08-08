@@ -12,8 +12,8 @@ MOOSTimeWarp = 1
 TERM_REPORTING = true
 
 // Swains
-LatOrigin  = 43.2001957
-LongOrigin = -71.0466533
+LatOrigin  = 42.97373611
+LongOrigin = -70.7968875
 
 
 //------------------------------------------
@@ -81,8 +81,8 @@ ProcessConfig = uSimMarine
   AppTick	= 4
   CommsTick	= 4
 
-  start_x       = 0
-  start_y       = 0
+  start_x       = 4107
+  start_y       = -589
   start_heading = 180
   start_speed   = 0
 
@@ -155,17 +155,18 @@ ProcessConfig = pMarineViewer
   AppTick    = 4
   CommsTick  = 4
 
-  tiff_file            = Swains_Aerial.tif
+  tiff_file            = SH_2015.tif
 
-  set_pan_x            = 300
-  set_pan_y            = -1300
-  zoom                 = 0.65
+  set_pan_x            = -535
+  set_pan_y            = -788
+  zoom                 = 0.60
   vehicle_shape_scale  = 1.5
   hash_delta           = 100
   hash_shade           = 0.4
-  hash_viewable        = true
+  hash_viewable        = false
 
   trails_point_size   = 2
+  trails_length = 10000
 
   // Appcast configuration
   appcast_height       = 75

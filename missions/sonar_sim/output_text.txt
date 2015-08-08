@@ -1,0 +1,6116 @@
+[32mpMarineViewer launching as pMarineViewer
+[0m
+[32muSimMarine launching as uSimMarine
+[0m
+
+-------------- moos connect ----------------------
+  contacting a MOOS server localhost:9000 -  try 00001 
+  Handshaking as uSimMarine             [1;32m[ok]
+[0m  DB reports async support is           [1;32m[on]
+[0m  DB is running on                      [1;32mDamian.local
+[0m  Timing skew estimation is             [33m[off] (not needed)
+[0m--------------------------------------------------
+
+Sim connected
+***************************************************
+*  uSimMarine starting ...
+***************************************************
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  THRUST_REFLECT
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  THRUST_MAP
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  TURN_RATE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  PREFIX
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  START_SPEED
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  START_HEADING
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  START_Y
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  START_X
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  COMMSTICK
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  APPTICK
++++++++++++++++++++++++++++++++++++++++++++++++++
+[32mpMarinePID launching as pMarinePID
+[0m
+pMasrtianretViinegw eprM atrhirneeaVdi eswpearw ntehdr
+ead
+
+-------------- moos connect ----------------------
+  contacting a MOOS server localhost:9000 -  try 00001 
+  Handshaking as pMarineViewer          [1;32m[ok]
+[0m  DB reports async support is           [1;32m[on]
+[0m  DB is running on                      [1;32mDamian.local
+[0m  Timing skew estimation is             [33m[off] (not needed)
+[0m--------------------------------------------------
+
+***************************************************
+*  pMarineViewer starting ...
+***************************************************
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  ACTION
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  ACTION
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  ACTION+
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  ACTION
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  BUTTON_FOUR
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  BUTTON_THREE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  BUTTON_TWO
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  BUTTON_ONE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  BUTTON_ONE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  SCOPE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  SCOPE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  SCOPE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  SCOPE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  SCOPE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  SCOPE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  SCOPE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  SCOPE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  SCOPE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  LEFT_CONTEXT[POLYVERT]
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  RIGHT_CONTEXT[RETURN]
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  RIGHT_CONTEXT[RETURN]
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  RIGHT_CONTEXT[RETURN]
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  LEFT_CONTEXT[SURVEY-POINT]
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  LEFT_CONTEXT[SURVEY-POINT]
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  LEFT_CONTEXT[SURVEY-POINT]
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  APPCAST_FONT_SIZE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  PROCS_FONT_SIZE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  NODES_FONT_SIZE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  APPCAST_COLOR_SCHEME
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  APPCAST_VIEWABLE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  APPCAST_WIDTH
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  APPCAST_HEIGHT
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  TRAILS_LENGTH
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  TRAILS_POINT_SIZE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  HASH_VIEWABLE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  HASH_SHADE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  HASH_DELTA
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  VEHICLE_SHAPE_SCALE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  ZOOM
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  SET_PAN_Y
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  SET_PAN_X
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  TIFF_FILE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  COMMSTICK
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  APPTICK
++++++++++++++++++++++++++++++++++++++++++++++++++
+Setting PMV LatOrigin based on the MOOS file. 
+pMarineViewer is Running:
+ |-Baseline AppTick   @ 2.0 Hz
+ |	 Comms is Synchronous
+ |	 Baseline CommsTick @ 4 Hz
+	|-Time Warp @ 10.0 
+	|-Time Warp delay @ 4.0 ms 
+
+
+trying to open:[SH_2015.tif]
+Result:0x7fff758bb1a0
+Trying to open: SH_2015.tif
+Success: SH_2015.tif
+
+-------------- moos connect ----------------------
+  contacting a MOOS server localhost:9000 -  try 00001 
+  Handshaking as pMarinePID             [1;32m[ok]
+[0m  DB reports async support is           [1;32m[on]
+[0m  DB is running on                      [1;32mDamian.local
+[0m  Timing skew estimation is             [33m[off] (not needed)
+[0m--------------------------------------------------
+
+pMarinePID starting....
+ pMarinePID says: ** NEW CONTROLLER GAINS ARE **
+ pMarinePID says: YAW_PID_KP             = 1.200
+ pMarinePID says: YAW_PID_KD             = 0.000
+ pMarinePID says: YAW_PID_KI             = 0.300
+ pMarinePID says: YAW_PID_INTEGRAL_LIMIT = 0.070
+ pMarinePID says: MAXRUDDER              = 100.000
+ pMarinePID says: SPEED_PID_KP           = 1.000
+ pMarinePID says: SPEED_PID_KD           = 0.000
+ pMarinePID says: SPEED_PID_KI           = 0.000
+ pMarinePID says: SPEED_PID_INTEGRAL_LIMIT = 0.070
+ pMarinePID says: MAXTHRUST              = 100.000
+Depth Control is OFF
+
+
+
+
+
+
+
+
+
+==============================================================
+pMarineViewer emily                                     0/0(1)
+==============================================================
+Tiff File A:      SH_2015.tif
+Info File A:      
+Tiff File B:      
+Info File B:      
+------------------
+Total GeoShapes:  0
+Clear GeoShapes:  0
+NodeReports Recd: 0
+NodeReport Index: 0
+Draw Count:       1
+Draw Count Rate:  18.2859
+Curr Time:        0.00
+Time Warp:        0.000
+Elapsed:          0.00000
+
+Visual Settings: 
+  pan_x:   0.00
+  pan_y:   0.00
+  zoom :   1.00
+
+set_pan_x:-535
+set_pan_y:-788
+.uSimMarine started 
+uSimMarine is Running:
+ |-Baseline AppTick   @ 4.0 Hz
+ |	 Comms is Synchronous
+ |	 Baseline CommsTick @ 4 Hz
+	|-Time Warp @ 10.0 
+	|-Time Warp delay @ 4.0 ms 
+
+
+
+
+
+
+
+
+
+
+
+==============================================================
+uSimMarine emily                                        0/0(1)
+==============================================================
+Datum: 42.97373611,-70.7968875
+
+  Start Pose           Current Pose (NAV)     Current Pose (GT)
+------- ------------   ------- ------------   ------- ---------
+Headng: 180            Headng: 180             (same) -        
+ Speed: 0               Speed: 0                      -        
+ Depth: 0               Depth: 0                      -        
+   Alt: 0                 Alt: 0                      -        
+ (X,Y): 4107,-589       (X,Y): 4107,-589              -        
+   Lat: 42.96921401       Lat: 42.96921401            -        
+   Lon: -70.74639523      Lon: -70.74639523           -        
+Present Buoyancy rate: 0.025
+        Starting rate: 0.025
+               Source: initial_config
+
+Ext Drift  X   Y   |  Mag  Ang  |  Rot.  |  Source(s)  
+---------  --  --  |  ---  ---  |  ----  |  -----------
+ Starting  0   0   |  0    0    |  0     |  init_config
+  Present  0   0   |  0    0    |  0     |  n/a        
+
+Velocity Information: 
+--------------------- 
+     DESIRED_THRUST=0 ==> SPEED=0
+     Using Thrust_Factor: false
+     Positive Thrust Map: 20,1, 40,2, 60,3, 80,4, 100,5
+     Negative Thrust Map: Positive thrust-map reflected
+        Max Accereration: 0
+        Max Decereration: 0.5
+
+             Thrust Mode: normal
+     Thrust Mode Reverse: false
+        DESIRED_THRUST_L: n/a
+        DESIRED_THRUST_R: n/a
+
+Depth Information: 
+------------------ 
+           Max Depth Rate: 0.5
+     Max Depth Rate Speed: 2
+              Water Depth: 0
+
+
+
+
+
+
+
+
+
+
+==============================================================
+uSimMarine emily                                       0/0(16)
+==============================================================
+Datum: 42.97373611,-70.7968875
+
+  Start Pose           Current Pose (NAV)     Current Pose (GT)
+------- ------------   ------- ------------   ------- ---------
+Headng: 180            Headng: 180             (same) -        
+ Speed: 0               Speed: 0                      -        
+ Depth: 0               Depth: 0                      -        
+   Alt: 0                 Alt: 0                      -        
+ (X,Y): 4107,-589       (X,Y): 4107,-589              -        
+   Lat: 42.96921401       Lat: 42.96921401            -        
+   Lon: -70.74639523      Lon: -70.74639523           -        
+Present Buoyancy rate: 0.025
+        Starting rate: 0.025
+               Source: initial_config
+
+Ext Drift  X   Y   |  Mag  Ang  |  Rot.  |  Source(s)  
+---------  --  --  |  ---  ---  |  ----  |  -----------
+ Starting  0   0   |  0    0    |  0     |  init_config
+  Present  0   0   |  0    0    |  0     |  n/a        
+
+Velocity Information: 
+--------------------- 
+     DESIRED_THRUST=0 ==> SPEED=0
+     Using Thrust_Factor: false
+     Positive Thrust Map: 20,1, 40,2, 60,3, 80,4, 100,5
+     Negative Thrust Map: Positive thrust-map reflected
+        Max Accereration: 0
+        Max Decereration: 0.5
+
+             Thrust Mode: normal
+     Thrust Mode Reverse: false
+        DESIRED_THRUST_L: n/a
+        DESIRED_THRUST_R: n/a
+
+Depth Information: 
+------------------ 
+           Max Depth Rate: 0.5
+     Max Depth Rate Speed: 2
+              Water Depth: 0
+
+
+
+
+
+
+
+
+
+
+==============================================================
+uSimMarine emily                                       0/0(21)
+==============================================================
+Datum: 42.97373611,-70.7968875
+
+  Start Pose           Current Pose (NAV)     Current Pose (GT)
+------- ------------   ------- ------------   ------- ---------
+Headng: 180            Headng: 180             (same) -        
+ Speed: 0               Speed: 0                      -        
+ Depth: 0               Depth: 0                      -        
+   Alt: 0                 Alt: new_proc_count2
+.......
+-------------- moos connect ----------------------
+  contacting a MOOS server localhost:9000 -  try 00001 
+  Handshaking as pHelmIvP               [1;32m[ok]
+[0m  DB reports async support is           [1;32m[on]
+[0m  DB is running on                      [1;32mDamian.local
+[0m  Timing skew estimation is             [33m[off] (not needed)
+[0m--------------------------------------------------
+
+***************************************************
+*  pHelmIvP starting ...
+***************************************************
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  OK_SKEW
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  DOMAIN
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  DOMAIN
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  BEHAVIORS
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  IVP_BEHAVIOR_DIR
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  BHV_DIR_NOT_FOUND_OK
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  TERM_REPORT_INTERVAL
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  COMMSTICK
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  APPTICK
++++++++++++++++++++++++++++++++++++++++++++++++++
+Number of behavior files: 1
+Processing Behavior File: swains.bhv  START
+    Successfully found file: swains.bhv
+Processing Behavior File: swains.bhv  END
+[32mLoading behavior dynamic libraries specified in IVP_BEHAVIOR_DIRS...
+[0m[34mLoading behavior dynamic library specified in .moos file: /home/ubuntu/moos-ivp-emily
+[0m[34mDone Loading behavior dynamic library: /home/ubuntu/moos-ivp-emily
+[0mBehaviorSet: Total # of specs: 6
+spec_build: 0  result:1
+spec_build: 1  result:1
+spec_build: 2  result:1
+spec_build: 3  result:1
+spec_build: 4  result:1
+spec_build: 5  result:1
+BehaviorSet: all_builds_ok: true
+total specs::::::::::::::::::::::::6
+Total Behaviors now: 1
+Total Behaviors now: 2
+Total Behaviors now: 3
+Total Behaviors now: 4
+Total Behaviors now: 5
+Total Behaviors now: 6
+mode description: MODE#---,ACTIVE#---,INACTIVE#ACTIVE,SURVEY#ACTIVE,LINESTART#ACTIVE,TURN#ACTIVE,INPLACE#ACTIVE,HOME#HOME,TRANSIT_HOME#HOME,HOME_HOLD
+
+
+
+
+
+
+
+
+
+==============================================================
+pMarineViewer emily                                     0/0(9)
+==============================================================
+Tiff File A:      SH_2015.tif
+Info File A:      SH_2015.info
+Tiff File B:      
+Info File B:      
+------------------
+Total GeoShapes:  0
+Clear GeoShapes:  0
+NodeReports Recd: 0
+NodeReport Index: 0
+Draw Count:       14
+Draw Count Rate:  43.9395
+Curr Time:        14389609597.49
+Time Warp:        10.000
+Elapsed:          0.00025
+
+Visual Settings: 
+  pan_x:   -535.00
+  pan_y:   -788.00
+  zoom :   0.60
+
+.new_proc_count3
+.pHelmIvP is Running:
+ |-Baseline AppTick   @ 10.0 Hz
+ |	 Comms is Synchronous
+ |	 Baseline CommsTick @ 4 Hz
+	|-Time Warp @ 10.0 
+	|-Time Warp delay @ 4.0 ms 
+
+
+ pHelmIvP says: pHelmIvP AllStop: ManualOverride
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                          0/0(1)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                          0/0(2)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                          0/0(3)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                          0/0(4)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                          0/0(5)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                          0/0(6)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                          0/0.(7)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                          0/0(8)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                          0/0(9)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(10)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(11)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(12)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(13)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: ------.--- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(14)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(15)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(16)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(17)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(18)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(19)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(20)
+==================================================..============
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(21)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(22)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(23)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(24)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(25)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(26)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors [32muProcessWatch launching as uProcessWatch
+[0m
+.Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(27)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(28)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(29)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(30)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(31)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(32)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(33)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+ 
+-------------- moos connect ----------------------
+  contacting a MOOS server localhost:9000 -  try 00001 
+  Handshaking as uProcessWatch          [1;32m[ok]
+[0m  DB reports async support is           [1;32m[on]
+[0m  DB is running on                      [1;32mDamian.local
+[0m  Timing skew estimation is             [33m[off] (not needed)
+[0m--------------------------------------------------
+
+***************************************************
+*  uProcessWatch starting ...
+***************************************************
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  WATCH_ALL
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  NOWATCH
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  NOWATCH
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  NOWATCH
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  SUMMARY_WAIT
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  COMMSTICK
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  APPTICK
++++++++++++++++++++++++++++++++++++++++++++++++++
+reportEvent: max_event: 8
+reportEvent: max_event: 8
+reportEvent: max_event: 8
+reportEvent: max_event: 8
+reportEvent: max_event: 8
+. Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(34)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(35)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(36)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(37)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(38)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(39)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Ite
+
+
+
+
+
+
+
+
+==============================================================
+pMarineViewer emily                                    0/0(17)
+==============================================================
+Tiff File A:      SH_2015.tif
+Info File A:      SH_2015.info
+Tiff File B:      
+Info File B:      
+------------------
+Total GeoShapes:  0
+Clear GeoShapes:  0
+NodeReports Recd: 0
+NodeReport Index: 0
+Draw Count:       30
+Draw Count Rate:  40.1898
+Curr Time:        14389609601.76
+Time Warp:        10.000
+Elapsed:          0.00089
+
+Visual Settings: 
+  pan_x:   -535.00
+  pan_y:   -788.00
+  zoom :   0.60
+
+.new_proc_count4
+.r  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(40)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(41)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(42)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(43)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(44)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(45)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(46)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  C.0                      -        
+ (X,Y): 4107,-589       (X,Y): 4107,-589              -        
+   Lat: 42.96921401       Lat: 42.96921401            -        
+   Lon: -70.74639523      Lon: -70.74639523           -        
+Present Buoyancy rate: 0.025
+        Starting rate: 0.025
+               Source: initial_config
+
+Ext Drift  X   Y   |  Mag  Ang  |  Rot.  |  Source(s)  
+---------  --  --  |  ---  ---  |  ----  |  -----------
+ Starting  0   0   |  0    0    |  0     |  init_config
+  Present  0   0   |  0    0    |  0     |  n/a        
+
+Velocity Information: 
+--------------------- 
+     DESIRED_THRUST=0 ==> SPEED=0
+     Using Thrust_Factor: false
+     Positive Thrust Map: 20,1, 40,2, 60,3, 80,4, 100,5
+     Negative Thrust Map: Positive thrust-map reflected
+        Max Accereration: 0
+        Max Decereration: 0.5
+
+             Thrust Mode: normal
+     Thrust Mode Reverse: false
+        DESIRED_THRUST_L: n/a
+        DESIRED_THRUST_R: n/a
+
+Depth Information: 
+------------------ 
+           Max Depth Rate: 0.5
+     Max Depth Rate Speed: 2
+              Water Depth: 0
+
+
+
+
+
+
+
+
+
+
+==============================================================
+uSimMarine emily                                       0/0(36)
+==============================================================
+Datum: 42.97373611,-70.7968875
+
+  Start Pose           Current Pose (NAV)     Current Pose (GT)
+------- ------------   ------- ------------   ------- ---------
+Headng: 180            Headng: 180             (same) -        
+ Speed: 0               Speed: 0                      -        
+ Depth: 0               Depth: 0                      -        
+   Alt: 0                 Alt: 0                      -        
+ (X,Y): 4107,-589       (X,Y): 4107,-589              -        
+   Lat: 42.96921401       Lat: 42.96921401            -        
+   Lon: -70.74639523      Lon: -70.74639523           -        
+Present Buoyancy rate: 0.025
+        Starting rate: 0.025
+               Source: initial_config
+
+Ext Drift  X   Y   |  Mag  Ang  |  Rot.  |  Source(s)  
+---------  --  --  |  ---  ---  |  ----  |  -----------
+ Starting  0   0   |  0    0    |  0     |  init_config
+  Present  0   0   |  0    0    |  0     |  n/a        
+
+Velocity Information: 
+--------------------- 
+     DESIRED_THRUST=0 ==> SPEED=0
+     Using Thrust_Factor: false
+     Positive Thrust Map: 20,1, 40,2, 60,3, 80,4, 100,5
+     Negative Thrust Map: Positive thrust-map reflected
+        Max Accereration: 0
+        Max Decereration: 0.5
+
+             Thrust Mode: normal
+     Thrust Mode Reverse: false
+        DESIRED_THRUST_L: n/a
+        DESIRED_THRUST_R: n/a
+
+Depth Information: 
+------------------ 
+           Max Depth Rate: 0.5
+     Max Depth Rate Speed: 2
+              Water Depth: 0
+
+
+
+
+
+
+
+
+
+
+==============================================================
+uSimMarine emily                                       0/0(50)
+==============================================================
+Datum: 42.97373611,-70.7968875
+
+  Start Pose           Current Pose (NAV)     Current Pose (GT)
+------- ------------   ------- ------------   ------- ---------
+Headng: 180            Headng: 180             (same) -        
+ Speed: 0               Speed: 0                      -        
+ Depth: 0               Depth: 0                      -        
+   Alt: 0                 Alt: 0                      -        
+ (X,Y): 4107,-589       (X,Y): 4107,-589              -        
+   Lat: 42.96921401       Lat: 42.96921401            -        
+   Lon: -70.74639523      Lon: -70.74639523           -        
+Present Buoyancy rate: 0.025
+        Starting rate: 0.025
+               Source: initial_config
+
+Ext Drift  X   Y   |  Mag  Ang  |  Rot.  |  Source(s)  
+---------  --  --  |  ---  ---  |  ----  |  -----------
+ Starting  0   0   |  0    0    |  0     |  init_config
+  Present  0   0   |  0    0    |  0     |  n/a        
+
+Velocity Information: 
+--------------------- 
+     DESIRED_THRUST=0 ==> SPEED=0
+     Using Thrust_Factor: false
+     Positive Thrust Map: 20,1, 40,2, 60,3, 80,4, 100,5
+     Negative Thrust Map: Positive thrust-map rreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(47)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(48)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(49)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(50)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(51)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(52)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+..
+
+==============================================================
+pHelmIvP emily                                         0/0(53)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(54)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(55)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(56)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(57)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(58)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(59)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (m[32mpNodeReporter launching as pNodeReporter
+[0m
+.ax=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(60)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(61)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(62)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(63)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(64)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(65)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+====================================================------------------- MOOSDB V10 -------------------
+  Hosting  community                [1;32m"emily"
+[0m  Name look up is                   [31moff
+[0m  Asynchronous support is           [1;32mon
+[0m  Connect to this server on port    [32m9000[0m
+--------------------------------------------------
+[1;33mnetwork performance data published on localhost:9020
+listen with "nc -u -lk 9020"
+
+------------[1;32mCONNECT[0m-------------
+  Handshaking   :  [32mOK
+[0m  Client's name :  [32muSimMarine[0m
+  Type          :  [32mSynchronous[0m
+  Priority      :  [32mnormal[0m
+  Total Clients :  [32m1[0m
+--------------------------------
+
+------------[1;32mCONNECT[0m-------------
+  Handshaking   :  [32mOK
+[0m  Client's name :  [32mpMarineViewer[0m
+  Type          :  [32mSynchronous[0m
+  Priority      :  [32mnormal[0m
+  Total Clients :  [32m2[0m
+--------------------------------
+
+------------[1;32mCONNECT[0m-------------
+  Handshaking   :  [32mOK
+[0m  Client's name :  [32mpMarinePID[0m
+  Type          :  [32mSynchronous[0m
+  Priority      :  [32mnormal[0m
+  Total Clients :  [32m3[0m
+--------------------------------
+
+------------[1;32mCONNECT[0m-------------
+  Handshaking   :  [32mOK
+[0m  Client's name :  [32mpHelmIvP[0m
+  Type          :  [32mSynchronous[0m
+  Priority      :  [32mnormal[0m
+  Total Clients :  [32m4[0m
+--------------------------------
+
+------------[1;32mCONNECT[0m-------------
+  Handshaking   :  [32mOK
+[0m  Client's name :  [32muProcessWatch[0m
+  Type          :  [32mSynchronous[0m
+  Priority      :  [32mnormal[0m
+  Total Clients :  [32m5[0m
+--------------------------------
+
+------------[1;32mCONNECT[0m-------------
+  Handshaking   :  [32mOK
+[0m  Client's name :  [32mpNodeReporter[0m
+  Type          :  [32mSynchronous[0m
+  Priority      :  [32mnormal[0m
+  Total Clients :  [32m6[0m
+--------------------------------
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+.
+-------------- moos connect ----------------------
+  contacting a MOOS server localhost:9000 -  try 00001 
+  Handshaking as pNodeReporter          [1;32m[ok]
+[0m  DB reports async support is           [1;32m[on]
+[0m  DB is running on                      [1;32mDamian.local
+[0m  Timing skew estimation is             [33m[off] (not needed)
+[0m--------------------------------------------------
+
+***************************************************
+*  pNodeReporter starting ...
+***************************************************
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  NODE_REPORT_OUTPUT
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  PLATFORM_LENGTH
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  PLATFORM_TYPE
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  COMMSTICK
++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++
+param =  APPTICK
++++++++++++++++++++++++++++++++++++++++++++++++++
+==========
+pHelmIvP emily                                         0/0(66)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(67)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(68)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(69)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(70)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(71)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(72)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm D.[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+[33m+ subs of "pNodeReporter" to variables matching "NAV_*:*"[0m
+
+
+
+
+
+
+
+
+
+==============================================================
+pMarineViewer emily                                    0/0(25)
+==============================================================
+Tiff File A:      SH_2015.tif
+Info File A:      SH_2015.info
+Tiff File B:      
+Info File B:      
+------------------
+Total GeoShapes:  0
+Clear GeoShapes:  0
+NodeReports Recd: 0
+NodeReport Index: 0
+Draw Count:       46
+Draw Count Rate:  39.0933
+Curr Time:        14389609606.06
+Time Warp:        10.000
+Elapsed:          0.00085
+
+Visual Settings: 
+  pan_x:   -535.00
+  pan_y:   -788.00
+  zoom :   0.60
+
+.ecision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(73)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(74)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(75)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(76)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(77)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(78)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                             .            0/0(79)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(80)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(81)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(82)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(83)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(84)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(85)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviorsnew_proc_count5
+. Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(86)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(87)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(88)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(89)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(90)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(91)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(92)
+==================================..============================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(93)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(94)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(95)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(96)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(97)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(98)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (.0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                         0/0(99)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(100)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(101)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(102)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(103)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(104)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(105)
+==============================================================
+  Helm Iteration: 0
+  IvP. Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(106)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(107)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(108)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(109)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(110)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(111)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Beh.
+
+
+
+
+
+
+
+
+==============================================================
+pMarineViewer emily                                    0/0(33)
+==============================================================
+Tiff File A:      SH_2015.tif
+Info File A:      SH_2015.info
+Tiff File B:      
+Info File B:      
+------------------
+Total GeoShapes:  0
+Clear GeoShapes:  0
+NodeReports Recd: 7
+NodeReport Index: 6
+Draw Count:       62
+Draw Count Rate:  38.6208
+Curr Time:        14389609610.37
+Time Warp:        10.000
+Elapsed:          0.00070
+
+Visual Settings: 
+  pan_x:   -535.00
+  pan_y:   -788.00
+  zoom :   0.60
+
+.avior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(112)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(113)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(114)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(115)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(116)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(117)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(118)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00 .  (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(119)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(120)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(121)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(122)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(123)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(124)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ---..-  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(125)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(126)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(127)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(128)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(129)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(130)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(131)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTi.me:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(132)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(133)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(134)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(135)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(136)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(137)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+====================================.==========================
+pHelmIvP emily                                        0/0(138)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(139)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(140)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(141)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(142)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(143)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(144)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 .uProcessWatch is Running:
+ |-Baseline AppTick   @ 4.0 Hz
+ |	 Comms is Synchronous
+ |	 Baseline CommsTick @ 4 Hz
+	|-Time Warp @ 10.0 
+	|-Time Warp delay @ 4.0 ms 
+
+
+
+
+
+
+
+
+
+
+
+==============================================================
+uProcessWatch emily                                     0/0(1)
+==============================================================
+Summary: All Present
+
+Antler List: pHelmIvP,pMarinePID,pMarineViewer,pNodeReporter
+             uSimMarine
+
+                                        Current    Max     
+ProcName        Watch Reason   Status   CPU Load   CPU Load
+-------------   ------------   ------   --------   --------
+pHelmIvP        ANT       DB   [7;32mOK[0m       0.00       0.00    
+pMarinePID      ANT       DB   [7;32mOK[0m       0.00       0.00    
+pMarineViewer   ANT       DB   [7;32mOK[0m       0.00       0.00    
+pNodeReporter   ANT            [7;32mOK[0m       0.00       0.00    
+uSimMarine      ANT       DB   [7;32mOK[0m       0.00       0.00    
+===================================================================
+Most Recent Events (5):
+===================================================================
+[0.00]: Noted to be present: [pMarineViewer]
+[0.00]: Noted to be present: [uSimMarine]
+[0.00]: Noted to be present: [pMarinePID]
+[0.00]: Noted to be present: [pHelmIvP]
+[0.00]: Noted to be present: [pNodeReporter]
+
+
+
+
+
+
+
+
+
+==============================================================
+uProcessWatch emily                                    0/0(16)
+==============================================================
+Summary: All Present
+
+Antler List: pHelmIvP,pMarinePID,pMarineViewer,pNodeReporter
+             uSimMarine
+
+                                        Current    Max     
+ProcName        Watch Reason   Status   CPU Load   CPU Load
+-------------   ------------   ------   --------   --------
+pHelmIvP        ANT       DB   [7;32mOK[0m       5.17       5.17    
+pMarinePID      ANT       DB   [7;32mOK[0m       5.18       6.58    
+pMarineViewer   ANT       DB   [7;32mOK[0m       12.13      60.50   
+pNodeReporter   ANT       DB   [7;32mOK[0m       0.00       0.00    
+uSimMarine      ANT       DB   [7;32mOK[0m       1.63       1.63    
+===================================================================
+Most Recent Events (5):
+===================================================================
+[0.00]: Noted to be present: [pMarineViewer]
+[0.00]: Noted to be present: [uSimMarine]
+[0.00]: Noted to be present: [pMarinePID]
+[0.00]: Noted to be present: [pHelmIvP]
+[0.00]: Noted to be present: [pNodeReporter]
+
+
+
+
+
+
+
+
+
+==============================================================
+uProcessWatch emily                                    0/0(30)
+==============================================================
+Summary: All Present
+
+Antler List: pHelmIvP,pMarinePID,pMarineViewer,pNodeReporter
+             uSimMarine
+
+                                        Current    Max     
+ProcName        Watch Reason   Status   CPU Load   CPU Load
+-------------   ------------   ------   --------   --------
+pHelmIvP        ANT       DB   [7;32mOK[0m       4.25       5.17    
+pMarinePID      ANT       DB   [7;32mOK[0m       6.27       6.58    
+pMarineViewer   ANT       DB   [7;32mOK[0m       12.21      60.50   
+pNodeReporter   ANT       DB   [7;32mOK[0m       0.00       0.00    
+uSimMarine      ANT       DB   [7;32mOK[0m       1.63       1.63    
+===================================================================
+Most Recent Events (5):
+===================================================================
+[0.00]: Noted to be present: [pMarineViewer]
+[0.00]: Noted to be present: [uSimMarine]
+[0.00]: Noted to be present: [pMarinePID]
+[0.00]: Noted to be present: [pHelmIvP]
+[0.00]: Noted to be present: [pNodeReporter]
+
+
+
+
+
+
+
+
+
+==============================================================
+uProcessWatch emily                                    0/0(44)
+==============================================================
+Summary: All Present
+
+Antler List: pHelmIvP,pMarinePID,pMarineViewer,pNodeReporter
+      .warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(145)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(146)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(147)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(148)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(149)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(150)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily             
+
+
+
+
+
+
+
+
+==============================================================
+pMarineViewer emily                                    0/0(41)
+==============================================================
+Tiff File A:      SH_2015.tif
+Info File A:      SH_2015.info
+Tiff File B:      
+Info File B:      
+------------------
+Total GeoShapes:  0
+Clear GeoShapes:  0
+NodeReports Recd: 15
+NodeReport Index: 14
+Draw Count:       78
+Draw Count Rate:  38.3356
+Curr Time:        14389609614.66
+Time Warp:        10.000
+Elapsed:          0.00064
+
+Visual Settings: 
+  pan_x:   -535.00
+  pan_y:   -788.00
+  zoom :   0.60
+
+.                           0/0(151)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(152)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(153)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(154)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(155)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(156)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(157)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: --------.eflected
+        Max Accereration: 0
+        Max Decereration: 0.5
+
+             Thrust Mode: normal
+     Thrust Mode Reverse: false
+        DESIRED_THRUST_L: n/a
+        DESIRED_THRUST_R: n/a
+
+Depth Information: 
+------------------ 
+           Max Depth Rate: 0.5
+     Max Depth Rate Speed: 2
+              Water Depth: 0
+
+
+
+
+
+
+
+
+
+
+==============================================================
+uSimMarine emily                                       0/0(65)
+==============================================================
+Datum: 42.97373611,-70.7968875
+
+  Start Pose           Current Pose (NAV)     Current Pose (GT)
+------- ------------   ------- ------------   ------- ---------
+Headng: 180            Headng: 180             (same) -        
+ Speed: 0               Speed: 0                      -        
+ Depth: 0               Depth: 0                      -        
+   Alt: 0                 Alt: 0                      -        
+ (X,Y): 4107,-589       (X,Y): 4107,-589              -        
+   Lat: 42.96921401       Lat: 42.96921401            -        
+   Lon: -70.74639523      Lon: -70.74639523           -        
+Present Buoyancy rate: 0.025
+        Starting rate: 0.025
+               Source: initial_config
+
+Ext Drift  X   Y   |  Mag  Ang  |  Rot.  |  Source(s)  
+---------  --  --  |  ---  ---  |  ----  |  -----------
+ Starting  0   0   |  0    0    |  0     |  init_config
+  Present  0   0   |  0    0    |  0     |  n/a        
+
+Velocity Information: 
+--------------------- 
+     DESIRED_THRUST=0 ==> SPEED=0
+     Using Thrust_Factor: false
+     Positive Thrust Map: 20,1, 40,2, 60,3, 80,4, 100,5
+     Negative Thrust Map: Positive thrust-map reflected
+        Max Accereration: 0
+        Max Decereration: 0.5
+
+             Thrust Mode: normal
+     Thrust Mode Reverse: false
+        DESIRED_THRUST_L: n/a
+        DESIRED_THRUST_R: n/a
+
+Depth Information: 
+------------------ 
+           Max Depth Rate: 0.5
+     Max Depth Rate Speed: 2
+              Water Depth: 0
+
+
+
+
+
+
+
+
+
+
+==============================================================
+uSimMarine emily                                       0/0(80)
+==============================================================
+Datum: 42.97373611,-70.7968875
+
+  Start Pose           Current Pose (NAV)     Current Pose (GT)
+------- ------------   ------- ------------   ------- ---------
+Headng: 180            Headng: 180             (same) -        
+ Speed: 0               Speed: 0                      -        
+ Depth: 0               Depth: 0                      -        
+   Alt: 0                 Alt: 0                      -        
+ (X,Y): 4107,-589       (X,Y): 4107,-589              -        
+   Lat: 42.96921401       Lat: 42.96921401            -        
+   Lon: -70.74639523      Lon: -70.74639523           -        
+Present Buoyancy rate: 0.025
+        Starting rate: 0.025
+               Source: initial_config
+
+Ext Drift  X   Y   |  Mag  Ang  |  Rot.  |  Source(s)  
+---------  --  --  |  ---  ---  |  ----  |  -----------
+ Starting  0   0   |  0    0    |  0     |  init_config
+  Present  0   0   |  0    0    |  0     |  n/a        
+
+Velocity Information: 
+--------------------- 
+     DESIRED_THRUST=0 ==> SPEED=0
+     Using Thrust_Factor: false
+     Positive Thrust Map: 20,1, 40,2, 60,3, 80,4, 100,5
+     Negative Thrust Map: Positive thrust-map reflected
+        Max Accereration: 0
+        Max Decereration: 0.5
+
+             Thrust Mode: normal
+     Thrust Mode Reverse: false
+        DESIRED_THRUST_L: n/a
+        DESIRED_THRUST_R: n/a
+
+Depth Information: 
+------------------ 
+           Max Depth Rate: 0.5
+     Max Depth Rate Speed: 2
+              Water Depth: 0
+
+
+
+
+
+
+
+
+
+
+==============================================================
+uSimMarine emily                                       0/0(94)
+==============================================================
+Datum: 42.97373611,-70.7968875
+
+  Start Pose           Current Pose (NAV)     Current Pose (GT)
+------- ------------   ------- ------------   ------- ---------
+Headng: 180            Headng: 180             (same) -        
+ Speed: 0       .-- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(158)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(159)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(160)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(161)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(162)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(163)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(164)
+==================.============================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(165)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(166)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(167)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(168)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(169)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle: ------------ (0)
+  
+Behaviors Completed: ------- (0)
+
+
+Variable  Behavior  Time  Iter  Value
+--------  --------  ----  ----  -----
+
+
+
+
+
+
+
+
+
+==============================================================
+pHelmIvP emily                                        0/0(170)
+==============================================================
+  Helm Iteration: 0
+  IvP Functions:  0
+  Mode(s):        
+  SolveTime:   0.00   (max=0.00)
+  CreateTime:  0.00   (max=0.00)
+  LoopTime:    0.00   (max=0.00)
+  Halted:         false   (0 warnings)
+Helm Decision: []
+Behaviors Active: ---------- (0)
+Behaviors Running: --------- (0)
+Behaviors Idle*************************************
+*  This is Antler, head of MOOS...  *
+*  P. Newman 2008                   *
+*************************************
+
+
+|****** Launch ******|
+
+Unless directed otherwise using system path to locate binaries 
+   [000] Process: MOOSDB          ~ MOOSDB          launched successfully
+   [001] Process: pMarineViewer   ~ pMarineViewer   launched successfully
+   [002] Process: uSimMarine      ~ uSimMarine      launched successfully
+   [003] Process: pMarinePID      ~ pMarinePID      launched successfully
+   [004] Process: pHelmIvP        ~ pHelmIvP        launched successfully
+   [005] Process: uProcessWatch   ~ uProcessWatch   launched successfully
+   [006] Process: pNodeReporter   ~ pNodeReporter   launched successfully
+
+
+|***** Shutdown *****|
+
+
+   Signalling pNodeReporter   [OK]
+   Signalling uProcessWatch   [OK]
+   Signalling pHelmIvP        [OK]
+   Signalling pMarinePID      [OK]
+   Signalling uSimMarine      [OK]
+   Signalling pMarineViewer   [OK]
+   Signalling MOOSDB          [OK]
+
+   All spawned processes shutdown.
+
+   That was the MOOS 
+

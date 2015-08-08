@@ -66,12 +66,12 @@ Behavior = BHV_Waypoint
 
                lead = 8
         lead_damper = 1
-              speed = 3   // meters per second
+              speed = 10   // meters per second
        capture_line = true
      capture_radius = 3.0
         slip_radius = 8.0
              //points = 60,-40 : 60,-160 : 150,-160 : 180,-100 : 150,-40
-             points = 16,-45 : 50,-150 //100,-325
+             points = 4075, -650 : 3293, -2464
              //points = format=lawnmower, label=emily_survey, x=35, y=-225, width=60, height=200, lane_width=30, rows=east-west, degs=-20
              repeat = 0
 
@@ -98,7 +98,7 @@ Behavior=BHV_Waypoint
            speed = 3.0
   capture_radius = 2.0
      slip_radius = 8.0
-          points = 10,-26:16,-45
+          points = 4088,-626:4075, -650
 }
 
 //----------------------------------------------
@@ -119,7 +119,7 @@ Behavior=BHV_Waypoint
            speed = 3.0
   capture_radius = 2.0
      slip_radius = 8.0
-          point = 40, -170
+          point = 3280, -2489
 }
 
 //----------------------------------------------
@@ -136,7 +136,7 @@ Behavior=BHV_Waypoint
            speed = 5.0
   capture_radius = 2.0
      slip_radius = 8.0
-          points = 0,-60
+          points = 4107,-589
 }
 
 Behavior=BHV_Loiter
@@ -152,7 +152,7 @@ Behavior=BHV_Loiter
   acquire_dist = 10
   capture_radius = 3
   slip_radius = 8
-  polygon = format=radial, label=home, x=0, y=-30, radius=25, pts=12
+  polygon = format=radial, label=home, x=4107, y=-589, radius=25, pts=12
   
   //----- Visual Display -----
   visual_hints = vertex_size  = 1             // default
