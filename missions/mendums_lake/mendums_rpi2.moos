@@ -188,7 +188,7 @@ ProcessConfig = pHelmIvP
   bhv_dir_not_found_ok = true
   ivp_behavior_dir = /home/ubuntu/moos-ivp-emily
 
-  behaviors  = mendums.bhv
+  behaviors  = mendums_avoidcollision.bhv
   domain     = course:0:359:360
   domain     = speed:1:10:25
 
