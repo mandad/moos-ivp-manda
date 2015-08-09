@@ -4,8 +4,8 @@
 // Intended for connecting to remote RPi2
 //-------------------------------------------------
 
-//Beaglebone direct connection
-//ServerHost = 192.168.42.1
+//RPI direct connection
+//ServerHost = 192.168.42.15
 //Community = emily
 
 //Local server with pShare
@@ -28,12 +28,13 @@ ProcessConfig = ANTLER
   MSBetweenLaunches = 400
 
   Run = MOOSDB          @ NewConsole = false
-  //Run = pLogger         @ NewConsole = false
+  Run = pLogger         @ NewConsole = false
   Run = pMarineViewer	  @ NewConsole = false
   Run = uProcessWatch   @ NewConsole = false
   Run = pShare            @ NewConsole = false
   Run = pHostInfo       @ NewConsole = false
   Run = uFldShoreBroker  @ NewConsole = false
+  Run = uFldNodeComms   @ NewConsole = false
 }
 
 //------------------------------------------
@@ -46,9 +47,9 @@ ProcessConfig = pHostInfo
   CommsTick = 1                                                 
                                                                 
   TEMP_FILE_DIR  = ./                                           
-  DEFAULT_HOSTIP = 192.168.42.13    // default is "localhost"  
+  //DEFAULT_HOSTIP = 192.168.42.10    // default is "localhost"  
                                                                 
-  //DEFAULT_HOSTIP_FORCE = 192.168.0.55                           
+  //DEFAULT_HOSTIP_FORCE = 192.168.42.10                           
 } 
 
 ProcessConfig = uFldShoreBroker                                 
@@ -90,6 +91,25 @@ ProcessConfig = pShare
   // Output = src_name = APPCAST_REQ, route = 10.0.0.22:9301
   // Output = src_name = NODE_REPORT_LOCAL, dest_name=NODE_REPORT, route=10.0.0.22:9301
   // Output = src_name = FAULT, dest_name=FAULT, route=10.0.0.22:9301
+}
+
+//--------------------------------------------------
+// ufldnodecomms Configuration Block
+
+ProcessConfig = uFldNodeComms
+{
+  AppTick       = 2
+  CommsTick     = 2
+
+  comms_range      = 1000
+  critical_range   = 50
+
+  min_msg_interval = 15
+  max_msg_length   = 1000
+
+  groups           = true
+
+  view_node_rpt_pulses = false
 }
 
 //------------------------------------------
