@@ -27,6 +27,7 @@ ProcessConfig = ANTLER
   //Run = uSimMarine	    @ NewConsole = false
   Run = pMarinePID      @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
+  Run = pBasicContactMgr @ NewConsole = false
   Run = uProcessWatch	  @ NewConsole = false
   Run = pNodeReporter	  @ NewConsole = false
   Run = iMOOSArduino    @ NewConsole = false
@@ -91,6 +92,7 @@ ProcessConfig = uFldNodeBroker
 
   BRIDGE = src=VIEW_POLYGON
   BRIDGE = src=VIEW_POINT
+  BRIDGE = src=VIEW_CIRCLE
   BRIDGE = src=VIEW_SEGLIST
   BRIDGE = src=APPCAST
   BRIDGE = src=NODE_REPORT_LOCAL,  alias=NODE_REPORT
@@ -239,4 +241,31 @@ ProcessConfig = pNodeReporter
   platform_length = 4
 
   node_report_output = NODE_REPORT_LOCAL
+}
+
+//--------------------------------------------------------
+// pBasicContactMgr Configuration Block
+
+ProcessConfig = pBasicContactMgr
+{
+  AppTick   = 2
+  CommsTick = 2
+
+  decay = 30,60
+
+  alert_verbose = true
+
+  contact_max_age = 3600
+  display_radii   = true
+
+  default_alert_range = 50
+  default_cpa_range   = 65
+  default_alert_range_color = gray70
+  default_cpa_range_color   = gray30
+
+  //alert = id=avd, var=CONTACT_INFO, val="name=$[VNAME] # contact=$[VNAME]"
+  //alert = id=avd, alert_range=80
+  //alert = id=avd, cpa_range=100
+  //alert = id=avd, alert_range_color=green
+  //alert = id=avd, cpa_range_color=white
 }
