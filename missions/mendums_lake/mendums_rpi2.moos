@@ -24,14 +24,14 @@ ProcessConfig = ANTLER
 
   Run = MOOSDB          @ NewConsole = false
   Run = pLogger         @ NewConsole = false
-  Run = uSimMarine	    @ NewConsole = false
+  //Run = uSimMarine	    @ NewConsole = false
   Run = pMarinePID      @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
   Run = pBasicContactMgr @ NewConsole = false
   Run = uProcessWatch	  @ NewConsole = false
   Run = pNodeReporter	  @ NewConsole = false
   Run = iMOOSArduino    @ NewConsole = false
-  //Run = iGP9            @ NewConsole = false
+  Run = iGP9            @ NewConsole = false
   Run = pShare          @ NewConsole = false
   Run = pHostInfo       @ NewConsole = false
   Run = uFldNodeBroker  @ NewConsole = false
@@ -210,8 +210,8 @@ ProcessConfig = pMarinePID
 
   // Yaw PID controller
   yaw_pid_kp		 = 1.2
-  yaw_pid_kd		 = 0.0
-  yaw_pid_ki		 = 0.3
+  yaw_pid_kd		 = 1
+  yaw_pid_ki		 = 0
   yaw_pid_integral_limit = 0.07
 
   // Speed PID controller
@@ -226,7 +226,7 @@ ProcessConfig = pMarinePID
 
   // A non-zero SPEED_FACTOR overrides use of SPEED_PID
   // Will set DESIRED_THRUST = DESIRED_SPEED * SPEED_FACTOR
-  speed_factor = 0
+  speed_factor = 10
 }
 
 //------------------------------------------
