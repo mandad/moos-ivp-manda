@@ -24,7 +24,7 @@ ProcessConfig = ANTLER
 
   Run = MOOSDB          @ NewConsole = false
   Run = pMarineViewer   @ NewConsole = false
-  //Run = pLogger         @ NewConsole = false
+  Run = pLogger         @ NewConsole = false
   Run = uSimMarine	    @ NewConsole = false
   Run = pMarinePID      @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
@@ -91,6 +91,9 @@ ProcessConfig = uSimMarine
   turn_rate     = 40
   thrust_map    = 0:0, 20:1, 40:2, 60:3, 80:4, 100:5
   thrust_reflect = true
+
+  max_deceleration = 2
+  //max_acceleration = 0
 }
 
 //------------------------------------------
@@ -128,7 +131,7 @@ ProcessConfig = pMarinePID
 
   // Yaw PID controller
   yaw_pid_kp     = 1.2
-  yaw_pid_kd     = 0.0
+  yaw_pid_kd     = 0.5
   yaw_pid_ki     = 0.3
   yaw_pid_integral_limit = 0.07
 

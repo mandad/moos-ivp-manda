@@ -502,7 +502,7 @@ void GP9::publishMsgs(gp9::Registers& r)
   double lat = r.latitude.get_scaled(0);
   double lon = r.longitude.get_scaled(0);
   m_Comms.Notify("NAV_LAT", lat, MOOSTime());
-  m_Comms.Notify("NAV_LON", lon, MOOSTime());
+  m_Comms.Notify("NAV_LONG", lon, MOOSTime());
   //convert to x,y
   if (lat != 0 && lon != 0) {
     double curX = 0.0;
