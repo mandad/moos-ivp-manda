@@ -1,8 +1,8 @@
 /************************************************************/
-/*    NAME: Damian Manda                                              */
-/*    ORGN: MIT                                             */
-/*    FILE: ZBoat.cpp                                        */
-/*    DATE:                                                 */
+/*    NAME: Damian Manda                                    */
+/*    ORGN: UNH                                             */
+/*    FILE: ZBoat.cpp                                       */
+/*    DATE: 19 Aug 2015                                     */
 /************************************************************/
 
 #include <iterator>
@@ -13,9 +13,13 @@
 using namespace std;
 
 //---------------------------------------------------------
-// Constructor
+// Constructor and Destructor
 
 ZBoat::ZBoat()
+{
+}
+
+ZBoat::~ZBoat()
 {
 }
 
@@ -24,29 +28,31 @@ ZBoat::ZBoat()
 
 bool ZBoat::OnNewMail(MOOSMSG_LIST &NewMail)
 {
-  AppCastingMOOSApp::OnNewMail(NewMail);
+  // AppCastingMOOSApp::OnNewMail(NewMail);
 
-  MOOSMSG_LIST::iterator p;
-  for(p=NewMail.begin(); p!=NewMail.end(); p++) {
-    CMOOSMsg &msg = *p;
-    string key    = msg.GetKey();
+//   MOOSMSG_LIST::iterator p;
+//   for(p=NewMail.begin(); p!=NewMail.end(); p++) {
+//     CMOOSMsg &msg = *p;
+//     string key    = msg.GetKey();
 
-#if 0 // Keep these around just for template
-    string comm  = msg.GetCommunity();
-    double dval  = msg.GetDouble();
-    string sval  = msg.GetString(); 
-    string msrc  = msg.GetSource();
-    double mtime = msg.GetTime();
-    bool   mdbl  = msg.IsDouble();
-    bool   mstr  = msg.IsString();
-#endif
+// #if 0 // Keep these around just for template
+//     string comm  = msg.GetCommunity();
+//     double dval  = msg.GetDouble();
+//     string sval  = msg.GetString(); 
+//     string msrc  = msg.GetSource();
+//     double mtime = msg.GetTime();
+//     bool   mdbl  = msg.IsDouble();
+//     bool   mstr  = msg.IsString();
+// #endif
 
-     if(key == "FOO") 
-       cout << "great!";
+//      if(key == "FOO") 
+//        cout << "great!";
 
-     else if(key != "APPCAST_REQ") // handle by AppCastingMOOSApp
-       reportRunWarning("Unhandled Mail: " + key);
-   }
+//      else if(key != "APPCAST_REQ") // handle by AppCastingMOOSApp
+//        reportRunWarning("Unhandled Mail: " + key);
+//    }
+
+   return UpdateMOOSVariables(NewMail);
 	
    return(true);
 }
@@ -56,7 +62,12 @@ bool ZBoat::OnNewMail(MOOSMSG_LIST &NewMail)
 
 bool ZBoat::OnConnectToServer()
 {
-   registerVariables();
+   if (IsSimulateMode()) {
+    //not much to do...
+    RegisterMOOSVariables();
+  } else {
+
+  }
    return(true);
 }
 
@@ -66,9 +77,13 @@ bool ZBoat::OnConnectToServer()
 
 bool ZBoat::Iterate()
 {
-  AppCastingMOOSApp::Iterate();
-  // Do your thing here!
-  AppCastingMOOSApp::PostReport();
+  // AppCastingMOOSApp::Iterate();
+
+  if (GetData()) {
+    PublishData();
+  }
+
+  // AppCastingMOOSApp::PostReport();
   return(true);
 }
 
@@ -78,12 +93,15 @@ bool ZBoat::Iterate()
 
 bool ZBoat::OnStartUp()
 {
-  AppCastingMOOSApp::OnStartUp();
+  // AppCastingMOOSApp::OnStartUp();
+  CMOOSInstrument::OnStartUp();
 
   STRING_LIST sParams;
   m_MissionReader.EnableVerbatimQuoting(false);
-  if(!m_MissionReader.GetConfiguration(GetAppName(), sParams))
-    reportConfigWarning("No config block found for " + GetAppName());
+  if(!m_MissionReader.GetConfiguration(GetAppName(), sParams)) {
+    MOOSTrace("No config block found for " + GetAppName());
+    // reportConfigWarning("No config block found for " + GetAppName());
+  }
 
   STRING_LIST::iterator p;
   for(p=sParams.begin(); p!=sParams.end(); p++) {
@@ -100,12 +118,41 @@ bool ZBoat::OnStartUp()
       handled = true;
     }
 
-    if(!handled)
-      reportUnhandledConfigWarning(orig);
+    if(!handled) {
+      MOOSTrace("Unhandled config line: " + orig);
+      //reportUnhandledConfigWarning(orig);
+    }
 
   }
+
+  //here we make the variables that we are managing
+  double dfGPSPeriod = 1.0;
+
+  //GPS update @ 2Hz
+  AddMOOSVariable("X", "SIM_X", "GPS_X", dfGPSPeriod);
+
+  AddMOOSVariable("Y", "SIM_Y", "GPS_Y", dfGPSPeriod);
+
+  AddMOOSVariable("N", "", "GPS_N", dfGPSPeriod);
+
+  AddMOOSVariable("E", "", "GPS_E", dfGPSPeriod);
+
+  AddMOOSVariable("Raw", "", "GPS_RAW", dfGPSPeriod);
+
+  AddMOOSVariable("Satellites", "", "GPS_SAT", dfGPSPeriod);
   
-  registerVariables();	
+  registerVariables();
+  //try to open
+
+  if (!SetupPort()) {
+    return false;
+  }
+
+  //try 10 times to initialise sensor
+  if (!InitialiseSensorN(10, "GPS")) {
+    return false;
+  }
+
   return(true);
 }
 
@@ -114,7 +161,8 @@ bool ZBoat::OnStartUp()
 
 void ZBoat::registerVariables()
 {
-  AppCastingMOOSApp::RegisterVariables();
+  //AppCastingMOOSApp::RegisterVariables();
+  RegisterMOOSVariables();
   // Register("FOOBAR", 0);
 }
 
@@ -122,21 +170,82 @@ void ZBoat::registerVariables()
 //------------------------------------------------------------
 // Procedure: buildReport()
 
-bool ZBoat::buildReport() 
+// bool ZBoat::buildReport() 
+// {
+//   m_msgs << "============================================ \n";
+//   m_msgs << "File:                                        \n";
+//   m_msgs << "============================================ \n";
+
+//   ACTable actab(4);
+//   actab << "Alpha | Bravo | Charlie | Delta";
+//   actab.addHeaderLines();
+//   actab << "one" << "two" << "three" << "four";
+//   m_msgs << actab.getFormattedString();
+
+//   return(true);
+// }
+
+//-----------------------------------------------------------
+// MOOSInstrument Functions
+
+bool ZBoat::InitialiseSensor()
 {
-  m_msgs << "============================================ \n";
-  m_msgs << "File:                                        \n";
-  m_msgs << "============================================ \n";
+  // if (MOOSStrCmp(m_sType, "ASHTECH")) {
+  //   const char * sInit = "$PASHS,NME,GGA,A,ON\r\n";
+  //   MOOSTrace("Sending %s\n", sInit);
+  //   m_Port.Write(sInit, strlen(sInit));
 
-  ACTable actab(4);
-  actab << "Alpha | Bravo | Charlie | Delta";
-  actab.addHeaderLines();
-  actab << "one" << "two" << "three" << "four";
-  m_msgs << actab.getFormattedString();
+  //   MOOSPause(2000);
+  //   string sReply;
+  //   double dfTime;
 
-  return(true);
+  //   if (m_Port.GetLatest(sReply, dfTime)) {
+  //     MOOSTrace("Rx %s", sReply.c_str());
+  //   } else {
+  //     MOOSTrace("No reply\n");
+  //   }
+
+  // } 
+
+  return true;
+
 }
 
+//===========================================================
+// Custom functions for this instrument
 
+bool ZBoat::GetData()
+{
+  //here we actually access serial ports etc
+
+  string sWhat;
+
+  double dfWhen;
+
+  if (m_Port.IsStreaming()) {
+    if (!m_Port.GetLatest(sWhat, dfWhen)) {
+      return false;
+    }
+  } else {
+    if (!m_Port.GetTelegram(sWhat, 0.5)) {
+      return false;
+    }
+  }
+
+  //MOOSTrace("Rx:  %s",sWhat.c_str());
+  if (PublishRaw()) {
+    SetMOOSVar("Raw", sWhat, MOOSTime());
+  }
+
+  //Process the data here (sWhat)
+
+  return true;
+
+}
+
+bool ZBoat::PublishData()
+{
+  return PublishFreshMOOSVariables();
+}
 
 

@@ -9,12 +9,13 @@
 #define ZBoat_HEADER
 
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
+#include "MOOS/libMOOS/MOOSLib.h"
 
-class ZBoat : public AppCastingMOOSApp
+class ZBoat : public CMOOSInstrument
 {
  public:
    ZBoat();
-   ~ZBoat() {};
+   virtual ~ZBoat();
 
  protected: // Standard MOOSApp functions to overload  
    bool OnNewMail(MOOSMSG_LIST &NewMail);
@@ -22,11 +23,16 @@ class ZBoat : public AppCastingMOOSApp
    bool OnConnectToServer();
    bool OnStartUp();
 
- protected: // Standard AppCastingMOOSApp function to overload 
-   bool buildReport();
+   //CMOOSInstrument Functions
+   bool InitialiseSensor();
+
+ // protected: // Standard AppCastingMOOSApp function to overload 
+   // bool buildReport();
 
  protected:
    void registerVariables();
+   bool GetData();
+   bool PublishData();
 
  private: // Configuration variables
 
