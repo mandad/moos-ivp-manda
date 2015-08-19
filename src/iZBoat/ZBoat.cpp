@@ -52,7 +52,11 @@ bool ZBoat::OnNewMail(MOOSMSG_LIST &NewMail)
 //        reportRunWarning("Unhandled Mail: " + key);
 //    }
 
-   return UpdateMOOSVariables(NewMail);
+   UpdateMOOSVariables(NewMail);
+
+   GeneratePWMMessage();
+
+   PublishData();
 	
    return(true);
 }
@@ -96,6 +100,9 @@ bool ZBoat::OnStartUp()
   // AppCastingMOOSApp::OnStartUp();
   CMOOSInstrument::OnStartUp();
 
+  // 20 Hz max input rate
+  double dfInputPeriod = 0.05;
+
   STRING_LIST sParams;
   m_MissionReader.EnableVerbatimQuoting(false);
   if(!m_MissionReader.GetConfiguration(GetAppName(), sParams)) {
@@ -111,10 +118,13 @@ bool ZBoat::OnStartUp()
     string value = line;
 
     bool handled = false;
-    if(param == "FOO") {
+    if(param == "MAXINPUTRATE") {
+      dfInputPeriod = 1 / atof(value.c_str());
       handled = true;
     }
-    else if(param == "BAR") {
+    else if(param == "PORT" || param == "BAUDRATE" || param == "HANDSHAKING" || 
+      param == "STREAMING") {
+      // These are all handled by CMOOSInstrument
       handled = true;
     }
 
@@ -126,20 +136,11 @@ bool ZBoat::OnStartUp()
   }
 
   //here we make the variables that we are managing
-  double dfGPSPeriod = 1.0;
 
   //GPS update @ 2Hz
-  AddMOOSVariable("X", "SIM_X", "GPS_X", dfGPSPeriod);
-
-  AddMOOSVariable("Y", "SIM_Y", "GPS_Y", dfGPSPeriod);
-
-  AddMOOSVariable("N", "", "GPS_N", dfGPSPeriod);
-
-  AddMOOSVariable("E", "", "GPS_E", dfGPSPeriod);
-
-  AddMOOSVariable("Raw", "", "GPS_RAW", dfGPSPeriod);
-
-  AddMOOSVariable("Satellites", "", "GPS_SAT", dfGPSPeriod);
+  AddMOOSVariable("Throttle", "DESIRED_THRUST", "", dfInputPeriod);
+  AddMOOSVariable("Rudder", "DESIRED_RUDDER", "", dfInputPeriod);
+  AddMOOSVariable("PWM", "", "ZBOAT_PWM", dfInputPeriod);
   
   registerVariables();
   //try to open
@@ -149,7 +150,7 @@ bool ZBoat::OnStartUp()
   }
 
   //try 10 times to initialise sensor
-  if (!InitialiseSensorN(10, "GPS")) {
+  if (!InitialiseSensorN(10, "MOOS to ZBoat")) {
     return false;
   }
 
@@ -190,6 +191,10 @@ void ZBoat::registerVariables()
 
 bool ZBoat::InitialiseSensor()
 {
+  const char * sInit = "!SetAutonomousControl\r";
+  MOOSTrace("Sending %s\n", sInit);
+  m_Port.Write(sInit, strlen(sInit));
+
   // if (MOOSStrCmp(m_sType, "ASHTECH")) {
   //   const char * sInit = "$PASHS,NME,GGA,A,ON\r\n";
   //   MOOSTrace("Sending %s\n", sInit);
@@ -217,7 +222,9 @@ bool ZBoat::InitialiseSensor()
 bool ZBoat::GetData()
 {
   //here we actually access serial ports etc
+  //For this app we are not expecting to receive anything
 
+  /*
   string sWhat;
 
   double dfWhen;
@@ -236,7 +243,7 @@ bool ZBoat::GetData()
   if (PublishRaw()) {
     SetMOOSVar("Raw", sWhat, MOOSTime());
   }
-
+  */
   //Process the data here (sWhat)
 
   return true;
@@ -246,6 +253,11 @@ bool ZBoat::GetData()
 bool ZBoat::PublishData()
 {
   return PublishFreshMOOSVariables();
+}
+
+void GeneratePWMMessage()
+{
+
 }
 
 

@@ -3,7 +3,16 @@
 
 ProcessConfig = iZBoat
 {
-   AppTick   = 4
-   CommsTick = 4
+   AppTick   = 10
+   CommsTick = 10
+
+   // Serial port configuration
+   PORT = /dev/ttyS0
+   BAUDRATE = 115200
+   HANDSHAKING = FALSE
+   STREAMING = FALSE
+
+   //iZBoat Configuration
+   MaxInputRate = 20
 }
 
