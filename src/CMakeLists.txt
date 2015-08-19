@@ -14,10 +14,14 @@ INCLUDE_DIRECTORIES(${LOCAL_LIBRARY_DIRS})
 #============================================================================
 # List the subdirectories to build...
 #============================================================================
+ADD_SUBDIRECTORY(lib_anrp_util)
+
 ADD_SUBDIRECTORY(iMOOSArduino)
 ADD_SUBDIRECTORY(pMOOSArduinoTester)
 ADD_SUBDIRECTORY(uMOOSArduinoLib)
 ADD_SUBDIRECTORY(iGP9)
+ADD_SUBDIRECTORY(iZBoat)
+ADD_SUBDIRECTORY(iGPS)
 
 ##############################################################################
 #                           END of CMakeLists.txt

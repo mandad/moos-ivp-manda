@@ -1,0 +1,9 @@
+//------------------------------------------------
+// iZBoat config block
+
+ProcessConfig = iZBoat
+{
+   AppTick   = 4
+   CommsTick = 4
+}
+
