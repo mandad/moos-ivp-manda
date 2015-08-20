@@ -67,15 +67,12 @@ Behavior = BHV_StationKeep
    pwt          = 100                   // default
    condition    = MODE == HOME
    endflag      = REACHED_HOME = true
-   // inactiveflag = STATIONING = false    // example
-   // activeflag   = STATIONING = true     // example
-
 
    // Parameters specific to this behavior
    // ------------------------------------
       center_activate = false   // default
    hibernation_radius = -1      // default
-         inner_radius = 4       // default
+         inner_radius = 5       // default
          outer_radius = 20      // default
          outer_speed  = 1     // default
        transit_speed  = 5     // default
