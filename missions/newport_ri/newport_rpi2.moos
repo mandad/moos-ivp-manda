@@ -37,6 +37,7 @@ ProcessConfig = ANTLER
   Run = pShare          @ NewConsole = false
   Run = pHostInfo       @ NewConsole = false
   Run = uFldNodeBroker  @ NewConsole = false
+  Run = pEchoVar        @ NewConsole = false
 }
 
 //------------------------------------------------
@@ -198,7 +199,7 @@ ProcessConfig = uSimMarine
 
   prefix        = NAV
 
-  turn_rate     = 40
+  turn_rate     = 60
   thrust_map    = 0:0, 20:2, 40:4, 60:6, 80:8, 100:10
 }
 

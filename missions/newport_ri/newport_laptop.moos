@@ -169,6 +169,7 @@ ProcessConfig = pMarineViewer
   hash_viewable        = true
 
   trails_point_size   = 2
+  trails_length       = 1000
   trails_color        = blue
   vehicles_name_color = darkred
   vehicles_active_color = red //default
