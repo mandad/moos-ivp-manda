@@ -28,7 +28,7 @@ ProcessConfig = ANTLER
   MSBetweenLaunches = 400
 
   Run = MOOSDB          @ NewConsole = false
-  Run = pLogger         @ NewConsole = false
+  //Run = pLogger         @ NewConsole = false
   Run = pMarineViewer	  @ NewConsole = false
   Run = uProcessWatch   @ NewConsole = false
   Run = pShare            @ NewConsole = false
@@ -50,7 +50,7 @@ ProcessConfig = pHostInfo
   //DEFAULT_HOSTIP = 192.168.42.10    // default is "localhost"  
   DEFAULT_HOSTIP = 192.168.2.1
                                                                 
-  DEFAULT_HOSTIP_FORCE = TRUE                           
+  DEFAULT_HOSTIP_FORCE = 192.168.2.1                           
 } 
 
 ProcessConfig = uFldShoreBroker                                 

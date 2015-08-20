@@ -31,7 +31,7 @@ Behavior = BHV_Waypoint
   name      = waypt_survey
   pwt       = 100
   condition = MODE == SURVEY
-  endflag   = FAULT = true
+  //endflag   = FAULT = true
 
   idleflag  = WPTING = idle
   runflag   = WPTING = running
@@ -44,18 +44,18 @@ Behavior = BHV_Waypoint
 
                lead = 8
         lead_damper = 1
-              speed = 3   // meters per second
+              speed = 2   // meters per second
        capture_line = true
      capture_radius = 3.0
         slip_radius = 8.0
-             //points = 60,-40 : 60,-160 : 150,-160 : 180,-100 : 150,-40
-             points = format=lawnmower, label=emily_survey, x=-50, y=200, width=100, height=200, lane_width=50, rows=north-south, degs=0
+             //points = 0,100 : -141, -66
+             //points = format=lawnmower, label=emily_survey, x=-50, y=200, width=100, height=200, lane_width=50, rows=north-south, degs=0
              repeat = 0
 
     visual_hints = nextpt_color=yellow
     visual_hints = nextpt_vertex_size=8
     visual_hints = nextpt_lcolor=gray70
-    visual_hints = vertex_color=dodger_blue, edge_color=white
+    visual_hints = vertex_color=dodger_blue, edge_color=red
     visual_hints = vertex_size=5, edge_size=1.5
 }
 
@@ -73,7 +73,7 @@ Behavior=BHV_Waypoint
            speed = 5.0
   capture_radius = 2.0
      slip_radius = 8.0
-          points = -10,45
+          points = 0,100
 }
 
 Behavior=BHV_Loiter
@@ -89,13 +89,13 @@ Behavior=BHV_Loiter
   acquire_dist = 10
   capture_radius = 3
   slip_radius = 8
-  polygon = format=radial, label=home, x=-10, y=0, radius=25, pts=12
+  polygon = format=radial, label=home, x=0, y=100, radius=25, pts=12
   
   //----- Visual Display -----
   visual_hints = vertex_size  = 1             // default
   visual_hints = edge_size    = 1             // default
   visual_hints = vertex_color = dodger_blue   // default
-  visual_hints = edge_color   = white         // default
+  visual_hints = edge_color   = red         
   visual_hints = nextpt_color = yellow        // default
   visual_hints = nextpt_lcolor = aqua         // default
   visual_hints = nextpt_vertex_size = 5       // default

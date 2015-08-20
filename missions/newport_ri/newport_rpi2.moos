@@ -23,7 +23,7 @@ ProcessConfig = ANTLER
   MSBetweenLaunches = 400
 
   Run = MOOSDB          @ NewConsole = false
-  Run = pLogger         @ NewConsole = false
+  //Run = pLogger         @ NewConsole = false
   Run = uSimMarine	    @ NewConsole = false
   Run = pMarinePID      @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
@@ -167,7 +167,7 @@ ProcessConfig = uSimMarine
 
   start_x       = 0
   start_y       = 0
-  start_heading = 180
+  start_heading = 0
   start_speed   = 0
 
   prefix        = NAV
