@@ -264,6 +264,7 @@ bool ZBoat::PublishData()
   // char cPwmMessage[40];
   //  GetMOOSVar("PWM")->();
   if (strlen(m_cPwmMessage) > 0) {
+    MOOSTrace("ZBoat Tx: %s", m_cPwmMessage)
     m_Port.Write(m_cPwmMessage, strlen(m_cPwmMessage));
   }
   return PublishFreshMOOSVariables();
