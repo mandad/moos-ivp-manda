@@ -249,16 +249,14 @@ bool CGPSInstrument::ParseNMEAString(string &sNMEAString)
   string sWhat = MOOSChomp(sNMEAString, ",");
   bool bGood = true;
   
+    //first of all is this a good NMEA string?
+  if (!DoNMEACheckSum(sCopy)) {
+    MOOSDebugWrite("GPS Failed NMEA check sum");
+    return false;
+  }
   //GGA and GLL headers format the NMEA string differently
   
   if (sWhat == "$GPGGA") {
-    
-    //first of all is this a good NMEA string?
-    
-    if (!DoNMEACheckSum(sCopy)) {
-      MOOSDebugWrite("GPS Failed NMEA check sum");
-      return false;
-    }
     
     //OK so extract data...
     double dfTimeNow = MOOSTime();
@@ -267,7 +265,11 @@ bool CGPSInstrument::ParseNMEAString(string &sNMEAString)
     
     sTmp = MOOSChomp(sNMEAString, ",");
     
+    /////////////////////////////////////
+    //         GPS Time
     double dfTime	= atof(	sTmp.c_str());
+    m_Comms.Notify("GPS_TIME", dfTime, dfTimeNow);
+
     
     /////////////////////////////////////
     //          latitude..
@@ -369,7 +371,7 @@ bool CGPSInstrument::ParseNMEAString(string &sNMEAString)
       while(heading < -180) heading += 360;
       double yaw = -heading * M_PI/180.0;
       
-      m_Comms.Notify("GPS_HEADING", heading);
+      m_Comms.Notify("GPS_TRACK_ANG", heading);
       m_Comms.Notify("GPS_YAW", yaw);
     }
     
@@ -379,7 +381,17 @@ bool CGPSInstrument::ParseNMEAString(string &sNMEAString)
       if(m.Part(11)[0] == 'W') f = 0 - f;
       
       m_Comms.Notify("GPS_MAGNETIC_DECLINATION", f);
+    } 
+    return true;
+  } else if (sWhat == "$GPHDT") {
+    NMEAMessage m(sCopy);
+
+    if(strlen(m.Part(1).c_str())) {
+        m_Comms.Notify("GPS_HEADING", atof(m.Part(1).c_str()));
     }
+    return true;
+  } else if (sWhat == "$GPZDA") {
+    //May want to handle this case
   }
 
   return false;
