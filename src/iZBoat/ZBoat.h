@@ -33,8 +33,11 @@ class ZBoat : public CMOOSInstrument
    void registerVariables();
    bool GetData();
    bool PublishData();
+   void GeneratePWMMessage();
 
  private: // Configuration variables
+   double m_dfMaxRudder;
+   double m_dfMaxThrottle;
 
  private: // State variables
 };

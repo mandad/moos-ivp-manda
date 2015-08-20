@@ -17,6 +17,9 @@ using namespace std;
 
 ZBoat::ZBoat()
 {
+   m_dfMaxRudder = 45;
+   m_dfMaxThrottle = 100;
+
 }
 
 ZBoat::~ZBoat()
@@ -121,6 +124,12 @@ bool ZBoat::OnStartUp()
     if(param == "MAXINPUTRATE") {
       dfInputPeriod = 1 / atof(value.c_str());
       handled = true;
+    }
+    else if (param == "MAXRUDDER") {
+      m_dfMaxRudder = atof(value.c_str());
+    }
+    else if (param == "MAXTHROTTLE") {
+      m_dfMaxThrottle = atof(value.c_str());
     }
     else if(param == "PORT" || param == "BAUDRATE" || param == "HANDSHAKING" || 
       param == "STREAMING") {
@@ -255,8 +264,30 @@ bool ZBoat::PublishData()
   return PublishFreshMOOSVariables();
 }
 
-void GeneratePWMMessage()
+void ZBoat::GeneratePWMMessage()
 {
+  CMOOSVariable * pThrottleSet = GetMOOSVar("Throttle");
+  CMOOSVariable * pRudderSet = GetMOOSVar("Rudder");
+  double dfThrottleSet = 0;
+  double dfRudderSet = 0;
+
+  if (pThrottleSet->IsFresh()) { 
+    dfThrottleSet = pThrottleSet->GetDoubleVal();
+
+  }
+  if (pRudderSet->IsFresh()) {
+    dfRudderSet = pRudderSet->GetDoubleVal();
+  }
+  
+  double dfScaledThrottle = 1.5 - (dfThrottleSet / m_dfMaxThrottle) * 0.5;
+  double dfScaledRudder = 1.5 + (dfRudderSet / m_dfMaxRudder) * 0.5;
+ 
+  char cPwmMessage[40];
+  sprintf(cPwmMessage, "!pwm, *, %4.3f, %4.3f, %4.3f, *, *\r\n", dfScaledThrottle, 
+    dfScaledThrottle, dfScaledRudder);
+  string sPwmMessage(cPwmMessage);
+  SetMOOSVar("PWM", sPwmMessage, MOOSTime());
+  m_Port.Write(cPwmMessage, strlen(cPwmMessage))
 
 }
 
