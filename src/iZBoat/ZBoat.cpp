@@ -24,7 +24,11 @@ ZBoat::ZBoat()
 
 ZBoat::~ZBoat()
 {
+  const char * sInit = "!SetManualControl\r\n";
+  MOOSTrace("ZBoat: Sending %s\n", sInit);
+  m_Port.Write(sInit, strlen(sInit));
 }
+
 
 //---------------------------------------------------------
 // Procedure: OnNewMail
@@ -287,8 +291,8 @@ void ZBoat::GeneratePWMMessage()
     dfRudderSet = pRudderSet->GetDoubleVal();
   }
   
-  double dfScaledThrottle = 1.5 - (dfThrottleSet / m_dfMaxThrottle) * 0.5;
-  double dfScaledRudder = 1.5 + (dfRudderSet / m_dfMaxRudder) * 0.5;
+  double dfScaledThrottle = 1.5 - (dfThrottleSet / m_dfMaxThrottle) * 0.2;
+  double dfScaledRudder = 1.5 + (dfRudderSet / m_dfMaxRudder) * 0.2;
  
   char cPwmMessage[40];
   sprintf(cPwmMessage, "!pwm, *, %4.3f, %4.3f, %4.3f, *, *\r\n", dfScaledThrottle, 

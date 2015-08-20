@@ -44,8 +44,8 @@ ProcessConfig = ANTLER
 
 ProcessConfig = iZBoat
 {
-   AppTick   = 10
-   CommsTick = 10
+   AppTick   = 5
+   CommsTick = 5
 
    // Serial port configuration
    PORT = /dev/ttyUSB0
@@ -57,6 +57,17 @@ ProcessConfig = iZBoat
    MaxInputRate = 20
    MaxRudder = 45
    MaxThrottle = 100
+}
+
+ProcessConfig = iGPS
+{
+   AppTick = 5
+   CommsTick = 5
+   
+   PORT = /dev/ttyUSB1
+   BAUDRATE = 115200
+   HANDSHAKING = FALSE
+   STREAMING = FALSE
 }
 
 //------------------------------------------------
@@ -97,6 +108,7 @@ ProcessConfig = uFldNodeBroker
   // TRY_SHORE_HOST = pshare_route=192.168.42.13:9300
   //TRY_SHORE_HOST = pshare_route=10.42.0.97:9300
   TRY_SHORE_HOST = pshare_route=192.168.2.1:9300
+  TRY_SHORE_HOST = pshare_route=192.168.42.10:9300
 
 
   BRIDGE = src=VIEW_POLYGON
