@@ -13,7 +13,7 @@
 
 using namespace std;
 
-const char VERSION[10] = "0.0.1";   // gp9_driver version
+const char VERSION[10] = "0.0.2";   // gp9_driver version
 
 // Don't try to be too clever. Arrival of this message triggers
 // us to publish everything we have.
@@ -501,8 +501,8 @@ void GP9::publishMsgs(gp9::Registers& r)
   // Position
   double lat = r.latitude.get_scaled(0);
   double lon = r.longitude.get_scaled(0);
-  m_Comms.Notify("NAV_LAT", lat, MOOSTime());
-  m_Comms.Notify("NAV_LONG", lon, MOOSTime());
+  m_Comms.Notify("GP9_LAT", lat, MOOSTime());
+  m_Comms.Notify("GP9_LONG", lon, MOOSTime());
   //convert to x,y
   if (lat != 0 && lon != 0) {
     double curX = 0.0;
@@ -510,15 +510,15 @@ void GP9::publishMsgs(gp9::Registers& r)
     bool bGeoSuccess = m_geodesy.LatLong2LocalUTM(lat, 
       lon, curY, curX);
     if (bGeoSuccess) {
-      m_Comms.Notify("NAV_X", curX, MOOSTime());
-      m_Comms.Notify("NAV_Y", curY, MOOSTime());
+      m_Comms.Notify("GP9_X", curX, MOOSTime());
+      m_Comms.Notify("GP9_Y", curY, MOOSTime());
     }
   } else {
     //Pretend we are stationary at origin if no GPS signal
-    m_Comms.Notify("NAV_X", 0.0, MOOSTime());
-    m_Comms.Notify("NAV_Y", 0.0, MOOSTime());
+    m_Comms.Notify("GP9_X", 0.0, MOOSTime());
+    m_Comms.Notify("GP9_Y", 0.0, MOOSTime());
   }
 
-  m_Comms.Notify("NAV_SPEED", r.gps_speed.get_scaled(0), MOOSTime());
-  m_Comms.Notify("NAV_HEADING", r.gps_course.get_scaled(0), MOOSTime());
+  m_Comms.Notify("GP9_GPS_SPEED", r.gps_speed.get_scaled(0), MOOSTime());
+  m_Comms.Notify("GP9_GPS_HEADING", r.gps_course.get_scaled(0), MOOSTime());
 }

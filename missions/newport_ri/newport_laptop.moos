@@ -49,7 +49,8 @@ ProcessConfig = pHostInfo
   TEMP_FILE_DIR  = ./                                           
   //DEFAULT_HOSTIP = 192.168.42.10    // default is "localhost"  
   DEFAULT_HOSTIP = 192.168.2.1
-                                                                
+    
+  //DEFAULT_HOSTIP_FORCE = 192.168.42.10                                                            
   DEFAULT_HOSTIP_FORCE = 192.168.2.1                           
 } 
 
@@ -168,6 +169,10 @@ ProcessConfig = pMarineViewer
   hash_viewable        = true
 
   trails_point_size   = 2
+  trails_color        = blue
+  vehicles_name_color = darkred
+  vehicles_active_color = red //default
+
 
   // Appcast configuration
   appcast_height       = 75
@@ -201,6 +206,7 @@ ProcessConfig = pMarineViewer
   scope  = VIEW_POINT
   scope  = VIEW_POLYGON
   scope  = MODE
+  scope  = ZBOAT_PWM
 
   button_one = DEPLOY # DEPLOY_EMILY=true 
   button_one = MOOS_MANUAL_OVERRIDE_EMILY=false # RETURN_EMILY=false

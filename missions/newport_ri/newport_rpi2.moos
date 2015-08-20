@@ -44,30 +44,30 @@ ProcessConfig = ANTLER
 
 ProcessConfig = iZBoat
 {
-   AppTick   = 5
-   CommsTick = 5
+  AppTick   = 5
+  CommsTick = 5
 
-   // Serial port configuration
-   PORT = /dev/ttyUSB0
-   BAUDRATE = 115200
-   HANDSHAKING = FALSE
-   STREAMING = FALSE
+  // Serial port configuration
+  PORT = /dev/ttyUSB0
+  BAUDRATE = 115200
+  HANDSHAKING = FALSE
+  STREAMING = FALSE
 
-   //iZBoat Configuration
-   MaxInputRate = 20
-   MaxRudder = 45
-   MaxThrottle = 100
+  //iZBoat Configuration
+  MaxInputRate = 20
+  MaxRudder = 45
+  MaxThrottle = 100
 }
 
 ProcessConfig = iGPS
 {
-   AppTick = 5
-   CommsTick = 5
-   
-   PORT = /dev/ttyUSB1
-   BAUDRATE = 115200
-   HANDSHAKING = FALSE
-   STREAMING = FALSE
+  AppTick = 5
+  CommsTick = 5
+
+  PORT = /dev/ttyUSB1
+  BAUDRATE = 115200
+  HANDSHAKING = FALSE
+  STREAMING = FALSE
 }
 
 //------------------------------------------------
@@ -75,12 +75,26 @@ ProcessConfig = iGPS
 
 ProcessConfig = iGP9
 {
-   AppTick   = 20
-   CommsTick = 5
+  AppTick   = 20
+  CommsTick = 5
 
-   SerialPort = /dev/ttyAMA0
-   BaudRate = 115200
-   Covariance = "0 0 0 0 0 0 0 0 0"
+  SerialPort = /dev/ttyAMA0
+  BaudRate = 115200
+  Covariance = "0 0 0 0 0 0 0 0 0"
+}
+
+ProcessConfig = pEchoVar
+{
+  AppTick   = 20
+  CommsTick = 20
+
+  // Use iGPS for the GPS device
+  echo = GPS_LATITUDE     -> NAV_LAT
+  echo = GPS_LONGITUDE    -> NAV_LONG
+  echo = GPS_X            -> NAV_X
+  echo = GPS_Y            -> NAV_Y
+  echo = GPS_HEADING      -> NAV_HEADING
+  echo = GPS_SPEED        -> NAV_SPEED
 }
 
 //------------------------------------------
