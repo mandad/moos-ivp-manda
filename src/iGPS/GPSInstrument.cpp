@@ -390,9 +390,24 @@ bool CGPSInstrument::ParseNMEAString(string &sNMEAString)
         m_Comms.Notify("GPS_HEADING", atof(m.Part(1).c_str()));
     }
     return true;
-  } else if (sWhat == "$GPZDA") {
-    //May want to handle this case
+  } else if (sWhat == "$GPVTG") {
+    NMEAMessage m(sCopy);
+
+    //Track made good (degrees true)
+    if(strlen(m.Part(1).c_str())) {
+        m_Comms.Notify("GPS_VTG_HEADING", atof(m.Part(1).c_str()));
+    }
+    //Speed, in knots
+    if(strlen(m.Part(5).c_str())) {
+        m_Comms.Notify("GPS_SPEED", atof(m.Part(5).c_str()) * 0.51444444);
+    } else if (strlen(m.Part(7).c_str())) {
+        //Speed over ground in kilometers/hour (kph)
+        m_Comms.Notify("GPS_SPEED", atof(m.Part(7).c_str()) * 0.27777778);
+    }
+    
+    return true;
   }
+  //May also want to handle ZDA
 
   return false;
 }
