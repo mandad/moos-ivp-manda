@@ -103,6 +103,8 @@ bool ZBoat::OnStartUp()
   // AppCastingMOOSApp::OnStartUp();
   CMOOSInstrument::OnStartUp();
 
+  MOOSTrace("ZBoat: StartUp");
+
   // 20 Hz max input rate
   double dfInputPeriod = 0.05;
 
@@ -201,7 +203,7 @@ void ZBoat::registerVariables()
 bool ZBoat::InitialiseSensor()
 {
   const char * sInit = "!SetAutonomousControl\r\n";
-  MOOSTrace("Sending %s\n", sInit);
+  MOOSTrace("ZBoat: Sending %s\n", sInit);
   m_Port.Write(sInit, strlen(sInit));
 
   // if (MOOSStrCmp(m_sType, "ASHTECH")) {
@@ -264,7 +266,7 @@ bool ZBoat::PublishData()
   // char cPwmMessage[40];
   //  GetMOOSVar("PWM")->();
   if (strlen(m_cPwmMessage) > 0) {
-    MOOSTrace("ZBoat Tx: %s", m_cPwmMessage)
+    MOOSTrace("ZBoat Tx: %s", m_cPwmMessage);
     m_Port.Write(m_cPwmMessage, strlen(m_cPwmMessage));
   }
   return PublishFreshMOOSVariables();
