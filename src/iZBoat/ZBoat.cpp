@@ -19,7 +19,7 @@ ZBoat::ZBoat()
 {
    m_dfMaxRudder = 45;
    m_dfMaxThrottle = 100;
-
+   m_cPwmMessage[0] = '\0';
 }
 
 ZBoat::~ZBoat()
@@ -200,7 +200,7 @@ void ZBoat::registerVariables()
 
 bool ZBoat::InitialiseSensor()
 {
-  const char * sInit = "!SetAutonomousControl\r";
+  const char * sInit = "!SetAutonomousControl\r\n";
   MOOSTrace("Sending %s\n", sInit);
   m_Port.Write(sInit, strlen(sInit));
 
@@ -261,6 +261,11 @@ bool ZBoat::GetData()
 
 bool ZBoat::PublishData()
 {
+  // char cPwmMessage[40];
+  //  GetMOOSVar("PWM")->();
+  if (strlen(m_cPwmMessage) > 0) {
+    m_Port.Write(m_cPwmMessage, strlen(m_cPwmMessage));
+  }
   return PublishFreshMOOSVariables();
 }
 
@@ -285,9 +290,10 @@ void ZBoat::GeneratePWMMessage()
   char cPwmMessage[40];
   sprintf(cPwmMessage, "!pwm, *, %4.3f, %4.3f, %4.3f, *, *\r\n", dfScaledThrottle, 
     dfScaledThrottle, dfScaledRudder);
+  strncpy(m_cPwmMessage, cPwmMessage, sizeof(cPwmMessage));
+
   string sPwmMessage(cPwmMessage);
   SetMOOSVar("PWM", sPwmMessage, MOOSTime());
-  m_Port.Write(cPwmMessage, strlen(cPwmMessage))
 
 }
 
