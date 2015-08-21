@@ -39,7 +39,7 @@ Behavior = BHV_Waypoint
   endflag   = WPTING = end
   inactiveflag = WPTING = inactive
 
-  UPDATES   = WPT_UPDATE
+  UPDATES   = SURVEY_UPDATE
   perpetual = true
 
                lead = 8
@@ -67,6 +67,7 @@ Behavior = BHV_StationKeep
    pwt          = 100                   // default
    condition    = MODE == HOME
    endflag      = REACHED_HOME = true
+   updates      = HOME_UPDATE
 
    // Parameters specific to this behavior
    // ------------------------------------

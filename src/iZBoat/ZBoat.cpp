@@ -291,8 +291,8 @@ void ZBoat::GeneratePWMMessage()
     dfRudderSet = pRudderSet->GetDoubleVal();
   }
   
-  double dfScaledThrottle = 1.5 - (dfThrottleSet / m_dfMaxThrottle) * 0.2;
-  double dfScaledRudder = 1.5 + (dfRudderSet / m_dfMaxRudder) * 0.2;
+  double dfScaledThrottle = 1.5 - (dfThrottleSet / m_dfMaxThrottle) * 0.3;
+  double dfScaledRudder = 1.5 + (dfRudderSet / m_dfMaxRudder) * 0.3;
  
   char cPwmMessage[40];
   sprintf(cPwmMessage, "!pwm, *, %4.3f, %4.3f, %4.3f, *, *\r\n", dfScaledThrottle, 
