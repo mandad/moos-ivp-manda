@@ -23,8 +23,9 @@ ProcessConfig = ANTLER
   MSBetweenLaunches = 400
 
   Run = MOOSDB          @ NewConsole = false
-  Run = pLogger         @ NewConsole = false
-  //Run = uSimMarine	    @ NewConsole = false
+  Run = pEchoVar        @ NewConsole = false
+  //Run = pLogger         @ NewConsole = false
+  Run = uSimMarine	    @ NewConsole = false
   Run = pMarinePID      @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
   //Run = pBasicContactMgr @ NewConsole = false
@@ -32,12 +33,11 @@ ProcessConfig = ANTLER
   Run = pNodeReporter	  @ NewConsole = false
   //Run = iMOOSArduino    @ NewConsole = false
   //Run = iGP9            @ NewConsole = false
-  Run = iGPS          @ NewConsole = false
-  Run = iZBoat        @ NewConsole = false
+  //Run = iGPS          @ NewConsole = false
+  //Run = iZBoat        @ NewConsole = false
   Run = pShare          @ NewConsole = false
   Run = pHostInfo       @ NewConsole = false
   Run = uFldNodeBroker  @ NewConsole = false
-  Run = pEchoVar        @ NewConsole = false
 }
 
 //------------------------------------------------
@@ -122,9 +122,10 @@ ProcessConfig = uFldNodeBroker
   // TRY_SHORE_HOST = pshare_route=192.168.42.11:9300
   // TRY_SHORE_HOST = pshare_route=192.168.42.13:9300
   //TRY_SHORE_HOST = pshare_route=10.42.0.97:9300
-  TRY_SHORE_HOST = pshare_route=192.168.2.1:9300
+  //TRY_SHORE_HOST = pshare_route=192.168.2.1:9300
   TRY_SHORE_HOST = pshare_route=192.168.42.10:9300
   TRY_SHORE_HOST = pshare_route=192.168.1.32:9300
+  TRY_SHORE_HOST = pshare_route=192.168.2.32:9300
 
 
   BRIDGE = src=VIEW_POLYGON
@@ -142,6 +143,10 @@ ProcessConfig = pShare
   CommsTick = 2
 
   Input = route = localhost:9301
+  //Output = src_name = NODE_REPORT_LOCAL, dest_name=NODE_REPORT, route=192.168.2.32:9300
+  //Output = src_name = NODE_MESSAGE_LOCAL, dest_name=NODE_MESSAGE, route=192.168.2.32:9300
+  //Output = src_name = TEST_VAR, route = 192.168.2.32:9300
+  //Output = src_name = APPCAST, route = 192.168.2.32:9300
 }
 
 //------------------------------------------
