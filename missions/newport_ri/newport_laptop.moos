@@ -5,7 +5,7 @@
 //-------------------------------------------------
 
 //RPI direct connection
-//ServerHost = 192.168.42.15
+//ServerHost = 192.168.2.3
 //Community = emily
 
 //Local server with pShare
@@ -49,10 +49,10 @@ ProcessConfig = pHostInfo
   TEMP_FILE_DIR  = ./                                           
   //DEFAULT_HOSTIP = 192.168.42.10    // default is "localhost"  
   //DEFAULT_HOSTIP = 192.168.2.1
-  DEFAULT_HOSTIP = 192.168.1.32
+  DEFAULT_HOSTIP = 192.168.2.32
     
   //DEFAULT_HOSTIP_FORCE = 192.168.42.10                                                            
-  DEFAULT_HOSTIP_FORCE = 192.168.1.32                           
+  DEFAULT_HOSTIP_FORCE = 192.168.2.32                           
 } 
 
 ProcessConfig = uFldShoreBroker                                 
@@ -86,7 +86,9 @@ ProcessConfig = pShare
   AppTick   = 2
   CommsTick = 2
 
-  input = route = localhost:9300 // & multicast_1
+  Input = route = localhost:9300
+  //Output = src_name = APPCAST_REQ, route = 192.168.2.3:9301
+  //Output = src_name = TEST_VAR, route = 192.168.2.3:9301
 
 }
 
