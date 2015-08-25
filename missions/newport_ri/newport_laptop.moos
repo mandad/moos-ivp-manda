@@ -28,7 +28,7 @@ ProcessConfig = ANTLER
   MSBetweenLaunches = 400
 
   Run = MOOSDB          @ NewConsole = false
-  //Run = pLogger         @ NewConsole = false
+  Run = pLogger         @ NewConsole = false
   Run = pMarineViewer	  @ NewConsole = false
   Run = uProcessWatch   @ NewConsole = false
   Run = pShare            @ NewConsole = false
@@ -73,6 +73,7 @@ ProcessConfig = uFldShoreBroker
 
   qbridge  = DEPLOY, RETURN, STATION_KEEP, NODE_REPORT, NODE_MESSAGE, FAULT
   qbridge  = MOOS_MANUAL_OVERRIDE, MOOS_MANUAL_OVERIDE, APPCAST_REQ, AVOID
+  bridge = src=SET_AUTONOMY_MODE
 
                                                                 
   // Note: [qbridge = FOO]  is shorthand for
@@ -221,7 +222,8 @@ ProcessConfig = pMarineViewer
   action  = MENU_KEY=deploy # DEPLOY = true # RETURN = false
   action+ = MENU_KEY=deploy # MOOS_MANUAL_OVERRIDE=false
   action  = RETURN=true
-  action  = UPDATES_RETURN=speed=1.4
+  //action  = UPDATES_RETURN=speed=1.4
+  action  = MENU_KEY=SetAutonomy # SET_AUTONOMY_MODE=1
 }
 
 
