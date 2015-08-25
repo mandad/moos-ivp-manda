@@ -1,0 +1,42 @@
+//-------------------------------------------------
+// NAME: Damian Manda
+// Runs a test of the lat/long translation
+// Intended for connecting to remote RPi2
+//-------------------------------------------------
+
+//RPI direct connection
+//ServerHost = 192.168.2.3
+//Community = emily
+
+//Local server with pShare
+ServerHost = localhost
+ServerPort = 9000
+Community  = shoreside
+
+MOOSTimeWarp = 1
+TERM_REPORTING = true
+
+// Near TJ Berth
+LatOrigin  = 41.530783
+LongOrigin = -71.316320
+//Easting = 306758.63
+//Northing = 4600272.34
+//UTM Zone = 19N
+
+
+//------------------------------------------
+// Antler configuration  block
+ProcessConfig = ANTLER
+{
+  MSBetweenLaunches = 400
+
+  Run = MOOSDB          @ NewConsole = false
+  Run = pLLTrackUpdate  @ NewConsole = false
+}
+
+ProcessConfig = pLLTrackUpdate
+{
+  AppTick = 1
+  CommsTick = 1
+
+}

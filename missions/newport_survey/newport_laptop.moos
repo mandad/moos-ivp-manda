@@ -1,0 +1,242 @@
+//-------------------------------------------------
+// NAME: Damian Manda
+// FILE: newport_laptop.moos
+// Intended for connecting to remote RPi2
+//-------------------------------------------------
+
+//RPI direct connection
+//ServerHost = 192.168.2.3
+//Community = emily
+
+//Local server with pShare
+ServerHost = localhost
+ServerPort = 9000
+Community  = shoreside
+
+MOOSTimeWarp = 1
+TERM_REPORTING = true
+
+// Near TJ Berth
+LatOrigin  = 41.530783
+LongOrigin = -71.316320
+
+
+//------------------------------------------
+// Antler configuration  block
+ProcessConfig = ANTLER
+{
+  MSBetweenLaunches = 400
+
+  Run = MOOSDB          @ NewConsole = false
+  Run = pLogger         @ NewConsole = false
+  Run = pMarineViewer	  @ NewConsole = false
+  Run = uProcessWatch   @ NewConsole = false
+  Run = pShare            @ NewConsole = false
+  Run = pHostInfo       @ NewConsole = false
+  Run = uFldShoreBroker  @ NewConsole = false
+  //Run = uFldNodeComms   @ NewConsole = false
+}
+
+//------------------------------------------
+// Vehicle Communication Config
+//------------------------------------------
+
+ProcessConfig = pHostInfo                                       
+{                                                               
+  AppTick   = 1                                                 
+  CommsTick = 1                                                 
+                                                                
+  TEMP_FILE_DIR  = ./                                           
+  //DEFAULT_HOSTIP = 192.168.42.10    // default is "localhost"  
+  //DEFAULT_HOSTIP = 192.168.2.1
+  DEFAULT_HOSTIP = 192.168.2.32
+    
+  //DEFAULT_HOSTIP_FORCE = 192.168.42.10                                                            
+  DEFAULT_HOSTIP_FORCE = 192.168.2.32                           
+} 
+
+ProcessConfig = uFldShoreBroker                                 
+{                                                               
+  AppTick   = 1
+  CommsTick = 1                   
+                                                                
+  //bridge = src=DEPLOY_ALL, alias=DEPLOY
+  //bridge = src=DEPLOY_$V,  alias=DEPLOY
+                                                                
+  //bridge = src=RETURN, alias=RETURN
+  //bridge = src=DEPLOY, alias=DEPLOY
+  //bridge = src=FAULT
+  //bridge = src=NODE_REPORT_LOCAL, alias=NODE_REPORT
+  //bridge  = src=APPCAST_REQ, alias=APPCAST_REQ
+  //bridge  = src=MOOS_MANUAL_OVERIDE, alias=MOOS_MANUAL_OVERIDE
+  //bridge  = src=MOOS_MANUAL_OVERRIDE, alias=MOOS_MANUAL_OVERRIDE
+
+  qbridge  = DEPLOY, RETURN, STATION_KEEP, NODE_REPORT, NODE_MESSAGE, FAULT
+  qbridge  = MOOS_MANUAL_OVERRIDE, MOOS_MANUAL_OVERIDE, APPCAST_REQ, AVOID
+  bridge = src=SET_AUTONOMY_MODE
+
+                                                                
+  // Note: [qbridge = FOO]  is shorthand for
+  //       [bridge = src=FOO_$V,  alias=FOO] and
+  //       [bridge = src=FOO_ALL, alias=FOO]
+}                                                                          
+
+//------------------------------------------                                                            
+ProcessConfig = pShare
+{
+  AppTick   = 2
+  CommsTick = 2
+
+  Input = route = localhost:9300
+  //Output = src_name = APPCAST_REQ, route = 192.168.2.3:9301
+  //Output = src_name = TEST_VAR, route = 192.168.2.3:9301
+
+}
+
+//--------------------------------------------------
+// ufldnodecomms Configuration Block
+
+ProcessConfig = uFldNodeComms
+{
+  AppTick       = 2
+  CommsTick     = 2
+
+  comms_range      = 1000
+  critical_range   = 50
+
+  min_msg_interval = 15
+  max_msg_length   = 1000
+
+  groups           = true
+
+  view_node_rpt_pulses = false
+}
+
+//------------------------------------------
+// uProcessWatch config block
+
+ProcessConfig = uProcessWatch
+{
+  AppTick   = 4
+  CommsTick = 4
+
+  summary_wait = 5
+
+  nowatch   = uXMS*
+  nowatch   = uMAC*
+  nowatch   = uPokeDB*
+  nowatch   = uTermCommand*
+  watch_all = true
+}
+
+
+//------------------------------------------
+// pLogger config block
+
+ProcessConfig = pLogger
+{
+  AppTick   = 8
+  CommsTick = 8
+
+  AsyncLog = true
+
+  // For variables that are published in a bundle on their first post,
+  // explicitly declare their logging request
+
+  Log = IVPHELM_LIFE_EVENT @ 0 NOSYNC
+
+  LogAuxSrc = true
+  WildCardLogging = true
+  WildCardOmitPattern = *_STATUS
+  WildCardOmitPattern = DB_VARSUMMARY
+  WildCardOmitPattern = DB_RWSUMMARY
+  WildCardExclusionLog = true
+}
+
+//------------------------------------------
+// pMarineViewer config block
+
+ProcessConfig = pMarineViewer
+{
+  AppTick    = 4
+  CommsTick  = 4
+
+  tiff_file            = Newport_Chart.tif
+  tiff_file_b          = Newport_Aerial.tif
+
+  set_pan_x            = 0
+  set_pan_y            = 0
+  zoom                 = 0.65
+  vehicle_shape_scale  = 1.5
+  hash_delta           = 100
+  hash_shade           = 0.4
+  hash_viewable        = true
+
+  trails_point_size   = 2
+  trails_length       = 1000
+  trails_color        = blue
+  vehicles_name_color = darkred
+  vehicles_active_color = red //default
+
+
+  // Appcast configuration
+  appcast_height       = 75
+  appcast_width        = 30
+  appcast_viewable     = true
+  appcast_color_scheme = indigo
+  nodes_font_size      = medium
+  procs_font_size      = medium
+  appcast_font_size    = small
+  
+  //datum_viewable = true
+  //datum_size     = 18
+  //gui_size = small
+
+  left_context[survey-point] = DEPLOY_ALL=true
+  left_context[survey-point] = MOOS_MANUAL_OVERRIDE_ALL=false
+  left_context[survey-point] = RETURN_ALL=false
+
+  right_context[return] = DEPLOY=true
+  right_context[return] = MOOS_MANUAL_OVERRIDE=false
+  right_context[return] = RETURN=false
+
+  left_context[polyvert] = POLY_VERT=x=$(XPOS),y=$(YPOS)
+
+  scope  = WPT_EFFICIENCY_LEG
+  scope  = WPT_EFFICIENCY_SUM
+  scope  = WPT_EFFICIENCY_VAL
+  scope  = RETURN
+  scope  = WPT_STAT
+  scope  = VIEW_SEGLIST
+  scope  = VIEW_POINT
+  scope  = VIEW_POLYGON
+  scope  = MODE
+  scope  = ZBOAT_PWM
+
+  button_one = DEPLOY # DEPLOY_EMILY=true 
+  button_one = MOOS_MANUAL_OVERRIDE_EMILY=false # RETURN_EMILY=false
+  button_two = RETURN # RETURN_EMILY=true # FAULT_EMILY=false
+  button_three = CONTINUE # FAULT_EMILY=false
+  button_four = FAULT # FAULT_EMILY=true
+
+  action  = MENU_KEY=deploy # DEPLOY = true # RETURN = false
+  action+ = MENU_KEY=deploy # MOOS_MANUAL_OVERRIDE=false
+  action  = RETURN=true
+  //action  = UPDATES_RETURN=speed=1.4
+  action  = MENU_KEY=SetAutonomy # SET_AUTONOMY_MODE=1
+}
+
+
+// This block is here in conjunction with the uTermCommand 
+// documentation to demonstrate functionality of that tool.
+// This mission may be alternately 
+
+ProcessConfig = uTermCommandFoo
+{
+  cmd  = override_true  -->  MOOS_MANUAL_OVERIDE --> true
+  cmd  = override_false -->  MOOS_MANUAL_OVERIDE --> false
+  cmd  = deploy_true    -->  DEPLOY --> true
+  cmd  = deploy_false   -->  DEPLOY --> false
+  cmd  = return_true    -->  RETURN --> true
+  cmd  = return_false   -->  RETURN --> false
+}

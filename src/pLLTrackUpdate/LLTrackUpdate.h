@@ -1,8 +1,8 @@
 /************************************************************/
-/*    NAME: Damian Manda                                              */
-/*    ORGN: MIT                                             */
-/*    FILE: LLTrackUpdate.h                                          */
-/*    DATE:                                                 */
+/*    NAME: Damian Manda                                    */
+/*    ORGN: UNH/NOAA                                        */
+/*    FILE: LLTrackUpdate.h                                 */
+/*    DATE: 25 Aug 2015                                     */
 /************************************************************/
 
 #ifndef LLTrackUpdate_HEADER

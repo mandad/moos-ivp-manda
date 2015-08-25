@@ -116,16 +116,19 @@ bool LLTrackUpdate::Iterate()
     //Get points with one decimal precision
     points_post += m_survey_pts.get_spec(1);
     m_Comms.Notify("SURVEY_UPDATE", points_post, dfTimeNow);
+    m_survey_update = false;
   }
   if (m_turn_update) {
     string points_post = "points=";
     points_post += m_turn_pts.get_spec(1);
     m_Comms.Notify("TURN_UPDATE", points_post, dfTimeNow);
+    m_turn_update = false;
   }
   if (m_alignment_update) {
     string points_post = "points=";
     points_post += m_alignment_pts.get_spec(1);
     m_Comms.Notify("START_UPDATE", points_post, dfTimeNow);
+    m_alignment_update = false;
   }
   return(true);
 }
