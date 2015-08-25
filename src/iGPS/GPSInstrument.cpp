@@ -75,7 +75,7 @@ bool CGPSInstrument::OnStartUp()
 
 
 	//here we make the variables that we are managing
-	double dfGPSPeriod = 1.0;
+	double dfGPSPeriod = 0.01;
 
 	//GPS update @ 2Hz
 	AddMOOSVariable("X", "SIM_X", "GPS_X", dfGPSPeriod);

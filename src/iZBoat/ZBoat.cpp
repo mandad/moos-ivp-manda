@@ -156,6 +156,7 @@ bool ZBoat::OnStartUp()
   AddMOOSVariable("Throttle", "DESIRED_THRUST", "", dfInputPeriod);
   AddMOOSVariable("Rudder", "DESIRED_RUDDER", "", dfInputPeriod);
   AddMOOSVariable("PWM", "", "ZBOAT_PWM", dfInputPeriod);
+  AddMOOSVariable("SetAutonomy", "SET_AUTONOMY_MODE", "", dfInputPeriod);
   
   registerVariables();
   //try to open
@@ -273,6 +274,16 @@ bool ZBoat::PublishData()
     MOOSTrace("ZBoat Tx: %s", m_cPwmMessage);
     m_Port.Write(m_cPwmMessage, strlen(m_cPwmMessage));
   }
+
+  //Check if we need to set autonomy mode again
+  CMOOSVariable * pSetAutonomy = GetMOOSVar("SetAutonomy");
+  double dfSetAutonomy = -1;
+  if (pSetAutonomy->IsFresh()){
+    dfSetAutonomy = pSetAutonomy->GetDoubleVal();
+  }
+  if (dfSetAutonomy == 1) {
+    InitialiseSensor();
+  }
   return PublishFreshMOOSVariables();
 }
 
@@ -291,7 +302,7 @@ void ZBoat::GeneratePWMMessage()
     dfRudderSet = pRudderSet->GetDoubleVal();
   }
   
-  double dfScaledThrottle = 1.5 - (dfThrottleSet / m_dfMaxThrottle) * 0.3;
+  double dfScaledThrottle = 1.5 - (dfThrottleSet / m_dfMaxThrottle) * 0.5;
   double dfScaledRudder = 1.5 + (dfRudderSet / m_dfMaxRudder) * 0.3;
  
   char cPwmMessage[40];

@@ -77,7 +77,7 @@ Behavior = BHV_StationKeep
          outer_radius = 20      // default
          outer_speed  = 1     // default
        transit_speed  = 5     // default
-           station_pt = 0,100     // default
+           station_pt = 30,25     // default
            swing_time = 0       // default
 
          visual_hints = vertex_size  = 1           // default
@@ -102,7 +102,7 @@ Behavior = BHV_StationKeep
    // ------------------------------------
       center_activate = true   // default
    hibernation_radius = -1      // default
-         inner_radius = 3       // default
+         inner_radius = 4       // default
          outer_radius = 10      // default
          outer_speed  = 1     // default
        transit_speed  = 2     // default
