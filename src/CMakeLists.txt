@@ -22,6 +22,7 @@ ADD_SUBDIRECTORY(uMOOSArduinoLib)
 ADD_SUBDIRECTORY(iGP9)
 ADD_SUBDIRECTORY(iZBoat)
 ADD_SUBDIRECTORY(iGPS)
+ADD_SUBDIRECTORY(pLLTrackUpdate)
 
 ##############################################################################
 #                           END of CMakeLists.txt

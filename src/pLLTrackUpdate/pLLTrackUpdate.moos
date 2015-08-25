@@ -1,0 +1,9 @@
+//------------------------------------------------
+// pLLTrackUpdate config block
+
+ProcessConfig = pLLTrackUpdate
+{
+   AppTick   = 4
+   CommsTick = 4
+}
+
