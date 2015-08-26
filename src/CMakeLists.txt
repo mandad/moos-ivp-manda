@@ -1,6 +1,6 @@
 ##############################################################################
 # FILE:        moos-ivp-extend/src/CMakeLists.txt
-# DATE:        2010/09/07
+# DATE:        2015/08/26
 # DESCRIPTION: CMakeLists.txt file for the moos-ivp-extend source directory
 ##############################################################################
 
@@ -23,6 +23,8 @@ ADD_SUBDIRECTORY(iGP9)
 ADD_SUBDIRECTORY(iZBoat)
 ADD_SUBDIRECTORY(iGPS)
 ADD_SUBDIRECTORY(pLLTrackUpdate)
+ADD_SUBDIRECTORY(iCV100)
+ADD_SUBDIRECTORY(pSonarFilter)
 
 ##############################################################################
 #                           END of CMakeLists.txt
