@@ -38,6 +38,7 @@ ProcessConfig = ANTLER
   Run = pShare          @ NewConsole = false
   Run = pHostInfo       @ NewConsole = false
   Run = uFldNodeBroker  @ NewConsole = false
+  Run = pLLTrackUpdate  @ NewConsole = false
 }
 
 //------------------------------------------------
@@ -82,6 +83,12 @@ ProcessConfig = iGP9
   SerialPort = /dev/ttyAMA0
   BaudRate = 115200
   Covariance = "0 0 0 0 0 0 0 0 0"
+}
+
+ProcessConfig = pLLTrackUpdate
+{
+  AppTick = 1
+  CommsTick = 1
 }
 
 ProcessConfig = pEchoVar
@@ -224,7 +231,7 @@ ProcessConfig = pHelmIvP
 
   behaviors  = newport.bhv
   domain     = course:0:359:360
-  domain     = speed:0:10:25
+  domain     = speed:0:7:28
 
   ok_skew    = any
 }
@@ -243,9 +250,9 @@ ProcessConfig = pMarinePID
   // SIM_INSTABILITY = 20
 
   // Yaw PID controller
-  yaw_pid_kp		 = 0.5
+  yaw_pid_kp		 = 1.0
   yaw_pid_kd		 = 0.2
-  yaw_pid_ki		 = 0
+  yaw_pid_ki		 = 0.1
   yaw_pid_integral_limit = 0.07
 
   // Speed PID controller
