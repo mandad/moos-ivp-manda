@@ -210,11 +210,13 @@ ProcessConfig = pMarineViewer
   scope  = WPT_EFFICIENCY_VAL
   scope  = RETURN
   scope  = WPT_STAT
-  scope  = VIEW_SEGLIST
-  scope  = VIEW_POINT
-  scope  = VIEW_POLYGON
   scope  = MODE
   scope  = ZBOAT_PWM
+  scope  = SWATH_WIDTH
+  scope  = SWATH_EDGE
+  scope  = SWATH_WIDTH_RECORD
+  scope  = NEXT_SWATH_SIDE
+  scope  = NEW_PATH
 
   button_one = DEPLOY # DEPLOY_EMILY=true 
   button_one = MOOS_MANUAL_OVERRIDE_EMILY=false # RETURN_EMILY=false
