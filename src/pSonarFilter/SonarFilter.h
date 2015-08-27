@@ -27,10 +27,20 @@ class SonarFilter : public AppCastingMOOSApp
 
  protected:
    void registerVariables();
+   void InjestDepthVal(double depth);
+   double GetStDev(std::list<double> * v);
+   std::string GenerateSwathMessage();
 
  private: // Configuration variables
+    int                 m_filter_len;
+    double              m_std_limit;
+    double              m_sim_swath_angle;
 
  private: // State variables
+    std::list<double>   m_all_depths;
+    double              m_last_valid_depth;
+    bool                m_fresh_depth;
+    char                m_last_msg[200];
 };
 
 #endif 

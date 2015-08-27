@@ -90,9 +90,9 @@ bool ZBoat::Iterate()
 {
   // AppCastingMOOSApp::Iterate();
 
-  if (GetData()) {
-    PublishData();
-  }
+  // if (GetData()) {
+  //   PublishData();
+  // }
 
   // AppCastingMOOSApp::PostReport();
   return(true);

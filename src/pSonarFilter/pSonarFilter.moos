@@ -3,7 +3,11 @@
 
 ProcessConfig = pSonarFilter
 {
-   AppTick   = 4
-   CommsTick = 4
+   AppTick   = 5
+   CommsTick = 20
+
+   FilterLen  = 10
+   StDevLimit = 2
+   SimSwathAngle = 70
 }
 

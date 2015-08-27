@@ -134,61 +134,7 @@ bool CCV100::OnConnectToServer()
 // here we initialise the sensor, giving it start up values
 bool CCV100::InitialiseSensor()
 {
-	if (MOOSStrCmp(m_sType, "ASHTECH")) {
-		const char * sInit = "$PASHS,NME,GGA,A,ON\r\n";
-		MOOSTrace("Sending %s\n", sInit);
-		m_Port.Write(sInit, strlen(sInit));
-
-		MOOSPause(2000);
-		string sReply;
-		double dfTime;
-
-		if (m_Port.GetLatest(sReply, dfTime)) {
-			MOOSTrace("Rx %s", sReply.c_str());
-		} else {
-			MOOSTrace("No reply\n");
-		}
-
-	} else if (MOOSStrCmp(m_sType, "GARMIN")) {
-		const char *sInitA = "$PGRMO,,2\r\n";
-		MOOSTrace("Sending %s\n", sInitA);
-		MOOSPause(2000);
-		m_Port.Write(sInitA, strlen(sInitA));
-		
-		const char *sInitB = "$PGRMO,GPGGA,1\r\n";
-		MOOSTrace("Sending %s\n", sInitB);
-		MOOSPause(2000);
-		m_Port.Write(sInitB, strlen(sInitB));
-
-		const char *sInitC = "$PGRMO,GPRMC,1\r\n";
-		MOOSTrace("Sending %s\n", sInitC);
-		MOOSPause(2000);
-		m_Port.Write(sInitC, strlen(sInitC));
-
-		const char *sInit;
-		string sReply;
-		double dfTime;
-
-		if (m_Port.GetLatest(sReply, dfTime)) {
-			MOOSTrace("Rx %s\n", sReply.c_str());
-		} else {
-			MOOSTrace("No reply\n");
-		}
-		
-		sInit = "$PGRMC,,,,,,,,,,5,,2,1,\r\n";
-		MOOSTrace("Sending %s\n", sInit);
-		m_Port.Write(sInit, strlen(sInit));
-
-
-		if (m_Port.GetLatest(sReply, dfTime)) {
-			MOOSTrace("Rx %s\n", sReply.c_str());
-		} else {
-			MOOSTrace("No reply\n");
-		}
-	}
-
 	return true;
-
 }
 
 
