@@ -194,8 +194,8 @@ void SonarFilter::InjestDepthVal(double depth) {
     if (m_all_depths.size() >= 2) {
       MOOSTrace("SonarFilt - Testing StDev\n");
       // Only call a depth good if it is within the stdev limit
-      if (depth < (m_last_valid_depth + std * m_std_limit) && 
-        depth > (m_last_valid_depth - std * m_std_limit)) {
+      if (depth <= (m_last_valid_depth + std * m_std_limit) && 
+        depth >= (m_last_valid_depth - std * m_std_limit)) {
         MOOSTrace("SonarFilt - Have Valid Depth: %0.2f\n", depth);
         m_fresh_depth = true;
         m_cycles_since_last = 0;

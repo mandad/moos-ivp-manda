@@ -17,7 +17,7 @@ using namespace std;
 
 CCV100::CCV100()
 {
-	m_sType = "SERIAL";
+  m_sType = "SERIAL";
   m_dfSimDepth = 15;
   m_bSimulateMode = false;
 }
@@ -76,14 +76,16 @@ bool CCV100::OnStartUp()
 	}
 
   string sSimMode;
-  if (!m_MissionReader.GetConfigurationParam("Simulate", sSimMode)) {
+  if (m_MissionReader.GetConfigurationParam("Simulate", sSimMode)) {
+    MOOSTrace("sSimMode=\""+sSimMode+"\"\n");
     if (sSimMode == "true") {
+      MOOSTrace("Setting Sim Mode\n");
       m_bSimulateMode = true;
     }
   }
 
   string sDepthConfig;
-  if (!m_MissionReader.GetConfigurationParam("SimDepth", sDepthConfig)) {
+  if (m_MissionReader.GetConfigurationParam("SimDepth", sDepthConfig)) {
     m_dfSimDepth = atof(sDepthConfig.c_str());
   } else {
     if (IsSimulateMode()) {

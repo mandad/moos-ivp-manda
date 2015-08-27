@@ -25,7 +25,7 @@ ProcessConfig = ANTLER
 
   Run = MOOSDB          @ NewConsole = false
   Run = pEchoVar        @ NewConsole = false
-  //Run = pLogger         @ NewConsole = false
+  Run = pLogger         @ NewConsole = false
   Run = uSimMarine	    @ NewConsole = false
   Run = pMarinePID      @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
@@ -98,12 +98,13 @@ ProcessConfig = iCV100
    CommsTick = 20
 
    // Serial port configuration
-   PORT = /dev/ttyUSB2
+   PORT = /dev/ttyAMA0
    BAUDRATE = 38400
    HANDSHAKING = FALSE
    STREAMING = TRUE
 
    SimDepth = 15  //m
+   Simulate = true
 }
 
 //==============================================
