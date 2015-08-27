@@ -1,0 +1,15 @@
+//------------------------------------------------
+// iCV100 config block
+
+ProcessConfig = iCV100
+{
+   AppTick   = 20
+   CommsTick = 20
+
+   // Serial port configuration
+   PORT = /dev/ttyUSB2
+   BAUDRATE = 38400
+   HANDSHAKING = FALSE
+   STREAMING = TRUE
+}
+
