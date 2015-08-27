@@ -19,6 +19,7 @@ CCV100::CCV100()
 {
 	m_sType = "SERIAL";
   m_dfSimDepth = 15;
+  m_bSimulateMode = false;
 }
 
 CCV100::~CCV100()
@@ -74,6 +75,13 @@ bool CCV100::OnStartUp()
 		return false;
 	}
 
+  string sSimMode;
+  if (!m_MissionReader.GetConfigurationParam("Simulate", sSimMode)) {
+    if (sSimMode == "true") {
+      m_bSimulateMode = true;
+    }
+  }
+
   string sDepthConfig;
   if (!m_MissionReader.GetConfigurationParam("SimDepth", sDepthConfig)) {
     m_dfSimDepth = atof(sDepthConfig.c_str());
@@ -82,6 +90,8 @@ bool CCV100::OnStartUp()
       MOOSTrace("Warning: Simulate mode set, but not simulate depth configured.\n");
     }
   }
+
+
 
 	//here we make the variables that we are managing
 	double dfPeriod = 0;
@@ -112,7 +122,9 @@ bool CCV100::OnStartUp()
 	return true;
 }
 
-
+bool CCV100::IsSimulateMode() {
+  return m_bSimulateMode;
+}
 
 bool CCV100::OnNewMail(MOOSMSG_LIST &NewMail)
 {

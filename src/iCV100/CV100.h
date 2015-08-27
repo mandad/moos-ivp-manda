@@ -29,10 +29,12 @@ class CCV100 : public CMOOSInstrument
 		bool OnStartUp();
 		bool GetData();
 		bool PublishData();
+		bool IsSimulateMode();
 
 	protected:
 		//Config variables
 		double m_dfSimDepth;
 		string m_sType;
+		bool m_bSimulateMode;
 
 };
