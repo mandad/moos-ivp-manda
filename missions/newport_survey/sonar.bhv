@@ -1,0 +1,193 @@
+//--------    FILE: swains.bhv   -------------
+
+initialize   DEPLOY = false
+initialize   RETURN = false
+initialize   FAULT = false
+initialize   REACHED_HOME = false
+initialize   LINE_TURN = false
+initialize   LINE_START = true
+
+Set MODE = ACTIVE {
+  DEPLOY = true
+} INACTIVE
+
+Set MODE = SURVEY {
+  MODE = ACTIVE
+  RETURN != true
+  FAULT != true
+  LINE_TURN != true
+  LINE_START != true
+}
+
+Set MODE = LINESTART {
+  MODE = ACTIVE
+  RETURN != true
+  FAULT != true
+  LINE_TURN != true
+  LINE_START = true
+}
+
+Set MODE = TURN {
+  MODE = ACTIVE
+  RETURN != true
+  FAULT != true
+  LINE_TURN = true
+  LINE_START != true
+}
+
+SET MODE = INPLACE {
+  MODE = ACTIVE
+  FAULT = true
+} HOME
+
+SET MODE = TRANSIT_HOME {
+  MODE = ACTIVE:HOME
+  REACHED_HOME != true
+} HOME_HOLD
+
+//----------------------------------------------
+Behavior = BHV_Waypoint
+{ 
+  name      = waypt_survey
+  pwt       = 100
+  condition = MODE == SURVEY
+  endflag   = LINE_TURN = true
+
+  idleflag  = WPTING = idle
+  runflag   = WPTING = running
+  runflag   = REACHED_HOME = false
+  runflag   = LINE_BEGIN = true
+  endflag   = WPTING = end
+  endflag   = LINE_END = true
+  inactiveflag = WPTING = inactive
+
+  UPDATES   = SURVEY_UPDATE
+  perpetual = true
+
+               lead = 8
+        lead_damper = 1
+              speed = 5   // meters per second
+       capture_line = true
+     capture_radius = 3.0
+        slip_radius = 8.0
+             //points = 60,-40 : 60,-160 : 150,-160 : 180,-100 : 150,-40
+             points = 4075, -650 : 3293, -2464
+             //points = format=lawnmower, label=emily_survey, x=35, y=-225, width=60, height=200, lane_width=30, rows=east-west, degs=-20
+             repeat = 0
+
+    visual_hints = nextpt_color=yellow
+    visual_hints = nextpt_vertex_size=8
+    visual_hints = nextpt_lcolor=gray70
+    visual_hints = vertex_color=dodger_blue, edge_color=white
+    visual_hints = vertex_size=5, edge_size=1.5
+}
+
+//----------------------------------------------
+Behavior=BHV_Waypoint
+{
+  name       = waypt_line_start
+  pwt        = 100  
+  condition  = MODE == LINESTART
+  perpetual  = true
+  endflag    = LINE_START = false
+
+  UPDATES   = START_UPDATE
+  //endflag    = DEPLOY = false
+  //endflag    = MISSION = complete
+
+           speed = 5
+  capture_radius = 4.0
+     slip_radius = 8.0
+          points = 4088,-626:4075, -650
+}
+
+//----------------------------------------------
+Behavior=BHV_Waypoint
+{
+  name       = waypt_turn
+  pwt        = 100  
+  condition  = MODE == TURN
+  perpetual  = true
+  endflag    = LINE_TURN = false
+  endflag    = TURN_REACHED = true
+  endflag    = LINE_START = true
+
+  UPDATES   = TURN_UPDATE
+  //endflag    = DEPLOY = false
+  //endflag    = MISSION = complete
+
+           speed = 5
+  capture_radius = 4.0
+     slip_radius = 8.0
+          point = 3280, -2489
+}
+
+//----------------------------------------------
+Behavior=BHV_Waypoint
+{
+  name       = waypt_home
+  pwt        = 100  
+  condition  = MODE == TRANSIT_HOME
+  perpetual  = true
+  endflag    = REACHED_HOME = true
+  //endflag    = DEPLOY = false
+  //endflag    = MISSION = complete
+
+           speed = 5.0
+  capture_radius = 2.0
+     slip_radius = 8.0
+          points = 4107,-589
+}
+
+Behavior=BHV_Loiter
+{
+  name = loiter_home
+  pwt  = 100
+  condition = MODE == HOME_HOLD
+  
+  //----- Specific To This Behavior -----
+  speed = 1 // idle
+  clockwise = best
+  center_activate = false
+  acquire_dist = 10
+  capture_radius = 3
+  slip_radius = 8
+  polygon = format=radial, label=home, x=4107, y=-589, radius=25, pts=12
+  
+  //----- Visual Display -----
+  visual_hints = vertex_size  = 1             // default
+  visual_hints = edge_size    = 1             // default
+  visual_hints = vertex_color = dodger_blue   // default
+  visual_hints = edge_color   = white         // default
+  visual_hints = nextpt_color = yellow        // default
+  visual_hints = nextpt_lcolor = aqua         // default
+  visual_hints = nextpt_vertex_size = 5       // default
+  visual_hints = label        = Home
+}
+
+Behavior=BHV_Loiter
+{
+  name = loiter_fault
+  pwt  = 100
+  condition = MODE == INPLACE
+  endflag   = WPTING = end
+  
+  //----- Specific To This Behavior -----
+  speed = 1 // idle
+  clockwise = best
+  center_activate = true
+  acquire_dist = 5
+  capture_radius = 3
+  slip_radius = 5
+  polygon = format=radial, label=Fault_Loc, x=0, y=0, radius=15, pts=12
+  
+  //----- Visual Display -----
+  visual_hints = vertex_size  = 1             // default
+  visual_hints = edge_size    = 1             // default
+  visual_hints = vertex_color = dodger_blue   // default
+  visual_hints = edge_color   = red         
+  visual_hints = nextpt_color = yellow        // default
+  visual_hints = nextpt_lcolor = aqua         // default
+  visual_hints = nextpt_vertex_size = 5       // default
+  visual_hints = label        = Fault_Loc
+}

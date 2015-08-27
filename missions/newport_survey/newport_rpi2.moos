@@ -24,8 +24,8 @@ ProcessConfig = ANTLER
 
   Run = MOOSDB          @ NewConsole = false
   Run = pEchoVar        @ NewConsole = false
-  Run = pLogger         @ NewConsole = false
-  //Run = uSimMarine	    @ NewConsole = false
+  //Run = pLogger         @ NewConsole = false
+  Run = uSimMarine	    @ NewConsole = false
   Run = pMarinePID      @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
   //Run = pBasicContactMgr @ NewConsole = false
@@ -33,16 +33,19 @@ ProcessConfig = ANTLER
   Run = pNodeReporter	  @ NewConsole = false
   //Run = iMOOSArduino    @ NewConsole = false
   //Run = iGP9            @ NewConsole = false
-  Run = iGPS          @ NewConsole = false
-  Run = iZBoat        @ NewConsole = false
+  //Run = iGPS            @ NewConsole = false
+  //Run = iCV100          @ NewConsole = false
+  //Run = iZBoat          @ NewConsole = false
   Run = pShare          @ NewConsole = false
   Run = pHostInfo       @ NewConsole = false
   Run = uFldNodeBroker  @ NewConsole = false
   Run = pLLTrackUpdate  @ NewConsole = false
+  Run = pSonarFilter    @ NewConsole = false
 }
 
-//------------------------------------------------
-// iZBoat config block
+//==============================================
+// ZBoat Interfaces
+//==============================================
 
 ProcessConfig = iZBoat
 {
@@ -85,10 +88,39 @@ ProcessConfig = iGP9
   Covariance = "0 0 0 0 0 0 0 0 0"
 }
 
+//------------------------------------------------
+// iCV100 config block
+
+ProcessConfig = iCV100
+{
+   AppTick   = 20
+   CommsTick = 20
+
+   // Serial port configuration
+   PORT = /dev/ttyUSB2
+   BAUDRATE = 38400
+   HANDSHAKING = FALSE
+   STREAMING = TRUE
+}
+
+//==============================================
+// Custom Background Processes
+//==============================================
+
 ProcessConfig = pLLTrackUpdate
 {
   AppTick = 1
   CommsTick = 1
+}
+
+ProcessConfig = pSonarFilter
+{
+   AppTick   = 5
+   CommsTick = 20
+
+   FilterLen  = 10
+   StDevLimit = 2
+   SimSwathAngle = 70
 }
 
 ProcessConfig = pEchoVar
@@ -104,6 +136,10 @@ ProcessConfig = pEchoVar
   echo = GPS_HEADING      -> NAV_HEADING
   echo = GPS_SPEED        -> NAV_SPEED
 }
+
+//==============================================
+// Standard Processes
+//==============================================
 
 //------------------------------------------
 // Find the shoreside and share variables
@@ -133,6 +169,7 @@ ProcessConfig = uFldNodeBroker
   TRY_SHORE_HOST = pshare_route=192.168.42.10:9300
   TRY_SHORE_HOST = pshare_route=192.168.1.32:9300
   TRY_SHORE_HOST = pshare_route=192.168.2.32:9300
+  TRY_SHORE_HOST = pshare_route=10.42.0.1:9300
 
 
   BRIDGE = src=VIEW_POLYGON

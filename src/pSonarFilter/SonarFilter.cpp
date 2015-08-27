@@ -25,6 +25,7 @@ using namespace std;
 SonarFilter::SonarFilter()
 {
   m_fresh_depth = false;
+  m_cycles_since_last = 0;
   m_std_limit = 2;
   m_filter_len = 10;
   m_sim_swath_angle = 70 * M_PI / 180;
@@ -193,14 +194,21 @@ void SonarFilter::InjestDepthVal(double depth) {
     if (m_all_depths.size() >= 2) {
       MOOSTrace("SonarFilt - Testing StDev\n");
       // Only call a depth good if it is within the stdev limit
-      if (depth < (m_all_depths.front() + std * m_std_limit) && 
-        depth > (m_all_depths.front() - std * m_std_limit)) {
+      if (depth < (m_last_valid_depth + std * m_std_limit) && 
+        depth > (m_last_valid_depth - std * m_std_limit)) {
         MOOSTrace("SonarFilt - Have Valid Depth: %0.2f\n", depth);
         m_fresh_depth = true;
+        m_cycles_since_last = 0;
         m_last_valid_depth = depth;
       } else {
         MOOSTrace("SonarFilt - Throwing Out Invalid Depth: %0.2f \n", depth);
+        if (++m_cycles_since_last > 10) {
+          m_last_valid_depth = GetMean(&m_all_depths);
+          m_cycles_since_last = 0;
+        }
       }
+    } else {
+      m_last_valid_depth = depth;
     }
     //Add it anyway in case this is a trend
     m_all_depths.push_front(depth);
@@ -231,8 +239,7 @@ double SonarFilter::GetStDev(list<double> * v) {
     return -1;
   }
 
-  double sum = std::accumulate(v->begin(), v->end(), 0.0);
-  double mean = sum / v->size();
+  double mean = GetMean(v);
 
   double sq_sum = std::inner_product(v->begin(), v->end(), v->begin(), 0.0);
   double stdev = std::sqrt(sq_sum / v->size() - mean * mean);
@@ -245,6 +252,15 @@ double SonarFilter::GetStDev(list<double> * v) {
   // double stdev = std::sqrt(sq_sum / v.size());
 
   return stdev;
+}
+
+double SonarFilter::GetMean(list<double> * v) {
+  if (v->size() < 2) {
+    return v->front();
+  }
+  double sum = std::accumulate(v->begin(), v->end(), 0.0);
+  double mean = sum / v->size();
+  return mean;
 }
 
 string SonarFilter::GenerateSwathMessage() {

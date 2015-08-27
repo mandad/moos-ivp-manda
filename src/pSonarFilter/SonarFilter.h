@@ -29,6 +29,7 @@ class SonarFilter : public AppCastingMOOSApp
    void registerVariables();
    void InjestDepthVal(double depth);
    double GetStDev(std::list<double> * v);
+   double GetMean(std::list<double> * v);
    std::string GenerateSwathMessage();
 
  private: // Configuration variables
@@ -41,6 +42,7 @@ class SonarFilter : public AppCastingMOOSApp
     double              m_last_valid_depth;
     bool                m_fresh_depth;
     char                m_last_msg[200];
+    int                 m_cycles_since_last;
 };
 
 #endif 

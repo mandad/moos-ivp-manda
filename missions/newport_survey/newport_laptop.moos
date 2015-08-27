@@ -49,10 +49,13 @@ ProcessConfig = pHostInfo
   TEMP_FILE_DIR  = ./                                           
   //DEFAULT_HOSTIP = 192.168.42.10    // default is "localhost"  
   //DEFAULT_HOSTIP = 192.168.2.1
-  DEFAULT_HOSTIP = 192.168.1.32
+  // DEFAULT_HOSTIP = 192.168.1.32
+  DEFAULT_HOSTIP = 10.42.0.1
     
-  //DEFAULT_HOSTIP_FORCE = 192.168.42.10                                                            
-  DEFAULT_HOSTIP_FORCE = 192.168.1.32                           
+  //DEFAULT_HOSTIP_FORCE = 192.168.42.10
+  // DEFAULT_HOSTIP_FORCE = 192.168.1.32                           
+  DEFAULT_HOSTIP_FORCE = 10.42.0.1
+
 } 
 
 ProcessConfig = uFldShoreBroker                                 
