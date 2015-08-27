@@ -126,6 +126,10 @@ ProcessConfig = pSonarFilter
    SimSwathAngle = 70
 }
 
+//==============================================
+// Standard Processes
+//==============================================
+
 ProcessConfig = pEchoVar
 {
   AppTick   = 30
@@ -139,10 +143,6 @@ ProcessConfig = pEchoVar
   echo = GPS_HEADING      -> NAV_HEADING
   echo = GPS_SPEED        -> NAV_SPEED
 }
-
-//==============================================
-// Standard Processes
-//==============================================
 
 //------------------------------------------
 // Find the shoreside and share variables
@@ -269,7 +269,7 @@ ProcessConfig = pHelmIvP
   bhv_dir_not_found_ok = true
   ivp_behavior_dir = /home/ubuntu/moos-ivp-emily
 
-  behaviors  = newport.bhv
+  behaviors  = newport_sonar.bhv
   domain     = course:0:359:360
   domain     = speed:0:7:28
 
