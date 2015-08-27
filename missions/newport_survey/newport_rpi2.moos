@@ -10,6 +10,7 @@ Community  = emily
 
 MOOSTimeWarp = 1
 TERM_REPORTING = true
+Simulate = true
 
 // Near TJ Berth
 LatOrigin  = 41.530783
@@ -101,6 +102,8 @@ ProcessConfig = iCV100
    BAUDRATE = 38400
    HANDSHAKING = FALSE
    STREAMING = TRUE
+
+   SimDepth = 15  //m
 }
 
 //==============================================

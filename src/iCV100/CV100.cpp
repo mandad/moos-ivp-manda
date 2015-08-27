@@ -18,6 +18,7 @@ using namespace std;
 CCV100::CCV100()
 {
 	m_sType = "SERIAL";
+  m_dfSimDepth = 15;
 }
 
 CCV100::~CCV100()
@@ -73,6 +74,14 @@ bool CCV100::OnStartUp()
 		return false;
 	}
 
+  string sDepthConfig;
+  if (!m_MissionReader.GetConfigurationParam("SimDepth", sDepthConfig)) {
+    m_dfSimDepth = atof(sDepthConfig.c_str());
+  } else {
+    if (IsSimulateMode()) {
+      MOOSTrace("Warning: Simulate mode set, but not simulate depth configured.\n");
+    }
+  }
 
 	//here we make the variables that we are managing
 	double dfPeriod = 0;
@@ -170,8 +179,8 @@ bool CCV100::GetData()
 		ParseNMEAString(sWhat);
 
 	} else {
-		//in simulated mode there is nothing to do..all data
-		//arrives via comms.
+    // Post a constant depth
+    m_Comms.Notify("SONAR_DEPTH_M", m_dfSimDepth);
 	}
 
 	return true;
