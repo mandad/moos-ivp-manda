@@ -186,14 +186,20 @@ bool SonarFilter::buildReport()
 
 void SonarFilter::InjestDepthVal(double depth) {
   // Reject depths that are rejected by the sonar (0 depth)
+  MOOSTrace("SonarFilt - Injesting Depth\n");
   if (depth > 0) {
     double std = GetStDev(&m_all_depths);
     // Need to add values before we can compute stdev
-    if (m_all_depths.size() > 2) {
+    if (m_all_depths.size() >= 2) {
+      MOOSTrace("SonarFilt - Testing StDev\n");
       // Only call a depth good if it is within the stdev limit
-      if (depth > (m_all_depths.front() + std * m_std_limit) || 
-        depth < (m_all_depths.front() - std * m_std_limit)) {
+      if (depth < (m_all_depths.front() + std * m_std_limit) && 
+        depth > (m_all_depths.front() - std * m_std_limit)) {
+        MOOSTrace("SonarFilt - Have Valid Depth: %0.2f\n", depth);
         m_fresh_depth = true;
+        m_last_valid_depth = depth;
+      } else {
+        MOOSTrace("SonarFilt - Throwing Out Invalid Depth: %0.2f \n", depth);
       }
     }
     //Add it anyway in case this is a trend
@@ -247,17 +253,19 @@ string SonarFilter::GenerateSwathMessage() {
   CMOOSVariable * x_var = GetMOOSVar("X");
   CMOOSVariable * y_var = GetMOOSVar("Y");
   CMOOSVariable * heading_var = GetMOOSVar("Heading");
-  CMOOSVariable * depth_var = GetMOOSVar("Depth");
+  // CMOOSVariable * depth_var = GetMOOSVar("Depth");
 
   // There is a danger that the variables could not be set yet
   double swath_width = 0;
-  if (depth_var->GetDoubleVal() > 0)
-    swath_width = tan(m_sim_swath_angle) / depth_var->GetDoubleVal();
-  snprintf (message, 200, "x=%0.2f;y=%0.2f;hdg=1%0.2f;port=%0.1f;stbd=%0.1f", 
+  swath_width = tan(m_sim_swath_angle) * m_last_valid_depth;
+
+  snprintf (message, 200, "x=%0.2f;y=%0.2f;hdg=%0.2f;port=%0.1f;stbd=%0.1f", 
     x_var->GetDoubleVal(), y_var->GetDoubleVal(), heading_var->GetDoubleVal(),
     swath_width, swath_width);
 
   strncpy(m_last_msg, message, sizeof(message));
   string msg_string(message);
+  MOOSTrace("SonarFilt - GeneratedMessage:\n");
+  MOOSTrace(msg_string + "\n");
   return msg_string;
 }

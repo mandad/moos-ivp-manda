@@ -1,0 +1,62 @@
+//-------------------------------------------------
+// NAME: Damian Manda
+// Runs a test of the lat/long translation
+// Intended for connecting to remote RPi2
+//-------------------------------------------------
+
+//RPI direct connection
+//ServerHost = 192.168.2.3
+//Community = emily
+
+//Local server with pShare
+ServerHost = localhost
+ServerPort = 9000
+Community  = shoreside
+
+MOOSTimeWarp = 1
+TERM_REPORTING = true
+
+// Near TJ Berth
+LatOrigin  = 41.530783
+LongOrigin = -71.316320
+//Easting = 306758.63
+//Northing = 4600272.34
+//UTM Zone = 19N
+
+
+//------------------------------------------
+// Antler configuration  block
+ProcessConfig = ANTLER
+{
+  MSBetweenLaunches = 400
+
+  Run = MOOSDB          @ NewConsole = false
+  Run = uSimMarine    @ NewConsole = false
+  Run = pSonarFilter  @ NewConsole = false
+}
+
+ProcessConfig = pSonarFilter
+{
+   AppTick   = 5
+   CommsTick = 20
+
+   FilterLen  = 10
+   StDevLimit = 2
+   SimSwathAngle = 70
+}
+
+ProcessConfig = uSimMarine
+{
+  AppTick = 4
+  CommsTick = 4
+
+  start_x       = 0
+  start_y       = 0
+  start_heading = 0
+  start_speed   = 0
+
+  prefix        = NAV
+
+  turn_rate     = 60
+  thrust_map    = 0:0, 20:2, 40:4, 60:6, 80:8, 100:10
+}
