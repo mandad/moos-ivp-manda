@@ -26,7 +26,7 @@ ProcessConfig = ANTLER
   Run = MOOSDB          @ NewConsole = false
   Run = pEchoVar        @ NewConsole = false
   //Run = pLogger         @ NewConsole = false
-  Run = uSimMarine	    @ NewConsole = false
+  //Run = uSimMarine	    @ NewConsole = false
   Run = pMarinePID      @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
   //Run = pBasicContactMgr @ NewConsole = false
@@ -34,9 +34,9 @@ ProcessConfig = ANTLER
   Run = pNodeReporter	  @ NewConsole = false
   //Run = iMOOSArduino    @ NewConsole = false
   //Run = iGP9            @ NewConsole = false
-  //Run = iGPS            @ NewConsole = false
-  Run = iCV100          @ NewConsole = false
-  //Run = iZBoat          @ NewConsole = false
+  Run = iGPS            @ NewConsole = false
+  //Run = iCV100          @ NewConsole = false
+  Run = iZBoat          @ NewConsole = false
   Run = pShare          @ NewConsole = false
   Run = pHostInfo       @ NewConsole = false
   Run = uFldNodeBroker  @ NewConsole = false
@@ -54,7 +54,7 @@ ProcessConfig = iZBoat
   CommsTick = 5
 
   // Serial port configuration
-  PORT = /dev/ttyUSB0
+  PORT = /dev/ttyUSB1
   BAUDRATE = 115200
   HANDSHAKING = FALSE
   STREAMING = FALSE
@@ -70,7 +70,7 @@ ProcessConfig = iGPS
   AppTick = 25
   CommsTick = 25
 
-  PORT = /dev/ttyUSB1
+  PORT = /dev/ttyUSB0
   BAUDRATE = 38400
   HANDSHAKING = FALSE
   STREAMING = FALSE

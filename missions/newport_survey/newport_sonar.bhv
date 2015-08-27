@@ -64,14 +64,14 @@ Behavior = BHV_Waypoint
   UPDATES   = SURVEY_UPDATE
   perpetual = true
 
-               lead = 8
+               lead = 5
         lead_damper = 1
               speed = 5   // meters per second
        capture_line = true
      capture_radius = 3.0
         slip_radius = 8.0
              //points = 60,-40 : 60,-160 : 150,-160 : 180,-100 : 150,-40
-             points = 4075, -650 : 3293, -2464
+             points = -167, -194 : -136, -342
              //points = format=lawnmower, label=emily_survey, x=35, y=-225, width=60, height=200, lane_width=30, rows=east-west, degs=-20
              repeat = 0
 
@@ -141,7 +141,8 @@ Behavior = BHV_StationKeep
          outer_radius = 20      // default
          outer_speed  = 1     // default
        transit_speed  = 5     // default
-           station_pt = 30,25     // default
+           #station_pt = 30,25   //north side of pier 
+           station_pt = 55,-115
            swing_time = 0       // default
 
          visual_hints = vertex_size  = 1           // default
