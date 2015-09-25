@@ -12,8 +12,8 @@ MOOSTimeWarp = 1
 TERM_REPORTING = true
 
 // Mendums_pond
-LatOrigin  = 43.1689413
-LongOrigin = -71.0612336
+LatOrigin  = 43.240743
+LongOrigin = -71.155426
 
 
 //------------------------------------------
@@ -24,14 +24,14 @@ ProcessConfig = ANTLER
 
   Run = MOOSDB          @ NewConsole = false
   Run = pLogger         @ NewConsole = false
-  //Run = uSimMarine	    @ NewConsole = false
+  Run = uSimMarine	    @ NewConsole = false
   Run = pMarinePID      @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
   Run = pBasicContactMgr @ NewConsole = false
   Run = uProcessWatch	  @ NewConsole = false
   Run = pNodeReporter	  @ NewConsole = false
-  Run = iMOOSArduino    @ NewConsole = false
-  Run = iGP9            @ NewConsole = false
+  //Run = iMOOSArduino    @ NewConsole = false
+  //Run = iGP9            @ NewConsole = false
   Run = pShare          @ NewConsole = false
   Run = pHostInfo       @ NewConsole = false
   Run = uFldNodeBroker  @ NewConsole = false
@@ -188,7 +188,7 @@ ProcessConfig = pHelmIvP
   bhv_dir_not_found_ok = true
   ivp_behavior_dir = /home/ubuntu/moos-ivp-emily
 
-  behaviors  = mendums_avoidcollision.bhv
+  behaviors  = bow_avoidcollision.bhv
   domain     = course:0:359:360
   domain     = speed:1:10:25
 
