@@ -1,0 +1,239 @@
+//-------------------------------------------------
+// NAME: Damian Manda
+// FILE: mendums_remote.moos
+// Intended for connecting to remote RPi2
+//-------------------------------------------------
+
+//RPI direct connection
+//ServerHost = 192.168.42.15
+//Community = emily
+
+//Local server with pShare
+ServerHost = localhost
+ServerPort = 9000
+Community  = shoreside
+
+MOOSTimeWarp = 1
+TERM_REPORTING = true
+
+// Center of zoomed version
+LatOrigin  = 43.240743
+LongOrigin = -71.155426
+
+
+//------------------------------------------
+// Antler configuration  block
+ProcessConfig = ANTLER
+{
+  MSBetweenLaunches = 400
+
+  Run = MOOSDB          @ NewConsole = false
+  Run = pLogger         @ NewConsole = false
+  Run = pMarineViewer	  @ NewConsole = false
+  Run = uProcessWatch   @ NewConsole = false
+  Run = pShare            @ NewConsole = false
+  Run = pHostInfo       @ NewConsole = false
+  Run = uFldShoreBroker  @ NewConsole = false
+  Run = uFldNodeComms   @ NewConsole = false
+}
+
+//------------------------------------------
+// Vehicle Communication Config
+//------------------------------------------
+
+ProcessConfig = pHostInfo                                       
+{                                                               
+  AppTick   = 1                                                 
+  CommsTick = 1                                                 
+                                                                
+  TEMP_FILE_DIR  = ./                                           
+  //DEFAULT_HOSTIP = 192.168.42.10    // default is "localhost"  
+                                                                
+  //DEFAULT_HOSTIP_FORCE = 192.168.42.10                           
+} 
+
+ProcessConfig = uFldShoreBroker                                 
+{                                                               
+  AppTick   = 1
+  CommsTick = 1                   
+                                                                
+  //bridge = src=DEPLOY_ALL, alias=DEPLOY
+  //bridge = src=DEPLOY_$V,  alias=DEPLOY
+                                                                
+  //bridge = src=RETURN, alias=RETURN
+  //bridge = src=DEPLOY, alias=DEPLOY
+  //bridge = src=FAULT
+  //bridge = src=NODE_REPORT_LOCAL, alias=NODE_REPORT
+  //bridge  = src=APPCAST_REQ, alias=APPCAST_REQ
+  //bridge  = src=MOOS_MANUAL_OVERIDE, alias=MOOS_MANUAL_OVERIDE
+  //bridge  = src=MOOS_MANUAL_OVERRIDE, alias=MOOS_MANUAL_OVERRIDE
+
+  qbridge  = DEPLOY, RETURN, STATION_KEEP, NODE_REPORT, NODE_MESSAGE, FAULT
+  qbridge  = MOOS_MANUAL_OVERRIDE, MOOS_MANUAL_OVERIDE, APPCAST_REQ, AVOID
+
+                                                                
+  // Note: [qbridge = FOO]  is shorthand for
+  //       [bridge = src=FOO_$V,  alias=FOO] and
+  //       [bridge = src=FOO_ALL, alias=FOO]
+}                                                                          
+
+//------------------------------------------                                                            
+ProcessConfig = pShare
+{
+  AppTick   = 2
+  CommsTick = 2
+
+  input = route = localhost:9300 // & multicast_1
+
+  //Input = route = multicast_1
+
+  // Output = src_name = MOOS_MANUAL_OVERIDE, route = 10.0.0.22:9301
+  // Output = src_name = MOOS_MANUAL_OVERRIDE, route = 10.0.0.22:9301
+  // Output = src_name = DEPLOY, route = 10.0.0.22:9301
+  // Output = src_name = RETURN, route = 10.0.0.22:9301
+  // Output = src_name = APPCAST_REQ, route = 10.0.0.22:9301
+  // Output = src_name = NODE_REPORT_LOCAL, dest_name=NODE_REPORT, route=10.0.0.22:9301
+  // Output = src_name = FAULT, dest_name=FAULT, route=10.0.0.22:9301
+}
+
+//--------------------------------------------------
+// ufldnodecomms Configuration Block
+
+ProcessConfig = uFldNodeComms
+{
+  AppTick       = 2
+  CommsTick     = 2
+
+  comms_range      = 1000
+  critical_range   = 50
+
+  min_msg_interval = 15
+  max_msg_length   = 1000
+
+  groups           = true
+
+  view_node_rpt_pulses = false
+}
+
+//------------------------------------------
+// uProcessWatch config block
+
+ProcessConfig = uProcessWatch
+{
+  AppTick   = 4
+  CommsTick = 4
+
+  summary_wait = 5
+
+  //nowatch   = uXMS*
+  nowatch   = uMAC*
+  nowatch   = uPokeDB*
+  nowatch   = uTermCommand*
+  watch_all = true
+}
+
+
+//------------------------------------------
+// pLogger config block
+
+ProcessConfig = pLogger
+{
+  AppTick   = 8
+  CommsTick = 8
+
+  AsyncLog = true
+
+  // For variables that are published in a bundle on their first post,
+  // explicitly declare their logging request
+
+  Log = IVPHELM_LIFE_EVENT @ 0 NOSYNC
+
+  LogAuxSrc = true
+  WildCardLogging = true
+  WildCardOmitPattern = *_STATUS
+  WildCardOmitPattern = DB_VARSUMMARY
+  WildCardOmitPattern = DB_RWSUMMARY
+  WildCardExclusionLog = true
+}
+
+//------------------------------------------
+// pMarineViewer config block
+
+ProcessConfig = pMarineViewer
+{
+  AppTick    = 4
+  CommsTick  = 4
+
+  tiff_file          = BowLake_Zoom_Redo.tif
+  //tiff_file        = BowLake_Redo.tif
+
+  set_pan_x            = -950
+  set_pan_y            = 0
+  zoom                 = 0.65
+  vehicle_shape_scale  = 1.5
+  hash_delta           = 100
+  hash_shade           = 0.4
+  hash_viewable        = true
+
+  trails_point_size   = 2
+
+  // Appcast configuration
+  appcast_height       = 75
+  appcast_width        = 30
+  appcast_viewable     = true
+  appcast_color_scheme = indigo
+  nodes_font_size      = medium
+  procs_font_size      = medium
+  appcast_font_size    = small
+  
+  //datum_viewable = true
+  //datum_size     = 18
+  //gui_size = small
+
+  left_context[deploy-all] = DEPLOY_ALL=true
+  left_context[deploy-all] = MOOS_MANUAL_OVERRIDE_ALL=false
+  left_context[deploy-all] = RETURN_ALL=false
+
+  right_context[return-all] = DEPLOY_ALL=true
+  right_context[return-all] = MOOS_MANUAL_OVERIDE_ALL=false
+  right_context[return-all] = RETURN_ALL=true
+
+  right_context[set_home] = HOME_UPDATE=polygon=format=radial, label=home, x=-$(XPOS), y=$(YPOS), radius=20, pts=12
+  right_context[set_home] = TRANSIT_HOME_UPDATE=points=$(XPOS),$(YPOS)
+  
+  scope  = WPT_EFFICIENCY_LEG
+  scope  = WPT_EFFICIENCY_SUM
+  scope  = WPT_EFFICIENCY_VAL
+  scope  = RETURN
+  scope  = WPT_STAT
+  scope  = VIEW_SEGLIST
+  scope  = VIEW_POINT
+  scope  = VIEW_POLYGON
+  scope  = MODE
+
+  button_one = DEPLOY # DEPLOY_EMILY=true 
+  button_one = MOOS_MANUAL_OVERRIDE_EMILY=false # RETURN_EMILY=false
+  button_two = RETURN # RETURN_EMILY=true # FAULT_EMILY=false
+  button_three = CONTINUE # FAULT_EMILY=false
+  button_four = FAULT # FAULT_EMILY=true
+
+  action  = MENU_KEY=deploy # DEPLOY = true # RETURN = false
+  action+ = MENU_KEY=deploy # MOOS_MANUAL_OVERRIDE=false
+  action  = RETURN=true
+  action  = UPDATES_RETURN=speed=1.4
+}
+
+
+// This block is here in conjunction with the uTermCommand 
+// documentation to demonstrate functionality of that tool.
+// This mission may be alternately 
+
+ProcessConfig = uTermCommandFoo
+{
+  cmd  = override_true  -->  MOOS_MANUAL_OVERIDE --> true
+  cmd  = override_false -->  MOOS_MANUAL_OVERIDE --> false
+  cmd  = deploy_true    -->  DEPLOY --> true
+  cmd  = deploy_false   -->  DEPLOY --> false
+  cmd  = return_true    -->  RETURN --> true
+  cmd  = return_false   -->  RETURN --> false
+}
