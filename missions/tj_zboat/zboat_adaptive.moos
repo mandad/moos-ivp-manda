@@ -1,0 +1,341 @@
+//-------------------------------------------------
+// NAME: Damian Manda
+// FILE: zboat_adaptive.moos
+// DATE: 4 Oct 2015
+//-------------------------------------------------
+
+ServerHost = localhost		
+ServerPort = 9000
+Community  = zboat
+
+MOOSTimeWarp = 1
+TERM_REPORTING = true
+
+// This defines where 0,0 is referenced from in the system
+// Change this to be a local origin for the survey area
+// It must be set in both this file and the laptop.moos file
+// for proper operation.
+LatOrigin  = 41.530783
+LongOrigin = -71.316320
+
+
+//------------------------------------------
+// Antler configuration  block
+ProcessConfig = ANTLER
+{
+  MSBetweenLaunches = 400
+
+  Run = MOOSDB          @ NewConsole = false
+  Run = pEchoVar        @ NewConsole = false
+  Run = pLogger         @ NewConsole = false
+  //Run = uSimMarine	    @ NewConsole = false
+  Run = pMarinePID      @ NewConsole = false
+  Run = pHelmIvP        @ NewConsole = false
+  //Run = pBasicContactMgr @ NewConsole = false
+  Run = uProcessWatch	  @ NewConsole = false
+  Run = pNodeReporter	  @ NewConsole = false
+  Run = iGPS            @ NewConsole = false
+  Run = iCV100          @ NewConsole = false
+  Run = iZBoat          @ NewConsole = false
+  Run = pShare          @ NewConsole = false
+  Run = pHostInfo       @ NewConsole = false
+  Run = uFldNodeBroker  @ NewConsole = false
+  //Run = pLLTrackUpdate  @ NewConsole = false
+  Run = pSonarFilter    @ NewConsole = false
+}
+
+//==============================================
+// ZBoat Interfaces
+//==============================================
+
+ProcessConfig = iZBoat
+{
+  AppTick   = 5
+  CommsTick = 5
+
+  // Serial port configuration
+  PORT = /dev/ttyUSB0
+  BAUDRATE = 115200
+  HANDSHAKING = FALSE
+  STREAMING = FALSE
+
+  //iZBoat Configuration
+  MaxInputRate = 20
+  MaxRudder = 45
+  MaxThrottle = 100
+}
+
+ProcessConfig = iGPS
+{
+  AppTick = 25
+  CommsTick = 25
+
+  PORT = /dev/ttyUSB1
+  BAUDRATE = 38400
+  HANDSHAKING = FALSE
+  STREAMING = FALSE
+}
+
+//------------------------------------------------
+// iCV100 config block
+
+ProcessConfig = iCV100
+{
+   AppTick   = 20
+   CommsTick = 20
+
+   // Serial port configuration
+   PORT = /dev/ttyUSB2
+   BAUDRATE = 38400
+   HANDSHAKING = FALSE
+   STREAMING = TRUE
+
+   SimDepth = 15  //m
+   Simulate = false
+}
+
+//==============================================
+// Custom Background Processes
+//==============================================
+
+ProcessConfig = pLLTrackUpdate
+{
+  AppTick = 1
+  CommsTick = 1
+}
+
+ProcessConfig = pSonarFilter
+{
+   AppTick   = 5
+   CommsTick = 20
+
+   FilterLen  = 10
+   StDevLimit = 2
+   SimSwathAngle = 65
+}
+
+//==============================================
+// Standard Processes
+//==============================================
+
+ProcessConfig = pEchoVar
+{
+  AppTick   = 30
+  CommsTick = 30
+
+  // Use iGPS for the GPS device
+  echo = GPS_LATITUDE     -> NAV_LAT
+  echo = GPS_LONGITUDE    -> NAV_LONG
+  echo = GPS_X            -> NAV_X
+  echo = GPS_Y            -> NAV_Y
+  echo = GPS_HEADING      -> NAV_HEADING
+  echo = GPS_SPEED        -> NAV_SPEED
+}
+
+//------------------------------------------
+// Find the shoreside and share variables
+//------------------------------------------
+
+ProcessConfig = pHostInfo                                       
+{                                                               
+  AppTick   = 1                                                 
+  CommsTick = 1                                                 
+                                                                
+  TEMP_FILE_DIR  = ./                                           
+  //DEFAULT_HOSTIP = 192.168.200.223    // default is "localhost"  
+                                                                
+  //DEFAULT_HOSTIP_FORCE = 192.168.200.223
+}       
+
+ProcessConfig = uFldNodeBroker
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  TRY_SHORE_HOST = pshare_route=192.168.1.15:9300
+  TRY_SHORE_HOST = pshare_route=192.168.2.15:9300
+
+
+  BRIDGE = src=VIEW_POLYGON
+  BRIDGE = src=VIEW_POINT
+  BRIDGE = src=VIEW_CIRCLE
+  BRIDGE = src=VIEW_SEGLIST
+  BRIDGE = src=APPCAST
+
+  // Stuff for scoping
+  BRIDGE = src=MODE
+  BRIDGE = src=ZBOAT_PWM
+  BRIDGE = src=SWATH_WIDTH
+  BRIDGE = src=SWATH_EDGE
+  BRIDGE = src=SWATH_WIDTH_RECORD
+  BRIDGE = src=NEXT_SWATH_SIDE
+  BRIDGE = src=NEW_PATH
+  BRIDGE = src=SONAR_DEPTH_M
+ 
+  //This is the info about the boat
+  BRIDGE = src=NODE_REPORT_LOCAL,  alias=NODE_REPORT
+  BRIDGE = src=NODE_MESSAGE_LOCAL, alias=NODE_MESSAGE
+}
+                                                           
+ProcessConfig = pShare
+{
+  AppTick   = 2
+  CommsTick = 2
+
+  Input = route = localhost:9301
+}
+
+//------------------------------------------
+// uProcessWatch config block
+
+ProcessConfig = uProcessWatch
+{
+  AppTick   = 4
+  CommsTick = 4
+
+  summary_wait = 5
+
+  nowatch   = uXMS*
+  nowatch   = uMAC*
+  nowatch   = uPokeDB*
+  nowatch   = uTermCommand*
+  watch_all = true
+}
+
+
+//------------------------------------------
+// pLogger config block
+
+ProcessConfig = pLogger
+{
+  AppTick   = 8
+  CommsTick = 8
+
+  AsyncLog = true
+
+  // For variables that are published in a bundle on their first post,
+  // explicitly declare their logging request
+
+  Log = IVPHELM_LIFE_EVENT @ 0 NOSYNC
+
+  LogAuxSrc = true
+  WildCardLogging = true
+  WildCardOmitPattern = *_STATUS
+  WildCardOmitPattern = DB_VARSUMMARY
+  WildCardOmitPattern = DB_RWSUMMARY
+  WildCardExclusionLog = true
+}
+
+//------------------------------------------
+// uSimMarine config block
+
+ProcessConfig = uSimMarine
+{
+  AppTick	= 4
+  CommsTick	= 4
+
+  start_x       = 56
+  start_y       = -115
+  start_heading = 180
+  start_speed   = 0
+
+  prefix        = NAV
+
+  turn_rate     = 60
+  thrust_map    = 0:0, 20:2, 40:4, 60:6, 80:8, 100:10
+}
+
+//------------------------------------------
+// pHelmIvP config block
+
+ProcessConfig = pHelmIvP
+{
+  AppTick    = 10
+  CommsTick  = 4
+
+  term_report_interval=0
+
+  bhv_dir_not_found_ok = true
+  ivp_behavior_dir = /home/ubuntu/moos-ivp-emily
+
+  behaviors  = zboat_adaptive.bhv
+  domain     = course:0:359:360
+  domain     = speed:0:7:28
+
+  ok_skew    = any
+}
+
+//------------------------------------------
+// pMarinePID config block
+
+ProcessConfig = pMarinePID
+{
+  AppTick    = 20
+  CommsTick  = 20
+
+  verbose       = true
+  depth_control = false
+
+  // SIM_INSTABILITY = 20
+
+  // Yaw PID controller
+  yaw_pid_kp		 = 1.0
+  yaw_pid_kd		 = 0.3
+  yaw_pid_ki		 = 0.1
+  yaw_pid_integral_limit = 0.07
+
+  // Speed PID controller
+  speed_pid_kp		 = 1.0
+  speed_pid_kd		 = 0.2
+  speed_pid_ki		 = 0.0
+  speed_pid_integral_limit = 0.07
+
+  //MAXIMUMS
+  maxrudder    = 45
+  maxthrust    = 100
+
+  // A non-zero SPEED_FACTOR overrides use of SPEED_PID
+  // Will set DESIRED_THRUST = DESIRED_SPEED * SPEED_FACTOR
+  //speed_factor = 10
+}
+
+//------------------------------------------
+// pNodeReporter config block
+
+ProcessConfig = pNodeReporter
+{
+  AppTick    = 2
+  CommsTick	 = 2
+
+  platform_type   = SHIP
+  platform_length = 4
+
+  node_report_output = NODE_REPORT_LOCAL
+}
+
+//--------------------------------------------------------
+// pBasicContactMgr Configuration Block
+
+ProcessConfig = pBasicContactMgr
+{
+  AppTick   = 2
+  CommsTick = 2
+
+  decay = 30,60
+
+  alert_verbose = true
+
+  contact_max_age = 3600
+  display_radii   = true
+
+  default_alert_range = 50
+  default_cpa_range   = 65
+  default_alert_range_color = gray70
+  default_cpa_range_color   = gray30
+
+  //alert = id=avd, var=CONTACT_INFO, val="name=$[VNAME] # contact=$[VNAME]"
+  //alert = id=avd, alert_range=80
+  //alert = id=avd, cpa_range=100
+  //alert = id=avd, alert_range_color=green
+  //alert = id=avd, cpa_range_color=white
+}

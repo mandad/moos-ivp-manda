@@ -1,0 +1,177 @@
+//--------    FILE: zboat_adaptive.bhv   -------------
+
+initialize   DEPLOY = false
+initialize   RETURN = false
+initialize   FAULT = false
+initialize   REACHED_HOME = false
+initialize   LINE_TURN = false
+initialize   LINE_START = true
+
+Set MODE = ACTIVE {
+  DEPLOY = true
+} INACTIVE
+
+Set MODE = SURVEY {
+  MODE = ACTIVE
+  RETURN != true
+  FAULT != true
+  LINE_TURN != true
+  LINE_START != true
+}
+
+Set MODE = LINESTART {
+  MODE = ACTIVE
+  RETURN != true
+  FAULT != true
+  LINE_TURN != true
+  LINE_START = true
+}
+
+Set MODE = TURN {
+  MODE = ACTIVE
+  RETURN != true
+  FAULT != true
+  LINE_TURN = true
+  LINE_START != true
+}
+
+SET MODE = INPLACE {
+  MODE = ACTIVE
+  FAULT = true
+} HOME
+
+//----------------------------------------------
+Behavior = BHV_Waypoint
+{ 
+  name      = waypt_survey
+  pwt       = 100
+  condition = MODE == SURVEY
+  endflag   = LINE_TURN = true
+
+  idleflag  = WPTING = idle
+  runflag   = WPTING = running
+  runflag   = REACHED_HOME = false
+  runflag   = LINE_BEGIN = true
+  endflag   = WPTING = end
+  endflag   = LINE_END = true
+  inactiveflag = WPTING = inactive
+
+  UPDATES   = SURVEY_UPDATE
+  perpetual = true
+
+               lead = 5
+        lead_damper = 1
+              speed = 1.6   // meters per second
+       capture_line = true
+     capture_radius = 3.0
+        slip_radius = 8.0
+             //points = 60,-40 : 60,-160 : 150,-160 : 180,-100 : 150,-40
+             points = -167, -194 : -136, -342
+             //points = format=lawnmower, label=emily_survey, x=35, y=-225, width=60, height=200, lane_width=30, rows=east-west, degs=-20
+             repeat = 0
+
+    visual_hints = nextpt_color=yellow
+    visual_hints = nextpt_vertex_size=8
+    visual_hints = nextpt_lcolor=gray70
+    visual_hints = vertex_color=dodger_blue, edge_color=white
+    visual_hints = vertex_size=5, edge_size=1.5
+}
+
+//----------------------------------------------
+Behavior=BHV_Waypoint
+{
+  name       = waypt_line_start
+  pwt        = 100  
+  condition  = MODE == LINESTART
+  perpetual  = true
+  endflag    = LINE_START = false
+
+  UPDATES   = START_UPDATE
+  //endflag    = DEPLOY = false
+  //endflag    = MISSION = complete
+
+           speed = 1.6
+  capture_radius = 4.0
+     slip_radius = 8.0
+          points = 4088,-626:4075, -650
+}
+
+//----------------------------------------------
+Behavior=BHV_Waypoint
+{
+  name       = waypt_turn
+  pwt        = 100  
+  condition  = MODE == TURN
+  perpetual  = true
+  endflag    = LINE_TURN = false
+  endflag    = TURN_REACHED = true
+  endflag    = LINE_START = true
+
+  UPDATES   = TURN_UPDATE
+  //endflag    = DEPLOY = false
+  //endflag    = MISSION = complete
+
+           speed = 1.6
+  capture_radius = 4.0
+     slip_radius = 8.0
+          point = 3280, -2489
+}
+
+//----------------------------------------------
+Behavior = BHV_StationKeep
+{
+   // General Behavior Parameters
+   // ---------------------------
+   name         = sk_home
+   pwt          = 100                   // default
+   condition    = MODE == HOME
+   endflag      = REACHED_HOME = true
+   updates      = HOME_UPDATE
+
+   // Parameters specific to this behavior
+   // ------------------------------------
+      center_activate = false   // default
+   hibernation_radius = -1      // default
+         inner_radius = 5       // default
+         outer_radius = 20      // default
+         outer_speed  = 1     // default
+       transit_speed  = 3     // default
+           station_pt = 0,0   //set to the origin
+           swing_time = 0       // default
+
+         visual_hints = vertex_size  = 1           // default
+         visual_hints = edge_color   = light_blue  // default
+         visual_hints = edge_size    = 1           // default
+         visual_hints = label_color  = light_blue       // default
+         visual_hints = vertex_color = red         // default
+}
+
+
+Behavior = BHV_StationKeep
+{
+   // General Behavior Parameters
+   // ---------------------------
+   name         = loiter_inplace
+   pwt          = 100                   // default
+   condition    = MODE == INPLACE
+   // inactiveflag = STATIONING = false    // example
+   // activeflag   = STATIONING = true     // example
+
+
+   // Parameters specific to this behavior
+   // ------------------------------------
+      center_activate = true   // default
+   hibernation_radius = -1      // default
+         inner_radius = 4       // default
+         outer_radius = 10      // default
+         outer_speed  = 1     // default
+       transit_speed  = 2     // default
+           station_pt = 0,0     // default
+           swing_time = 4   //s - allow the vessel to keep moving this long
+
+         visual_hints = vertex_size  = 1           // default
+         visual_hints = edge_color   = light_blue  // default
+         visual_hints = edge_size    = 1           // default
+         visual_hints = label_color  = light_blue       // default
+         visual_hints = vertex_color = red         // default
+}
