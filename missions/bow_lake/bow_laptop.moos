@@ -70,6 +70,9 @@ ProcessConfig = uFldShoreBroker
 
   qbridge  = DEPLOY, RETURN, STATION_KEEP, NODE_REPORT, NODE_MESSAGE, FAULT
   qbridge  = MOOS_MANUAL_OVERRIDE, MOOS_MANUAL_OVERIDE, APPCAST_REQ, AVOID
+  bridge = src = HOME_UPDATE
+  bridge = src = TRANSIT_HOME_UPDATE
+  bridge = src = LOITER_UPDATE
 
                                                                 
   // Note: [qbridge = FOO]  is shorthand for

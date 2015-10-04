@@ -13,7 +13,7 @@
 
 using namespace std;
 
-const char VERSION[10] = "0.0.2";   // gp9_driver version
+const char VERSION[10] = "0.0.3";   // gp9_driver version
 
 // Don't try to be too clever. Arrival of this message triggers
 // us to publish everything we have.

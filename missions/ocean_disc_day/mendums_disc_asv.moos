@@ -10,7 +10,7 @@
 
 //Local server with pShare
 ServerHost = localhost
-ServerPort = 9000
+ServerPort = 9001
 Community  = unh_asv
 
 MOOSTimeWarp = 1
@@ -77,6 +77,7 @@ ProcessConfig = uFldShoreBroker
 
   qbridge  = DEPLOY, RETURN, STATION_KEEP, NODE_REPORT, NODE_MESSAGE, FAULT
   qbridge  = MOOS_MANUAL_OVERRIDE, MOOS_MANUAL_OVERIDE, APPCAST_REQ, AVOID
+  qbridge  = LOITER, LOITER_UPDATE
 
                                                                 
   // Note: [qbridge = FOO]  is shorthand for
@@ -90,7 +91,7 @@ ProcessConfig = pShare
   AppTick   = 2
   CommsTick = 2
 
-  input = route = localhost:9300 // & multicast_1
+  input = route = localhost:9301 // & multicast_1
 
   //Input = route = multicast_1
 
@@ -283,19 +284,19 @@ ProcessConfig = pMarineViewer
   //datum_size     = 18
   //gui_size = small
 
-  left_context[survey-point] = DEPLOY=true
-  left_context[survey-point] = MOOS_MANUAL_OVERRIDE=false
-  left_context[survey-point] = RETURN=false
   left_context[loiter_point] = LOITER=true
   left_context[loiter_point] = LOITER_UPDATE=station_pt=$(XPOS),$(YPOS)
   left_context[loiter_point] = RETURN=false
+  left_context[survey-point] = DEPLOY=true
+  left_context[survey-point] = MOOS_MANUAL_OVERRIDE=false
+  left_context[survey-point] = RETURN=false
 
-  right_context[return] = DEPLOY=false
-  right_context[return] = MOOS_MANUAL_OVERIDE=false
-  right_context[return] = RETURN=true
   right_context[resume] = DEPLOY=true
   right_context[resume] = RETURN=false
   right_context[resume] = LOITER=false
+  right_context[return] = DEPLOY=false
+  right_context[return] = MOOS_MANUAL_OVERIDE=false
+  right_context[return] = RETURN=true
 
   scope  = WPT_EFFICIENCY_LEG
   scope  = WPT_EFFICIENCY_SUM
@@ -309,8 +310,8 @@ ProcessConfig = pMarineViewer
 
   button_one = DEPLOY # DEPLOY=true 
   button_one = MOOS_MANUAL_OVERRIDE=false # RETURN=false
-  button_two = RETURN # RETURN=true # FAULT=false
-  button_three = CONTINUE # FAULT=false
+  button_two = RETURN # RETURN=true # FAULT=false # LOITER=false
+  button_three = CONTINUE # LOITER=false # RETURN=false
   button_four = LOITER # LOITER=true
 
   action  = MENU_KEY=deploy # DEPLOY = true # RETURN = false

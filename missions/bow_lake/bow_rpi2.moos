@@ -281,6 +281,6 @@ ProcessConfig = pEchoVar
   echo = GP9_LONG        -> NAV_LONG
   echo = GP9_X           -> NAV_X
   echo = GP9_Y           -> NAV_Y
-  echo = GP9_Yaw_Heading         -> NAV_HEADING
+  echo = GP9_YAW         -> NAV_HEADING
   echo = GP9_GPS_SPEED   -> NAV_SPEED
 }
