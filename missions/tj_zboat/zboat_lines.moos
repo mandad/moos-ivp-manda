@@ -66,8 +66,8 @@ ProcessConfig = iZBoat
 
 ProcessConfig = iGPS
 {
-  AppTick = 25
-  CommsTick = 25
+  AppTick = 40
+  CommsTick = 40
 
   PORT = /dev/ttyUSB1
   BAUDRATE = 38400
