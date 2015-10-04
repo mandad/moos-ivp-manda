@@ -15,9 +15,8 @@ TERM_REPORTING = true
 // Change this to be a local origin for the survey area
 // It must be set in both this file and the laptop.moos file
 // for proper operation.
-LatOrigin  = 41.530783
-LongOrigin = -71.316320
-
+LatOrigin  = 43.077933
+LongOrigin = -70.738977
 
 //------------------------------------------
 // Antler configuration  block
