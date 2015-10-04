@@ -154,6 +154,7 @@ ProcessConfig = uFldNodeBroker
 
   TRY_SHORE_HOST = pshare_route=192.168.1.15:9300
   TRY_SHORE_HOST = pshare_route=192.168.2.15:9300
+  TRY_SHORE_HOST = pshare_route=192.168.2.1:9300
 
 
   BRIDGE = src=VIEW_POLYGON
