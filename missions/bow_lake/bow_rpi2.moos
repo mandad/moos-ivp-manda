@@ -35,6 +35,7 @@ ProcessConfig = ANTLER
   Run = pShare          @ NewConsole = false
   Run = pHostInfo       @ NewConsole = false
   Run = uFldNodeBroker  @ NewConsole = false
+  Run = pEchoVar        @ NewConsole = false
 }
 
 //------------------------------------------

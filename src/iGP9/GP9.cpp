@@ -489,6 +489,12 @@ void GP9::publishMsgs(gp9::Registers& r)
   m_Comms.Notify("GP9_Roll", r.euler.get_scaled(0), MOOSTime());
   m_Comms.Notify("GP9_Pitch", r.euler.get_scaled(1), MOOSTime());
   m_Comms.Notify("GP9_Yaw", r.euler.get_scaled(2), MOOSTime());
+  double heading = r.euler.get_scaled(2)*180/3.14159-90;
+  if (heading < 0) {
+ 	heading = heading + 360;
+  }
+  m_Comms.Notify("GP9_Yaw_Heading", heading, MOOSTime());
+
 
   m_Comms.Notify("GP9_VelE", r.velocity_e.get_scaled(1), MOOSTime());
   m_Comms.Notify("GP9_VelN", r.velocity_n.get_scaled(1), MOOSTime());
