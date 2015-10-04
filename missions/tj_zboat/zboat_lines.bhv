@@ -35,7 +35,7 @@ Behavior = BHV_Waypoint
   inactiveflag = WPTING = inactive
 
   UPDATES   = SURVEY_UPDATE
-  perpetual = true
+  perpetual = false
 
                lead = 5
         lead_damper = 1
@@ -43,7 +43,7 @@ Behavior = BHV_Waypoint
        capture_line = true
      capture_radius = 3.0
         slip_radius = 8.0
-             points = 0,0
+             points = 100,0
              //points = format=lawnmower, label=emily_survey, x=-50, y=200, width=100, height=200, lane_width=50, rows=north-south, degs=0
              repeat = 0
 
