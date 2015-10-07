@@ -6,7 +6,7 @@ ProcessConfig = pLogger
   AppTick 	= 5
   CommsTick 	= 5
   
-  File		= LOG_%(VNAME)
+  File		= MOOSLog_%(VNAME)
   PATH		= ./
   //SyncLog 	= true @ 0.2
   AsyncLog 	= true

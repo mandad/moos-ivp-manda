@@ -39,6 +39,7 @@ fi
 #  Part 2: Do the cleaning!
 #-------------------------------------------------------
 
+rm -rf  $VERBOSE   MOOSLog_*
 rm -rf  $VERBOSE   LOG_*
 rm -f   $VERBOSE   *~
 rm -f   $VERBOSE   targ_*
