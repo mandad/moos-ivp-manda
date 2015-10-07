@@ -51,9 +51,9 @@ ProcessConfig = uFldShoreBroker
 
   qbridge  = DEPLOY, RETURN, STATION_KEEP, NODE_REPORT, NODE_MESSAGE, FAULT
   qbridge  = MOOS_MANUAL_OVERRIDE, MOOS_MANUAL_OVERIDE, APPCAST_REQ, AVOID
+  qbridge = LOITER, LOITER_UPDATE
   bridge = src = HOME_UPDATE
   bridge = src = TRANSIT_HOME_UPDATE
-  bridge = src = LOITER_UPDATE
 }
 
 //--------------------------------------------------
@@ -106,14 +106,20 @@ ProcessConfig = pMarineViewer
   //datum_size     = 18
   //gui_size = small
 
-  //left_context[survey-point] = DEPLOY=true
-  //left_context[survey-point] = MOOS_MANUAL_OVERIDE=false
-  //left_context[survey-point] = RETURN=false
-  left_context[update_return] = RETURN_UPDATE = points= $(XPOS),$(YPOS)
- 
-  // right_context[return] = DEPLOY=true
-  // right_context[return] = MOOS_MANUAL_OVERIDE=false
-  // right_context[return] = RETURN=false
+  // Set the actions for clicking mouse buttons
+  left_context[loiter_point] = LOITER_ASV=true
+  left_context[loiter_point] = LOITER_UPDATE_ASV=station_pt=$(XPOS),$(YPOS)
+  left_context[loiter_point] = RETURN_ASV=false
+  left_context[survey-point] = DEPLOY=true
+  left_context[survey-point] = MOOS_MANUAL_OVERRIDE=false
+  left_context[survey-point] = RETURN=false
+
+  right_context[resume] = DEPLOY_ASV=true
+  right_context[resume] = RETURN_ASV=false
+  right_context[resume] = LOITER_ASV=false
+  right_context[return] = DEPLOY=false
+  right_context[return] = MOOS_MANUAL_OVERIDE=false
+  right_context[return] = RETURN=true
 
 
   scope  = RETURN_UPDATE

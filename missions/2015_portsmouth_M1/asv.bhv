@@ -26,11 +26,10 @@ Behavior = BHV_Waypoint
   name      = waypt_survey
   pwt       = 100
   condition = MODE == SURVEY
-  endflag   = LOITER = true
+  //endflag   = LOITER = true
 
   idleflag  = WPTING = idle
   runflag   = WPTING = running
-  runflag   = REACHED_HOME = false
   endflag   = WPTING = end
   inactiveflag = WPTING = inactive
 
@@ -43,8 +42,8 @@ Behavior = BHV_Waypoint
        capture_line = true
      capture_radius = 3.0
         slip_radius = 8.0
-             //points = 60,-40 : 60,-160 : 150,-160 : 180,-100 : 150,-40
-             points = format=lawnmower, label=survey_pts, x=-50, y=200, width=100, height=200, lane_width=50, rows=north-south, degs=0
+             points = 0,0 : 1000,0
+             //points = format=lawnmower, label=survey_pts, x=-50, y=200, width=100, height=200, lane_width=50, rows=north-south, degs=0
              repeat = 0
 
     visual_hints = nextpt_color=yellow
@@ -62,7 +61,6 @@ Behavior = BHV_StationKeep
    name         = sk_home
    pwt          = 100                   // default
    condition    = MODE == HOME
-   endflag      = REACHED_HOME = true
    updates      = HOME_UPDATE
 
    // Parameters specific to this behavior
@@ -131,9 +129,9 @@ Behavior = BHV_AvoidCollision
          extrapolate = true
                decay = 30,60
 
-        pwt_outer_dist = 40
-        pwt_inner_dist = 20
-        completed_dist = 50
+        pwt_outer_dist = 100
+        pwt_inner_dist = 50
+        completed_dist = 110
      min_util_cpa_dist = 8
      max_util_cpa_dist = 25
              pwt_grade = linear

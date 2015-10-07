@@ -2,6 +2,7 @@
 
 initialize   DEPLOY = false
 initialize   RETURN = false
+initialize   AVOID = true
 
 // #ifdef VNAME archie
 // 	points = format=lawnmower,label=archiesearch,x=-40,y=-237.5,height=325,width=240,lane_width=40,rows=ns
@@ -30,7 +31,7 @@ Behavior = BHV_Waypoint
 
                lead = 8
         lead_damper = 1
-              speed = 2   // meters per second
+              speed = 6   // meters per second
        capture_line = true
      capture_radius = 5.0
         slip_radius = 15.0
@@ -64,5 +65,34 @@ Behavior=BHV_Waypoint
   capture_radius = 2.0
      slip_radius = 8.0
           points = $(START_POS)
+}
+
+//----------------------------------------------
+Behavior = BHV_AvoidCollision
+{
+  name         = ac_
+  pwt          = 200
+  condition    = AVOID = true 
+  updates      = CONTACT_INFO
+  idleflag    = AVOIDING = idle
+  activeflag   = AVOIDING = active
+  inactiveflag = AVOIDING = inactive
+  runflag      = AVOIDING = running
+  endflag      = AVOIDING = end
+  endflag      = CONTACT_RESOLVED = $[CONTACT]
+  templating   = spawn
+
+             contact = to-be-set
+    on_no_contact_ok = true
+         extrapolate = true
+               decay = 30,60
+
+        pwt_outer_dist = 100
+        pwt_inner_dist = 50
+        completed_dist = 110
+     min_util_cpa_dist = 8
+     max_util_cpa_dist = 25
+             pwt_grade = linear
+   bearing_line_config = white:0, green:0.65, yellow:0.8, red:1.0
 }
 
