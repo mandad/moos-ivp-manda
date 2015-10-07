@@ -1,0 +1,45 @@
+0.869           PLOGGER_STATUS       pLogger         AppErrorFlag=false,Uptime=0.86923,cpuload=1.167,memory_kb=1112,memory_max_kb=1112,MOOSName=pLogger,Publishing="LOGGER_DIRECTORY,",Subscribing="IVPHELM_LIFE_EVENT,LOGGER_RESTART,MOOS_DEBUG,MOOS_SYSTEM,PLOGGER_CMD,",LogAuxSrc=true 
+1.265           DB_VARSUMMARY        MOOSDB_shoreside APPCAST              18:59:59.000         (write pending)      0.0 Hz ~  
+                   APPCAST_REQ          18:59:59.000         (write pending)      0.0 Hz ~  
+                   DB_CLIENTS           13:51:37.533         MOOSDB_shoreside     0.0 Hz S  pHostInfo,pShare,pMari...
+DB_EVENT             13:51:37.177         MOOSDB_shoreside     1.9 Hz S  connected=pHostInfo 
+DB_QOS               13:51:35.460         MOOSDB#1             0.0 Hz S                      
+DB_RWSUMMARY         13:51:35.460         MOOSDB#1             0.0 Hz S                      
+DB_TIME              13:51:37.533         MOOSDB_shoreside     0.0 Hz D  1444240297.5         
+DB_UPTIME            13:51:37.533         MOOSDB_shoreside     0.0 Hz D  2.1                  
+DB_VARSUMMARY        13:51:35.460         MOOSDB#1             0.0 Hz S                      
+GRID_CONFIG          18:59:59.000         (write pending)      0.0 Hz ~  
+                   GRID_DELTA           18:59:59.000         (write pending)      0.0 Hz ~  
+                   HAZARDSET_REPORT     18:59:59.000         (write pending)      0.0 Hz ~  
+                   HELM_MAP_CLEAR       13:51:37.533         pMarineViewer        0.0 Hz D  0.0                  
+HOST_INFO_REQUEST    18:59:59.000         (write pending)      0.0 Hz ~  
+                   IVPHELM_LIFE_EVENT   18:59:59.000         (write pending)      0.0 Hz ~  
+                   LOGGER_DIRECTORY     13:51:36.933         pLogger              0.0 Hz S  ./LOG_SHORESIDE_7_10_2...
+LOGGER_RESTART       18:59:59.000         (write pending)      0.0 Hz ~  
+                   MOOS_DEBUG           18:59:59.000         (write pending)      0.0 Hz ~  
+                   MOOS_SYSTEM          18:59:59.000         (write pending)      0.0 Hz ~  
+                   NODE_REPORT          18:59:59.000         (write pending)      0.0 Hz ~  
+                   NODE_REPORT_LOCAL    18:59:59.000         (write pending)      0.0 Hz ~  
+                   PHI_HOST_IP          18:59:59.000         (write pending)      0.0 Hz ~  
+                   PLOGGER_CMD          18:59:59.000         (write pending)      0.0 Hz ~  
+                   PLOGGER_STATUS       13:51:37.138         pLogger              0.0 Hz S  AppErrorFlag=false,Upt...
+PMARINEVIEWER_ITER_LEN 13:51:37.533         pMarineViewer        0.0 Hz D  0.0                  
+PMARINEVIEWER_STATUS 13:51:37.533         pMarineViewer        0.0 Hz S  AppErrorFlag=false,Upt...
+PMV_CLEAR            18:59:59.000         (write pending)      0.0 Hz ~  
+                   PMV_CONNECT          13:51:37.533         pMarineViewer        0.0 Hz D  0.0                  
+PMV_MENU_CONTEXT     18:59:59.000         (write pending)      0.0 Hz ~  
+                   PSHARE_CMD           18:59:59.000         (write pending)      0.0 Hz ~  
+                   PSHARE_INPUT_SUMMARY 18:59:59.000         (write pending)      0.0 Hz ~  
+                   PSHARE_STATUS        13:51:37.415         pShare               0.0 Hz S  AppErrorFlag=false,Upt...
+TRAIL_RESET          18:59:59.000         (write pending)      0.0 Hz ~  
+                   VIEW_CIRCLE          18:59:59.000         (write pending)      0.0 Hz ~  
+                   VIEW_COMMS_PULSE     18:59:59.000         (write pending)      0.0 Hz ~  
+                   VIEW_GRID            18:59:59.000         (write pending)      0.0 Hz ~  
+                   VIEW_MARKER          18:59:59.000         (write pending)      0.0 Hz ~  
+                   VIEW_POINT           18:59:59.000         (write pending)      0.0 Hz ~  
+                   VIEW_POLYGON         18:59:59.000         (write pending)      0.0 Hz ~  
+                   VIEW_RANGE_PULSE     18:59:59.000         (write pending)      0.0 Hz ~  
+                   VIEW_SEGLIST         18:59:59.000         (write pending)      0.0 Hz ~  
+                   VIEW_VECTOR          18:59:59.000         (write pending)      0.0 Hz ~  
+                    
+1.265           DB_RWSUMMARY         MOOSDB_shoreside pHostInfo=APPCAST_REQ:HOST_INFO_REQUEST:PSHARE_INPUT_SUMMARY&,pShare=PSHARE_CMD&PSHARE_STATUS,pMarineViewer=APPCAST:APPCAST_REQ:GRID_CONFIG:GRID_DELTA:HAZARDSET_REPORT:NODE_REPORT:NODE_REPORT_LOCAL:PHI_HOST_IP:PMV_CLEAR:PMV_MENU_CONTEXT:TRAIL_RESET:VIEW_CIRCLE:VIEW_COMMS_PULSE:VIEW_GRID:VIEW_MARKER:VIEW_POINT:VIEW_POLYGON:VIEW_RANGE_PULSE:VIEW_SEGLIST:VIEW_VECTOR&HELM_MAP_CLEAR:PMARINEVIEWER_ITER_LEN:PMARINEVIEWER_STATUS:PMV_CONNECT,pLogger=APPCAST:APPCAST_REQ:DB_CLIENTS:DB_EVENT:DB_QOS:DB_RWSUMMARY:DB_TIME:DB_UPTIME:DB_VARSUMMARY:GRID_CONFIG:GRID_DELTA:IVPHELM_LIFE_EVENT:LOGGER_DIRECTORY:LOGGER_RESTART:MOOS_DEBUG:MOOS_SYSTEM:NODE_REPORT:NODE_REPORT_LOCAL:PHI_HOST_IP:PLOGGER_CMD:PLOGGER_STATUS:PMV_CLEAR:PMV_MENU_CONTEXT:TRAIL_RESET:VIEW_CIRCLE:VIEW_COMMS_PULSE:VIEW_GRID:VIEW_MARKER:VIEW_POINT:VIEW_POLYGON:VIEW_RANGE_PULSE:VIEW_SEGLIST:VIEW_VECTOR&LOGGER_DIRECTORY:PLOGGER_STATUS 

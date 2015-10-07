@@ -1,0 +1,4 @@
+MOOSTimeWarp = $(WARP)
+// CCOM Pier
+LatOrigin  = 43.071959194444446
+LongOrigin = -70.711610833333339 

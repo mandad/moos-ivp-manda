@@ -1,0 +1,69 @@
+//--------    FILE: targ_boat1.bhv   -------------
+
+initialize   DEPLOY = false
+initialize   RETURN = false
+
+// #ifdef VNAME archie
+// 	points = format=lawnmower,label=archiesearch,x=-40,y=-237.5,height=325,width=240,lane_width=40,rows=ns
+//   visual_hints = vertex_color=yellow, edge_color=green
+// #elseifdef VNAME betty
+// 	points = format=lawnmower,label=bettysearch,x=262.5,y=-237.5,height=325,width=255,lane_width=20,rows=north-south,degs=0
+//   visual_hints = vertex_color=yellow, edge_color=gray25
+// #endif
+
+//----------------------------------------------
+Behavior = BHV_Waypoint
+{ 
+  name      = waypt_survey
+  pwt       = 100
+  condition = RETURN = false
+  condition = DEPLOY = true
+  endflag   = RETURN = true
+
+  idleflag  = WPTING = idle
+  runflag   = WPTING = running
+  endflag   = WPTING = end
+  inactiveflag = WPTING = inactive
+
+  UPDATES   = WPT_UPDATE
+  perpetual = true
+
+               lead = 8
+        lead_damper = 1
+              speed = 2   // meters per second
+       capture_line = true
+     capture_radius = 5.0
+        slip_radius = 15.0
+             //points = 60,-40 : 60,-160 : 150,-160 : 180,-100 : 150,-40
+             points = 500.000,500.000 : 620.942,-165.181 : 549.133,-1208.305 : 556.692,-1892.383 : 760.781,-1896.162 : 757.002,-1174.290 : 859.047,-138.725 : 552.912,518.897 : 345.044,518.897 : 428.191,-172.740 : 311.029,-860.597 : 318.587,-2122.692 : 658.737,-2107.574 : 673.854,-792.331 : 715.428,-108.253 : 307.249,416.616 : 265.675,427.954
+
+             repeat = 100
+
+    visual_hints = nextpt_color=yellow
+    visual_hints = nextpt_vertex_size=8
+    visual_hints = nextpt_lcolor=gray70
+    visual_hints = vertex_color=dodger_blue, edge_color=white
+    visual_hints = vertex_size=5, edge_size=1
+}
+
+//----------------------------------------------
+Behavior=BHV_Waypoint
+{
+  name       = waypt_return
+  pwt        = 100
+  condition  = RETURN = true
+  condition  = DEPLOY = true
+  perpetual  = true
+  endflag    = RETURN = false
+  endflag    = DEPLOY = false
+  endflag    = MISSION = complete
+
+  UPDATES = RETURN_UPDATE
+
+           speed = 2.0
+  capture_radius = 2.0
+     slip_radius = 8.0
+          points = 500,500
+}
+
+

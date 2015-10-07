@@ -1,0 +1,193 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% LOG FILE:       ./LOG_SHORESIDE_7_10_2015_____13_51_13/LOG_SHORESIDE_7_10_2015_____13_51_13.alog
+%% FILE OPENED ON  Wed Dec 31 19:00:00 1969
+%% LOGSTART               1444240272.75
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+0.615           LOGGER_DIRECTORY     pLogger         ./LOG_SHORESIDE_7_10_2015_____13_51_13 
+0.913           DB_EVENT             MOOSDB_shoreside connected=pHostInfo 
+1.225           DB_TIME              MOOSDB_shoreside 1444240273.97464 
+1.225           DB_UPTIME            MOOSDB_shoreside 2.03099      
+1.225           DB_CLIENTS           MOOSDB_shoreside pHostInfo,pMarineViewer,pShare,pLogger, 
+1.226           DB_QOS               MOOSDB_shoreside pHostInfo=0:0.300884:0.300884:0,pLogger=0:0.391006:0.391006:0,pMarineViewer=0:0.358105:0.358105:0,pShare=0:0.314951:0.314951:0, 
+1.316           DB_EVENT             MOOSDB_shoreside connected=uFldShoreBroker 
+1.383           APPCAST              pMarineViewer   proc=pMarineViewer!@#iter=1!@#node=shoreside!@#iter=1!@#messages=Tiff File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.tif!@Info File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.info!@Tiff File B:      !@Info File B:      !@------------------!@Total GeoShapes:  0!@Clear GeoShapes:  0!@NodeReports Recd: 0!@NodeReport Index: 0!@Draw Count:       2!@Draw Count Rate:  11.6113!@Curr Time:        0.00!@Time Warp:        1.000!@Elapsed:          0.00000!@!@Visual Settings: !@  pan_x:   -32.00!@  pan_y:   200.00!@  zoom :   1.30!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+1.396           APPCAST_REQ          pMarineViewer   node=all,app=all,duration=3.0,key=pMarineViewer:shoreside,thresh=any 
+1.638           APPCAST_REQ          pMarineViewer   node=all,app=all,duration=0.1,key=pMarineViewerstartup,thresh=any 
+1.640           APPCAST_REQ          pMarineViewer   node=all,app=all,duration=3.0,key=pMarineViewer:shoreside,thresh=any 
+1.722           DB_EVENT             MOOSDB_shoreside connected=uFldNodeComms 
+1.891           APPCAST              pMarineViewer   proc=pMarineViewer!@#iter=3!@#node=shoreside!@#iter=3!@#messages=Tiff File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.tif!@Info File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.info!@Tiff File B:      !@Info File B:      !@------------------!@Total GeoShapes:  0!@Clear GeoShapes:  0!@NodeReports Recd: 0!@NodeReport Index: 0!@Draw Count:       6!@Draw Count Rate:  8.81815!@Curr Time:        1444240274.39!@Time Warp:        1.000!@Elapsed:          0.00004!@!@Visual Settings: !@  pan_x:   -32.00!@  pan_y:   200.00!@  zoom :   1.30!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+1.893           APPCAST_REQ          pMarineViewer   node=all,app=all,duration=3.0,key=pMarineViewer:shoreside,thresh=any 
+1.382           HELM_MAP_CLEAR       pMarineViewer   0.00000      
+1.382           PMV_CONNECT          pMarineViewer   0.00000      
+2.059           PSHARE_INPUT_SUMMARY pShare          224.1.1.11:24469:multicast_9,localhost:9300 
+2.144           PMARINEVIEWER_ITER_GAP pMarineViewer   1.01382      
+2.144           PMARINEVIEWER_ITER_LEN pMarineViewer   0.00017      
+2.145           APPCAST_REQ          pMarineViewer   node=all,app=all,duration=3.0,key=pMarineViewer:shoreside,thresh=any 
+2.145           APPCAST_REQ_ALL      pMarineViewer   node=all,app=all,duration=3.0,key=pMarineViewer:shoreside,thresh=any 
+2.397           PMARINEVIEWER_ITER_GAP pMarineViewer   1.01298      
+2.397           PMARINEVIEWER_ITER_LEN pMarineViewer   0.00018      
+2.398           APPCAST              pMarineViewer   proc=pMarineViewer!@#iter=5!@#node=shoreside!@#iter=5!@#messages=Tiff File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.tif!@Info File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.info!@Tiff File B:      !@Info File B:      !@------------------!@Total GeoShapes:  0!@Clear GeoShapes:  0!@NodeReports Recd: 0!@NodeReport Index: 0!@Draw Count:       10!@Draw Count Rate:  8.4238!@Curr Time:        1444240274.89!@Time Warp:        1.000!@Elapsed:          0.00009!@!@Visual Settings: !@  pan_x:   -32.00!@  pan_y:   200.00!@  zoom :   1.30!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+2.398           APPCAST_REQ          pMarineViewer   node=all,app=all,duration=3.0,key=pMarineViewer:shoreside,thresh=any 
+2.398           APPCAST_REQ_ALL      pMarineViewer   node=all,app=all,duration=3.0,key=pMarineViewer:shoreside,thresh=any 
+2.650           PMARINEVIEWER_ITER_GAP pMarineViewer   1.01056      
+2.650           PMARINEVIEWER_ITER_LEN pMarineViewer   0.00005      
+2.650           APPCAST_REQ          pMarineViewer   node=all,app=all,duration=3.0,key=pMarineViewer:shoreside,thresh=any 
+2.650           APPCAST_REQ_ALL      pMarineViewer   node=all,app=all,duration=3.0,key=pMarineViewer:shoreside,thresh=any 
+2.735           PHI_HOST_IP          pHostInfo       192.168.200.108 
+2.735           PHI_HOST_INFO        pHostInfo       community=shoreside,hostip=192.168.200.108,port_db=9000,pshare_iroutes=multicast_9&192.168.200.108:9300,hostip_alts=192.168.2.15,timewarp=1 
+2.735           APPCAST              pHostInfo       proc=pHostInfo!@#iter=1!@#node=shoreside!@#iter=1!@#messages=!@  PHI_HOST_IP:         192.168.200.108[0m!@  PHI_HOST_IP_ALL:     192.168.200.108,192.168.2.15!@!@  PHI_HOST_IP_VERBOSE: OSX_WIFI=192.168.200.108,!@                       OSX_ETHERNET=192.168.2.15!@!@  PHI_HOST_PORT:       9000!@  PHI_PSHARES_IROUTES: multicast_9&localhost:9300!@  PHI_HOST_INFO:       community=shoreside,hostip=192.168.200.108,!@                       port_db=9000,!@                       pshare_iroutes=multicast_9&192.168.200.108:9300,!@                       hostip_alts=192.168.2.15,timewarp=1!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+2.736           APPCAST              uFldNodeComms   proc=uFldNodeComms!@#iter=1!@#node=shoreside!@#iter=1!@#messages=Node Report Summary!@======================================!@        Total Received: 0!@     ------------------ !@            Total Sent: 0!@!@Node Message Summary!@======================================!@    Total Msgs Received: 0!@     ------------------ !@            Total Sent: 0!@     ------------------ !@    Total Blocked Msgs: 0!@               Invalid: 0!@        Stale Receiver: 0!@            Too Recent: 0!@          Msg Too Long: 0!@         Range Too Far: 0!@!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+2.879           APPCAST              uFldShoreBroker proc=uFldShoreBroker!@#iter=1!@#node=shoreside!@#iter=1!@#messages=!@ Total PHI_HOST_INFO    received: 1!@ Total NODE_BROKER_PING received: 0!@ Total NODE_BROKER_ACK    posted: 0!@ Total PSHARE_CMD         posted: 0!@!@===========================================================!@            Shoreside Node(s) Information:!@===========================================================!@!@     Community: shoreside!@        HostIP: 192.168.200.108!@   Port MOOSDB: 9000!@     Time Warp: 1!@       IRoutes: multicast_9,!@                192.168.200.108:9300!@!@===========================================================!@             Vehicle Node Information:!@===========================================================!@!@Node  IP               Elap  pShare              !@Name  Address  Status  Time  Input Route(s)  Skew!@----  -------  ------  ----  --------------  ----!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+2.903           PMARINEVIEWER_ITER_GAP pMarineViewer   1.01486      
+2.903           PMARINEVIEWER_ITER_LEN pMarineViewer   0.00007      
+2.904           APPCAST              pMarineViewer   proc=pMarineViewer!@#iter=7!@#node=shoreside!@#iter=7!@#messages=Tiff File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.tif!@Info File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.info!@Tiff File B:      !@Info File B:      !@------------------!@Total GeoShapes:  0!@Clear GeoShapes:  0!@NodeReports Recd: 0!@NodeReport Index: 0!@Draw Count:       14!@Draw Count Rate:  8.26706!@Curr Time:        1444240275.40!@Time Warp:        1.000!@Elapsed:          0.00006!@!@Visual Settings: !@  pan_x:   -32.00!@  pan_y:   200.00!@  zoom :   1.30!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+2.907           APPCAST_REQ          pMarineViewer   node=all,app=all,duration=1.1,key=pMarineViewernewproc,thresh=any 
+2.907           APPCAST_REQ_ALL      pMarineViewer   node=all,app=all,duration=1.1,key=pMarineViewernewproc,thresh=any 
+2.907           APPCAST_REQ          pMarineViewer   node=all,app=all,duration=3.0,key=pMarineViewer:shoreside,thresh=any 
+2.907           APPCAST_REQ_ALL      pMarineViewer   node=all,app=all,duration=3.0,key=pMarineViewer:shoreside,thresh=any 
+3.067           PSHARE_INPUT_SUMMARY pShare          224.1.1.11:24469:multicast_9,localhost:9300 
+3.158           PMARINEVIEWER_ITER_GAP pMarineViewer   1.01852      
+3.158           PMARINEVIEWER_ITER_LEN pMarineViewer   0.00012      
+3.159           APPCAST_REQ          pMarineViewer   node=all,app=all,duration=3.0,key=pMarineViewer:shoreside,thresh=any 
+3.159           APPCAST_REQ_ALL      pMarineViewer   node=all,app=all,duration=3.0,key=pMarineViewer:shoreside,thresh=any 
+3.238           DB_TIME              MOOSDB_shoreside 1444240275.98777 
+3.238           DB_UPTIME            MOOSDB_shoreside 4.04412      
+3.238           DB_CLIENTS           MOOSDB_shoreside uFldNodeComms,uFldShoreBroker,pHostInfo,pMarineViewer,pShare,pLogger, 
+3.238           APPCAST              uFldNodeComms   proc=uFldNodeComms!@#iter=2!@#node=shoreside!@#iter=2!@#messages=Node Report Summary!@======================================!@        Total Received: 0!@     ------------------ !@            Total Sent: 0!@!@Node Message Summary!@======================================!@    Total Msgs Received: 0!@     ------------------ !@            Total Sent: 0!@     ------------------ !@    Total Blocked Msgs: 0!@               Invalid: 0!@        Stale Receiver: 0!@            Too Recent: 0!@          Msg Too Long: 0!@         Range Too Far: 0!@!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+3.239           DB_QOS               MOOSDB_shoreside pHostInfo=0:0.300884:0.267029:0,pLogger=0:0.391006:0.165224:0,pMarineViewer=0:0.358105:0.195026:0,pShare=0:0.421047:0.255108:0,uFldNodeComms=0:0.339031:0.117064:0,uFldShoreBroker=0:0.301123:0.299215:0, 
+2.735           PHI_HOST_IP_ALL      pHostInfo       192.168.200.108,192.168.2.15 
+2.735           PHI_HOST_IP_VERBOSE  pHostInfo       OSX_WIFI=192.168.200.108,OSX_ETHERNET=192.168.2.15 
+2.735           PHI_HOST_PORT_DB     pHostInfo       9000 
+2.735           PHOSTINFO_ITER_LEN   pHostInfo       0.31358      
+2.875           UFLDSHOREBROKER_ITER_LEN uFldShoreBroker 0.00001      
+3.067           PSHARE_OUTPUT_SUMMARY pShare           
+3.238           UFLDNODECOMMS_ITER_GAP uFldNodeComms   1.00391      
+3.238           UFLDNODECOMMS_ITER_LEN uFldNodeComms   0.00008      
+3.408           PMARINEVIEWER_ITER_GAP pMarineViewer   1.00111      
+3.408           PMARINEVIEWER_ITER_LEN pMarineViewer   0.00003      
+3.409           APPCAST              pMarineViewer   proc=pMarineViewer!@#iter=9!@#node=shoreside!@#iter=9!@#messages=Tiff File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.tif!@Info File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.info!@Tiff File B:      !@Info File B:      !@------------------!@Total GeoShapes:  0!@Clear GeoShapes:  0!@NodeReports Recd: 0!@NodeReport Index: 0!@Draw Count:       18!@Draw Count Rate:  8.18786!@Curr Time:        1444240275.91!@Time Warp:        1.000!@Elapsed:          0.00005!@!@Visual Settings: !@  pan_x:   -32.00!@  pan_y:   200.00!@  zoom :   1.30!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+3.409           APPCAST_REQ          pMarineViewer   node=shoreside,app=pMarineViewer,duration=3.0,key=pMarineViewer:shoresideapp,thresh=any 
+3.409           APPCAST_REQ          pMarineViewer   node=all,app=all,duration=3.0,key=pMarineViewer:shoresidegen,thresh=run_warning 
+3.409           APPCAST_REQ_ALL      pMarineViewer   node=all,app=all,duration=3.0,key=pMarineViewer:shoresidegen,thresh=run_warning 
+3.424           PHOSTINFO_ITER_LEN   pHostInfo       0.00001      
+3.424           APPCAST              pHostInfo       proc=pHostInfo!@#iter=2!@#node=shoreside!@#iter=2!@#messages=!@  PHI_HOST_IP:         192.168.200.108[0m!@  PHI_HOST_IP_ALL:     192.168.200.108,192.168.2.15!@!@  PHI_HOST_IP_VERBOSE: OSX_WIFI=192.168.200.108,!@                       OSX_ETHERNET=192.168.2.15!@!@  PHI_HOST_PORT:       9000!@  PHI_PSHARES_IROUTES: multicast_9&localhost:9300!@  PHI_HOST_INFO:       community=shoreside,hostip=192.168.200.108,!@                       port_db=9000,!@                       pshare_iroutes=multicast_9&192.168.200.108:9300,!@                       hostip_alts=192.168.2.15,timewarp=1!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+3.660           PMARINEVIEWER_ITER_GAP pMarineViewer   1.00796      
+3.660           PMARINEVIEWER_ITER_LEN pMarineViewer   0.00012      
+3.739           UFLDNODECOMMS_ITER_GAP uFldNodeComms   1.00261      
+3.739           UFLDNODECOMMS_ITER_LEN uFldNodeComms   0.00009      
+3.740           APPCAST              uFldNodeComms   proc=uFldNodeComms!@#iter=3!@#node=shoreside!@#iter=3!@#messages=Node Report Summary!@======================================!@        Total Received: 0!@     ------------------ !@            Total Sent: 0!@!@Node Message Summary!@======================================!@    Total Msgs Received: 0!@     ------------------ !@            Total Sent: 0!@     ------------------ !@    Total Blocked Msgs: 0!@               Invalid: 0!@        Stale Receiver: 0!@            Too Recent: 0!@          Msg Too Long: 0!@         Range Too Far: 0!@!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+3.878           UFLDSHOREBROKER_ITER_LEN uFldShoreBroker 0.00005      
+3.878           APPCAST              uFldShoreBroker proc=uFldShoreBroker!@#iter=2!@#node=shoreside!@#iter=2!@#messages=!@ Total PHI_HOST_INFO    received: 1!@ Total NODE_BROKER_PING received: 0!@ Total NODE_BROKER_ACK    posted: 0!@ Total PSHARE_CMD         posted: 0!@!@===========================================================!@            Shoreside Node(s) Information:!@===========================================================!@!@     Community: shoreside!@        HostIP: 192.168.200.108!@   Port MOOSDB: 9000!@     Time Warp: 1!@       IRoutes: multicast_9,!@                192.168.200.108:9300!@!@===========================================================!@             Vehicle Node Information:!@===========================================================!@!@Node  IP               Elap  pShare              !@Name  Address  Status  Time  Input Route(s)  Skew!@----  -------  ------  ----  --------------  ----!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+3.913           PMARINEVIEWER_ITER_GAP pMarineViewer   1.01112      
+3.913           PMARINEVIEWER_ITER_LEN pMarineViewer   0.00018      
+3.914           APPCAST              pMarineViewer   proc=pMarineViewer!@#iter=11!@#node=shoreside!@#iter=11!@#messages=Tiff File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.tif!@Info File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.info!@Tiff File B:      !@Info File B:      !@------------------!@Total GeoShapes:  0!@Clear GeoShapes:  0!@NodeReports Recd: 0!@NodeReport Index: 0!@Draw Count:       22!@Draw Count Rate:  8.13866!@Curr Time:        1444240276.41!@Time Warp:        1.000!@Elapsed:          0.00006!@!@Visual Settings: !@  pan_x:   -32.00!@  pan_y:   200.00!@  zoom :   1.30!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+4.071           PSHARE_OUTPUT_SUMMARY pShare           
+4.071           PSHARE_INPUT_SUMMARY pShare          224.1.1.11:24469:multicast_9,localhost:9300 
+4.166           PMARINEVIEWER_ITER_GAP pMarineViewer   1.01166      
+4.166           PMARINEVIEWER_ITER_LEN pMarineViewer   0.00012      
+4.241           UFLDNODECOMMS_ITER_GAP uFldNodeComms   1.00361      
+4.241           UFLDNODECOMMS_ITER_LEN uFldNodeComms   0.00005      
+4.241           APPCAST              uFldNodeComms   proc=uFldNodeComms!@#iter=4!@#node=shoreside!@#iter=4!@#messages=Node Report Summary!@======================================!@        Total Received: 0!@     ------------------ !@            Total Sent: 0!@!@Node Message Summary!@======================================!@    Total Msgs Received: 0!@     ------------------ !@            Total Sent: 0!@     ------------------ !@    Total Blocked Msgs: 0!@               Invalid: 0!@        Stale Receiver: 0!@            Too Recent: 0!@          Msg Too Long: 0!@         Range Too Far: 0!@!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+4.419           PMARINEVIEWER_ITER_GAP pMarineViewer   1.01226      
+4.419           PMARINEVIEWER_ITER_LEN pMarineViewer   0.00016      
+4.420           APPCAST              pMarineViewer   proc=pMarineViewer!@#iter=13!@#node=shoreside!@#iter=13!@#messages=Tiff File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.tif!@Info File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.info!@Tiff File B:      !@Info File B:      !@------------------!@Total GeoShapes:  0!@Clear GeoShapes:  0!@NodeReports Recd: 0!@NodeReport Index: 0!@Draw Count:       26!@Draw Count Rate:  8.1019!@Curr Time:        1444240276.92!@Time Warp:        1.000!@Elapsed:          0.00007!@!@Visual Settings: !@  pan_x:   -32.00!@  pan_y:   200.00!@  zoom :   1.30!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+4.421           APPCAST_REQ          pMarineViewer   node=shoreside,app=pMarineViewer,duration=3.0,key=pMarineViewer:shoresideapp,thresh=any 
+4.421           APPCAST_REQ          pMarineViewer   node=all,app=all,duration=3.0,key=pMarineViewer:shoresidegen,thresh=run_warning 
+4.421           APPCAST_REQ_ALL      pMarineViewer   node=all,app=all,duration=3.0,key=pMarineViewer:shoresidegen,thresh=run_warning 
+4.425           PHOSTINFO_ITER_LEN   pHostInfo       0.00000      
+4.425           APPCAST              pHostInfo       proc=pHostInfo!@#iter=3!@#node=shoreside!@#iter=3!@#messages=!@  PHI_HOST_IP:         192.168.200.108[0m!@  PHI_HOST_IP_ALL:     192.168.200.108,192.168.2.15!@!@  PHI_HOST_IP_VERBOSE: OSX_WIFI=192.168.200.108,!@                       OSX_ETHERNET=192.168.2.15!@!@  PHI_HOST_PORT:       9000!@  PHI_PSHARES_IROUTES: multicast_9&localhost:9300!@  PHI_HOST_INFO:       community=shoreside,hostip=192.168.200.108,!@                       port_db=9000,!@                       pshare_iroutes=multicast_9&192.168.200.108:9300,!@                       hostip_alts=192.168.2.15,timewarp=1!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+3.878           UFLDSHOREBROKER_ITER_GAP uFldShoreBroker 1.00285      
+4.421           APPCAST_REQ_SHORESIDE pMarineViewer   node=shoreside,app=pMarineViewer,duration=3.0,key=pMarineViewer:shoresideapp,thresh=any 
+4.425           PHOSTINFO_ITER_GAP   pHostInfo       1.00118      
+4.674           PMARINEVIEWER_ITER_GAP pMarineViewer   1.01862      
+4.674           PMARINEVIEWER_ITER_LEN pMarineViewer   0.00008      
+4.742           UFLDNODECOMMS_ITER_GAP uFldNodeComms   1.00232      
+4.742           UFLDNODECOMMS_ITER_LEN uFldNodeComms   0.00001      
+4.742           APPCAST              uFldNodeComms   proc=uFldNodeComms!@#iter=5!@#node=shoreside!@#iter=5!@#messages=Node Report Summary!@======================================!@        Total Received: 0!@     ------------------ !@            Total Sent: 0!@!@Node Message Summary!@======================================!@    Total Msgs Received: 0!@     ------------------ !@            Total Sent: 0!@     ------------------ !@    Total Blocked Msgs: 0!@               Invalid: 0!@        Stale Receiver: 0!@            Too Recent: 0!@          Msg Too Long: 0!@         Range Too Far: 0!@!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+4.880           UFLDSHOREBROKER_ITER_GAP uFldShoreBroker 1.00200      
+4.880           UFLDSHOREBROKER_ITER_LEN uFldShoreBroker 0.00002      
+4.880           APPCAST              uFldShoreBroker proc=uFldShoreBroker!@#iter=3!@#node=shoreside!@#iter=3!@#messages=!@ Total PHI_HOST_INFO    received: 1!@ Total NODE_BROKER_PING received: 0!@ Total NODE_BROKER_ACK    posted: 0!@ Total PSHARE_CMD         posted: 0!@!@===========================================================!@            Shoreside Node(s) Information:!@===========================================================!@!@     Community: shoreside!@        HostIP: 192.168.200.108!@   Port MOOSDB: 9000!@     Time Warp: 1!@       IRoutes: multicast_9,!@                192.168.200.108:9300!@!@===========================================================!@             Vehicle Node Information:!@===========================================================!@!@Node  IP               Elap  pShare              !@Name  Address  Status  Time  Input Route(s)  Skew!@----  -------  ------  ----  --------------  ----!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+4.926           PMARINEVIEWER_ITER_GAP pMarineViewer   1.00834      
+4.926           PMARINEVIEWER_ITER_LEN pMarineViewer   0.00009      
+4.926           APPCAST              pMarineViewer   proc=pMarineViewer!@#iter=15!@#node=shoreside!@#iter=15!@#messages=Tiff File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.tif!@Info File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.info!@Tiff File B:      !@Info File B:      !@------------------!@Total GeoShapes:  0!@Clear GeoShapes:  0!@NodeReports Recd: 0!@NodeReport Index: 0!@Draw Count:       30!@Draw Count Rate:  8.0735!@Curr Time:        1444240277.42!@Time Warp:        1.000!@Elapsed:          0.00004!@!@Visual Settings: !@  pan_x:   -32.00!@  pan_y:   200.00!@  zoom :   1.30!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+5.091           PSHARE_OUTPUT_SUMMARY pShare           
+5.091           PSHARE_INPUT_SUMMARY pShare          224.1.1.11:24469:multicast_9,localhost:9300 
+5.177           PMARINEVIEWER_ITER_GAP pMarineViewer   1.00709      
+5.177           PMARINEVIEWER_ITER_LEN pMarineViewer   0.00014      
+5.242           UFLDNODECOMMS_ITER_GAP uFldNodeComms   1.00058      
+5.242           UFLDNODECOMMS_ITER_LEN uFldNodeComms   0.00003      
+5.242           APPCAST              uFldNodeComms   proc=uFldNodeComms!@#iter=6!@#node=shoreside!@#iter=6!@#messages=Node Report Summary!@======================================!@        Total Received: 0!@     ------------------ !@            Total Sent: 0!@!@Node Message Summary!@======================================!@    Total Msgs Received: 0!@     ------------------ !@            Total Sent: 0!@     ------------------ !@    Total Blocked Msgs: 0!@               Invalid: 0!@        Stale Receiver: 0!@            Too Recent: 0!@          Msg Too Long: 0!@         Range Too Far: 0!@!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+5.242           DB_TIME              MOOSDB_shoreside 1444240277.99207 
+5.243           DB_UPTIME            MOOSDB_shoreside 6.04842      
+5.243           DB_CLIENTS           MOOSDB_shoreside uFldNodeComms,uFldShoreBroker,pHostInfo,pMarineViewer,pShare,pLogger, 
+5.243           DB_QOS               MOOSDB_shoreside pHostInfo=0:0.354052:0.267029:0,pLogger=0.331163:0.391006:0.165224:0.287294,pMarineViewer=0.270844:0.405073:0.195026:0.298405,pShare=0.298977:0.421047:0.255108:0.328398,uFldNodeComms=0:0.429869:0.117064:0,uFldShoreBroker=0:0.437975:0.299215:0, 
+5.430           PHOSTINFO_ITER_GAP   pHostInfo       1.00478      
+5.430           PHOSTINFO_ITER_LEN   pHostInfo       0.00001      
+5.430           PMARINEVIEWER_ITER_GAP pMarineViewer   1.00991      
+5.430           PMARINEVIEWER_ITER_LEN pMarineViewer   0.00004      
+5.430           APPCAST              pHostInfo       proc=pHostInfo!@#iter=4!@#node=shoreside!@#iter=4!@#messages=!@  PHI_HOST_IP:         192.168.200.108[0m!@  PHI_HOST_IP_ALL:     192.168.200.108,192.168.2.15!@!@  PHI_HOST_IP_VERBOSE: OSX_WIFI=192.168.200.108,!@                       OSX_ETHERNET=192.168.2.15!@!@  PHI_HOST_PORT:       9000!@  PHI_PSHARES_IROUTES: multicast_9&localhost:9300!@  PHI_HOST_INFO:       community=shoreside,hostip=192.168.200.108,!@                       port_db=9000,!@                       pshare_iroutes=multicast_9&192.168.200.108:9300,!@                       hostip_alts=192.168.2.15,timewarp=1!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+5.430           APPCAST              pMarineViewer   proc=pMarineViewer!@#iter=17!@#node=shoreside!@#iter=17!@#messages=Tiff File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.tif!@Info File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.info!@Tiff File B:      !@Info File B:      !@------------------!@Total GeoShapes:  0!@Clear GeoShapes:  0!@NodeReports Recd: 0!@NodeReport Index: 0!@Draw Count:       34!@Draw Count Rate:  8.05666!@Curr Time:        1444240277.93!@Time Warp:        1.000!@Elapsed:          0.00007!@!@Visual Settings: !@  pan_x:   -32.00!@  pan_y:   200.00!@  zoom :   1.30!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+5.431           APPCAST_REQ          pMarineViewer   node=shoreside,app=pMarineViewer,duration=3.0,key=pMarineViewer:shoresideapp,thresh=any 
+5.431           APPCAST_REQ_SHORESIDE pMarineViewer   node=shoreside,app=pMarineViewer,duration=3.0,key=pMarineViewer:shoresideapp,thresh=any 
+5.431           APPCAST_REQ          pMarineViewer   node=all,app=all,duration=3.0,key=pMarineViewer:shoresidegen,thresh=run_warning 
+5.431           APPCAST_REQ_ALL      pMarineViewer   node=all,app=all,duration=3.0,key=pMarineViewer:shoresidegen,thresh=run_warning 
+5.685           PMARINEVIEWER_ITER_GAP pMarineViewer   1.01840      
+5.685           PMARINEVIEWER_ITER_LEN pMarineViewer   0.00010      
+5.743           UFLDNODECOMMS_ITER_GAP uFldNodeComms   1.00174      
+5.743           UFLDNODECOMMS_ITER_LEN uFldNodeComms   0.00004      
+5.743           APPCAST              uFldNodeComms   proc=uFldNodeComms!@#iter=7!@#node=shoreside!@#iter=7!@#messages=Node Report Summary!@======================================!@        Total Received: 0!@     ------------------ !@            Total Sent: 0!@!@Node Message Summary!@======================================!@    Total Msgs Received: 0!@     ------------------ !@            Total Sent: 0!@     ------------------ !@    Total Blocked Msgs: 0!@               Invalid: 0!@        Stale Receiver: 0!@            Too Recent: 0!@          Msg Too Long: 0!@         Range Too Far: 0!@!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+5.882           UFLDSHOREBROKER_ITER_GAP uFldShoreBroker 1.00239      
+5.882           UFLDSHOREBROKER_ITER_LEN uFldShoreBroker 0.00004      
+5.883           APPCAST              uFldShoreBroker proc=uFldShoreBroker!@#iter=4!@#node=shoreside!@#iter=4!@#messages=!@ Total PHI_HOST_INFO    received: 1!@ Total NODE_BROKER_PING received: 0!@ Total NODE_BROKER_ACK    posted: 0!@ Total PSHARE_CMD         posted: 0!@!@===========================================================!@            Shoreside Node(s) Information:!@===========================================================!@!@     Community: shoreside!@        HostIP: 192.168.200.108!@   Port MOOSDB: 9000!@     Time Warp: 1!@       IRoutes: multicast_9,!@                192.168.200.108:9300!@!@===========================================================!@             Vehicle Node Information:!@===========================================================!@!@Node  IP               Elap  pShare              !@Name  Address  Status  Time  Input Route(s)  Skew!@----  -------  ------  ----  --------------  ----!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+5.936           PMARINEVIEWER_ITER_GAP pMarineViewer   1.00634      
+5.936           PMARINEVIEWER_ITER_LEN pMarineViewer   0.00018      
+5.937           APPCAST              pMarineViewer   proc=pMarineViewer!@#iter=19!@#node=shoreside!@#iter=19!@#messages=Tiff File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.tif!@Info File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.info!@Tiff File B:      !@Info File B:      !@------------------!@Total GeoShapes:  0!@Clear GeoShapes:  0!@NodeReports Recd: 0!@NodeReport Index: 0!@Draw Count:       38!@Draw Count Rate:  8.04012!@Curr Time:        1444240278.43!@Time Warp:        1.000!@Elapsed:          0.00005!@!@Visual Settings: !@  pan_x:   -32.00!@  pan_y:   200.00!@  zoom :   1.30!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+6.092           PSHARE_OUTPUT_SUMMARY pShare           
+6.092           PSHARE_INPUT_SUMMARY pShare          224.1.1.11:24469:multicast_9,localhost:9300 
+6.187           PMARINEVIEWER_ITER_GAP pMarineViewer   1.00386      
+6.187           PMARINEVIEWER_ITER_LEN pMarineViewer   0.00013      
+6.245           UFLDNODECOMMS_ITER_GAP uFldNodeComms   1.00381      
+6.245           UFLDNODECOMMS_ITER_LEN uFldNodeComms   0.00007      
+6.435           PHOSTINFO_ITER_GAP   pHostInfo       1.00478      
+6.435           PHOSTINFO_ITER_LEN   pHostInfo       0.00001      
+6.438           PMARINEVIEWER_ITER_GAP pMarineViewer   1.00248      
+6.438           PMARINEVIEWER_ITER_LEN pMarineViewer   0.00027      
+6.438           APPCAST              pMarineViewer   proc=pMarineViewer!@#iter=21!@#node=shoreside!@#iter=21!@#messages=Tiff File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.tif!@Info File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.info!@Tiff File B:      !@Info File B:      !@------------------!@Total GeoShapes:  0!@Clear GeoShapes:  0!@NodeReports Recd: 0!@NodeReport Index: 0!@Draw Count:       42!@Draw Count Rate:  8.03385!@Curr Time:        1444240278.94!@Time Warp:        1.000!@Elapsed:          0.00007!@!@Visual Settings: !@  pan_x:   -32.00!@  pan_y:   200.00!@  zoom :   1.30!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+6.439           APPCAST_REQ          pMarineViewer   node=shoreside,app=pMarineViewer,duration=3.0,key=pMarineViewer:shoresideapp,thresh=any 
+6.439           APPCAST_REQ_SHORESIDE pMarineViewer   node=shoreside,app=pMarineViewer,duration=3.0,key=pMarineViewer:shoresideapp,thresh=any 
+6.439           APPCAST_REQ          pMarineViewer   node=all,app=all,duration=3.0,key=pMarineViewer:shoresidegen,thresh=run_warning 
+6.439           APPCAST_REQ_ALL      pMarineViewer   node=all,app=all,duration=3.0,key=pMarineViewer:shoresidegen,thresh=run_warning 
+6.693           PMARINEVIEWER_ITER_GAP pMarineViewer   1.02120      
+6.693           PMARINEVIEWER_ITER_LEN pMarineViewer   0.00008      
+6.749           UFLDNODECOMMS_ITER_GAP uFldNodeComms   1.00773      
+6.749           UFLDNODECOMMS_ITER_LEN uFldNodeComms   0.00003      
+6.886           UFLDSHOREBROKER_ITER_GAP uFldShoreBroker 1.00376      
+6.886           UFLDSHOREBROKER_ITER_LEN uFldShoreBroker 0.00002      
+6.946           PMARINEVIEWER_ITER_GAP pMarineViewer   1.01200      
+6.946           PMARINEVIEWER_ITER_LEN pMarineViewer   0.00018      
+6.946           APPCAST              pMarineViewer   proc=pMarineViewer!@#iter=23!@#node=shoreside!@#iter=23!@#messages=Tiff File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.tif!@Info File A:      /Users/damian/code/moos-ivp-trunk/ivp/data/AerialMIT.info!@Tiff File B:      !@Info File B:      !@------------------!@Total GeoShapes:  0!@Clear GeoShapes:  0!@NodeReports Recd: 0!@NodeReport Index: 0!@Draw Count:       44!@Draw Count Rate:  7.67061!@Curr Time:        1444240279.19!@Time Warp:        1.000!@Elapsed:          0.25064!@!@Visual Settings: !@  pan_x:   -32.00!@  pan_y:   200.00!@  zoom :   1.30!@!@#!@#events_total=0!@#!@#run_warning_total=0!@# 
+6.948           DB_EVENT             MOOSDB_shoreside disconnected=pMarineViewer 
+7.107           PSHARE_OUTPUT_SUMMARY pShare           
+7.107           PSHARE_INPUT_SUMMARY pShare          224.1.1.11:24469:multicast_9,localhost:9300 
+7.254           UFLDNODECOMMS_ITER_GAP uFldNodeComms   1.00961      
+7.254           UFLDNODECOMMS_ITER_LEN uFldNodeComms   0.00008      
+7.254           DB_TIME              MOOSDB_shoreside 1444240280.00364 
+7.254           DB_UPTIME            MOOSDB_shoreside 8.05999      
+7.254           DB_CLIENTS           MOOSDB_shoreside uFldNodeComms,uFldShoreBroker,pHostInfo,pShare,pLogger, 
+7.255           DB_QOS               MOOSDB_shoreside pHostInfo=0.371933:0.447035:0.267029:0.327349,pLogger=0.483036:0.483036:0.165224:0.317669,pShare=0.257015:0.488997:0.255108:0.320005,uFldNodeComms=0.271082:0.429869:0.117064:0.298405,uFldShoreBroker=0.535011:0.535011:0.299215:0.396681, 
+7.436           PHOSTINFO_ITER_GAP   pHostInfo       1.00094      
+7.436           PHOSTINFO_ITER_LEN   pHostInfo       0.00004      
+7.755           UFLDNODECOMMS_ITER_GAP uFldNodeComms   1.00350      
+7.755           UFLDNODECOMMS_ITER_LEN uFldNodeComms   0.00011      
+7.891           UFLDSHOREBROKER_ITER_GAP uFldShoreBroker 1.00549      
+7.892           UFLDSHOREBROKER_ITER_LEN uFldShoreBroker 0.00009      
+8.136           PSHARE_OUTPUT_SUMMARY pShare           
+8.136           PSHARE_INPUT_SUMMARY pShare          224.1.1.11:24469:multicast_9,localhost:9300 
+8.259           UFLDNODECOMMS_ITER_GAP uFldNodeComms   1.00681      
+8.259           UFLDNODECOMMS_ITER_LEN uFldNodeComms   0.00010      
+8.437           PHOSTINFO_ITER_GAP   pHostInfo       1.00167      
+8.437           PHOSTINFO_ITER_LEN   pHostInfo       0.00001      
+8.761           UFLDNODECOMMS_ITER_GAP uFldNodeComms   1.00342      
+8.761           UFLDNODECOMMS_ITER_LEN uFldNodeComms   0.00002      
+8.894           UFLDSHOREBROKER_ITER_GAP uFldShoreBroker 1.00277      
+8.894           UFLDSHOREBROKER_ITER_LEN uFldShoreBroker 0.00003      

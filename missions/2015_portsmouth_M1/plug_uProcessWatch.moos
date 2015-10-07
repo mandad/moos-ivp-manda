@@ -1,0 +1,17 @@
+//--------------------------------------------------------
+// uProcessWatch Configuration Block (Created from Plugin)
+
+ProcessConfig = uProcessWatch
+{
+  AppTick   = 2
+  CommsTick = 2
+  
+  NOWATCH = uXMS*
+  nowatch = uPokeDB*
+  nowatch = uTermCommand*
+  nowatch = uMAC*
+  nowatch = uMS*
+
+  WATCH_ALL = true
+}
+
