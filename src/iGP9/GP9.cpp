@@ -418,72 +418,12 @@ void GP9::configureSensor(gp9::Comms* sensor)
 }
 
 
-// bool GP9::handleResetService(gp9::Comms* sensor,
-//     const gp9::Reset::Request& req, const gp9::Reset::Response& resp)
-// {
-//   gp9::Registers r;
-//   if (req.zero_gyros) sendCommand(sensor, r.cmd_zero_gyros, "zero gyroscopes");
-//   if (req.reset_ekf) sendCommand(sensor, r.cmd_reset_ekf, "reset EKF");
-//   if (req.set_mag_ref) sendCommand(sensor, r.cmd_set_mag_ref, "set magnetometer reference");
-//   return true;
-// }
-
 /**
  * Uses the register accessors to grab data from the IMU, and populate
  * the ROS messages which are output.
  */
 void GP9::publishMsgs(gp9::Registers& r)
 {
-  // static ros::Publisher imu_pub = n->advertise<sensor_msgs::Imu>("imu/data", 1, false);
-  // static ros::Publisher mag_pub = n->advertise<geometry_msgs::Vector3Stamped>("imu/mag", 1, false);
-  // static ros::Publisher rpy_pub = n->advertise<geometry_msgs::Vector3Stamped>("imu/rpy", 1, false);
-  // static ros::Publisher temp_pub = n->advertise<std_msgs::Float32>("imu/temperature", 1, false);
-
-  // if (imu_pub.getNumSubscribers() > 0)
-  // {
-  //   sensor_msgs::Imu imu_msg;
-  //   imu_msg.header = header;
-
-  //   // IMU outputs [w,x,y,z], convert to [x,y,z,w] & transform to ROS axes
-  //   imu_msg.orientation.x =  r.quat.get_scaled(1);
-  //   imu_msg.orientation.y = -r.quat.get_scaled(2);
-  //   imu_msg.orientation.z = -r.quat.get_scaled(3);
-  //   imu_msg.orientation.w = r.quat.get_scaled(0);
-
-  //   // Covariance of attitude.  set to constant default or parameter values
-  //   imu_msg.orientation_covariance[0] = covar[0];
-  //   imu_msg.orientation_covariance[1] = covar[1];
-  //   imu_msg.orientation_covariance[2] = covar[2];
-  //   imu_msg.orientation_covariance[3] = covar[3];
-  //   imu_msg.orientation_covariance[4] = covar[4];
-  //   imu_msg.orientation_covariance[5] = covar[5];
-  //   imu_msg.orientation_covariance[6] = covar[6];
-  //   imu_msg.orientation_covariance[7] = covar[7];
-  //   imu_msg.orientation_covariance[8] = covar[8];
-
-  //   // Angular velocity.  transform to ROS axes
-  //   imu_msg.angular_velocity.x =  r.gyro.get_scaled(0);
-  //   imu_msg.angular_velocity.y = -r.gyro.get_scaled(1);
-  //   imu_msg.angular_velocity.z = -r.gyro.get_scaled(2);
-
-  //   // Linear accel.  transform to ROS axes
-  //   imu_msg.linear_acceleration.x =  r.accel.get_scaled(0);
-  //   imu_msg.linear_acceleration.y = -r.accel.get_scaled(1);
-  //   imu_msg.linear_acceleration.z = -r.accel.get_scaled(2);
-
-  //   imu_pub.publish(imu_msg);
-  // }
-
-  // Magnetometer.  transform to ROS axes
-  // if (mag_pub.getNumSubscribers() > 0)
-  // {
-  //   geometry_msgs::Vector3Stamped mag_msg;
-  //   mag_msg.header = header;
-  //   mag_msg.vector.x =  r.mag.get_scaled(0);
-  //   mag_msg.vector.y = -r.mag.get_scaled(1);
-  //   mag_msg.vector.z = -r.mag.get_scaled(2);
-  //   mag_pub.publish(mag_msg);
-  // }
 
   // Euler attitudes.  transform to ROS axes
   m_Comms.Notify("GP9_Roll", r.euler.get_scaled(0), MOOSTime());

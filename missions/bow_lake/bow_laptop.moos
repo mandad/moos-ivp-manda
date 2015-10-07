@@ -56,17 +56,6 @@ ProcessConfig = uFldShoreBroker
 {                                                               
   AppTick   = 1
   CommsTick = 1                   
-                                                                
-  //bridge = src=DEPLOY_ALL, alias=DEPLOY
-  //bridge = src=DEPLOY_$V,  alias=DEPLOY
-                                                                
-  //bridge = src=RETURN, alias=RETURN
-  //bridge = src=DEPLOY, alias=DEPLOY
-  //bridge = src=FAULT
-  //bridge = src=NODE_REPORT_LOCAL, alias=NODE_REPORT
-  //bridge  = src=APPCAST_REQ, alias=APPCAST_REQ
-  //bridge  = src=MOOS_MANUAL_OVERIDE, alias=MOOS_MANUAL_OVERIDE
-  //bridge  = src=MOOS_MANUAL_OVERRIDE, alias=MOOS_MANUAL_OVERRIDE
 
   qbridge  = DEPLOY, RETURN, STATION_KEEP, NODE_REPORT, NODE_MESSAGE, FAULT
   qbridge  = MOOS_MANUAL_OVERRIDE, MOOS_MANUAL_OVERIDE, APPCAST_REQ, AVOID
@@ -89,14 +78,6 @@ ProcessConfig = pShare
   input = route = localhost:9300 // & multicast_1
 
   //Input = route = multicast_1
-
-  // Output = src_name = MOOS_MANUAL_OVERIDE, route = 10.0.0.22:9301
-  // Output = src_name = MOOS_MANUAL_OVERRIDE, route = 10.0.0.22:9301
-  // Output = src_name = DEPLOY, route = 10.0.0.22:9301
-  // Output = src_name = RETURN, route = 10.0.0.22:9301
-  // Output = src_name = APPCAST_REQ, route = 10.0.0.22:9301
-  // Output = src_name = NODE_REPORT_LOCAL, dest_name=NODE_REPORT, route=10.0.0.22:9301
-  // Output = src_name = FAULT, dest_name=FAULT, route=10.0.0.22:9301
 }
 
 //--------------------------------------------------
@@ -201,7 +182,7 @@ ProcessConfig = pMarineViewer
   right_context[return-all] = MOOS_MANUAL_OVERIDE_ALL=false
   right_context[return-all] = RETURN_ALL=true
 
-  right_context[set_home] = HOME_UPDATE=polygon=format=radial, label=home, x=-$(XPOS), y=$(YPOS), radius=20, pts=12
+  right_context[set_home] = HOME_UPDATE=polygon=format=radial, label=home, x=$(XPOS), y=$(YPOS), radius=20, pts=12
   right_context[set_home] = TRANSIT_HOME_UPDATE=points=$(XPOS),$(YPOS)
   
   scope  = WPT_EFFICIENCY_LEG
@@ -226,17 +207,3 @@ ProcessConfig = pMarineViewer
   action  = UPDATES_RETURN=speed=1.4
 }
 
-
-// This block is here in conjunction with the uTermCommand 
-// documentation to demonstrate functionality of that tool.
-// This mission may be alternately 
-
-ProcessConfig = uTermCommandFoo
-{
-  cmd  = override_true  -->  MOOS_MANUAL_OVERIDE --> true
-  cmd  = override_false -->  MOOS_MANUAL_OVERIDE --> false
-  cmd  = deploy_true    -->  DEPLOY --> true
-  cmd  = deploy_false   -->  DEPLOY --> false
-  cmd  = return_true    -->  RETURN --> true
-  cmd  = return_false   -->  RETURN --> false
-}
