@@ -24,14 +24,12 @@ Processconfig = ANTLER
   Run = uFldNodeBroker     @ NewConsole = false
   //Run = uFldMessageHandler @ NewConsole = false
   Run = pBasicContactMgr   @ NewConsole = false
-  //Run = uFldHazardMgr      @ NewConsole = false
 }
   
 #include plug_uFldNodeBroker.moos
 #include plug_pShare.moos
 #include plug_pHostInfo.moos
 //#include plug_uFldMessageHandler.moos
-//#include plug_uFldHazardMgr.moos
 #include plug_pBasicContactMgr.moos
 
 #include plug_uSimMarine.moos

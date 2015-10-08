@@ -72,7 +72,7 @@ ProcessConfig = uFldNodeComms
 
   groups           = true
 
-  view_node_rpt_pulses = true
+  view_node_rpt_pulses = false
 }
 
 ProcessConfig = pMarineViewer
