@@ -39,7 +39,7 @@ cd build
 
 cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ../
 
-make -j6 ${CMD_LINE_ARGS}
+make -j2 ${CMD_LINE_ARGS}
 cd ${INVOCATION_ABS_DIR}
 
 #test-pathplan -d yes

@@ -5,9 +5,11 @@
 SET(CMAKE_CXX_STANDARD 11)
 
 # Find package is broken under < 3.3 on Homebrew
+# And Debian Wheezy armhf
 find_package(Eigen3)
 if(NOT EIGEN3_FOUND)
   include_directories(/usr/local/Cellar/eigen/3.2.8/include/eigen3/)
+  include_directories(/usr/include/eigen3/)
 else()
   include_directories(${EIGEN3_INCLUDE_DIR})
 endif()
