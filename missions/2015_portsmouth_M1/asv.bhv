@@ -42,9 +42,9 @@ Behavior = BHV_Waypoint
        capture_line = true
      capture_radius = 3.0
         slip_radius = 8.0
-             points = 0,0 : 1000,0
-             //points = format=lawnmower, label=survey_pts, x=-50, y=200, width=100, height=200, lane_width=50, rows=north-south, degs=0
-             repeat = 0
+             //points = 0,0 : 1000,0
+             points = format=lawnmower, label=survey_pts, x=600, y=-600, width=800, height=500, lane_width=50, rows=east-west, degs=0
+             //repeat = 0
 
     visual_hints = nextpt_color=yellow
     visual_hints = nextpt_vertex_size=8
@@ -98,7 +98,7 @@ Behavior = BHV_StationKeep
          inner_radius = 4       // default
          outer_radius = 10      // default
          outer_speed  = 1     // default
-       transit_speed  = 2     // default
+       transit_speed  = 3     // default
            station_pt = 0,0     // default
            swing_time = 0   //s - allow the vessel to keep moving this long
 
