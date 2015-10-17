@@ -19,7 +19,7 @@ Behavior = BHV_Waypoint
   pwt       = 100
   condition = RETURN = false
   condition = DEPLOY = true
-  endflag   = RETURN = true
+  //endflag   = RETURN = true
 
   idleflag  = WPTING = idle
   runflag   = WPTING = running
@@ -42,7 +42,7 @@ Behavior = BHV_Waypoint
             #elseifdef VNAME boat2
              currix = 5
             #endif
-             // repeat = 100
+             //repeat = 100
 
     visual_hints = nextpt_color=yellow
     visual_hints = nextpt_vertex_size=8
