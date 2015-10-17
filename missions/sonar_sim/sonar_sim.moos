@@ -8,10 +8,10 @@ ServerHost = localhost
 ServerPort = 9000
 Community  = emily
 
-MOOSTimeWarp = 3
+MOOSTimeWarp = 7
 TERM_REPORTING = true
 
-// Swains
+// SH 2015 Area
 LatOrigin  = 42.97373611
 LongOrigin = -70.7968875
 
@@ -86,8 +86,12 @@ ProcessConfig = uSimMarine
   // start_y       = -589
 
   // SH 15 Southern Region
-  start_x       = 2509
-  start_y       = -4328
+  //start_x       = 2509
+  //start_y       = -4328
+
+  //Half Step Test
+  start_x = 705
+  start_y = -4379
 
   start_heading = 180
   start_speed   = 0
