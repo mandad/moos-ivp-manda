@@ -6,14 +6,14 @@
 
 ServerHost = localhost		
 ServerPort = 9000
-Community  = emily
+Community  = asv
 
-MOOSTimeWarp = 7
+MOOSTimeWarp = $(WARP)
 TERM_REPORTING = true
 
-// SH 2015 Area
-LatOrigin  = 42.97373611
-LongOrigin = -70.7968875
+// Survey Area
+LatOrigin  = $(LAT_ORIGIN)
+LongOrigin = $(LONG_ORIGIN)
 
 
 //------------------------------------------
@@ -90,11 +90,13 @@ ProcessConfig = uSimMarine
   //start_y       = -4328
 
   //Half Step Test
-  start_x = 705
-  start_y = -4379
+  // start_x = 705
+  // start_y = -4379
 
-  start_heading = 180
-  start_speed   = 0
+  START_POS = $(START_POS), 180, 0
+
+  // start_heading = 180
+  // start_speed   = 0
 
   prefix        = NAV
 
@@ -208,7 +210,7 @@ ProcessConfig = pMarineViewer
   right_context[return] = MOOS_MANUAL_OVERIDE=false
   right_context[return] = RETURN=false
 
-  left_context[polyvert] = POLY_VERT=x=$(XPOS),y=$(YPOS)
+  //left_context[polyvert] = POLY_VERT=x=$(XPOS),y=$(YPOS)
 
   scope  = WPT_EFFICIENCY_LEG
   scope  = WPT_EFFICIENCY_SUM
