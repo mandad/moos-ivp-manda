@@ -123,23 +123,6 @@ Behavior=BHV_Waypoint
 }
 
 //----------------------------------------------
-// Behavior=BHV_Waypoint
-// {
-//   name       = waypt_home
-//   pwt        = 100  
-//   condition  = MODE == TRANSIT_HOME
-//   perpetual  = true
-//   endflag    = REACHED_HOME = true
-//   //endflag    = DEPLOY = false
-//   //endflag    = MISSION = complete
-
-//            speed = 5.0
-//   capture_radius = 2.0
-//      slip_radius = 8.0
-//           points = 4107,-589
-// }
-
-//----------------------------------------------
 Behavior = BHV_StationKeep
 {
    // General Behavior Parameters
@@ -157,7 +140,7 @@ Behavior = BHV_StationKeep
          inner_radius = 5       // default
          outer_radius = 20      // default
          outer_speed  = 1     // default
-       transit_speed  = 3     // default
+       transit_speed  = 5     // default
            station_pt = 0,0   
            swing_time = 0       // default
 
@@ -175,8 +158,6 @@ Behavior = BHV_StationKeep
    name         = loiter_inplace
    pwt          = 100                   // default
    condition    = MODE == INPLACE
-   // inactiveflag = STATIONING = false    // example
-   // activeflag   = STATIONING = true     // example
 
 
    // Parameters specific to this behavior
