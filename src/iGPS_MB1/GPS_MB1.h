@@ -5,6 +5,9 @@
 //
 //////////////////////////////////////////////////////////////////////
 
+//This is a hack since apparently Clang doesn't define this
+#define UNIX
+
 #include "NMEAMessage.h"
 #include "MOOS/libMOOS/MOOSLib.h"
 #include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
@@ -30,6 +33,11 @@ class CGPS_MB1 : public CMOOSInstrument
 		bool OnStartUp();
 		bool GetData();
 		bool PublishData();
+
+		void ProcessPacket(char* pUdpPacket);
+		bool SetupUDPPort();
 		string m_sType;
+		unsigned int m_iUDPPort;
+		XPCUdpSocket* m_pListenSocket;
 
 };

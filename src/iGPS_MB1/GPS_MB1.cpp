@@ -75,6 +75,11 @@ bool CGPS_MB1::OnStartUp()
 		return false;
 	}
 
+    if (!m_MissionReader.GetConfigurationParam("Port", m_iUDPPort)) {
+        MOOSTrace("UDP Port not set - FAIL\n");
+        return false;
+    }
+
 
 	//here we make the variables that we are managing
 	double dfGPSPeriod = 0.01;
@@ -100,7 +105,7 @@ bool CGPS_MB1::OnStartUp()
 	} else {
 		//try to open
 
-		if (!SetupPort()) {
+		if (!SetupUDPPort()) {
 			return false;
 		}
 
@@ -112,6 +117,13 @@ bool CGPS_MB1::OnStartUp()
 
 
 	return true;
+}
+
+bool CGPS_MB1::SetupUDPPort()
+{
+    m_pListenSocket = new XPCUdpSocket((long)m_iUDPPort);
+    m_pListenSocket->vBindSocket();
+    return true;
 }
 
 
@@ -162,26 +174,34 @@ bool CGPS_MB1::GetData()
 	if (!IsSimulateMode()) {
 		//here we actually access serial ports etc
 
-		string sWhat;
+		// string sWhat;
 
-		double dfWhen;
+		// double dfWhen;
 
-		if (m_Port.IsStreaming()) {
-			if (!m_Port.GetLatest(sWhat, dfWhen)) {
-				return false;
-			}
-		} else {
-			if (!m_Port.GetTelegram(sWhat, 0.5)) {
-				return false;
-			}
-		}
+		// if (m_Port.IsStreaming()) {
+		// 	if (!m_Port.GetLatest(sWhat, dfWhen)) {
+		// 		return false;
+		// 	}
+		// } else {
+		// 	if (!m_Port.GetTelegram(sWhat, 0.5)) {
+		// 		return false;
+		// 	}
+		// }
+
+        char buffer[1472];  //traditional max for 1500 MTU
+        if (m_pListenSocket->iRecieveMessage(buffer, sizeof(buffer), 0)
+            == sizeof(buffer)) {
+            MOOSTrace("Packet Overflows Buffer");
+        } else {
+            ProcessPacket(buffer);
+        }
 
 		//MOOSTrace("Rx:  %s",sWhat.c_str());
 		if (PublishRaw()) {
-			SetMOOSVar("Raw", sWhat, MOOSTime());
+			SetMOOSVar("Raw", buffer, MOOSTime());
 		}
 
-		ParseNMEAString(sWhat);
+		//ParseNMEAString(sWhat);
 
 	} else {
 		//in simulated mode there is nothing to do..all data
@@ -190,6 +210,31 @@ bool CGPS_MB1::GetData()
 
 	return true;
 
+}
+
+void CGPS_MB1::ProcessPacket(char* pUdpPacket)
+{
+    char * pNMEAMessage = &pUdpPacket[31];
+    unsigned int iMsgLength = 0;
+    // There could also be a sound velocity message
+    // Could also uses pNMEAMessage[7] as numerical indicator
+    if (strstr(pNMEAMessage, "$GPGGA") != NULL) {
+        iMsgLength = 80;
+    } else if (strstr(pNMEAMessage, "$GPHDT") != NULL) {
+        iMsgLength = 19;
+    }
+
+    // If a message was found, process it
+    if (iMsgLength > 0) {
+        string sNMEAMessage(pNMEAMessage, iMsgLength);
+        if (!ParseNMEAString(sNMEAMessage)) {
+            MOOSTrace("Unable to process NMEA string.");
+        }
+    } else {
+        MOOSTrace("No GPS data found in RTA message.");
+        MOOSTrace(pNMEAMessage);
+    }
+    
 }
 
 
