@@ -89,7 +89,7 @@ bool CCV100::OnStartUp()
     m_dfSimDepth = atof(sDepthConfig.c_str());
   } else {
     if (IsSimulateMode()) {
-      MOOSTrace("Warning: Simulate mode set, but not simulate depth configured.\n");
+      MOOSTrace("Warning: Simulate mode set, but no simulate depth configured.\n");
     }
   }
 
@@ -115,7 +115,7 @@ bool CCV100::OnStartUp()
 		}
 
 		//try 10 times to initialise sensor
-		if (!InitialiseSensorN(10, "GPS")) {
+		if (!InitialiseSensorN(10, "CV100")) {
 			return false;
 		}
 	}
@@ -226,164 +226,6 @@ bool CCV100::ParseNMEAString(string &sNMEAString)
     
     return true;
   }
-
-
-  //GGA and GLL headers format the NMEA string differently
-  
-  /*
-  if (sWhat == "$GPGGA") {
-    
-    //OK so extract data...
-    double dfTimeNow = MOOSTime();
-    
-    string sTmp;
-    
-    sTmp = MOOSChomp(sNMEAString, ",");
-    
-    /////////////////////////////////////
-    //         GPS Time
-    double dfTime	= atof(	sTmp.c_str());
-    m_Comms.Notify("GPS_TIME", dfTime, dfTimeNow);
-
-    
-    /////////////////////////////////////
-    //          latitude..
-    sTmp = MOOSChomp(sNMEAString, ",");
-    if (sTmp.size() == 0)
-      bGood = false;
-    
-    double dfLat = atof(sTmp.c_str());
-    
-    sTmp = MOOSChomp(sNMEAString, ",");
-    
-    string sNS	= sTmp;
-    
-    if (sNS == "S") {
-      dfLat *= -1.0;
-    }
-    
-    //////////////////////////////////////
-    //          longitude
-    sTmp = MOOSChomp(sNMEAString, ",");
-    
-    if (sTmp.size() == 0)
-      bGood = false;
-    
-    double dfLong = atof(sTmp.c_str());
-    
-    sTmp = MOOSChomp(sNMEAString, ",");
-    
-    string sEW = sTmp;
-    
-    if (sEW == "W") {
-      dfLong *= -1.0;
-    }
-    
-    
-    ////////////////////////////////////////
-    //          quality
-    
-    sTmp = MOOSChomp(sNMEAString, ",");
-    double dfHDOP	= atof(sTmp.c_str());
-    sTmp = MOOSChomp(sNMEAString, ",");
-    double dfSatellites = atof(	sTmp.c_str());
-    if (dfSatellites < 4)
-      bGood = false;
-    
-    
-    /////////////////////////////////////////
-    //GEODETIC CONVERSION....
-    
-    double dfLatDecDeg = m_Geodesy.DMS2DecDeg(dfLat);
-    double dfLongDecDeg = m_Geodesy.DMS2DecDeg(dfLong);
-    double dfELocal;
-    double dfNLocal;
-    double dfXLocal;
-    double dfYLocal;
-    
-    if (m_Geodesy.LatLong2LocalUTM(dfLatDecDeg, dfLongDecDeg, dfNLocal, dfELocal)) {
-      //set our GPS local Northings and Eastings variables
-      
-      if (bGood) {
-	SetMOOSVar("N", dfNLocal, dfTimeNow);
-	SetMOOSVar("E", dfELocal, dfTimeNow);
-      }
-    }
-    
-    if (m_Geodesy.LatLong2LocalUTM(dfLatDecDeg, dfLongDecDeg, dfYLocal, dfXLocal)) {
-      //set our GPS local Grid variables
-      
-      if (bGood) {
-	SetMOOSVar("X", dfXLocal, dfTimeNow);
-	SetMOOSVar("Y", dfYLocal, dfTimeNow);
-      }
-    }
-    
-    m_Comms.Notify("GPS_LATITUDE", dfLatDecDeg);
-    m_Comms.Notify("GPS_LONGITUDE", dfLongDecDeg);
-    
-    //always say how many satellites we have...
-    SetMOOSVar("Satellites", dfSatellites, dfTimeNow);
-    
-    char tmp[160];
-    snprintf(tmp, 160, "time=%lf,n=%lf,e=%lf,x=%lf,y=%lf,lat=%lf,lon=%lf,sat=%i,hdop=%lf",
-	     dfTimeNow, dfNLocal, dfELocal, dfXLocal,
-	     dfYLocal, dfLatDecDeg, dfLongDecDeg, (int)dfSatellites, dfHDOP);
-    
-    m_Comms.Notify("GPS_SUMMARY", tmp);
-    
-    return true;
-  } else if(sWhat == "$GPRMC") {
-    NMEAMessage m(sCopy);
-    
-    if(strlen(m.Part(7).c_str())) {
-      m_Comms.Notify("GPS_SPEED", atof(m.Part(7).c_str()) * 0.51444444);
-    }
-    
-    if(strlen(m.Part(8).c_str())) {
-      double heading = atof(m.Part(8).c_str());
-      while(heading > 180) heading -= 360;
-      while(heading < -180) heading += 360;
-      double yaw = -heading * M_PI/180.0;
-      
-      m_Comms.Notify("GPS_TRACK_ANG", heading);
-      m_Comms.Notify("GPS_YAW", yaw);
-    }
-    
-    if(strlen(m.Part(10).c_str())) {
-      double f = atof(m.Part(10).c_str());
-      
-      if(m.Part(11)[0] == 'W') f = 0 - f;
-      
-      m_Comms.Notify("GPS_MAGNETIC_DECLINATION", f);
-    } 
-    return true;
-  } else if (sWhat == "$GPHDT") {
-    NMEAMessage m(sCopy);
-
-    if(strlen(m.Part(1).c_str())) {
-        m_Comms.Notify("GPS_HEADING", atof(m.Part(1).c_str()));
-    }
-    return true;
-  } else if (sWhat == "$GPVTG") {
-    NMEAMessage m(sCopy);
-
-    //Track made good (degrees true)
-    if(strlen(m.Part(1).c_str())) {
-        m_Comms.Notify("GPS_VTG_HEADING", atof(m.Part(1).c_str()));
-    }
-    //Speed, in knots
-    if(strlen(m.Part(5).c_str())) {
-        m_Comms.Notify("GPS_SPEED", atof(m.Part(5).c_str()) * 0.51444444);
-    } else if (strlen(m.Part(7).c_str())) {
-        //Speed over ground in kilometers/hour (kph)
-        m_Comms.Notify("GPS_SPEED", atof(m.Part(7).c_str()) * 0.27777778);
-    }
-    
-    return true;
-  }
-  //May also want to handle ZDA
-  */
 
   return false;
 }

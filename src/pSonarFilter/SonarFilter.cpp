@@ -136,6 +136,8 @@ bool SonarFilter::OnStartUp()
       // Convert the angle to radians
       m_sim_swath_angle = atof(value.c_str()) * M_PI / 180;
       handled = true;
+    } else if (param == "SONARTYPE") {
+
     }
 
     if(!handled)
@@ -147,6 +149,7 @@ bool SonarFilter::OnStartUp()
   AddMOOSVariable("Y", "NAV_Y", "", 0);
   AddMOOSVariable("Heading", "NAV_HEADING", "", 0);
   AddMOOSVariable("Depth", "SONAR_DEPTH_M", "", 0);
+  AddMOOSVariable("SonarWidth", "SONAR_WIDTH", "", 0);
   AddMOOSVariable("Swath", "", "SWATH_WIDTH", 0);
   
   registerVariables();	

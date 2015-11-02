@@ -33,9 +33,16 @@ class SonarFilter : public AppCastingMOOSApp
    std::string GenerateSwathMessage();
 
  private: // Configuration variables
+    enum sonar_type
+    {
+      SBES,
+      MBES 
+    };
     int                 m_filter_len;
     double              m_std_limit;
     double              m_sim_swath_angle;
+    sonar_type          m_sonar_type;
+
 
  private: // State variables
     std::list<double>   m_all_depths;

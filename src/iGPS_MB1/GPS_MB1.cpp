@@ -75,6 +75,7 @@ bool CGPS_MB1::OnStartUp()
 		return false;
 	}
 
+    //port = 56004
     if (!m_MissionReader.GetConfigurationParam("Port", m_iUDPPort)) {
         MOOSTrace("UDP Port not set - FAIL\n");
         return false;
@@ -189,11 +190,17 @@ bool CGPS_MB1::GetData()
 		// }
 
         char buffer[1472];  //traditional max for 1500 MTU
-        if (m_pListenSocket->iRecieveMessage(buffer, sizeof(buffer), 0)
-            == sizeof(buffer)) {
-            MOOSTrace("Packet Overflows Buffer");
-        } else {
-            ProcessPacket(buffer);
+        try
+        {
+            MOOSTrace("Receiving message on UDP port\n");
+            if (m_pListenSocket->iRecieveMessage(buffer, sizeof(buffer), 0)
+                == sizeof(buffer)) {
+                MOOSTrace("Packet Overflows Buffer");
+            } else {
+                ProcessPacket(buffer);
+            }
+        } catch (int e) {
+            MOOSTrace("Error Receiving Data from GPS");
         }
 
 		//MOOSTrace("Rx:  %s",sWhat.c_str());
@@ -214,25 +221,46 @@ bool CGPS_MB1::GetData()
 
 void CGPS_MB1::ProcessPacket(char* pUdpPacket)
 {
-    char * pNMEAMessage = &pUdpPacket[31];
-    unsigned int iMsgLength = 0;
-    // There could also be a sound velocity message
-    // Could also uses pNMEAMessage[7] as numerical indicator
-    if (strstr(pNMEAMessage, "$GPGGA") != NULL) {
-        iMsgLength = 80;
-    } else if (strstr(pNMEAMessage, "$GPHDT") != NULL) {
-        iMsgLength = 19;
-    }
+    const bool HypackMode = true;
 
-    // If a message was found, process it
-    if (iMsgLength > 0) {
-        string sNMEAMessage(pNMEAMessage, iMsgLength);
-        if (!ParseNMEAString(sNMEAMessage)) {
-            MOOSTrace("Unable to process NMEA string.");
+    if (HypackMode) {
+        //Parses data from network with just strings in the data
+        MOOSTrace("GPS Packet Received:");
+        MOOSTrace(pUdpPacket);
+        // There can potentially be multiple messages per ethernet packet
+        //bool bMoreMessages = true;
+        char * pThisMessage;
+        pThisMessage = strtok(pUdpPacket, "\r\n");
+        while (pThisMessage != NULL) {
+            string sThisMessage(pThisMessage);
+
+            if (!ParseNMEAString(sThisMessage)) {
+                MOOSTrace("Unable to process NMEA string.");
+            }
+            pThisMessage = strtok(NULL, "\r\n");
         }
     } else {
-        MOOSTrace("No GPS data found in RTA message.");
-        MOOSTrace(pNMEAMessage);
+        char * pNMEAMessage = &pUdpPacket[31];
+        unsigned int iMsgLength = 0;
+        // There could also be a sound velocity message
+        // Could also uses pNMEAMessage[7] as numerical indicator
+        if (strstr(pNMEAMessage, "$GPGGA") != NULL) {
+            iMsgLength = 80;
+
+        } else if (strstr(pNMEAMessage, "$GPHDT") != NULL) {
+            iMsgLength = 19;
+        }
+
+        // If a message was found, process it
+        if (iMsgLength > 0) {
+            string sNMEAMessage(pNMEAMessage, iMsgLength);
+            if (!ParseNMEAString(sNMEAMessage)) {
+                MOOSTrace("Unable to process NMEA string.");
+            }
+        } else {
+            MOOSTrace("No GPS data found in RTA message.");
+            MOOSTrace(pNMEAMessage);
+        }
     }
     
 }
