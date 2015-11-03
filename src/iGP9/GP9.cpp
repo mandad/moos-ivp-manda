@@ -380,29 +380,30 @@ void GP9::configureSensor(gp9::Comms* sensor)
   // uint32_t misc_config_reg = 0;  // initialize all options off
 
   // Optionally disable mag updates in the sensor's EKF.
-  /*
-  bool mag_updates;
-  ros::param::param<bool>("~mag_updates", mag_updates, true);
+  
+  //Make these read MOOS parameters
+  bool mag_updates = false;
+  // ros::param::param<bool>("~mag_updates", mag_updates, true);
   if (mag_updates)
   {
     misc_config_reg |= MAG_UPDATES_ENABLED;
   }
   else
   {
-    ROS_WARN("Excluding magnetometer updates from EKF.");
+    MOOSTrace("Excluding magnetometer updates from EKF.");
   }
 
   // Optionally enable quaternion mode .
-  bool quat_mode;
-  ros::param::param<bool>("~quat_mode", quat_mode, true);
-  if (quat_mode)
-  {
-    misc_config_reg |= QUATERNION_MODE_ENABLED;
-  }
-  else
-  {
-    ROS_WARN("Excluding quaternion mode.");
-  }
+  // bool quat_mode;
+  // ros::param::param<bool>("~quat_mode", quat_mode, true);
+  // if (quat_mode)
+  // {
+  //   misc_config_reg |= QUATERNION_MODE_ENABLED;
+  // }
+  // else
+  // {
+  //   ROS_WARN("Excluding quaternion mode.");
+  // }
 
   r.misc_config.set(0, misc_config_reg);
   if (!sensor->sendWaitAck(r.misc_config))
@@ -411,10 +412,10 @@ void GP9::configureSensor(gp9::Comms* sensor)
   }
 
   // Optionally disable performing a zero gyros command on driver startup.
-  bool zero_gyros;
-  ros::param::param<bool>("~zero_gyros", zero_gyros, true);
+  bool zero_gyros = true;
+  //ros::param::param<bool>("~zero_gyros", zero_gyros, true);
   if (zero_gyros) sendCommand(sensor, r.cmd_zero_gyros, "zero gyroscopes");
-  */
+  
 }
 
 
