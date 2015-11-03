@@ -227,7 +227,7 @@ ProcessConfig = pHelmIvP
 
   behaviors  = zboat_lines.bhv
   domain     = course:0:359:360
-  domain     = speed:0:7:28
+  domain     = speed:0:10:50
 
   ok_skew    = any
 }
@@ -240,7 +240,7 @@ ProcessConfig = pMarinePID
   AppTick    = 20
   CommsTick  = 20
 
-  verbose       = true
+  verbose       = verbose
   depth_control = false
 
   // SIM_INSTABILITY = 20
@@ -252,8 +252,8 @@ ProcessConfig = pMarinePID
   yaw_pid_integral_limit = 0.07
 
   // Speed PID controller
-  speed_pid_kp     = 1.0
-  speed_pid_kd     = 0.2
+  speed_pid_kp     = 0.8
+  speed_pid_kd     = 0.0
   speed_pid_ki     = 0.0
   speed_pid_integral_limit = 0.07
 
@@ -263,7 +263,7 @@ ProcessConfig = pMarinePID
 
   // A non-zero SPEED_FACTOR overrides use of SPEED_PID
   // Will set DESIRED_THRUST = DESIRED_SPEED * SPEED_FACTOR
-  //speed_factor = 10
+  speed_factor = 10
 }
 
 //------------------------------------------
