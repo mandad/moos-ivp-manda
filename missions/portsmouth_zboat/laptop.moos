@@ -1,0 +1,223 @@
+//-------------------------------------------------
+// NAME: Damian Manda
+// FILE: laptop.moos
+// Intended for connecting to remote RPi2 for
+// monitoring of a MOOS mission
+//-------------------------------------------------
+
+//Local server with pShare
+ServerHost = localhost
+ServerPort = 9000
+Community  = shoreside
+
+MOOSTimeWarp = 1
+TERM_REPORTING = true
+
+// This defines where 0,0 is referenced from in the system
+// Change this to be a local origin for the survey area
+// It must be set in both this file and the zboat_*.moos files
+// For proper operation
+LatOrigin  = 43.071959194444446
+LongOrigin = -70.711610833333339 
+
+
+//------------------------------------------
+// Antler configuration  block
+ProcessConfig = ANTLER
+{
+  MSBetweenLaunches = 400
+
+  Run = MOOSDB          @ NewConsole = false
+  Run = pLogger         @ NewConsole = false
+  Run = pMarineViewer	  @ NewConsole = false
+  Run = uProcessWatch   @ NewConsole = false
+  Run = pShare            @ NewConsole = false
+  Run = pHostInfo       @ NewConsole = false
+  Run = uFldShoreBroker  @ NewConsole = false
+  //Run = uFldNodeComms   @ NewConsole = false
+}
+
+//------------------------------------------
+// Vehicle Communication Config
+//------------------------------------------
+
+ProcessConfig = pHostInfo                                       
+{                                                               
+  AppTick   = 1                                                 
+  CommsTick = 1                                                 
+                                                                
+  TEMP_FILE_DIR  = ./                                           
+  //DEFAULT_HOSTIP = 192.168.42.10    // default is "localhost"  
+  //DEFAULT_HOSTIP = 192.168.2.1
+  DEFAULT_HOSTIP = 192.168.1.120
+  //DEFAULT_HOSTIP = 10.42.0.1
+    
+  //DEFAULT_HOSTIP_FORCE = 192.168.42.10
+  // DEFAULT_HOSTIP_FORCE = 192.168.1.32                           
+  //DEFAULT_HOSTIP_FORCE = 10.42.0.1
+
+} 
+
+ProcessConfig = uFldShoreBroker                                 
+{                                                               
+  AppTick   = 1
+  CommsTick = 1                   
+
+  qbridge  = DEPLOY, RETURN, STATION_KEEP, NODE_REPORT, NODE_MESSAGE, FAULT
+  qbridge  = MOOS_MANUAL_OVERRIDE, MOOS_MANUAL_OVERIDE, APPCAST_REQ, AVOID
+  bridge = src=SET_AUTONOMY_MODE
+
+                                                                
+  // Note: [qbridge = FOO]  is shorthand for
+  //       [bridge = src=FOO_$V,  alias=FOO] and
+  //       [bridge = src=FOO_ALL, alias=FOO]
+}                                                                          
+
+//------------------------------------------                                                            
+ProcessConfig = pShare
+{
+  AppTick   = 2
+  CommsTick = 2
+
+  Input = route = localhost:9300
+}
+
+//--------------------------------------------------
+// ufldnodecomms Configuration Block
+
+ProcessConfig = uFldNodeComms
+{
+  AppTick       = 2
+  CommsTick     = 2
+
+  comms_range      = 1000
+  critical_range   = 50
+
+  min_msg_interval = 15
+  max_msg_length   = 1000
+
+  groups           = true
+
+  view_node_rpt_pulses = false
+}
+
+//------------------------------------------
+// uProcessWatch config block
+
+ProcessConfig = uProcessWatch
+{
+  AppTick   = 4
+  CommsTick = 4
+
+  summary_wait = 5
+
+  nowatch   = uXMS*
+  nowatch   = uMAC*
+  nowatch   = uPokeDB*
+  nowatch   = uTermCommand*
+  watch_all = true
+}
+
+
+//------------------------------------------
+// pLogger config block
+
+ProcessConfig = pLogger
+{
+  AppTick   = 8
+  CommsTick = 8
+
+  AsyncLog = true
+
+  // For variables that are published in a bundle on their first post,
+  // explicitly declare their logging request
+
+  Log = IVPHELM_LIFE_EVENT @ 0 NOSYNC
+
+  LogAuxSrc = true
+  WildCardLogging = true
+  WildCardOmitPattern = *_STATUS
+  WildCardOmitPattern = DB_VARSUMMARY
+  WildCardOmitPattern = DB_RWSUMMARY
+  WildCardExclusionLog = true
+}
+
+//------------------------------------------
+// pMarineViewer config block
+
+ProcessConfig = pMarineViewer
+{
+  AppTick    = 4
+  CommsTick  = 4
+
+  tiff_file            = data/portsmouth2.tif
+  //tiff_file_b          = Newport_Aerial.tif
+
+  set_pan_x            = 0
+  set_pan_y            = 0
+  zoom                 = 0.65
+  vehicle_shape_scale  = 1.5
+  hash_delta           = 100
+  hash_shade           = 0.4
+  hash_viewable        = true
+
+  trails_point_size   = 2
+  trails_length       = 1000
+  trails_color        = blue
+  vehicles_name_color = darkred
+  vehicles_active_color = red //default
+
+
+  // Appcast configuration
+  appcast_height       = 75
+  appcast_width        = 30
+  appcast_viewable     = true
+  appcast_color_scheme = indigo
+  nodes_font_size      = medium
+  procs_font_size      = medium
+  appcast_font_size    = small
+  
+  //datum_viewable = true
+  //datum_size     = 18
+  //gui_size = small
+
+  left_context[loiter_point] = RETURN_ZBOAT=true
+  left_context[loiter_point] = HOME_UPDATE_ZBOAT=station_pt=$(XPOS),$(YPOS)
+  left_context[loiter_point] = LOITER_ZBOAT=false
+  left_context[survey-point] = DEPLOY_ALL=true
+  left_context[survey-point] = MOOS_MANUAL_OVERRIDE_ALL=false
+  left_context[survey-point] = RETURN_ALL=false
+
+  right_context[resume] = DEPLOY_ASV=true
+  right_context[resume] = RETURN_ASV=false
+  right_context[resume] = LOITER_ASV=false
+  right_context[return] = DEPLOY=true
+  right_context[return] = MOOS_MANUAL_OVERRIDE=false
+  right_context[return] = RETURN=false
+
+  scope  = WPT_EFFICIENCY_LEG
+  scope  = WPT_EFFICIENCY_SUM
+  scope  = WPT_EFFICIENCY_VAL
+  scope  = RETURN
+  scope  = WPT_STAT
+  scope  = MODE
+  scope  = ZBOAT_PWM
+  scope  = SWATH_WIDTH
+  scope  = SONAR_DEPTH_M
+  scope  = SWATH_EDGE
+  scope  = SWATH_WIDTH_RECORD
+  scope  = NEXT_SWATH_SIDE
+  scope  = NEW_PATH
+
+  button_one = DEPLOY # DEPLOY_ZBOAT=true 
+  button_one = MOOS_MANUAL_OVERRIDE_ZBOAT=false # RETURN_ZBOAT=false
+  button_two = RETURN # RETURN_ZBOAT=true # FAULT_ZBOAT=false
+  button_three = CONTINUE # FAULT_ZBOAT=false RETURN_ZBOAT=false
+  button_four = FAULT # FAULT_ZBOAT=true
+
+  action  = MENU_KEY=deploy # DEPLOY = true # RETURN = false
+  action+ = MENU_KEY=deploy # MOOS_MANUAL_OVERRIDE=false
+  action  = RETURN=true
+  //action  = UPDATES_RETURN=speed=1.4
+  action  = MENU_KEY=SetAutonomy # SET_AUTONOMY_MODE=1
+}
