@@ -349,7 +349,7 @@ void GP9::configureSensor(gp9::Comms* sensor)
     throw std::runtime_error("Unable to set CREG_COM_RATES4.");
   }
 
-  uint32_t misc_rate = (20 << RATE5_EULER_START) | (10 << RATE5_POSITION_START)
+  uint32_t misc_rate = (10 << RATE5_EULER_START) | (10 << RATE5_POSITION_START)
            | (10 << RATE5_VELOCITY_START) | (0 << RATE5_QUAT_START);
   r.comrate5.set(0, misc_rate);
   if (!sensor->sendWaitAck(r.comrate5))
@@ -440,12 +440,11 @@ void GP9::publishMsgs(gp9::Registers& r)
   m_Comms.Notify("GP9_Roll", r.euler.get_scaled(0), MOOSTime());
   m_Comms.Notify("GP9_Pitch", r.euler.get_scaled(1), MOOSTime());
   m_Comms.Notify("GP9_Yaw", r.euler.get_scaled(2), MOOSTime());
-  double heading = r.euler.get_scaled(2)*180/3.14159-90;
-  if (heading < 0) {
- 	heading = heading + 360;
-  }
-  m_Comms.Notify("GP9_Yaw_Heading", heading, MOOSTime());
-
+  double dfHeading = (r.euler.get_scaled(2)*180/3.14159);
+  //if (heading > 360) {
+  //	heading = heading - 360;
+  //}
+  m_Comms.Notify("GP9_Yaw_Heading", dfHeading, MOOSTime());
 
   m_Comms.Notify("GP9_VelE", r.velocity_e.get_scaled(1), MOOSTime());
   m_Comms.Notify("GP9_VelN", r.velocity_n.get_scaled(1), MOOSTime());
@@ -477,5 +476,9 @@ void GP9::publishMsgs(gp9::Registers& r)
   }
 
   m_Comms.Notify("GP9_GPS_SPEED", r.gps_speed.get_scaled(0), MOOSTime());
-  m_Comms.Notify("GP9_GPS_HEADING", r.gps_course.get_scaled(0), MOOSTime());
+  double dfGpsHeading = r.gps_course.get_scaled(0);
+  if (dfGpsHeading < 0) {
+	dfGpsHeading = dfGpsHeading + 360;
+  }
+  m_Comms.Notify("GP9_GPS_HEADING", dfGpsHeading, MOOSTime());
 }

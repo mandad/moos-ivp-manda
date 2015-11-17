@@ -35,6 +35,7 @@ ProcessConfig = ANTLER
   Run = pNodeReporter	  @ NewConsole = false
   Run = iGPS_MB1        @ NewConsole = false
   Run = iZBoat          @ NewConsole = false
+  Run = iGP9            @ NewConsole = false
   Run = pShare          @ NewConsole = false
   Run = pHostInfo       @ NewConsole = false
   Run = uFldNodeBroker  @ NewConsole = false
@@ -70,6 +71,16 @@ ProcessConfig = iGPS_MB1
   PORT = 56006
 }
 
+ProcessConfig = iGP9
+{
+  AppTick    = 50
+  CommsTick  = 50
+ 
+  SerialPort = /dev/ttyAMA0
+  BaudRate = 115200
+  Covariance = "0 0 0 0 0 0 0 0 0"
+}
+
 //==============================================
 // Custom Background Processes
 //==============================================
@@ -101,7 +112,8 @@ ProcessConfig = pEchoVar
   echo = GPS_X            -> NAV_X
   echo = GPS_Y            -> NAV_Y
   echo = GPS_HEADING      -> NAV_HEADING
-  echo = GPS_SPEED        -> NAV_SPEED
+  //echo = GPS_SPEED        -> NAV_SPEED
+  echo = GP9_GPS_SPEED        -> NAV_SPEED
 }
 
 //==============================================
