@@ -228,7 +228,6 @@ void CGPS_MB1::ProcessPacket(char* pUdpPacket)
         MOOSTrace("GPS Packet Received:");
         MOOSTrace(pUdpPacket);
         // There can potentially be multiple messages per ethernet packet
-        //bool bMoreMessages = true;
         char * pThisMessage;
         pThisMessage = strtok(pUdpPacket, "\r\n");
         while (pThisMessage != NULL) {
@@ -429,6 +428,13 @@ bool CGPS_MB1::ParseNMEAString(string &sNMEAString)
         m_Comms.Notify("GPS_SPEED", atof(m.Part(7).c_str()) * 0.27777778);
     }
     
+    return true;
+  } else if (sWhat == "$GPDBT") {
+    NMEAMessage m(sCopy);
+
+    if(strlen(m.Part(3).c_str())) {
+        m_Comms.Notify("SONAR_DEPTH_M", atof(m.Part(3).c_str()));
+    }
     return true;
   }
   //May also want to handle ZDA
