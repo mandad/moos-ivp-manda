@@ -43,7 +43,7 @@ Behavior = BHV_Waypoint
        capture_line = true
      capture_radius = 3.0
         slip_radius = 8.0
-             points = -17,-35:51,-1
+             points = -200,-400:0,-400
              //points = format=lawnmower, label=zboat_survey, x=-50, y=200, width=100, height=200, lane_width=50, rows=north-south, degs=0
              repeat = 0
 
@@ -72,7 +72,7 @@ Behavior = BHV_StationKeep
          outer_radius = 20      // default
          outer_speed  = 1     // default
        transit_speed  = 2.5     // default
-           station_pt = -19,-30  
+           station_pt = -250,-380  
            swing_time = 0       // default
 
          visual_hints = vertex_size  = 1           // default

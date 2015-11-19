@@ -27,15 +27,15 @@ ProcessConfig = ANTLER
   Run = MOOSDB          @ NewConsole = false
   Run = pEchoVar        @ NewConsole = false
   Run = pLogger         @ NewConsole = false
-  Run = uSimMarine	    @ NewConsole = false
+  // Run = uSimMarine	    @ NewConsole = false
   Run = pMarinePID      @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
   //Run = pBasicContactMgr @ NewConsole = false
   Run = uProcessWatch	  @ NewConsole = false
   Run = pNodeReporter	  @ NewConsole = false
-  //Run = iGPS_MB1        @ NewConsole = false
-  //Run = iZBoat          @ NewConsole = false
-  //Run = iGP9            @ NewConsole = false
+  Run = iGPS_MB1        @ NewConsole = false
+  Run = iZBoat          @ NewConsole = false
+  Run = iGP9            @ NewConsole = false
   Run = pShare          @ NewConsole = false
   Run = pHostInfo       @ NewConsole = false
   Run = uFldNodeBroker  @ NewConsole = false
@@ -141,10 +141,10 @@ ProcessConfig = uFldNodeBroker
   CommsTick = 1
 
   TRY_SHORE_HOST = pshare_route=192.168.1.115:9300
-  TRY_SHORE_HOST = pshare_route=192.168.1.15:9300
-  TRY_SHORE_HOST = pshare_route=192.168.2.15:9300
-  TRY_SHORE_HOST = pshare_route=192.168.2.1:9300
-  TRY_SHORE_HOST = pshare_route=192.168.2.100:9300
+  // TRY_SHORE_HOST = pshare_route=192.168.1.15:9300
+  // TRY_SHORE_HOST = pshare_route=192.168.2.15:9300
+  // TRY_SHORE_HOST = pshare_route=192.168.2.1:9300
+  // TRY_SHORE_HOST = pshare_route=192.168.2.100:9300
 
 
   BRIDGE = src=VIEW_POLYGON
