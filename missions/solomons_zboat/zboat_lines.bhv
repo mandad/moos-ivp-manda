@@ -70,8 +70,8 @@ Behavior = BHV_StationKeep
    hibernation_radius = -1      // default
          inner_radius = 5       // default
          outer_radius = 20      // default
-         outer_speed  = 1     // default
-       transit_speed  = 2.5     // default
+         outer_speed  = 1     
+       transit_speed  = 2.5    
            station_pt = -369,40
            swing_time = 0       // default
 

@@ -3,6 +3,7 @@
 // FILE: laptop.moos
 // Intended for connecting to remote RPi2 for
 // monitoring of a MOOS mission
+// For use with launch_adaptive_laptop.sh
 //-------------------------------------------------
 
 //Local server with pShare
@@ -10,15 +11,15 @@ ServerHost = localhost
 ServerPort = 9000
 Community  = shoreside
 
-MOOSTimeWarp = 1
+MOOSTimeWarp = $(WARP)
 TERM_REPORTING = true
 
 // This defines where 0,0 is referenced from in the system
 // Change this to be a local origin for the survey area
 // It must be set in both this file and the zboat_*.moos files
 // For proper operation
-LatOrigin  = 38.3209399
-LongOrigin = -76.4479466
+LatOrigin  = $(LAT_ORIGIN)
+LongOrigin = $(LONG_ORIGIN)
 
 
 //------------------------------------------
@@ -151,9 +152,9 @@ ProcessConfig = pMarineViewer
   tiff_file            = data/TestArea.tif
   //tiff_file_b          = data/LargerArea_Solomons.tif
 
-  set_pan_x            = 0
-  set_pan_y            = 0
-  zoom                 = 0.65
+  set_pan_x            = $(PAN_X)
+  set_pan_y            = $(PAN_Y)
+  zoom                 = $(ZOOM)
   vehicle_shape_scale  = 1.5
   hash_delta           = 100
   hash_shade           = 0.4
