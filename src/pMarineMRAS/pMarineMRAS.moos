@@ -1,0 +1,9 @@
+//------------------------------------------------
+// pMarineMRAS config block
+
+ProcessConfig = pMarineMRAS
+{
+   AppTick   = 4
+   CommsTick = 4
+}
+
