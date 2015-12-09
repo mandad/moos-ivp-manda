@@ -26,6 +26,7 @@ ADD_SUBDIRECTORY(iGPS_MB1)
 ADD_SUBDIRECTORY(pLLTrackUpdate)
 ADD_SUBDIRECTORY(iCV100)
 ADD_SUBDIRECTORY(pSonarFilter)
+ADD_SUBDIRECTORY(pMarineMRAS)
 
 ##############################################################################
 #                           END of CMakeLists.txt

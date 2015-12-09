@@ -2,13 +2,14 @@
 /*    NAME: Damian Manda                                              */
 /*    ORGN: UNH                                              */
 /*    FILE: MarineMRAS.cpp                                        */
-/*    DATE:                                                 */
+/*    DATE: 2015-12-06                                                */
 /************************************************************/
 
 #include <iterator>
 #include "MBUtils.h"
 #include "ACTable.h"
 #include "MarineMRAS.h"
+#include "AngleUtils.h"
 
 using namespace std;
 
@@ -17,6 +18,20 @@ using namespace std;
 
 MarineMRAS::MarineMRAS()
 {
+    m_k_star = 1;
+    m_tau_star = 1;
+    m_z = 1;
+    m_beta = 1;
+    m_alpha = 1;
+    m_gamma = 1;
+    m_xi = 1;
+    m_rudder_limit = 45;
+    m_cruising_speed = 2;
+    m_length = 2;
+
+    m_first_heading = true;
+    m_current_ROT = 0;
+    //m_last_heading_time = MOOSTime();
 }
 
 //---------------------------------------------------------
@@ -41,8 +56,25 @@ bool MarineMRAS::OnNewMail(MOOSMSG_LIST &NewMail)
     bool   mstr  = msg.IsString();
 #endif
 
-     if(key == "FOO") 
-       cout << "great!";
+    if(key == "NAV_HEADING") {
+      double curr_time = MOOSTime();
+      double cur_head = msg.GetDouble();
+      m_current_heading = angle180(cur_head);
+      if (m_first_heading) {
+        m_first_heading = false;
+      } else {
+        double diff = m_previous_heading - m_current_heading;
+        diff = angle180(diff);
+        m_current_ROT = diff / (curr_time - m_last_heading_time);
+      }
+
+      m_previous_heading = m_current_heading;
+      m_last_heading_time = curr_time;
+    }
+    else if (key == "NAV_SPEED")
+      m_current_speed = msg.GetDouble();
+    else if (key == "DESIRED_HEADING")
+      m_desired_heading = msg.GetDouble();
 
      else if(key != "APPCAST_REQ") // handle by AppCastingMOOSApp
        reportRunWarning("Unhandled Mail: " + key);
@@ -67,7 +99,15 @@ bool MarineMRAS::OnConnectToServer()
 bool MarineMRAS::Iterate()
 {
   AppCastingMOOSApp::Iterate();
-  // Do your thing here!
+
+  double desired_rudder = 0;
+  if (!m_first_heading) {
+    desired_rudder = m_CourseControl.Run(m_desired_heading, m_current_heading, 
+      m_current_ROT, m_current_speed, m_last_heading_time);
+  }
+  Notify("DESIRED_RUDDER", desired_rudder);
+  Notify("DESIRED_THRUST", 50);
+
   AppCastingMOOSApp::PostReport();
   return(true);
 }
@@ -91,12 +131,47 @@ bool MarineMRAS::OnStartUp()
     string line  = *p;
     string param = toupper(biteStringX(line, '='));
     string value = line;
+    double dval  = atof(value.c_str());
 
     bool handled = false;
-    if(param == "FOO") {
+    if(param == "K_STAR") {
+      m_k_star = dval;
       handled = true;
     }
-    else if(param == "BAR") {
+    else if(param == "TAU_STAR") {
+      m_tau_star = dval;
+      handled = true;
+    }
+    else if(param == "DAMPINGRATIO") {
+      m_z = dval;
+      handled = true;
+    }
+    else if(param == "BETA") {
+      m_beta = dval;
+      handled = true;
+    }
+    else if(param == "ALPHA") {
+      m_alpha = dval;
+      handled = true;
+    }
+    else if(param == "GAMMA") {
+      m_gamma = dval;
+      handled = true;
+    }
+    else if(param == "XI") {
+      m_xi = dval;
+      handled = true;
+    }
+    else if(param == "RUDDERLIMIT") {
+      m_rudder_limit = dval;
+      handled = true;
+    }
+    else if(param == "CRUISINGSPEED") {
+      m_cruising_speed = dval;
+      handled = true;
+    }
+    else if(param == "LENGTH") {
+      m_length = dval;
       handled = true;
     }
 
@@ -105,6 +180,10 @@ bool MarineMRAS::OnStartUp()
 
   }
   
+  //Initialize the Control system
+  m_CourseControl.SetParameters(m_k_star, m_tau_star, m_z, m_beta, 
+        m_alpha, m_gamma, m_xi, m_rudder_limit, m_cruising_speed, m_length);
+
   registerVariables();	
   return(true);
 }
@@ -115,7 +194,9 @@ bool MarineMRAS::OnStartUp()
 void MarineMRAS::registerVariables()
 {
   AppCastingMOOSApp::RegisterVariables();
-  // Register("FOOBAR", 0);
+  Register("NAV_HEADING", 0);
+  Register("NAV_SPEED", 0);
+  Register("DESIRED_HEADING", 0);
 }
 
 
@@ -125,13 +206,13 @@ void MarineMRAS::registerVariables()
 bool MarineMRAS::buildReport() 
 {
   m_msgs << "============================================ \n";
-  m_msgs << "File:                                        \n";
+  m_msgs << "File: pMarineMRAS                            \n";
   m_msgs << "============================================ \n";
 
   ACTable actab(4);
-  actab << "Alpha | Bravo | Charlie | Delta";
+  actab << "Kp | Kd | Ki | Model Heading";
   actab.addHeaderLines();
-  actab << "one" << "two" << "three" << "four";
+  actab << m_CourseControl.GetStatusInfo();
   m_msgs << actab.getFormattedString();
 
   return(true);

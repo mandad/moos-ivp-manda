@@ -5,5 +5,22 @@ ProcessConfig = pMarineMRAS
 {
    AppTick   = 4
    CommsTick = 4
+
+   // Initial constant parameters
+   K_Star = 1   //0.5-2
+   Tau_Star = 1
+   DampingRatio = 1
+
+   //Adaptation parameters
+   Beta = 1     //Speed of Kp adaptation
+   Alpha = 1    //Speed of Kd adaptation
+   Gamma = 1    //Speed of Ki adaptation
+   Xi = 1   // <= 1
+
+   // Vessel Characteristics
+   RudderLimit = 35
+   CruisingSpeed = 1.6 // m/s
+   Length = 2 //m
+
 }
 

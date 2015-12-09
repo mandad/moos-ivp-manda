@@ -6,6 +6,7 @@
 SET(SRC
   MarineMRAS.cpp
   MarineMRAS_Info.cpp
+  CourseChangeMRAS.cpp
   main.cpp
 )
 
@@ -15,6 +16,7 @@ TARGET_LINK_LIBRARIES(pMarineMRAS
    ${MOOS_LIBRARIES}
    apputil
    mbutil
+   geometry
    m
    pthread)
 
