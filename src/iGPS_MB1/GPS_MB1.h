@@ -38,6 +38,7 @@ class CGPS_MB1 : public CMOOSInstrument
 		bool SetupUDPPort();
 		string m_sType;
 		unsigned int m_iUDPPort;
+		bool m_bIgnoreNumSats;
 		XPCUdpSocket* m_pListenSocket;
 
 };

@@ -20,6 +20,7 @@ using namespace std;
 CGPS_MB1::CGPS_MB1()
 {
 	m_sType = "VANILLA";
+    m_bIgnoreNumSats = false;
 }
 
 CGPS_MB1::~CGPS_MB1()
@@ -81,11 +82,14 @@ bool CGPS_MB1::OnStartUp()
         return false;
     }
 
+    if (!m_MissionReader.GetConfigurationParam("IgnoreSats", m_bIgnoreNumSats)) {
+        m_bIgnoreNumSats = false;
+    }
 
 	//here we make the variables that we are managing
 	double dfGPSPeriod = 0.01;
 
-	//GPS update @ 2Hz
+	//GPS update @ 10Hz
 	AddMOOSVariable("X", "SIM_X", "GPS_X", dfGPSPeriod);
 
 	AddMOOSVariable("Y", "SIM_Y", "GPS_Y", dfGPSPeriod);
@@ -335,7 +339,7 @@ bool CGPS_MB1::ParseNMEAString(string &sNMEAString)
     double dfHDOP	= atof(sTmp.c_str());
     sTmp = MOOSChomp(sNMEAString, ",");
     double dfSatellites = atof(	sTmp.c_str());
-    if (dfSatellites < 4)
+    if (dfSatellites < 4 && !m_bIgnoreNumSats)
       bGood = false;
     
     

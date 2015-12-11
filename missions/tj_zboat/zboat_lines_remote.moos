@@ -84,6 +84,7 @@ ProcessConfig = iGPS_MB1
   CommsTick  = 40
 
   PORT = 56006
+  IgnoreSats = true
 }
 
 //------------------------------------------------
