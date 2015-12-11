@@ -39,7 +39,7 @@ Behavior = BHV_Waypoint
 
                lead = 5
         lead_damper = 1
-              speed = 1.6   // meters per second
+              speed = $(SURVEY_SPEED)   // meters per second
        capture_line = true
      capture_radius = 3.0
         slip_radius = 8.0
@@ -71,8 +71,8 @@ Behavior = BHV_StationKeep
          inner_radius = 5       // default
          outer_radius = 20      // default
          outer_speed  = 1     // default
-       transit_speed  = 3     // default
-           station_pt = 0,0     // default
+       transit_speed  = 2.5
+           station_pt = $(HOME_POS)     // default
            swing_time = 0       // default
 
          visual_hints = vertex_size  = 1           // default

@@ -53,6 +53,7 @@ public:
 
     double m_dfPreviousTime;
     double m_dfPreviousHeading;
+    double m_dfMeasuredHeading;
     double m_dfCourseChangeTime;
     long   m_lIterations;
     bool   m_bFirstRun;

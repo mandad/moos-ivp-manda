@@ -49,6 +49,7 @@ class MarineMRAS : public AppCastingMOOSApp
     bool   m_first_heading;
     double m_previous_heading;
     double m_current_ROT;
+    bool   m_has_control;
 
     CourseChangeMRAS m_CourseControl;
 

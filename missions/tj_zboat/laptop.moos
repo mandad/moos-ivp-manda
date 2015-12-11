@@ -47,14 +47,11 @@ ProcessConfig = pHostInfo
   CommsTick = 1                                                 
                                                                 
   TEMP_FILE_DIR  = ./                                           
-  //DEFAULT_HOSTIP = 192.168.42.10    // default is "localhost"  
-  //DEFAULT_HOSTIP = 192.168.2.1
-  DEFAULT_HOSTIP = 192.168.1.32
+  
   //DEFAULT_HOSTIP = 10.42.0.1
     
-  //DEFAULT_HOSTIP_FORCE = 192.168.42.10
-  // DEFAULT_HOSTIP_FORCE = 192.168.1.32                           
-  //DEFAULT_HOSTIP_FORCE = 10.42.0.1
+  //External IP Address of Laptop
+  DEFAULT_HOSTIP_FORCE = $(SHORE_IP)
 
 } 
 
@@ -79,7 +76,7 @@ ProcessConfig = pShare
   AppTick   = 2
   CommsTick = 2
 
-  Input = route = localhost:9300
+  Input = route = localhost:$(SHORE_PORT)
 }
 
 //--------------------------------------------------
@@ -181,13 +178,16 @@ ProcessConfig = pMarineViewer
   //datum_size     = 18
   //gui_size = small
 
+  left_context[home-point] = RETURN_ZBOAT=true
+  left_context[home-point] = HOME_UPDATE_ZBOAT=station_pt=$(XPOS),$(YPOS)
+  left_context[home-point] = LOITER_ZBOAT=false
   left_context[survey-point] = DEPLOY_ALL=true
   left_context[survey-point] = MOOS_MANUAL_OVERRIDE_ALL=false
   left_context[survey-point] = RETURN_ALL=false
 
-  right_context[return] = DEPLOY=true
-  right_context[return] = MOOS_MANUAL_OVERRIDE=false
-  right_context[return] = RETURN=false
+  right_context[return] = DEPLOY_ZBOAT=true
+  right_context[return] = MOOS_MANUAL_OVERRIDE_ZBOAT=false
+  right_context[return] = RETURN_ZBOAT=false
 
   scope  = WPT_EFFICIENCY_LEG
   scope  = WPT_EFFICIENCY_SUM
@@ -212,6 +212,6 @@ ProcessConfig = pMarineViewer
   action  = MENU_KEY=deploy # DEPLOY = true # RETURN = false
   action+ = MENU_KEY=deploy # MOOS_MANUAL_OVERRIDE=false
   action  = RETURN=true
-  //action  = UPDATES_RETURN=speed=1.4
+  action  = UPDATES_RETURN=speed=1.6
   action  = MENU_KEY=SetAutonomy # SET_AUTONOMY_MODE=1
 }

@@ -49,9 +49,9 @@ ProcessConfig = pMarineMRAS
    DampingRatio = 1
 
    //Adaptation parameters
-   Beta = 1     //Speed of Kp adaptation
-   Alpha = 1    //Speed of Kd adaptation
-   Gamma = 1    //Speed of Ki adaptation
+   Beta = 0.01     //Speed of Kp adaptation
+   Alpha = 0.01    //Speed of Kd adaptation
+   Gamma = 0.01    //Speed of Ki adaptation
    Xi = 1   // <= 1
 
    // Vessel Characteristics

@@ -70,6 +70,9 @@ void CourseChangeMRAS::SetParameters(double dfKStar, double dfTauStar, double df
 double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading, 
     double dfMeasuredROT, double dfSpeed, double dfTime)
 {
+    dfMeasuredHeading = angle180(dfMeasuredHeading);
+    dfDesiredHeading = angle180(dfDesiredHeading);
+
     double dfRudderOut = 0;
 
     if (m_bFirstRun || (abs(dfDesiredHeading - m_dfPreviousHeading) > 5)) {
@@ -85,8 +88,7 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
         double dfDeltaT = dfTime - m_dfPreviousTime;
         //DesiredHeading would be phi''r if using series limit model
         UpdateModel(dfDesiredHeading, dfDeltaT);
-
-        dfMeasuredHeading = angle180(dfMeasuredHeading);
+        
         double dfe = m_dfModelHeading - dfMeasuredHeading;
         dfe = angle180(dfe);
         double dfeDot = m_dfModelROT - dfMeasuredROT;
@@ -105,7 +107,8 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
 
     }
     //PID equation
-    dfRudderOut = m_dfKp * (dfDesiredHeading - dfMeasuredHeading) 
+    double heading_error = angle180(dfDesiredHeading - dfMeasuredHeading);
+    dfRudderOut = m_dfKp * heading_error
         - m_dfKd * dfMeasuredROT + m_dfKi;
     //limit the rudder
     if(fabs(dfRudderOut) >= m_dfRudderLimit) {        
@@ -114,6 +117,7 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
 
     m_dfPreviousTime = dfTime;
     m_dfPreviousHeading = dfDesiredHeading;
+    m_dfMeasuredHeading = dfMeasuredHeading;
 
     return dfRudderOut;
 }
@@ -125,7 +129,9 @@ bool CourseChangeMRAS::NewHeading(double dfSpeed) {
         dfSpeed = 0.1;
     }
 
-    m_dfKp0 = 2.5 * m_dfCruisingSpeed / dfSpeed;
+    //from literature:  
+    //m_dfKp0 = 2.5 * m_dfCruisingSpeed / dfSpeed;
+    m_dfKp0 = 1 * m_dfCruisingSpeed / dfSpeed;
     if (m_dfKp0 > 5) {
         m_dfKp0 = 5;
     }
@@ -161,6 +167,8 @@ void CourseChangeMRAS::ResetModel(double dfHeading, double dfROT) {
 
 void CourseChangeMRAS::UpdateModel(double dfDesiredHeading, double dfDeltaT) {
     m_dfModelHeading += m_dfModelROT * dfDeltaT;
+    m_dfModelHeading = angle180(m_dfModelHeading);
+
     m_dfModelROT += ((m_dfKpm / m_dfTauM * (dfDesiredHeading - m_dfModelHeading))
         - 1/m_dfTauM * m_dfModelROT) * dfDeltaT;
 
@@ -168,7 +176,8 @@ void CourseChangeMRAS::UpdateModel(double dfDesiredHeading, double dfDeltaT) {
 
 string CourseChangeMRAS::GetStatusInfo() {
     stringstream info;
-    info << m_dfKp << "|" << m_dfKd << "|" << m_dfKi << "|" << m_dfModelHeading;
+    info << m_dfKp << "|" << m_dfKd << "|" << m_dfKi << "|" << m_dfModelHeading
+        << "|" << m_dfMeasuredHeading << "|" << m_dfPreviousHeading;
     return info.str();
 }
 

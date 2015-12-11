@@ -31,6 +31,7 @@ MarineMRAS::MarineMRAS()
 
     m_first_heading = true;
     m_current_ROT = 0;
+    m_has_control = false;
     //m_last_heading_time = MOOSTime();
 }
 
@@ -75,6 +76,13 @@ bool MarineMRAS::OnNewMail(MOOSMSG_LIST &NewMail)
       m_current_speed = msg.GetDouble();
     else if (key == "DESIRED_HEADING")
       m_desired_heading = msg.GetDouble();
+    else if((key == "MOOS_MANUAL_OVERIDE") || (key == "MOOS_MANUAL_OVERRIDE")) {
+      if(MOOSStrCmp(msg.GetString(), "FALSE")) {
+        m_has_control = true;
+      } else if(MOOSStrCmp(msg.GetString(), "TRUE")) {
+          m_has_control = false;
+      }
+    }
 
      else if(key != "APPCAST_REQ") // handle by AppCastingMOOSApp
        reportRunWarning("Unhandled Mail: " + key);
@@ -100,13 +108,18 @@ bool MarineMRAS::Iterate()
 {
   AppCastingMOOSApp::Iterate();
 
-  double desired_rudder = 0;
-  if (!m_first_heading) {
-    desired_rudder = m_CourseControl.Run(m_desired_heading, m_current_heading, 
-      m_current_ROT, m_current_speed, m_last_heading_time);
+  if (m_has_control) {
+    double desired_rudder = 0;
+    if (!m_first_heading) {
+      desired_rudder = m_CourseControl.Run(m_desired_heading, m_current_heading, 
+        m_current_ROT, m_current_speed, m_last_heading_time);
+    }
+    Notify("DESIRED_RUDDER", desired_rudder);
+    Notify("DESIRED_THRUST", 50.0);
+  } else {
+    Notify("DESIRED_RUDDER", 0.0);
+    Notify("DESIRED_THRUST", 0.0);
   }
-  Notify("DESIRED_RUDDER", desired_rudder);
-  Notify("DESIRED_THRUST", 50);
 
   AppCastingMOOSApp::PostReport();
   return(true);
@@ -197,6 +210,8 @@ void MarineMRAS::registerVariables()
   Register("NAV_HEADING", 0);
   Register("NAV_SPEED", 0);
   Register("DESIRED_HEADING", 0);
+  Register("MOOS_MANUAL_OVERIDE", 0);
+  Register("MOOS_MANUAL_OVERRIDE", 0);
 }
 
 
@@ -209,11 +224,15 @@ bool MarineMRAS::buildReport()
   m_msgs << "File: pMarineMRAS                            \n";
   m_msgs << "============================================ \n";
 
-  ACTable actab(4);
-  actab << "Kp | Kd | Ki | Model Heading";
-  actab.addHeaderLines();
-  actab << m_CourseControl.GetStatusInfo();
-  m_msgs << actab.getFormattedString();
+  if (m_has_control) {
+    ACTable actab(6);
+    actab << "Kp | Kd | Ki | Model Heading | Measured | Desired ";
+    actab.addHeaderLines();
+    actab << m_CourseControl.GetStatusInfo();
+    m_msgs << actab.getFormattedString();
+  } else {
+    m_msgs << "Control not running.";
+  }
 
   return(true);
 }
