@@ -17,8 +17,8 @@ TERM_REPORTING = true
 // Change this to be a local origin for the survey area
 // It must be set in both this file and the zboat_*.moos files
 // For proper operation
-LatOrigin  = 43.077933
-LongOrigin = -70.738977
+LatOrigin  = $(LAT_ORIGIN)
+LongOrigin = $(LONG_ORIGIN)
 
 
 //------------------------------------------
@@ -147,7 +147,7 @@ ProcessConfig = pMarineViewer
   AppTick    = 4
   CommsTick  = 4
 
-  //tiff_file            = Newport_Chart.tif
+  tiff_file            = $(TIFF_FILE)
   //tiff_file_b          = Newport_Aerial.tif
 
   set_pan_x            = 0

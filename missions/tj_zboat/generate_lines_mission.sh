@@ -28,7 +28,7 @@ SCENARIO=1
 # 2 = 
 if [ $SCENARIO = 1 ]; then
   #MOOS Stuff
-  START_POS="0,0"
+  START_POS="3000,8240"
   LAT_ORIGIN=37.7499688
   LONG_ORIGIN=-75.4585006
   TIFF_FILE=data/Chincoteague_Ref.tif
@@ -40,7 +40,7 @@ if [ $SCENARIO = 1 ]; then
   BOAT_MODEM_IP="166.150.166.136"
   BOAT_PORT=9301
   #Behavior
-  HOME_POS="0,0"
+  HOME_POS="3000,8240"
   SURVEY_SPEED=1.6
 fi
 
