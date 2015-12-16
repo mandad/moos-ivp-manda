@@ -62,7 +62,9 @@ ProcessConfig = uFldShoreBroker
 
   qbridge  = DEPLOY, RETURN, STATION_KEEP, NODE_REPORT, NODE_MESSAGE, FAULT
   qbridge  = MOOS_MANUAL_OVERRIDE, MOOS_MANUAL_OVERIDE, APPCAST_REQ, AVOID
+  qbridge = HOME_UPDATE, SONAR_DEPTH_M
   bridge = src=SET_AUTONOMY_MODE
+  bridge = src=UTM_SURVEYLINE
 
                                                                 
   // Note: [qbridge = FOO]  is shorthand for

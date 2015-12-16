@@ -71,7 +71,7 @@ Behavior = BHV_StationKeep
          inner_radius = 5       // default
          outer_radius = 20      // default
          outer_speed  = 1     // default
-       transit_speed  = 2.5
+       transit_speed  = 1.6
            station_pt = $(HOME_POS)     // default
            swing_time = 0       // default
 
