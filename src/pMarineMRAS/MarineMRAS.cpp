@@ -26,6 +26,7 @@ MarineMRAS::MarineMRAS()
     m_gamma = 1;
     m_xi = 1;
     m_rudder_limit = 45;
+    m_max_ROT = 60; // deg/s
     m_cruising_speed = 2;
     m_length = 2;
 
@@ -195,7 +196,8 @@ bool MarineMRAS::OnStartUp()
   
   //Initialize the Control system
   m_CourseControl.SetParameters(m_k_star, m_tau_star, m_z, m_beta, 
-        m_alpha, m_gamma, m_xi, m_rudder_limit, m_cruising_speed, m_length);
+        m_alpha, m_gamma, m_xi, m_rudder_limit, m_cruising_speed, m_length, 
+        m_max_ROT);
 
   registerVariables();	
   return(true);
