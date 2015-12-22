@@ -10,13 +10,14 @@
 #include "CourseChangeMRAS.h"
 #include <math.h>
 
-#define USE_SERIES_MODEL false
+#define USE_SERIES_MODEL true
 
 using namespace std;
 
 CourseChangeMRAS::CourseChangeMRAS() {
     m_bFirstRun = true;
     m_bParametersSet = false;
+    m_dfRudderOut = 0;
 
 }
 
@@ -40,6 +41,7 @@ CourseChangeMRAS::CourseChangeMRAS(double dfKStar, double dfTauStar, double dfZ,
     m_dfKpm = 1 / (4 * m_dfZ * m_dfZ * m_dfTauM);
     m_dfP12 = m_dfTauM / m_dfKpm;
     m_dfP22 = m_dfTauM * m_dfTauM / m_dfKpm + m_dfTauM;
+    m_dfRudderOut = 0;
 
     m_lIterations = 0;
     m_bFirstRun = true;
@@ -77,7 +79,7 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
     dfMeasuredHeading = angle180(dfMeasuredHeading);
     dfDesiredHeading = angle180(dfDesiredHeading);
 
-    double m_dfRudderOut = 0;
+    m_dfRudderOut = 0;
 
     if (m_bFirstRun || (abs(dfDesiredHeading - m_dfPreviousHeading) > 5)) {
         //Initial with no adaptation
@@ -114,7 +116,7 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
     double heading_error = angle180(m_dfPsiRefP - dfMeasuredHeading);
     m_dfRudderOut = m_dfKp * heading_error - m_dfKd * dfMeasuredROT + m_dfKi;
     //limit the rudder
-    m_dfRudderOut = TwoSidedLimit(m_dfRudderLimit, m_dfRudderOut);
+    m_dfRudderOut = TwoSidedLimit(m_dfRudderOut, m_dfRudderLimit);
 
     m_dfPreviousTime = dfTime;
     m_dfPreviousHeading = dfDesiredHeading;
@@ -165,7 +167,7 @@ void CourseChangeMRAS::ResetModel(double dfHeading, double dfROT) {
     //Series Model
     m_dfSeriesHeading = dfHeading;
     m_dfSeriesROT = dfROT;
-    m_dfPsiRefP = dfHeading;
+    m_dfPsiRefPP = dfHeading;
     m_dfPsiRefP = dfHeading;
 
     //Parallel Model
