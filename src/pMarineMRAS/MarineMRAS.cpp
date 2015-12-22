@@ -188,6 +188,10 @@ bool MarineMRAS::OnStartUp()
       m_length = dval;
       handled = true;
     }
+    else if(param == "MAXROT") {
+      m_max_ROT = dval;
+      handled = true;
+    }
 
     if(!handled)
       reportUnhandledConfigWarning(orig);
@@ -231,6 +235,10 @@ bool MarineMRAS::buildReport()
     actab << "Kp | Kd | Ki | Model Heading | Measured | Desired ";
     actab.addHeaderLines();
     actab << m_CourseControl.GetStatusInfo();
+    actab << " | | | | | ";
+    actab << "Psi_r'' | Psi_r' | Rudder | Series Heading | Model ROT | Series ROT";
+    actab.addHeaderLines();
+    actab << m_CourseControl.GetDebugInfo();
     m_msgs << actab.getFormattedString();
   } else {
     m_msgs << "Control not running.";

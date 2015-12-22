@@ -25,7 +25,7 @@ Behavior = BHV_Waypoint
          slip_radius = 15.0
 	efficiency_measure = all
 
-             polygon = 0,-30 : 0,-160 : 200,-160 
+             polygon = 0,-30 : 0,-100 : 100,-100 : 100, -200 
              repeat = 10000
 
 // uPokeDB alpha.moos++ WPT_UPDATE="name=1#polygon=60,-50 : 60,-170 : 150,-170 : 180,-110 : 150,-50#duration=20"

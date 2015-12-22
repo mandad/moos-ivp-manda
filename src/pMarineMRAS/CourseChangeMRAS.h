@@ -28,6 +28,7 @@ public:
     void UpdateModel(double dfDesiredHeading, double dfDeltaT);
     double TwoSidedLimit(double dfNumToLimit, double dfLimit);
     std::string GetStatusInfo();
+    std::string GetDebugInfo();
 
 
  private: // Configuration variables

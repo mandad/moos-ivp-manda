@@ -10,6 +10,8 @@
 #include "CourseChangeMRAS.h"
 #include <math.h>
 
+#define USE_SERIES_MODEL false
+
 using namespace std;
 
 CourseChangeMRAS::CourseChangeMRAS() {
@@ -110,8 +112,7 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
     }
     //PID equation
     double heading_error = angle180(m_dfPsiRefP - dfMeasuredHeading);
-    m_dfRudderOut = m_dfKp * heading_error
-        - m_dfKd * dfMeasuredROT + m_dfKi;
+    m_dfRudderOut = m_dfKp * heading_error - m_dfKd * dfMeasuredROT + m_dfKi;
     //limit the rudder
     m_dfRudderOut = TwoSidedLimit(m_dfRudderLimit, m_dfRudderOut);
 
@@ -176,6 +177,8 @@ void CourseChangeMRAS::UpdateModel(double dfDesiredHeading, double dfDeltaT) {
     //Update series model
     //This model serves to include nonlinearities such as saturation of rudder
     //and rate of turn from mechanical or user set limits
+
+    #if USE_SERIES_MODEL
     m_dfSeriesHeading += m_dfModelROT * dfDeltaT;
     m_dfSeriesHeading = angle180(m_dfSeriesHeading);
 
@@ -194,15 +197,18 @@ void CourseChangeMRAS::UpdateModel(double dfDesiredHeading, double dfDeltaT) {
     m_dfPsiRefP = angle180(dfROTModDiff * 1/m_dfKpm + m_dfSeriesHeading);
     //Input to parallel model as desired heading
     m_dfPsiRefPP = angle180(dfFModDiff * 1/m_dfKpm + m_dfSeriesHeading);
+    #else
+    m_dfPsiRefPP = dfDesiredHeading;
+    m_dfPsiRefP = dfDesiredHeading;
+    #endif
 
     //Update Parallel Model
-    m_dfModelHeading += m_dfModelROT * dfDeltaT;
-    m_dfModelHeading = angle180(m_dfModelHeading);
-
     //uses output of series model as desired heading
     m_dfModelROT += ((m_dfKpm / m_dfTauM * (m_dfPsiRefPP - m_dfModelHeading))
         - 1/m_dfTauM * m_dfModelROT) * dfDeltaT;
 
+    m_dfModelHeading += m_dfModelROT * dfDeltaT;
+    m_dfModelHeading = angle180(m_dfModelHeading);
 }
 
 double CourseChangeMRAS::TwoSidedLimit(double dfNumToLimit, double dfLimit) {
@@ -216,6 +222,13 @@ string CourseChangeMRAS::GetStatusInfo() {
     stringstream info;
     info << m_dfKp << "|" << m_dfKd << "|" << m_dfKi << "|" << m_dfModelHeading
         << "|" << m_dfMeasuredHeading << "|" << m_dfPreviousHeading;
+    return info.str();
+}
+
+string CourseChangeMRAS::GetDebugInfo() {
+    stringstream info;
+    info << m_dfPsiRefPP << "|" << m_dfPsiRefP << "|" << m_dfRudderOut << "|" 
+    << m_dfSeriesHeading << "|" << m_dfModelROT << "|" << m_dfSeriesROT;
     return info.str();
 }
 

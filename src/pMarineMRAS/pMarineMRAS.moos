@@ -21,6 +21,6 @@ ProcessConfig = pMarineMRAS
    RudderLimit = 35
    CruisingSpeed = 1.6 // m/s
    Length = 2 //m
-
+   MaxROT = 60 //deg/s (to control large turns)
 }
 
