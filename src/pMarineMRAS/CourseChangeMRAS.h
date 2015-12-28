@@ -75,6 +75,7 @@ public:
     double m_dfSeriesROT;
     double m_dfPsiRefP;
     double m_dfPsiRefPP;
+    double m_dfF;
     
 };
 
