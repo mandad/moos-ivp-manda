@@ -29,6 +29,7 @@ public:
     double TwoSidedLimit(double dfNumToLimit, double dfLimit);
     std::string GetStatusInfo();
     std::string GetDebugInfo();
+    void GetDebugVariables(double * vars);
 
 
  private: // Configuration variables

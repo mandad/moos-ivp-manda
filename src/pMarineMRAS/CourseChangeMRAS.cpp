@@ -105,9 +105,13 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
         //If using series model, desired heading should be Phi''r
         m_dfKp += m_dfBeta * dfTimeReduceFactor * dfErrorFactor *
             (m_dfPsiRefPP - dfMeasuredHeading) * dfDeltaT;
-        m_dfKd += m_dfAlpha * dfTimeReduceFactor* dfErrorFactor * dfMeasuredROT 
+        if (m_dfKp < 0)
+            m_dfKp = 0;
+        m_dfKd += m_dfAlpha * dfTimeReduceFactor * dfErrorFactor * dfMeasuredROT 
             * dfDeltaT;
-        m_dfKi += m_dfGamma * dfTimeReduceFactor* dfErrorFactor * dfDeltaT;
+        if (m_dfKd < 0)
+            m_dfKd = 0;
+        m_dfKi += m_dfGamma * dfErrorFactor * dfDeltaT;
         MOOSTrace("Updated constants\n");
 
 
@@ -206,11 +210,11 @@ void CourseChangeMRAS::UpdateModel(double dfDesiredHeading, double dfDeltaT) {
 
     //Update Parallel Model
     //uses output of series model as desired heading
-    m_dfModelROT += ((m_dfKpm / m_dfTauM * (m_dfPsiRefPP - m_dfModelHeading))
-        - 1/m_dfTauM * m_dfModelROT) * dfDeltaT;
-
     m_dfModelHeading += m_dfModelROT * dfDeltaT;
     m_dfModelHeading = angle180(m_dfModelHeading);
+
+    m_dfModelROT += ((m_dfKpm / m_dfTauM * (m_dfPsiRefPP - m_dfModelHeading))
+        - 1/m_dfTauM * m_dfModelROT) * dfDeltaT;
 }
 
 double CourseChangeMRAS::TwoSidedLimit(double dfNumToLimit, double dfLimit) {
@@ -234,4 +238,17 @@ string CourseChangeMRAS::GetDebugInfo() {
     return info.str();
 }
 
+void CourseChangeMRAS::GetDebugVariables(double * vars) {
+    //double vars[10];
+    vars[0] = m_dfKp;
+    vars[1] = m_dfKd;
+    vars[2] = m_dfKi;
+    vars[3] = m_dfRudderOut;
+    vars[4] = m_dfModelHeading;
+    vars[5] = m_dfModelROT;
+    vars[6] = m_dfSeriesHeading;
+    vars[7] = m_dfSeriesROT;
+    vars[8] = m_dfPsiRefP;
+    vars[9] = m_dfPsiRefPP;
+}
 

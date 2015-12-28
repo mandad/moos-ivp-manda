@@ -117,6 +117,20 @@ bool MarineMRAS::Iterate()
     }
     Notify("DESIRED_RUDDER", desired_rudder);
     Notify("DESIRED_THRUST", 50.0);
+
+    //Debug variables for logging
+    double vars[10];
+    m_CourseControl.GetDebugVariables(vars);
+    Notify("MRAS_KP", vars[0]);
+    Notify("MRAS_KD", vars[1]);
+    Notify("MRAS_KI", vars[2]);
+    Notify("MRAS_RUDDER_OUT", vars[3]);
+    Notify("MRAS_MODEL_HEADING", vars[4]);
+    Notify("MRAS_MODEL_ROT", vars[5]);
+    Notify("MRAS_SERIES_MODEL_HEADING", vars[6]);
+    Notify("MRAS_SERIS_MODEL_ROT", vars[7]);
+    Notify("MRAS_PSI_REF_P", vars[8]);
+    Notify("MRAS_PSI_REF_PP", vars[9]);
   } else {
     Notify("DESIRED_RUDDER", 0.0);
     Notify("DESIRED_THRUST", 0.0);

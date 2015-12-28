@@ -7,7 +7,7 @@ ServerHost = localhost
 ServerPort = 9000
 Community  = alpha
 
-MOOSTimeWarp = 3
+MOOSTimeWarp = 4
 
 // Forest Lake
 LatOrigin  = 43.825300 
@@ -32,7 +32,6 @@ ProcessConfig = ANTLER
   Run = pMarineViewer	  @ NewConsole = false, ExtraProcessParams=one
   Run = uProcessWatch	  @ NewConsole = false
   Run = pNodeReporter	  @ NewConsole = false
-  //Run = uTimerScript    @ NewConsole = false
 
   one = --size=1400x800
   db = --event_log=eventlog
@@ -49,8 +48,8 @@ ProcessConfig = pMarineMRAS
    DampingRatio = 1
 
    //Adaptation parameters
-   Beta = 0.01     //Speed of Kp adaptation
-   Alpha = 0.01    //Speed of Kd adaptation
+   Beta = 0.001     //Speed of Kp adaptation
+   Alpha = 0.001    //Speed of Kd adaptation
    Gamma = 0.01    //Speed of Ki adaptation
    Xi = 1   // <= 1
 
@@ -58,20 +57,7 @@ ProcessConfig = pMarineMRAS
    RudderLimit = 45
    CruisingSpeed = 1.6 // m/s
    Length = 2 //m
-   MaxROT = 60
-}
-
-//------------------------------------------
-// uTimerScript config block
-
-ProcessConfig = uTimerScript
-{
-  AppTick   = 2
-  CommsTick = 2
-
-	reset_time = all-posted
-	
-  event = var=VIEW_WEDGE, val="x=80,y=-80,rad_low=40,rad_hgh=80,ang_low=45,ang_hgh=135,label=test_wedge,active=true", time = 8.5
+   MaxROT = 40
 }
 
 //------------------------------------------
@@ -79,10 +65,30 @@ ProcessConfig = uTimerScript
 
 ProcessConfig = pLogger
 {
-  AppTick   = 8
-  CommsTick = 8
+  AppTick   = 20
+  CommsTick = 20
 
-  AsyncLog = true
+  AsyncLog = false
+  Synclog = true @ 0.1
+
+  Log = NAV_HEADING @ 0
+  Log = DESIRED_HEADING @ 0
+  Log = DESIRED_RUDDER @ 0
+
+  Log = MRAS_KP @ 0
+  Log = MRAS_KD @ 0
+  Log = MRAS_KI @ 0
+  Log = MRAS_RUDDER_OUT @ 0
+  Log = MRAS_MODEL_HEADING @ 0
+  Log = MRAS_MODEL_ROT @ 0
+  Log = MRAS_SERIES_MODEL_HEADING @ 0
+  Log = MRAS_SERIS_MODEL_ROT @ 0
+  Log = MRAS_PSI_REF_P @ 0
+  Log = MRAS_PSI_REF_PP @ 0
+
+  DoublePrecision = 7   //Default = 5
+  SyncLogIntermediateHeaders = false
+  IncludeStaleVariables = true
 
   // For variables that are published in a bundle on their first post,
   // explicitly declare their logging request
@@ -91,7 +97,7 @@ ProcessConfig = pLogger
   Log = REPORT @ 0 NOSYNC
 
   LogAuxSrc = true
-  WildCardLogging = true
+  WildCardLogging = false
   WildCardOmitPattern = *_STATUS
   WildCardOmitPattern = DB_VARSUMMARY
   WildCardOmitPattern = DB_RWSUMMARY
@@ -116,8 +122,8 @@ ProcessConfig = uProcessWatch
 
 ProcessConfig = uSimMarine
 {
-  AppTick  	= 4
-  CommsTick	= 4
+  AppTick  	= 10
+  CommsTick	= 10
 
   start_x       = 0
   start_y       = -20
@@ -126,7 +132,7 @@ ProcessConfig = uSimMarine
 
   prefix        = NAV
 
-	//max_rudder_degs_per_sec = 12
+	//max_rudder_degs_per_sec = 15
 
   turn_rate     = 40
   thrust_map    = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
@@ -138,8 +144,8 @@ ProcessConfig = uSimMarine
 
 ProcessConfig = pHelmIvP
 {
-  AppTick    = 4
-  CommsTick  = 4
+  AppTick    = 15
+  CommsTick  = 15
 
   bhv_dir_not_found_ok = true
 
@@ -187,18 +193,18 @@ ProcessConfig = pMarinePID
 
 ProcessConfig = pMarineViewer
 {
-  AppTick    = 4
-  CommsTick  = 4
+  AppTick    = 6
+  CommsTick  = 6
 
   tiff_file            = forrest19.tif
 
   set_pan_x            = -90
-  set_pan_y            = -280
+  set_pan_y            = -90
   zoom                 = 0.65
   vehicle_shape_scale  = 1.5
   hash_delta           = 50
   hash_shade           = 0.4
-  hash_viewable        = true
+  hash_viewable        = false
 
   trails_point_size   = 1
 
