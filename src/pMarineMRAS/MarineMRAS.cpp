@@ -29,6 +29,7 @@ MarineMRAS::MarineMRAS()
     m_max_ROT = 60; // deg/s
     m_cruising_speed = 2;
     m_length = 2;
+    m_decrease_adapt = true;
 
     m_first_heading = true;
     m_current_ROT = 0;
@@ -136,6 +137,7 @@ bool MarineMRAS::Iterate()
     Notify("MRAS_SERIES_F", vars[10]);
     Notify("NAV_ROT", m_current_ROT);
     Notify("NAV_HEADING_180", m_current_heading);
+    Notify("DESIRED_HEADING_180", angle180(m_desired_heading));
   } else {
     Notify("DESIRED_RUDDER", 0.0);
     Notify("DESIRED_THRUST", 0.0);
@@ -211,6 +213,11 @@ bool MarineMRAS::OnStartUp()
       m_max_ROT = dval;
       handled = true;
     }
+    else if (param == "DECREASEADAPTATION") {
+      if (toupper(value) == "FALSE")
+        m_decrease_adapt = false;
+      handled = true;
+    }
 
     if(!handled)
       reportUnhandledConfigWarning(orig);
@@ -220,7 +227,7 @@ bool MarineMRAS::OnStartUp()
   //Initialize the Control system
   m_CourseControl.SetParameters(m_k_star, m_tau_star, m_z, m_beta, 
         m_alpha, m_gamma, m_xi, m_rudder_limit, m_cruising_speed, m_length, 
-        m_max_ROT);
+        m_max_ROT, m_decrease_adapt);
 
   registerVariables();	
   return(true);

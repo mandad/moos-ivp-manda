@@ -14,7 +14,8 @@ public:
     CourseChangeMRAS();
     CourseChangeMRAS(double dfKStar, double dfTauStar, double dfZ, double dfBeta, 
         double dfAlpha, double dfGamma, double dfXi, double dfRudderLimit, 
-        double dfCruisingSpeed, double dfShipLength, double dfMaxROT);
+        double dfCruisingSpeed, double dfShipLength, double dfMaxROT, 
+        bool bDecreaseAdapt);
     ~CourseChangeMRAS() {}
 
     double Run(double dfDesiredHeading, double dfMeasuredHeading, double dfMeasuredROT,
@@ -22,7 +23,7 @@ public:
     void SetParameters(double dfKStar, double dfTauStar, double dfZ, 
         double dfBeta, double dfAlpha, double dfGamma, double dfXi, 
         double dfRudderLimit, double dfCruisingSpeed, double dfShipLength, 
-        double dfMaxROT);
+        double dfMaxROT, bool bDecreaseAdapt);
     bool NewHeading(double dfSpeed);
     void ResetModel(double dfHeading, double dfROT);
     void UpdateModel(double dfDesiredHeading, double dfDeltaT);
@@ -44,6 +45,7 @@ public:
     double m_dfMaxROT;
     double m_dfCruisingSpeed;
     double m_dfShipLength;
+    double m_bDecreaseAdapt;
 
  private: //Derived variables
     double m_dfTauM;

@@ -24,7 +24,7 @@ ProcessConfig = ANTLER
   MSBetweenLaunches = 200
 
   Run = MOOSDB          @ NewConsole = false, ExtraProcessParams=db
-  Run = pLogger         @ NewConsole = false
+  //Run = pLogger         @ NewConsole = false
   Run = uSimMarine	    @ NewConsole = false
   //Run = pMarinePID      @ NewConsole = false
   Run = pMarineMRAS     @ NewConsole = false
@@ -48,10 +48,11 @@ ProcessConfig = pMarineMRAS
    DampingRatio = 1
 
    //Adaptation parameters
-   Beta = 0.001     //Speed of Kp adaptation
-   Alpha = 0.001    //Speed of Kd adaptation
-   Gamma = 0.01    //Speed of Ki adaptation
+   Beta = 0.01     //Speed of Kp adaptation
+   Alpha = 0.01    //Speed of Kd adaptation
+   Gamma = 0.001    //Speed of Ki adaptation
    Xi = 1   // <= 1
+   DecreaseAdaptation = false
 
    // Vessel Characteristics
    RudderLimit = 45
@@ -73,7 +74,7 @@ ProcessConfig = pLogger
 
   Log = NAV_HEADING_180 @ 0
   Log = NAV_ROT @ 0
-  Log = DESIRED_HEADING @ 0
+  Log = DESIRED_HEADING_180 @ 0
   Log = DESIRED_RUDDER @ 0
 
   Log = MRAS_KP @ 0

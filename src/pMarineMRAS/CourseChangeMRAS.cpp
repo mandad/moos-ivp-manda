@@ -23,7 +23,8 @@ CourseChangeMRAS::CourseChangeMRAS() {
 
 CourseChangeMRAS::CourseChangeMRAS(double dfKStar, double dfTauStar, double dfZ, 
     double dfBeta, double dfAlpha, double dfGamma, double dfXi, 
-    double dfRudderLimit, double dfCruisingSpeed, double dfShipLength, double dfMaxROT) 
+    double dfRudderLimit, double dfCruisingSpeed, double dfShipLength, 
+    double dfMaxROT, bool bDecreaseAdapt) 
 {
     m_dfKStar = dfKStar;
     m_dfTauStar = dfTauStar;
@@ -36,6 +37,7 @@ CourseChangeMRAS::CourseChangeMRAS(double dfKStar, double dfTauStar, double dfZ,
     m_dfMaxROT = dfMaxROT;
     m_dfCruisingSpeed = dfCruisingSpeed;
     m_dfShipLength = dfShipLength;
+    m_bDecreaseAdapt = bDecreaseAdapt;
 
     m_dfTauM = 0.5 * m_dfTauStar * m_dfShipLength / m_dfCruisingSpeed;
     m_dfKpm = 1 / (4 * m_dfZ * m_dfZ * m_dfTauM);
@@ -50,7 +52,8 @@ CourseChangeMRAS::CourseChangeMRAS(double dfKStar, double dfTauStar, double dfZ,
 
 void CourseChangeMRAS::SetParameters(double dfKStar, double dfTauStar, double dfZ, 
     double dfBeta, double dfAlpha, double dfGamma, double dfXi, 
-    double dfRudderLimit, double dfCruisingSpeed, double dfShipLength, double dfMaxROT)
+    double dfRudderLimit, double dfCruisingSpeed, double dfShipLength, 
+    double dfMaxROT, bool bDecreaseAdapt)
 {
     m_dfKStar = dfKStar;
     m_dfTauStar = dfTauStar;
@@ -63,6 +66,7 @@ void CourseChangeMRAS::SetParameters(double dfKStar, double dfTauStar, double df
     m_dfMaxROT = dfMaxROT;
     m_dfCruisingSpeed = dfCruisingSpeed;
     m_dfShipLength = dfShipLength;
+    m_bDecreaseAdapt = bDecreaseAdapt;
 
     m_dfTauM = 0.5 * m_dfTauStar * m_dfShipLength / m_dfCruisingSpeed;
     m_dfKpm = 1 / (4 * m_dfZ * m_dfZ * m_dfTauM);
@@ -79,7 +83,7 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
     dfMeasuredHeading = angle180(dfMeasuredHeading);
     dfDesiredHeading = angle180(dfDesiredHeading);
 
-    m_dfRudderOut = 0;
+    //m_dfRudderOut = 0;
 
     if (m_bFirstRun || (abs(angle180(dfDesiredHeading - m_dfPreviousHeading)) > 5)) {
         //Initial with no adaptation
@@ -101,12 +105,17 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
 
         //Adapt the parameters
         double dfErrorFactor = m_dfP12 * dfe + m_dfP22 * dfeDot;
-        double dfTimeReduceFactor = m_dfXi / (1 + dfTime - m_dfCourseChangeTime);
+        double dfTimeReduceFactor = 1;
+        if (m_bDecreaseAdapt) {
+            dfTimeReduceFactor = m_dfXi / (1 + dfTime - m_dfCourseChangeTime);
+        } 
         //If using series model, desired heading should be Phi''r
         m_dfKp += m_dfBeta * dfTimeReduceFactor * dfErrorFactor *
             (angle180(m_dfPsiRefPP - dfMeasuredHeading)) * dfDeltaT;
         if (m_dfKp < 0)
             m_dfKp = 0;
+        // if (m_dfKp > 5)
+        //      m_dfKp = 5;
         m_dfKd += m_dfAlpha * dfTimeReduceFactor * dfErrorFactor * dfMeasuredROT 
             * dfDeltaT;
         if (m_dfKd < 0)
