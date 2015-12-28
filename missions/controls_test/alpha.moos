@@ -72,6 +72,7 @@ ProcessConfig = pLogger
   Synclog = true @ 0.1
 
   Log = NAV_HEADING @ 0
+  Log = NAV_ROT @ 0
   Log = DESIRED_HEADING @ 0
   Log = DESIRED_RUDDER @ 0
 

@@ -26,7 +26,7 @@ public:
     bool NewHeading(double dfSpeed);
     void ResetModel(double dfHeading, double dfROT);
     void UpdateModel(double dfDesiredHeading, double dfDeltaT);
-    double TwoSidedLimit(double dfNumToLimit, double dfLimit);
+    static double TwoSidedLimit(double dfNumToLimit, double dfLimit);
     std::string GetStatusInfo();
     std::string GetDebugInfo();
     void GetDebugVariables(double * vars);

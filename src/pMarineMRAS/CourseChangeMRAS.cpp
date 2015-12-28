@@ -120,13 +120,13 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
     double heading_error = angle180(m_dfPsiRefP - dfMeasuredHeading);
     m_dfRudderOut = m_dfKp * heading_error - m_dfKd * dfMeasuredROT + m_dfKi;
     //limit the rudder
-    m_dfRudderOut = TwoSidedLimit(m_dfRudderOut, m_dfRudderLimit);
+    //m_dfRudderOut = 
 
     m_dfPreviousTime = dfTime;
     m_dfPreviousHeading = dfDesiredHeading;
     m_dfMeasuredHeading = dfMeasuredHeading;
 
-    return m_dfRudderOut;
+    return TwoSidedLimit(m_dfRudderOut, m_dfRudderLimit);;
 }
 
 bool CourseChangeMRAS::NewHeading(double dfSpeed) {
@@ -185,11 +185,11 @@ void CourseChangeMRAS::UpdateModel(double dfDesiredHeading, double dfDeltaT) {
     //and rate of turn from mechanical or user set limits
 
     #if USE_SERIES_MODEL
-    m_dfSeriesHeading += m_dfModelROT * dfDeltaT;
+    m_dfSeriesHeading += m_dfSeriesROT * dfDeltaT;
     m_dfSeriesHeading = angle180(m_dfSeriesHeading);
 
     double f = 1;
-    if (m_dfRudderOut > m_dfRudderLimit) {
+    if (fabs(m_dfRudderOut) > m_dfRudderLimit) {
         f = m_dfRudderLimit / fabs(m_dfRudderOut);
     }
     //We split these variables out because they are used to calculate inputs to
@@ -213,6 +213,7 @@ void CourseChangeMRAS::UpdateModel(double dfDesiredHeading, double dfDeltaT) {
     m_dfModelHeading += m_dfModelROT * dfDeltaT;
     m_dfModelHeading = angle180(m_dfModelHeading);
 
+    //need to reference the PsiRefPP - dfModelHeading to angle180
     m_dfModelROT += ((m_dfKpm / m_dfTauM * (m_dfPsiRefPP - m_dfModelHeading))
         - 1/m_dfTauM * m_dfModelROT) * dfDeltaT;
 }
@@ -239,7 +240,6 @@ string CourseChangeMRAS::GetDebugInfo() {
 }
 
 void CourseChangeMRAS::GetDebugVariables(double * vars) {
-    //double vars[10];
     vars[0] = m_dfKp;
     vars[1] = m_dfKd;
     vars[2] = m_dfKi;

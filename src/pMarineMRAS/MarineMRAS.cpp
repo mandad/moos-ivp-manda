@@ -65,9 +65,11 @@ bool MarineMRAS::OnNewMail(MOOSMSG_LIST &NewMail)
       if (m_first_heading) {
         m_first_heading = false;
       } else {
-        double diff = m_previous_heading - m_current_heading;
-        diff = angle180(diff);
+        double diff = m_current_heading - m_previous_heading;
+        //diff = angle180(diff);
         m_current_ROT = diff / (curr_time - m_last_heading_time);
+        //Try limiting it for sim
+        m_current_ROT = CourseChangeMRAS::TwoSidedLimit(m_current_ROT, 40);
       }
 
       m_previous_heading = m_current_heading;
@@ -128,9 +130,10 @@ bool MarineMRAS::Iterate()
     Notify("MRAS_MODEL_HEADING", vars[4]);
     Notify("MRAS_MODEL_ROT", vars[5]);
     Notify("MRAS_SERIES_MODEL_HEADING", vars[6]);
-    Notify("MRAS_SERIS_MODEL_ROT", vars[7]);
+    Notify("MRAS_SERIES_MODEL_ROT", vars[7]);
     Notify("MRAS_PSI_REF_P", vars[8]);
     Notify("MRAS_PSI_REF_PP", vars[9]);
+    Notify("NAV_ROT", m_current_ROT);
   } else {
     Notify("DESIRED_RUDDER", 0.0);
     Notify("DESIRED_THRUST", 0.0);
