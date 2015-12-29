@@ -66,9 +66,13 @@ bool MarineMRAS::OnNewMail(MOOSMSG_LIST &NewMail)
       if (m_first_heading) {
         m_first_heading = false;
       } else {
-        double diff = m_current_heading - m_previous_heading;
-        //diff = angle180(diff);
-        m_current_ROT = diff / (curr_time - m_last_heading_time);
+        double diff = angle180(m_current_heading - m_previous_heading);
+        double curr_ROT = diff / (curr_time - m_last_heading_time);
+        //this is an arbitary threshold to eliminate noise from sim
+        if (fabs(curr_ROT - m_current_ROT) < 5) {
+          m_current_ROT = curr_ROT;
+        }
+
         //Try limiting it for sim
         m_current_ROT = CourseChangeMRAS::TwoSidedLimit(m_current_ROT, 40);
       }
