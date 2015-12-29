@@ -87,7 +87,13 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
 
     if (m_bFirstRun || (abs(angle180(dfDesiredHeading - m_dfPreviousHeading)) > 5)) {
         //Initial with no adaptation
-        NewHeading(dfSpeed);
+        if (m_bFirstRun) {
+            //Otherwise this will nearly always be zero and result in incorrect
+            //initial values for Kp, etc
+            NewHeading(m_dfCruisingSpeed);
+        } else {
+            NewHeading(dfSpeed);
+        }
         ResetModel(dfMeasuredHeading, dfMeasuredROT);
         m_dfCourseChangeTime = dfTime;
         MOOSTrace("Model and Controller Initialized.\n");
@@ -114,12 +120,15 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
             (angle180(m_dfPsiRefPP - dfMeasuredHeading)) * dfDeltaT;
         if (m_dfKp < 0)
             m_dfKp = 0;
-        // if (m_dfKp > 5)
-        //      m_dfKp = 5;
+        else if (m_dfKp > 5)
+             m_dfKp = 5;
+
         m_dfKd += m_dfAlpha * dfTimeReduceFactor * dfErrorFactor * dfMeasuredROT 
             * dfDeltaT;
         if (m_dfKd < 0)
             m_dfKd = 0;
+        else if (m_dfKd0 > (m_dfKp * m_dfShipLength / dfSpeed))
+            m_dfKd0 = m_dfKp * m_dfShipLength / dfSpeed;
         m_dfKi += m_dfGamma * dfErrorFactor * dfDeltaT;
         MOOSTrace("Updated constants\n");
 

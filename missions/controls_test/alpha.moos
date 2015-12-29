@@ -1,5 +1,5 @@
 //-------------------------------------------------
-// NAME: M. Benjamin, MIT CSAIL
+// NAME: Damian Manda, UNH
 // FILE: alpha.moos
 //-------------------------------------------------
 
@@ -13,10 +13,6 @@ MOOSTimeWarp = 4
 LatOrigin  = 43.825300 
 LongOrigin = -70.330400 
 
-// MIT Sailing Pavilion (use this one)
-// LatOrigin  = 42.358456 
-// LongOrigin = -71.087589
-
 //------------------------------------------
 // Antler configuration  block
 ProcessConfig = ANTLER
@@ -26,12 +22,14 @@ ProcessConfig = ANTLER
   Run = MOOSDB          @ NewConsole = false, ExtraProcessParams=db
   Run = pLogger         @ NewConsole = false
   Run = uSimMarine	    @ NewConsole = false
-  //Run = pMarinePID      @ NewConsole = false
-  Run = pMarineMRAS     @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
   Run = pMarineViewer	  @ NewConsole = false, ExtraProcessParams=one
   Run = uProcessWatch	  @ NewConsole = false
   Run = pNodeReporter	  @ NewConsole = false
+  Run = uTimerScript    @ NewConsole = false
+  Run = pMarineMRAS     @ NewConsole = false
+  //Run = pMarinePID      @ NewConsole = false
+  //Run = pEchoVar        @ NewConsole = false
 
   one = --size=1400x800
   db = --event_log=eventlog
@@ -55,7 +53,7 @@ ProcessConfig = pMarineMRAS
    DecreaseAdaptation = false
 
    // Vessel Characteristics
-   RudderLimit = 45
+   RudderLimit = 100
    CruisingSpeed = 1.6 // m/s
    Length = 2 //m
    MaxROT = 40
@@ -173,9 +171,9 @@ ProcessConfig = pMarinePID
   // SIM_INSTABILITY = 20
 
   // Yaw PID controller
-  yaw_pid_kp		 = 1.2
-  yaw_pid_kd		 = 0.2
-  yaw_pid_ki		 = 0.05
+  yaw_pid_kp		 = 1.24
+  yaw_pid_kd		 = 0.29
+  yaw_pid_ki		 = 0.01
   yaw_pid_integral_limit = 0.07
 
   // Speed PID controller
@@ -190,7 +188,29 @@ ProcessConfig = pMarinePID
 
   // A non-zero SPEED_FACTOR overrides use of SPEED_PID
   // Will set DESIRED_THRUST = DESIRED_SPEED * SPEED_FACTOR
-  speed_factor = 20
+  speed_factor = 31.25
+}
+
+//This is used in conjuction with the pMarinePID to maintain compatibility
+//with logging tools
+ProcessConfig = pEchoVar
+{
+  AppTick = 20
+  CommsTick = 20
+
+  echo_latest_only = true
+
+  echo = NAV_HEADING          ->  NAV_HEADING_180
+  echo = DESIRED_HEADING          ->  DESIRED_HEADING_180
+}
+
+ProcessConfig = uTimerScript  
+{
+  time_zero = db_start
+  delay_start = 10
+  event = var=MOOS_MANUAL_OVERRIDE, val=false
+  event = var=DEPLOY, val=true
+  event = quit 
 }
 
 //------------------------------------------
@@ -212,6 +232,7 @@ ProcessConfig = pMarineViewer
   hash_viewable        = false
 
   trails_point_size   = 1
+  trails_length       = 1000
 
   // Appcast configuration
   appcast_height       = 75
