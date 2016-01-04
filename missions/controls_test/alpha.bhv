@@ -16,7 +16,7 @@ Behavior = BHV_Waypoint
   perpetual  = true
   templating = clone
 
-                lead = 8
+                lead = 6
          lead_damper = 1
        lead_to_start = true
                speed = 1.6   // meters per second

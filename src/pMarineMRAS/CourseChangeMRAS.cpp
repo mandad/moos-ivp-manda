@@ -128,7 +128,8 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
         if (m_dfKd < 0)
             m_dfKd = 0;
         else if (m_dfKd0 > (m_dfKp * m_dfShipLength / dfSpeed))
-            m_dfKd0 = m_dfKp * m_dfShipLength / dfSpeed;
+            m_dfKd = m_dfKp * m_dfShipLength / dfSpeed;
+
         m_dfKi += m_dfGamma * dfErrorFactor * dfDeltaT;
         MOOSTrace("Updated constants\n");
 
@@ -156,12 +157,13 @@ bool CourseChangeMRAS::NewHeading(double dfSpeed) {
 
     //from literature:  
     //m_dfKp0 = 2.5 * m_dfCruisingSpeed / dfSpeed;
-    m_dfKp0 = 1 * m_dfCruisingSpeed / dfSpeed;
+    m_dfKp0 = 2.5 * m_dfCruisingSpeed / dfSpeed;
     if (m_dfKp0 > 5) {
         m_dfKp0 = 5;
     }
 
-    m_dfKd0 = (m_dfShipLength * 2 * m_dfZ * sqrt(m_dfKp0 * m_dfKStar * m_dfTauStar - 1)) / 
+    //This equation is incorrect in Van Amerongen
+    m_dfKd0 = (m_dfShipLength * 2 * m_dfZ * sqrt(m_dfKp0 * m_dfKStar * m_dfTauStar) - 1) / 
         (dfSpeed * m_dfKStar);
     if (m_dfKd0 < m_dfKp0) {
         m_dfKd0 = m_dfKp0;

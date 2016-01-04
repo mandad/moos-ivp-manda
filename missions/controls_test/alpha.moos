@@ -255,6 +255,7 @@ ProcessConfig = pMarineViewer
   right_context[return] = MOOS_MANUAL_OVERRIDE=false
   right_context[return] = RETURN=false
 
+  scope  = DESIRED_RUDDER
   scope  = VIEW_WEDGE
   scope  = MISSION
   scope  = SURVEY_DIST_TO_NEXT
@@ -266,7 +267,6 @@ ProcessConfig = pMarineViewer
   scope  = VIEW_POLYGON
   scope  = MVIEWER_LCLICK
   scope  = MVIEWER_RCLICK
-  scope  = DESIRED_RUDDER
 
   button_one = DEPLOY # DEPLOY=true
   button_one = MOOS_MANUAL_OVERRIDE=false # RETURN=false
