@@ -152,7 +152,7 @@ ProcessConfig = pHelmIvP
 
   bhv_dir_not_found_ok = true
 
-  behaviors  = alpha.bhv
+  behaviors  = alpha_consthead.bhv
   domain     = course:0:359:360
   domain     = speed:0:4:41
 }
@@ -256,15 +256,8 @@ ProcessConfig = pMarineViewer
   right_context[return] = RETURN=false
 
   scope  = DESIRED_RUDDER
-  scope  = VIEW_WEDGE
-  scope  = MISSION
-  scope  = SURVEY_DIST_TO_NEXT
-  scope  = SURVEY_DIST_TO_PREV
-  scope  = RETURN
+  scope  = NAV_ROT
   scope  = WPT_STAT
-  scope  = VIEW_SEGLIST
-  scope  = VIEW_POINT
-  scope  = VIEW_POLYGON
   scope  = MVIEWER_LCLICK
   scope  = MVIEWER_RCLICK
 

@@ -1,0 +1,110 @@
+//--------    FILE: alpha.bhv   -------------
+
+initialize   DEPLOY = false
+initialize   RETURN = false
+initialize   SEQ = 1
+
+Behavior = BHV_ConstantHeading
+{
+   // General Behavior Parameters
+   // ---------------------------
+   name         = const_hdg1            
+   pwt          = 100                  
+   condition = RETURN = false
+   condition = DEPLOY = true
+   condition = SEQ = 1
+   endflag = SEQ = 2
+   duration_reset = HEADING_BHV_RESET=true
+   updates      = CONST_HDG_UPDATES    // example
+
+   // Parameters specific to this behavior
+   // ------------------------------------
+                heading = 180
+              basewidth = 10        
+               duration = 10         
+              peakwidth = 10          
+            summitdelta = 25           
+}
+
+Behavior = BHV_ConstantHeading
+{
+   // General Behavior Parameters
+   // ---------------------------
+   name         = const_hdg2         
+   pwt          = 100                  
+   condition = RETURN = false
+   condition = DEPLOY = true
+   condition = SEQ = 2
+   endflag = SEQ = 3
+   duration_reset = HEADING_BHV_RESET=true
+   updates      = CONST_HDG_UPDATES    // example
+
+   // Parameters specific to this behavior
+   // ------------------------------------
+                heading = 90
+              basewidth = 10        
+               duration = 30       
+              peakwidth = 10          
+            summitdelta = 25           
+}
+
+Behavior = BHV_ConstantHeading
+{
+   // General Behavior Parameters
+   // ---------------------------
+   name         = const_hdg3         
+   pwt          = 100                  
+   condition = RETURN = false
+   condition = DEPLOY = true
+   condition = SEQ = 3
+   endflag = SEQ = 1
+   endflag = HEADING_BHV_RESET=true
+   duration_reset = HEADING_BHV_RESET=true
+   updates      = CONST_HDG_UPDATES    // example
+
+   // Parameters specific to this behavior
+   // ------------------------------------
+                heading = 0
+              basewidth = 10        
+               duration = 30        
+              peakwidth = 10          
+            summitdelta = 25           
+}
+
+Behavior = BHV_ConstantSpeed
+ {
+   // General Behavior Parameters
+   // ---------------------------
+   name         = const_spd_transit  // example
+   pwt          = 100                // default
+   condition = DEPLOY = true
+   condition    = SEQ > 0
+   updates      = CONST_SPD_UPDATES  // example
+
+   // Parameters specific to this behavior
+   // ------------------------------------
+            basewidth = 0.2         
+             duration = no-time-limit
+                speed = 1.6
+            peakwidth = 0            
+          summitdelta = 0            
+ }
+
+//----------------------------------------------
+Behavior=BHV_Waypoint
+{
+  name       = waypt_return
+  pwt        = 100
+  condition  = RETURN = true
+  condition  = DEPLOY = true
+  perpetual  = true
+  updates    = RETURN_UPDATE
+  endflag    = RETURN = false
+  endflag    = DEPLOY = false
+  endflag    = MISSION = complete
+
+           speed = 2.0
+  capture_radius = 2.0
+     slip_radius = 8.0
+          points = 0,-20
+ }
