@@ -22,6 +22,7 @@ class MarineMRAS : public AppCastingMOOSApp
    bool Iterate();
    bool OnConnectToServer();
    bool OnStartUp();
+   void UpdateROT(double curr_time);
 
  protected: // Standard AppCastingMOOSApp function to overload 
    bool buildReport();
@@ -51,6 +52,8 @@ class MarineMRAS : public AppCastingMOOSApp
     bool   m_first_heading;
     double m_previous_heading;
     double m_current_ROT;
+    std::list<double> m_DiffHistory;
+    int m_ROT_filter_len;
     bool   m_has_control;
 
     CourseChangeMRAS m_CourseControl;

@@ -197,6 +197,7 @@ void SonarFilter::InjestDepthVal(double depth) {
     if (m_all_depths.size() >= 2) {
       MOOSTrace("SonarFilt - Testing StDev\n");
       // Only call a depth good if it is within the stdev limit
+      //TODO: Maybe add a fixed factor since the stdev could be low (zero)
       if (depth <= (m_last_valid_depth + std * m_std_limit) && 
         depth >= (m_last_valid_depth - std * m_std_limit)) {
         MOOSTrace("SonarFilt - Have Valid Depth: %0.2f\n", depth);
@@ -222,21 +223,6 @@ void SonarFilter::InjestDepthVal(double depth) {
 }
 
 double SonarFilter::GetStDev(list<double> * v) {
-  // accumulator_set<double, stats<tag::variance> > var_accl;
-  // BOOST_FOREACH(double i, vals) {
-  //   var_accl(i);
-  // }
-  // return sqrt(variance(var_accl));
-
-  // double sum = std::accumulate(v->begin(), v->end(), 0.0);
-  // double m =  sum / v->size();
-
-  // double accum = 0.0;
-  // std::for_each (v->begin(), v->end(), [&](const double d) {
-  //     accum += (d - m) * (d - m);
-  // });
-
-  // double stdev = sqrt(accum / (v->size()-1));
   if (v->size() < 2) {
     // Limit for first few variables
     return -1;

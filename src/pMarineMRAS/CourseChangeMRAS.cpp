@@ -131,20 +131,17 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
             m_dfKd = m_dfKp * m_dfShipLength / dfSpeed;
 
         m_dfKi += m_dfGamma * dfErrorFactor * dfDeltaT;
-        MOOSTrace("Updated constants\n");
-
-
+        //MOOSTrace("Updated constants\n");
     }
     //PID equation
     double heading_error = angle180(m_dfPsiRefP - dfMeasuredHeading);
     m_dfRudderOut = m_dfKp * heading_error - m_dfKd * dfMeasuredROT + m_dfKi;
-    //limit the rudder
-    //m_dfRudderOut = 
 
     m_dfPreviousTime = dfTime;
     m_dfPreviousHeading = dfDesiredHeading;
     m_dfMeasuredHeading = dfMeasuredHeading;
 
+    //limit the rudder
     return TwoSidedLimit(m_dfRudderOut, m_dfRudderLimit);
 }
 
