@@ -43,8 +43,12 @@ Behavior = BHV_Waypoint
        capture_line = true
      capture_radius = 3.0
         slip_radius = 8.0
-             points = 100,0
-             //points = format=lawnmower, label=emily_survey, x=-50, y=200, width=100, height=200, lane_width=50, rows=north-south, degs=0
+              //Norfolk with transit
+             //points = 147,134 : 119,164 : 165,247 : -5, 546 : 121,736 : 135,727
+             //Norfolk, just test area
+             //points = 165,247 : -5, 546 : 121,736 : 135,727 : -5,546 : 165,247
+             //Norfolk, back and forth near TJ
+             points = format=lawnmower, label=emily_survey, x=256, y=243, width=150, height=50, lane_width=50, rows=east-west, degs=-20
              repeat = 0
 
     visual_hints = nextpt_color=yellow

@@ -211,23 +211,6 @@ bool ZBoat::InitialiseSensor()
   MOOSTrace("ZBoat: Sending %s\n", sInit);
   m_Port.Write(sInit, strlen(sInit));
 
-  // if (MOOSStrCmp(m_sType, "ASHTECH")) {
-  //   const char * sInit = "$PASHS,NME,GGA,A,ON\r\n";
-  //   MOOSTrace("Sending %s\n", sInit);
-  //   m_Port.Write(sInit, strlen(sInit));
-
-  //   MOOSPause(2000);
-  //   string sReply;
-  //   double dfTime;
-
-  //   if (m_Port.GetLatest(sReply, dfTime)) {
-  //     MOOSTrace("Rx %s", sReply.c_str());
-  //   } else {
-  //     MOOSTrace("No reply\n");
-  //   }
-
-  // } 
-
   return true;
 
 }
