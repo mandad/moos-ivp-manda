@@ -43,6 +43,7 @@ if [ $SCENARIO = 1 ]; then
   #Behavior
   HOME_POS="3510,9080"
   SURVEY_SPEED=1.6
+  SIMULATION=FALSE
 fi
 
 if [ $SCENARIO = 2 ]; then
@@ -62,6 +63,7 @@ if [ $SCENARIO = 2 ]; then
   #Behavior
   HOME_POS="3510,9080"
   SURVEY_SPEED=1.6
+  SIMULATION=TRUE
 fi
 
 # What is nsplug? Type "nsplug --help" or "nsplug --manual"
@@ -69,7 +71,7 @@ fi
 nsplug zboat_lines_remote.moos targ_zboat_lines_remote.moos -f WARP=$TIME_WARP \
    LAT_ORIGIN=$LAT_ORIGIN   LONG_ORIGIN=$LONG_ORIGIN   START_POS=$START_POS \
    SHORE_IP=$SHORE_IP   BOAT_MODEM_IP=$BOAT_MODEM_IP  SHORE_PORT=$SHORE_PORT \
-   BOAT_PORT=$BOAT_PORT
+   BOAT_PORT=$BOAT_PORT  SIMULATION=$SIMULATION
 
 nsplug laptop.moos targ_laptop.moos -f WARP=$TIME_WARP \
    LAT_ORIGIN=$LAT_ORIGIN   LONG_ORIGIN=$LONG_ORIGIN \

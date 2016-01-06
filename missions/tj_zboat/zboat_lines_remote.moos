@@ -4,7 +4,7 @@
 // DATE: 10 Dec 2015
 //-------------------------------------------------
 
-ServerHost = localhost		
+ServerHost = localhost
 ServerPort = 9000
 Community  = zboat
 
@@ -27,21 +27,24 @@ ProcessConfig = ANTLER
   Run = MOOSDB          @ NewConsole = false
   Run = pEchoVar        @ NewConsole = false
   Run = pLogger         @ NewConsole = false
-  //Run = uSimMarine	    @ NewConsole = false
   Run = pMarinePID      @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
   //Run = pBasicContactMgr @ NewConsole = false
   Run = uProcessWatch	  @ NewConsole = false
   Run = pNodeReporter	  @ NewConsole = false
+  Run = pShare          @ NewConsole = false
+  Run = pHostInfo       @ NewConsole = false
+  Run = uFldNodeBroker  @ NewConsole = false
+  Run = pLLTrackUpdate  @ NewConsole = false
+#ifdef SIMULATION TRUE
+  Run = uSimMarine	    @ NewConsole = false
+#else
   //Run = iGPS            @ NewConsole = false
   Run = iGPS_MB1        @ NewConsole = false
   //Run = iCV100          @ NewConsole = false
   //Run = pSonarFilter    @ NewConsole = false
   Run = iZBoat          @ NewConsole = false
-  Run = pShare          @ NewConsole = false
-  Run = pHostInfo       @ NewConsole = false
-  Run = uFldNodeBroker  @ NewConsole = false
-  Run = pLLTrackUpdate  @ NewConsole = false
+#endif
 }
 
 //==============================================
@@ -146,17 +149,17 @@ ProcessConfig = pEchoVar
 // Find the shoreside and share variables
 //------------------------------------------
 
-ProcessConfig = pHostInfo                                       
-{                                                               
-  AppTick   = 1                                                 
-  CommsTick = 1                                                 
-                                                                
-  TEMP_FILE_DIR  = ./                                           
-  //DEFAULT_HOSTIP = 192.168.2.71   // default is "localhost"  
-                        
-  //External (4G) IP of boat network                                        
+ProcessConfig = pHostInfo
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  TEMP_FILE_DIR  = ./
+  //DEFAULT_HOSTIP = 192.168.2.71   // default is "localhost"
+
+  //External (4G) IP of boat network
   DEFAULT_HOSTIP_FORCE = $(BOAT_MODEM_IP)
-}       
+}
 
 ProcessConfig = uFldNodeBroker
 {
@@ -177,7 +180,7 @@ ProcessConfig = uFldNodeBroker
   BRIDGE = src=ZBOAT_PWM
   BRIDGE = src=SONAR_DEPTH_M
 }
-                                                           
+
 ProcessConfig = pShare
 {
   AppTick   = 2
