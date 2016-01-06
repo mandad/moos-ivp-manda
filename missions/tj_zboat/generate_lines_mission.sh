@@ -49,7 +49,7 @@ fi
 
 if [ $SCENARIO = 2 ]; then
   #MOOS Stuff
-  START_POS="0,0"
+  START_POS="150,129"
   LAT_ORIGIN=36.8525995
   LONG_ORIGIN=-76.3003448
   TIFF_FILE=data/Norfolk_Chart.tif
@@ -58,13 +58,13 @@ if [ $SCENARIO = 2 ]; then
   PAN_Y=0
   ZOOM=0.53
   #In this case, the shore VM
-  SHORE_IP="192.168.1.166"
+  SHORE_IP="192.168.1.165"
   SHORE_PORT=9300
   #In this case, the RPi
   BOAT_MODEM_IP="192.168.1.243"
   BOAT_PORT=9301
   #Behavior
-  HOME_POS="0,0"
+  HOME_POS="150,129"
   SURVEY_SPEED=1.6
   SIMULATION=TRUE
 fi
