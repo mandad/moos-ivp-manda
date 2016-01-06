@@ -32,9 +32,10 @@ if [ $SCENARIO = 1 ]; then
   LAT_ORIGIN=37.7499688
   LONG_ORIGIN=-75.4585006
   TIFF_FILE=data/Chincoteague_Ref.tif
-  PAN_X=0
-  PAN_Y=0
-  ZOOM=0.53
+  TIFF_FILE_B=data/Chincoteague_Ref.tif
+  PAN_X=-500
+  PAN_Y=-1100
+  ZOOM=1.35
   SHORE_IP="73.219.106.147"
   SHORE_PORT=9300
   # BOAT_MODEM_IP="166.150.166.136"
@@ -48,20 +49,22 @@ fi
 
 if [ $SCENARIO = 2 ]; then
   #MOOS Stuff
-  START_POS="3000,8240"
-  LAT_ORIGIN=37.7499688
-  LONG_ORIGIN=-75.4585006
-  TIFF_FILE=data/Chincoteague_Ref.tif
+  START_POS="0,0"
+  LAT_ORIGIN=36.8525995
+  LONG_ORIGIN=-76.3003448
+  TIFF_FILE=data/Norfolk_Chart.tif
+  TIFF_FILE_B=data/Norfolk_Aerial.tif
   PAN_X=0
   PAN_Y=0
   ZOOM=0.53
+  #In this case, the shore VM
   SHORE_IP="192.168.1.166"
   SHORE_PORT=9300
-  # BOAT_MODEM_IP="166.150.166.136"
+  #In this case, the RPi
   BOAT_MODEM_IP="192.168.1.243"
   BOAT_PORT=9301
   #Behavior
-  HOME_POS="3510,9080"
+  HOME_POS="0,0"
   SURVEY_SPEED=1.6
   SIMULATION=TRUE
 fi
@@ -76,7 +79,7 @@ nsplug zboat_lines_remote.moos targ_zboat_lines_remote.moos -f WARP=$TIME_WARP \
 nsplug laptop.moos targ_laptop.moos -f WARP=$TIME_WARP \
    LAT_ORIGIN=$LAT_ORIGIN   LONG_ORIGIN=$LONG_ORIGIN \
    TIFF_FILE="$TIFF_FILE"  PAN_X=$PAN_X  PAN_Y=$PAN_Y  ZOOM=$ZOOM \
-   SHORE_IP=$SHORE_IP  SHORE_PORT=$SHORE_PORT
+   SHORE_IP=$SHORE_IP  SHORE_PORT=$SHORE_PORT  TIFF_FILE_B=$TIFF_FILE_B
 
 nsplug zboat_lines.bhv targ_zboat_lines.bhv -f HOME_POS=$HOME_POS \
   SURVEY_SPEED=$SURVEY_SPEED

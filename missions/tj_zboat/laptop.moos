@@ -150,11 +150,11 @@ ProcessConfig = pMarineViewer
   CommsTick  = 4
 
   tiff_file            = $(TIFF_FILE)
-  //tiff_file_b          = Newport_Aerial.tif
+  tiff_file_b          = $(TIFF_FILE_B)
 
-  set_pan_x            = -500
-  set_pan_y            = -1100
-  zoom                 = 1.35
+  set_pan_x            = $(PAN_X)
+  set_pan_y            = $(PAN_Y)
+  zoom                 = $(ZOOM)
   vehicle_shape_scale  = 1.5
   hash_delta           = 100
   hash_shade           = 0.4
