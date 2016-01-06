@@ -15,8 +15,8 @@ ADD_EXECUTABLE(pMarineMRAS ${SRC})
 TARGET_LINK_LIBRARIES(pMarineMRAS
    ${MOOS_LIBRARIES}
    apputil
-   mbutil
    geometry
+   mbutil
    m
    pthread)
 
