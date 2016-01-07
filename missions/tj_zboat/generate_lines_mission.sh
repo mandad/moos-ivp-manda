@@ -43,6 +43,8 @@ if [ $SCENARIO = 1 ]; then
   BOAT_PORT=9301
   #Behavior
   HOME_POS="3510,9080"
+  HOME_INNER_RADIUS=5
+  HOME_OUTER_RADIUS=20
   SURVEY_SPEED=1.6
   SIMULATION=FALSE
 fi
@@ -54,9 +56,9 @@ if [ $SCENARIO = 2 ]; then
   LONG_ORIGIN=-76.3003448
   TIFF_FILE=data/Norfolk_Chart.tif
   TIFF_FILE_B=data/Norfolk_Aerial.tif
-  PAN_X=0
-  PAN_Y=0
-  ZOOM=0.53
+  PAN_X=-381
+  PAN_Y=-513
+  ZOOM=0.82
   #In this case, the shore VM
   SHORE_IP="192.168.1.165"
   SHORE_PORT=9300
@@ -65,6 +67,8 @@ if [ $SCENARIO = 2 ]; then
   BOAT_PORT=9301
   #Behavior
   HOME_POS="150,129"
+  HOME_INNER_RADIUS=2
+  HOME_OUTER_RADIUS=5
   SURVEY_SPEED=1.6
   SIMULATION=TRUE
 fi
