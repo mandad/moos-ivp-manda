@@ -23,7 +23,7 @@ done
 #-------------------------------------------------------
 #  Part 2: Create the .moos and .bhv files.
 #-------------------------------------------------------
-SCENARIO=2
+SCENARIO=3
 # 1 = Chincoteague, VA
 # 2 = Test at home
 if [ $SCENARIO = 1 ]; then
@@ -73,6 +73,29 @@ if [ $SCENARIO = 2 ]; then
   SIMULATION=TRUE
 fi
 
+if [ $SCENARIO = 3 ]; then
+  #MOOS Stuff
+  START_POS="150,129"
+  LAT_ORIGIN=36.8525995
+  LONG_ORIGIN=-76.3003448
+  TIFF_FILE=data/Norfolk_Chart.tif
+  TIFF_FILE_B=data/Norfolk_Aerial.tif
+  PAN_X=-381
+  PAN_Y=-513
+  ZOOM=0.82
+  #In this case, the shore VM
+  SHORE_IP="73.219.106.147"
+  SHORE_PORT=9300
+  #In this case, the RPi
+  BOAT_MODEM_IP="166.150.167.176"
+  BOAT_PORT=9301
+  #Behavior
+  HOME_POS="150,129"
+  HOME_INNER_RADIUS=2
+  HOME_OUTER_RADIUS=5
+  SURVEY_SPEED=1.6
+  SIMULATION=FALSE
+fi
 # What is nsplug? Type "nsplug --help" or "nsplug --manual"
 
 nsplug zboat_lines_remote.moos targ_zboat_lines_remote.moos -f WARP=$TIME_WARP \
@@ -91,7 +114,8 @@ nsplug laptop.moos targ_laptop.moos -f WARP=$TIME_WARP \
    SHORE_IP=$SHORE_IP  SHORE_PORT=$SHORE_PORT  TIFF_FILE_B=$TIFF_FILE_B
 
 nsplug zboat_lines.bhv targ_zboat_lines.bhv -f HOME_POS=$HOME_POS \
-  SURVEY_SPEED=$SURVEY_SPEED
+  SURVEY_SPEED=$SURVEY_SPEED HOME_INNER_RADIUS=$HOME_INNER_RADIUS \
+  HOME_OUTER_RADIUS=$HOME_OUTER_RADIUS
 
 if [ ${JUST_MAKE} = "yes" ] ; then
     exit 0

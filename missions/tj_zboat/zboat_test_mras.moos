@@ -44,7 +44,7 @@ ProcessConfig = ANTLER
   Run = iGPS_MB1        @ NewConsole = false
   //Run = iCV100          @ NewConsole = false
   //Run = pSonarFilter    @ NewConsole = false
-  Run = iZBoat          @ NewConsole = false
+  //Run = iZBoat          @ NewConsole = false
 #endif
 }
 
@@ -87,7 +87,7 @@ ProcessConfig = iGPS_MB1
   AppTick    = 40
   CommsTick  = 40
 
-  PORT = 56006
+  PORT = 56007
   IgnoreSats = true
 }
 
