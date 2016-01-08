@@ -43,7 +43,7 @@ ProcessConfig = pMarineMRAS
    // Initial constant parameters
    K_Star = 1   //0.5-2
    Tau_Star = 1
-   DampingRatio = .85
+   DampingRatio = 0.85
 
    //Adaptation parameters
    Beta = 0.01     //Speed of Kp adaptation
@@ -58,6 +58,11 @@ ProcessConfig = pMarineMRAS
    CruisingSpeed = 1.6 // m/s
    Length = 2 //m
    MaxROT = 40
+
+   //Speed settings (use one or the other)
+   //ThrustPercent = 50
+   Speed_Factor = 31.25
+   MaxThrust = 100
 }
 
 //------------------------------------------
@@ -87,6 +92,10 @@ ProcessConfig = pLogger
   Log = MRAS_PSI_REF_P @ 0
   Log = MRAS_PSI_REF_PP @ 0
   Log = MRAS_SERIES_F @ 0
+  Log = NAV_SPEED @ 0
+  Log = DESIRED_SPEED @ 0
+  Log = DESIRED_THRUST @ 0
+
   Log = NODE_REPORT_LOCAL @ 0 NOSYNC
   Log = NODE_REPORT @ 0 NOSYNC
 
@@ -155,7 +164,7 @@ ProcessConfig = pHelmIvP
 
   behaviors  = alpha_consthead.bhv
   domain     = course:0:359:360
-  domain     = speed:0:4:41
+  domain     = speed:0:4:50
 }
 
 //------------------------------------------

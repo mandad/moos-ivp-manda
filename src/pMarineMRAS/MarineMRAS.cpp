@@ -31,11 +31,14 @@ MarineMRAS::MarineMRAS()
     m_cruising_speed = 2;
     m_length = 2;
     m_decrease_adapt = true;
+    m_speed_factor   = 0;
+    m_max_thrust = 100;
 
     m_first_heading = true;
     m_current_ROT = 0;
     m_has_control = false;
     m_desired_thrust = 50;
+    m_desired_speed = 0;
     m_allstop_posted = false;
     //m_last_heading_time = MOOSTime();
 }
@@ -76,6 +79,8 @@ bool MarineMRAS::OnNewMail(MOOSMSG_LIST &NewMail)
       m_current_speed = msg.GetDouble();
     else if (key == "DESIRED_HEADING")
       m_desired_heading = msg.GetDouble();
+    else if (key == "DESIRED_SPEED")
+      m_desired_speed = msg.GetDouble();
     else if((key == "MOOS_MANUAL_OVERIDE") || (key == "MOOS_MANUAL_OVERRIDE")) {
       if(MOOSStrCmp(msg.GetString(), "FALSE")) {
         m_has_control = true;
@@ -115,6 +120,12 @@ bool MarineMRAS::Iterate()
         m_current_ROT, m_current_speed, m_last_heading_time);
     }
     Notify("DESIRED_RUDDER", desired_rudder);
+
+    if(m_speed_factor != 0) {
+      m_desired_thrust = m_desired_speed * m_speed_factor;
+    }
+    m_desired_thrust = CourseChangeMRAS::TwoSidedLimit(m_desired_thrust, 
+      m_max_thrust);
     Notify("DESIRED_THRUST", m_desired_thrust);
 
     //Debug variables for logging
@@ -220,6 +231,12 @@ bool MarineMRAS::OnStartUp()
     } else if (param == "THRUSTPERCENT") {
       m_desired_thrust = dval;
       handled = true;
+    } else if(param == "SPEED_FACTOR") {
+      m_speed_factor = vclip(dval, 0, 100);
+      handled = true;
+    } else if(param == "MAXTHRUST") {
+      m_max_thrust = dval;
+      handled = true;
     }
 
     if(!handled)
@@ -245,6 +262,7 @@ void MarineMRAS::registerVariables()
   Register("NAV_HEADING", 0);
   Register("NAV_SPEED", 0);
   Register("DESIRED_HEADING", 0);
+  Register("DESIRED_SPEED", 0);
   Register("MOOS_MANUAL_OVERIDE", 0);
   Register("MOOS_MANUAL_OVERRIDE", 0);
 }

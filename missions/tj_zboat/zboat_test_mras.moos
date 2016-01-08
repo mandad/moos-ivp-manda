@@ -81,7 +81,7 @@ ProcessConfig = iGPS
   STREAMING = FALSE
 }
 
-//This reads from a Hypack NMEA output
+//This reads from a Network NMEA output
 ProcessConfig = iGPS_MB1
 {
   AppTick    = 40
@@ -172,7 +172,10 @@ ProcessConfig = pMarineMRAS
    Length = 2 //m
    MaxROT = 40
 
-   ThrustPercent = 50
+   //Speed settings (use one or the other)
+   //ThrustPercent = 50
+   Speed_Factor = 31.25
+   MaxThrust = 100
 }
 
 //==============================================
@@ -182,6 +185,40 @@ ProcessConfig = pMarineMRAS
 //------------------------------------------
 // Find the shoreside and share variables
 //------------------------------------------
+
+//------------------------------------------
+// pMarinePID config block
+
+ProcessConfig = pMarinePID
+{
+  AppTick    = 20
+  CommsTick  = 20
+
+  verbose       = true
+  depth_control = false
+
+  // SIM_INSTABILITY = 20
+
+  // Yaw PID controller
+  yaw_pid_kp     = 1.0
+  yaw_pid_kd     = 0.35
+  yaw_pid_ki     = 0.1
+  yaw_pid_integral_limit = 0.07
+
+  // Speed PID controller
+  speed_pid_kp     = 1.0
+  speed_pid_kd     = 0.2
+  speed_pid_ki     = 0.0
+  speed_pid_integral_limit = 0.07
+
+  //MAXIMUMS
+  maxrudder    = 45
+  maxthrust    = 100
+
+  // A non-zero SPEED_FACTOR overrides use of SPEED_PID
+  // Will set DESIRED_THRUST = DESIRED_SPEED * SPEED_FACTOR
+  //speed_factor = 10
+}
 
 ProcessConfig = pHostInfo
 {
@@ -269,6 +306,10 @@ ProcessConfig = pLogger
   Log = MRAS_PSI_REF_P @ 0
   Log = MRAS_PSI_REF_PP @ 0
   Log = MRAS_SERIES_F @ 0
+  Log = NAV_SPEED @ 0
+  Log = DESIRED_SPEED @ 0
+  Log = DESIRED_THRUST @ 0
+
   Log = NODE_REPORT_LOCAL @ 0 NOSYNC
   Log = NODE_REPORT @ 0 NOSYNC
 
@@ -322,43 +363,9 @@ ProcessConfig = pHelmIvP
 
   behaviors  = targ_zboat_statichead.bhv
   domain     = course:0:359:360
-  domain     = speed:0:7:28
+  domain     = speed:0:4:50
 
   ok_skew    = any
-}
-
-//------------------------------------------
-// pMarinePID config block
-
-ProcessConfig = pMarinePID
-{
-  AppTick    = 20
-  CommsTick  = 20
-
-  verbose       = true
-  depth_control = false
-
-  // SIM_INSTABILITY = 20
-
-  // Yaw PID controller
-  yaw_pid_kp     = 1.0
-  yaw_pid_kd     = 0.35
-  yaw_pid_ki     = 0.1
-  yaw_pid_integral_limit = 0.07
-
-  // Speed PID controller
-  speed_pid_kp     = 1.0
-  speed_pid_kd     = 0.2
-  speed_pid_ki     = 0.0
-  speed_pid_integral_limit = 0.07
-
-  //MAXIMUMS
-  maxrudder    = 45
-  maxthrust    = 100
-
-  // A non-zero SPEED_FACTOR overrides use of SPEED_PID
-  // Will set DESIRED_THRUST = DESIRED_SPEED * SPEED_FACTOR
-  //speed_factor = 10
 }
 
 //------------------------------------------

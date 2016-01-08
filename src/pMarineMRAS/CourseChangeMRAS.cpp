@@ -89,7 +89,7 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
     //m_dfRudderOut = 0;
 
     if (m_bFirstRun || (abs(angle180(dfDesiredHeading - m_dfPreviousHeading)) 
-        > 5)) {
+        > RESET_THRESHOLD)) {
         //Initial with no adaptation
         if (m_bFirstRun) {
             //Otherwise this will nearly always be zero and result in incorrect
@@ -154,11 +154,11 @@ bool CourseChangeMRAS::NewHeading(double dfSpeed) {
     // denominator of the constants
     if (dfSpeed < 0.1) {
         //If we aren't resetting, seed it higher
-        // if (RESET_THRESHOLD == 180) {
-        //     dfSpeed = m_dfCruisingSpeed;
-        // } else {
+        if (RESET_THRESHOLD >= 180) {
+            dfSpeed = m_dfCruisingSpeed;
+        } else {
             dfSpeed = 0.1;
-        // }
+        }
     }
 
     //from literature:  
