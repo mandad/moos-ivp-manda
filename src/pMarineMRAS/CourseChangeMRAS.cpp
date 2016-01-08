@@ -125,7 +125,7 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
         else if (m_dfKp > 5)
              m_dfKp = 5;
 
-        m_dfKd += m_dfAlpha * dfTimeReduceFactor * dfErrorFactor * dfMeasuredROT 
+        m_dfKd -= m_dfAlpha * dfTimeReduceFactor * dfErrorFactor * dfMeasuredROT 
             * dfDeltaT;
         if (m_dfKd < 0)
             m_dfKd = 0;
@@ -237,7 +237,6 @@ void CourseChangeMRAS::UpdateModel(double dfDesiredHeading, double dfDeltaT) {
     m_dfModelHeading += m_dfModelROT * dfDeltaT;
     m_dfModelHeading = angle180(m_dfModelHeading);
 
-    //need to reference the PsiRefPP - dfModelHeading to angle180
     m_dfModelROT += ((m_dfKpm / m_dfTauM * (angle180(m_dfPsiRefPP - m_dfModelHeading)))
         - 1/m_dfTauM * m_dfModelROT) * dfDeltaT;
 }
