@@ -23,7 +23,7 @@ done
 #-------------------------------------------------------
 #  Part 2: Create the .moos and .bhv files.
 #-------------------------------------------------------
-SCENARIO=3
+SCENARIO=2
 # 1 = Chincoteague, VA
 # 2 = Test at home
 if [ $SCENARIO = 1 ]; then

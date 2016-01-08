@@ -35,6 +35,7 @@ MarineMRAS::MarineMRAS()
     m_first_heading = true;
     m_current_ROT = 0;
     m_has_control = false;
+    m_desired_thrust = 50;
     //m_last_heading_time = MOOSTime();
 }
 
@@ -113,7 +114,7 @@ bool MarineMRAS::Iterate()
         m_current_ROT, m_current_speed, m_last_heading_time);
     }
     Notify("DESIRED_RUDDER", desired_rudder);
-    Notify("DESIRED_THRUST", 50.0);
+    Notify("DESIRED_THRUST", m_desired_thrust);
 
     //Debug variables for logging
     double vars[11];
@@ -215,6 +216,9 @@ bool MarineMRAS::OnStartUp()
       if (toupper(value) == "FALSE")
         m_decrease_adapt = false;
       handled = true;
+    } else if (param == "THRUSTPERCENT") {
+      m_desired_thrust = dval;
+      handled = true;
     }
 
     if(!handled)
@@ -274,7 +278,7 @@ bool MarineMRAS::buildReport()
 void MarineMRAS::UpdateROT(double curr_time) {
   if (m_first_heading) {
     m_first_heading = false;
-  } else {
+  } else if (m_ROT_filter_len > 1) {
     // double diff = angle180(m_current_heading - m_previous_heading);
     // double curr_ROT = diff / (curr_time - m_last_heading_time);
     // //this is an arbitary threshold to eliminate noise from sim
@@ -324,6 +328,16 @@ void MarineMRAS::UpdateROT(double curr_time) {
         m_current_ROT = CourseChangeMRAS::TwoSidedLimit(curr_ROT, m_max_ROT);
       }
     }
+  } else {
+    double diff = angle180(m_current_heading - m_previous_heading);
+    double curr_ROT = diff / (curr_time - m_last_heading_time);
+    //this is an arbitary threshold to eliminate noise from sim
+    if (fabs(curr_ROT - m_current_ROT) < 5) {
+      m_current_ROT = curr_ROT;
+    }
+
+    //Try limiting it for sim
+    m_current_ROT = CourseChangeMRAS::TwoSidedLimit(m_current_ROT, m_max_ROT);
   }
 }
 

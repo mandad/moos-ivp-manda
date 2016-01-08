@@ -43,6 +43,7 @@ class MarineMRAS : public AppCastingMOOSApp
     double m_cruising_speed;
     double m_length;
     bool   m_decrease_adapt;
+    double m_desired_thrust;
 
  private: // State variables
     double m_desired_heading;

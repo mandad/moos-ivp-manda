@@ -51,7 +51,7 @@ ProcessConfig = pMarineMRAS
    Gamma = 0.001    //Speed of Ki adaptation
    Xi = 1   // <= 1, not used if DecreaseAdaptation = false
    DecreaseAdaptation = false
-   ROTFilter = 4  // >= 1
+   ROTFilter = 3  // >= 1
 
    // Vessel Characteristics
    RudderLimit = 100

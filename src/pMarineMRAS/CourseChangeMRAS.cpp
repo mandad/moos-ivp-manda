@@ -87,7 +87,7 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
     //m_dfRudderOut = 0;
 
     if (m_bFirstRun || (abs(angle180(dfDesiredHeading - m_dfPreviousHeading)) 
-        > RESET_THRESHOLD)) {
+        > 5)) {
         //Initial with no adaptation
         if (m_bFirstRun) {
             //Otherwise this will nearly always be zero and result in incorrect
@@ -152,11 +152,11 @@ bool CourseChangeMRAS::NewHeading(double dfSpeed) {
     // denominator of the constants
     if (dfSpeed < 0.1) {
         //If we aren't resetting, seed it higher
-        if (RESET_THRESHOLD == 180) {
-            dfSpeed = m_dfCruisingSpeed;
-        } else {
+        // if (RESET_THRESHOLD == 180) {
+        //     dfSpeed = m_dfCruisingSpeed;
+        // } else {
             dfSpeed = 0.1;
-        }
+        // }
     }
 
     //from literature:  
@@ -248,7 +248,7 @@ void CourseChangeMRAS::UpdateModelTd(double dfDesiredHeading, double dfDeltaT) {
     //This model serves to include nonlinearities such as saturation of rudder
     //and rate of turn from mechanical or user set limits
 
-    #if USE_SERIES_MODEL
+#if USE_SERIES_MODEL
     m_dfSeriesHeading += m_dfSeriesROT * dfDeltaT;
     m_dfSeriesHeading = angle180(m_dfSeriesHeading);
 
@@ -269,10 +269,10 @@ void CourseChangeMRAS::UpdateModelTd(double dfDesiredHeading, double dfDeltaT) {
     m_dfPsiRefP = angle180(x3 * 1/m_dfKpm + m_dfSeriesHeading);
     //Input to parallel model as desired heading
     m_dfPsiRefPP = angle180(x2_dot * 1/m_dfKpm + m_dfSeriesHeading);
-    #else
+#else
     m_dfPsiRefPP = dfDesiredHeading;
     m_dfPsiRefP = dfDesiredHeading;
-    #endif
+#endif
 
     //------------  Update Parallel Model  ------------------
     //uses output of series model as desired heading
@@ -318,4 +318,3 @@ void CourseChangeMRAS::GetDebugVariables(double * vars) {
     vars[9] = m_dfPsiRefPP;
     vars[10] = m_dfF;
 }
-
