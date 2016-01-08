@@ -3,6 +3,7 @@
 #  Part 1: Check for and handle command-line arguments
 #-------------------------------------------------------
 TIME_WARP=1
+SCENARIO=3
 JUST_MAKE="no"
 for ARGI; do
     if [ "${ARGI}" = "--help" -o "${ARGI}" = "-h" ] ; then
@@ -10,8 +11,8 @@ for ARGI; do
 	printf "  --just_build, -j    \n"
 	printf "  --help, -h         \n"
 	exit 0;
-    elif [ "${ARGI//[^0-9]/}" = "$ARGI" -a "$TIME_WARP" = 1 ]; then
-        TIME_WARP=$ARGI
+    elif [ "${ARGI//[^0-9]/}" = "$ARGI" ]; then
+        SCENARIO=$ARGI
     elif [ "${ARGI}" = "--just_build" -o "${ARGI}" = "-j" ] ; then
 	JUST_MAKE="yes"
     else
@@ -23,7 +24,6 @@ done
 #-------------------------------------------------------
 #  Part 2: Create the .moos and .bhv files.
 #-------------------------------------------------------
-SCENARIO=3
 # 1 = Chincoteague, VA
 # 2 = Test at home
 if [ $SCENARIO = 1 ]; then
@@ -70,7 +70,7 @@ if [ $SCENARIO = 2 ]; then
   HOME_INNER_RADIUS=2
   HOME_OUTER_RADIUS=5
   SURVEY_SPEED=1.6
-  SIMULATION=TRUE
+  SIMULATION=FALSE
 fi
 
 if [ $SCENARIO = 3 ]; then
