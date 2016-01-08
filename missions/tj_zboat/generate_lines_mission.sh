@@ -117,6 +117,10 @@ nsplug zboat_lines.bhv targ_zboat_lines.bhv -f HOME_POS=$HOME_POS \
   SURVEY_SPEED=$SURVEY_SPEED HOME_INNER_RADIUS=$HOME_INNER_RADIUS \
   HOME_OUTER_RADIUS=$HOME_OUTER_RADIUS
 
+nsplug zboat_statichead.bhv targ_zboat_statichead.bhv -f HOME_POS=$HOME_POS \
+  SURVEY_SPEED=$SURVEY_SPEED HOME_INNER_RADIUS=$HOME_INNER_RADIUS \
+  HOME_OUTER_RADIUS=$HOME_OUTER_RADIUS
+
 if [ ${JUST_MAKE} = "yes" ] ; then
     exit 0
 fi

@@ -57,7 +57,7 @@ SET MODE = INPLACE {
 //    visual_hints = nextpt_lcolor=gray70
 //    visual_hints = vertex_color=dodger_blue, edge_color=red
 //    visual_hints = vertex_size=5, edge_size=1.5
-}
+//}
 
 Behavior = BHV_ConstantHeading
 {
