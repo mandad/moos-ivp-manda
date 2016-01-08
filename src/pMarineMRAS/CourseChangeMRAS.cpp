@@ -11,6 +11,7 @@
 #include <math.h>
 
 #define USE_SERIES_MODEL true
+#define RESET_THRESHOLD 5
 
 using namespace std;
 
@@ -85,7 +86,8 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
 
     //m_dfRudderOut = 0;
 
-    if (m_bFirstRun || (abs(angle180(dfDesiredHeading - m_dfPreviousHeading)) > 5)) {
+    if (m_bFirstRun || (abs(angle180(dfDesiredHeading - m_dfPreviousHeading)) 
+        > RESET_THRESHOLD)) {
         //Initial with no adaptation
         if (m_bFirstRun) {
             //Otherwise this will nearly always be zero and result in incorrect
@@ -149,7 +151,12 @@ bool CourseChangeMRAS::NewHeading(double dfSpeed) {
     // Try to avoid problems with really small speeds since it is in the 
     // denominator of the constants
     if (dfSpeed < 0.1) {
-        dfSpeed = 0.1;
+        //If we aren't resetting, seed it higher
+        if (RESET_THRESHOLD == 180) {
+            dfSpeed = m_dfCruisingSpeed;
+        } else {
+            dfSpeed = 0.1;
+        }
     }
 
     //from literature:  
@@ -197,7 +204,7 @@ void CourseChangeMRAS::ResetModel(double dfHeading, double dfROT) {
 }
 
 void CourseChangeMRAS::UpdateModel(double dfDesiredHeading, double dfDeltaT) {
-    //Update series model
+    //------------  Update series model -------------------
     //This model serves to include nonlinearities such as saturation of rudder
     //and rate of turn from mechanical or user set limits
 
@@ -225,7 +232,49 @@ void CourseChangeMRAS::UpdateModel(double dfDesiredHeading, double dfDeltaT) {
     // m_dfPsiRefP = dfDesiredHeading;
     // #endif
 
-    //Update Parallel Model
+    //------------  Update Parallel Model  ------------------
+    //uses output of series model as desired heading
+    m_dfModelHeading += m_dfModelROT * dfDeltaT;
+    m_dfModelHeading = angle180(m_dfModelHeading);
+
+    //need to reference the PsiRefPP - dfModelHeading to angle180
+    m_dfModelROT += ((m_dfKpm / m_dfTauM * (angle180(m_dfPsiRefPP - m_dfModelHeading)))
+        - 1/m_dfTauM * m_dfModelROT) * dfDeltaT;
+}
+
+void CourseChangeMRAS::UpdateModelTd(double dfDesiredHeading, double dfDeltaT) {
+    //This includes limited rudder speed in the model
+    //------------  Update series model -------------------
+    //This model serves to include nonlinearities such as saturation of rudder
+    //and rate of turn from mechanical or user set limits
+
+    #if USE_SERIES_MODEL
+    m_dfSeriesHeading += m_dfSeriesROT * dfDeltaT;
+    m_dfSeriesHeading = angle180(m_dfSeriesHeading);
+
+
+
+    m_dfF = 1;
+    if (fabs(m_dfRudderOut) > m_dfRudderLimit) {
+        m_dfF = m_dfRudderLimit / fabs(m_dfRudderOut);
+    }
+    //We split these variables out because they are used to calculate inputs to
+    //the parallel model and PID controller
+    double x3 = TwoSidedLimit(angle180(dfDesiredHeading - m_dfSeriesHeading) 
+        * m_dfKpm, m_dfMaxROT);
+    double x2_dot = m_dfF * x3;
+    m_dfSeriesROT += (x2_dot / m_dfTauM  
+        - 1/m_dfTauM * m_dfSeriesROT) * dfDeltaT;
+    //Input to PID as desired heading
+    m_dfPsiRefP = angle180(x3 * 1/m_dfKpm + m_dfSeriesHeading);
+    //Input to parallel model as desired heading
+    m_dfPsiRefPP = angle180(x2_dot * 1/m_dfKpm + m_dfSeriesHeading);
+    #else
+    m_dfPsiRefPP = dfDesiredHeading;
+    m_dfPsiRefP = dfDesiredHeading;
+    #endif
+
+    //------------  Update Parallel Model  ------------------
     //uses output of series model as desired heading
     m_dfModelHeading += m_dfModelROT * dfDeltaT;
     m_dfModelHeading = angle180(m_dfModelHeading);

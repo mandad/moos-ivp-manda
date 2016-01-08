@@ -44,7 +44,7 @@ ProcessConfig = ANTLER
   Run = iGPS_MB1        @ NewConsole = false
   //Run = iCV100          @ NewConsole = false
   //Run = pSonarFilter    @ NewConsole = false
-  //Run = iZBoat          @ NewConsole = false
+  Run = iZBoat          @ NewConsole = false
 #endif
 }
 
@@ -140,6 +140,12 @@ ProcessConfig = pEchoVar
   echo = GPS_Y            -> NAV_Y
   echo = GPS_HEADING      -> NAV_HEADING
   echo = GPS_SPEED        -> NAV_SPEED
+
+  echo_latest_only = true
+
+  //These are used with pMarinePID to maintain compatibility w/ graphing
+  //echo = NAV_HEADING          ->  NAV_HEADING_180
+  //echo = DESIRED_HEADING          ->  DESIRED_HEADING_180
 }
 
 ProcessConfig = pMarineMRAS
