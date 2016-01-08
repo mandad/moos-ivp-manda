@@ -43,7 +43,7 @@ ProcessConfig = pMarineMRAS
    // Initial constant parameters
    K_Star = 1   //0.5-2
    Tau_Star = 1
-   DampingRatio = 1
+   DampingRatio = .85
 
    //Adaptation parameters
    Beta = 0.01     //Speed of Kp adaptation
@@ -54,7 +54,7 @@ ProcessConfig = pMarineMRAS
    ROTFilter = 0  // >= 1
 
    // Vessel Characteristics
-   RudderLimit = 45
+   RudderLimit = 100
    CruisingSpeed = 1.6 // m/s
    Length = 2 //m
    MaxROT = 40

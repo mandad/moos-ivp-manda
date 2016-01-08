@@ -11,6 +11,7 @@
 #include <math.h>
 
 #define USE_SERIES_MODEL true
+#define LIMIT_ROT_INC false
 #define RESET_THRESHOLD 5
 
 using namespace std;
@@ -20,6 +21,7 @@ CourseChangeMRAS::CourseChangeMRAS() {
     m_bParametersSet = false;
     m_dfRudderOut = 0;
     m_dfF = 1;
+    m_dfMaxROTInc = 6;
 }
 
 CourseChangeMRAS::CourseChangeMRAS(double dfKStar, double dfTauStar, double dfZ, 
@@ -237,8 +239,15 @@ void CourseChangeMRAS::UpdateModel(double dfDesiredHeading, double dfDeltaT) {
     m_dfModelHeading += m_dfModelROT * dfDeltaT;
     m_dfModelHeading = angle180(m_dfModelHeading);
 
-    m_dfModelROT += ((m_dfKpm / m_dfTauM * (angle180(m_dfPsiRefPP - m_dfModelHeading)))
-        - 1/m_dfTauM * m_dfModelROT) * dfDeltaT;
+    double dfPsiMPP = (m_dfKpm / m_dfTauM * (angle180(m_dfPsiRefPP - m_dfModelHeading)))
+        - 1/m_dfTauM * m_dfModelROT;
+    //Limit this to compare to the sim
+#if LIMIT_ROT_INC
+    if (fabs(dfPsiMPP) > m_dfMaxROTInc) {
+        dfPsiMPP = TwoSidedLimit(dfPsiMPP, m_dfMaxROTInc);
+    } 
+#endif
+    m_dfModelROT += dfPsiMPP * dfDeltaT;
 }
 
 void CourseChangeMRAS::UpdateModelTd(double dfDesiredHeading, double dfDeltaT) {

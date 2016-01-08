@@ -47,6 +47,7 @@ public:
     double m_dfCruisingSpeed;
     double m_dfShipLength;
     double m_bDecreaseAdapt;
+    double m_dfMaxROTInc;
 
  private: //Derived variables
     double m_dfTauM;

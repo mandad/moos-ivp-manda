@@ -56,9 +56,9 @@ if [ $SCENARIO = 2 ]; then
   LONG_ORIGIN=-76.3003448
   TIFF_FILE=data/Norfolk_Chart.tif
   TIFF_FILE_B=data/Norfolk_Aerial.tif
-  PAN_X=-381
-  PAN_Y=-513
-  ZOOM=0.82
+  PAN_X=--322
+  PAN_Y=-284
+  ZOOM=1.4
   #In this case, the shore VM
   SHORE_IP="192.168.1.165"
   SHORE_PORT=9300
@@ -80,9 +80,9 @@ if [ $SCENARIO = 3 ]; then
   LONG_ORIGIN=-76.3003448
   TIFF_FILE=data/Norfolk_Chart.tif
   TIFF_FILE_B=data/Norfolk_Aerial.tif
-  PAN_X=-381
-  PAN_Y=-513
-  ZOOM=0.82
+  PAN_X=--322
+  PAN_Y=-284
+  ZOOM=1.4
   #In this case, the shore VM
   SHORE_IP="73.219.106.147"
   SHORE_PORT=9300
