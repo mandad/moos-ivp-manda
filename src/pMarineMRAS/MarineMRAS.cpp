@@ -36,6 +36,7 @@ MarineMRAS::MarineMRAS()
     m_current_ROT = 0;
     m_has_control = false;
     m_desired_thrust = 50;
+    m_allstop_posted = false;
     //m_last_heading_time = MOOSTime();
 }
 
@@ -133,9 +134,9 @@ bool MarineMRAS::Iterate()
     Notify("NAV_ROT", m_current_ROT);
     Notify("NAV_HEADING_180", m_current_heading);
     Notify("DESIRED_HEADING_180", angle180(m_desired_heading));
+    m_allstop_posted = false;
   } else {
-    Notify("DESIRED_RUDDER", 0.0);
-    Notify("DESIRED_THRUST", 0.0);
+    PostAllStop();
   }
 
   AppCastingMOOSApp::PostReport();
@@ -308,8 +309,8 @@ void MarineMRAS::UpdateROT(double curr_time) {
       double ROT_stdev = sqrt(sq_sum / m_DiffHistory.size() - mean * mean);
 
       //MOOSTrace("Calculated Mean %f\n", mean);
-      //Added the +5 to account
-      if (fabs(curr_ROT - mean) <= (2 * ROT_stdev + 5))  {
+      //Added the +5 to account for small stdev
+      if (fabs(curr_ROT - m_DiffHistory.front()) <= (2 * ROT_stdev + 10))  {
         m_DiffHistory.push_front(curr_ROT);
         while(m_DiffHistory.size() > m_ROT_filter_len) {
           m_DiffHistory.pop_back();
@@ -332,13 +333,24 @@ void MarineMRAS::UpdateROT(double curr_time) {
     double diff = angle180(m_current_heading - m_previous_heading);
     double curr_ROT = diff / (curr_time - m_last_heading_time);
     //this is an arbitary threshold to eliminate noise from sim
-    if (fabs(curr_ROT - m_current_ROT) < 5) {
+    if (fabs(curr_ROT - m_current_ROT) < 10) {
       m_current_ROT = curr_ROT;
     }
 
     //Try limiting it for sim
     m_current_ROT = CourseChangeMRAS::TwoSidedLimit(m_current_ROT, m_max_ROT);
   }
+}
+
+void MarineMRAS::PostAllStop()
+{
+  if(m_allstop_posted)
+    return;
+
+  Notify("DESIRED_RUDDER", 0.0);
+  Notify("DESIRED_THRUST", 0.0);
+
+  m_allstop_posted = true;
 }
 
 

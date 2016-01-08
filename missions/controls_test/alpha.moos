@@ -54,7 +54,7 @@ ProcessConfig = pMarineMRAS
    ROTFilter = 3  // >= 1
 
    // Vessel Characteristics
-   RudderLimit = 100
+   RudderLimit = 45
    CruisingSpeed = 1.6 // m/s
    Length = 2 //m
    MaxROT = 40

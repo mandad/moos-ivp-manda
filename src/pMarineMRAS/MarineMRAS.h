@@ -23,6 +23,7 @@ class MarineMRAS : public AppCastingMOOSApp
    bool OnConnectToServer();
    bool OnStartUp();
    void UpdateROT(double curr_time);
+   void PostAllStop();
 
  protected: // Standard AppCastingMOOSApp function to overload 
    bool buildReport();
@@ -44,6 +45,7 @@ class MarineMRAS : public AppCastingMOOSApp
     double m_length;
     bool   m_decrease_adapt;
     double m_desired_thrust;
+    bool   m_allstop_posted;
 
  private: // State variables
     double m_desired_heading;

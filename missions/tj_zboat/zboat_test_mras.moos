@@ -213,6 +213,7 @@ ProcessConfig = uFldNodeBroker
   BRIDGE = src=NODE_MESSAGE_LOCAL, alias=NODE_MESSAGE
   BRIDGE = src=ZBOAT_PWM
   BRIDGE = src=SONAR_DEPTH_M
+  BRIDGE = src=DESIRED_RUDDER
 }
 
 ProcessConfig = pShare
