@@ -42,8 +42,8 @@ ProcessConfig = pMarineMRAS
 
    // Initial constant parameters
    K_Star = 1   //0.5-2
-   Tau_Star = 1
-   DampingRatio = 0.85
+   Tau_Star = 1.3
+   DampingRatio = 1
 
    //Adaptation parameters
    Beta = 0.01     //Speed of Kp adaptation

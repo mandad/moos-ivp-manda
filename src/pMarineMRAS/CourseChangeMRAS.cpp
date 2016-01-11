@@ -11,7 +11,7 @@
 #include <math.h>
 
 #define USE_SERIES_MODEL true
-#define LIMIT_ROT_INC false
+#define LIMIT_ROT_INC true
 #define RESET_THRESHOLD 5
 
 using namespace std;
@@ -106,7 +106,7 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
     } else {
         //Normal operation
         double dfDeltaT = dfTime - m_dfPreviousTime;
-        //DesiredHeading would be phi''r if using series limit model
+        //This includes both the series and parallel models
         UpdateModel(dfDesiredHeading, dfDeltaT);
         
         double dfe = m_dfModelHeading - dfMeasuredHeading;
@@ -290,6 +290,12 @@ void CourseChangeMRAS::UpdateModelTd(double dfDesiredHeading, double dfDeltaT) {
     //need to reference the PsiRefPP - dfModelHeading to angle180
     m_dfModelROT += ((m_dfKpm / m_dfTauM * (angle180(m_dfPsiRefPP - m_dfModelHeading)))
         - 1/m_dfTauM * m_dfModelROT) * dfDeltaT;
+}
+
+void CourseChangeMRAS::UpdateRudderModel(double dfDesiredRudder, double dfDeltaT) {
+    // Update a model of the actual rudder location
+    // This is needed for simple systems which do not have a sensor to provide this
+    //feedback
 }
 
 double CourseChangeMRAS::TwoSidedLimit(double dfNumToLimit, double dfLimit) {
