@@ -73,7 +73,7 @@ Behavior = BHV_ConstantHeading
 
    // Parameters specific to this behavior
    // ------------------------------------
-                heading = 180
+                heading = 0
               basewidth = 10        
                duration = 30         
               peakwidth = 10          
@@ -94,7 +94,7 @@ Behavior = BHV_ConstantHeading
 
    // Parameters specific to this behavior
    // ------------------------------------
-                heading = 0
+                heading = 90
               basewidth = 10        
                duration = 30       
               peakwidth = 10          
@@ -116,7 +116,7 @@ Behavior = BHV_ConstantHeading
 
    // Parameters specific to this behavior
    // ------------------------------------
-                heading = 90
+                heading = 270
               basewidth = 10        
                duration = 30        
               peakwidth = 10          

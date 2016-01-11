@@ -26,6 +26,7 @@ done
 #-------------------------------------------------------
 # 1 = Chincoteague, VA
 # 2 = Test at home
+# 3 = Field in The Hague, Norfolk
 if [ $SCENARIO = 1 ]; then
   #MOOS Stuff
   START_POS="3000,8240"
@@ -56,7 +57,7 @@ if [ $SCENARIO = 2 ]; then
   LONG_ORIGIN=-76.3003448
   TIFF_FILE=data/Norfolk_Chart.tif
   TIFF_FILE_B=data/Norfolk_Aerial.tif
-  PAN_X=--322
+  PAN_X=-322
   PAN_Y=-284
   ZOOM=1.4
   #In this case, the shore VM
@@ -70,7 +71,7 @@ if [ $SCENARIO = 2 ]; then
   HOME_INNER_RADIUS=2
   HOME_OUTER_RADIUS=5
   SURVEY_SPEED=1.6
-  SIMULATION=FALSE
+  SIMULATION=TRUE
 fi
 
 if [ $SCENARIO = 3 ]; then
@@ -80,7 +81,7 @@ if [ $SCENARIO = 3 ]; then
   LONG_ORIGIN=-76.3003448
   TIFF_FILE=data/Norfolk_Chart.tif
   TIFF_FILE_B=data/Norfolk_Aerial.tif
-  PAN_X=--322
+  PAN_X=-322
   PAN_Y=-284
   ZOOM=1.4
   #In this case, the shore VM
