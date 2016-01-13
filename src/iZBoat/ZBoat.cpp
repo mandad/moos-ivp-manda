@@ -284,6 +284,9 @@ void ZBoat::GeneratePWMMessage()
   if (pRudderSet->IsFresh()) {
     dfRudderSet = pRudderSet->GetDoubleVal();
   }
+
+  MOOSAbsLimit(dfRudderSet, m_dfMaxRudder);
+  MOOSAbsLimit(dfThrottleSet, m_dfMaxThrottle);
   
   double dfScaledThrottle = 1.5 - (dfThrottleSet / m_dfMaxThrottle) * 0.5;
   double dfScaledRudder = 1.5 + (dfRudderSet / m_dfMaxRudder) * 0.3;
