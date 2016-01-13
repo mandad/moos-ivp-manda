@@ -82,6 +82,7 @@ public:
     double m_dfPsiRefPP;
     double m_dfF;
     double m_dfModelRudder;
+    double m_dfx2;
     
     double m_dfRudderPos;
     double m_dfRudderSpeed;

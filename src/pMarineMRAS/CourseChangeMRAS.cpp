@@ -11,7 +11,7 @@
 #include <math.h>
 
 #define USE_SERIES_MODEL true
-#define LIMIT_ROT_INC true
+#define LIMIT_ROT_INC false
 #define RESET_THRESHOLD 5
 
 using namespace std;
@@ -110,8 +110,8 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
         //Normal operation
         double dfDeltaT = dfTime - m_dfPreviousTime;
         //This includes both the series and parallel models
-        UpdateModel(dfDesiredHeading, dfDeltaT);
         UpdateRudderModel(dfDeltaT);
+        UpdateModel(dfDesiredHeading, dfDeltaT);
 
         double dfe = m_dfModelHeading - dfMeasuredHeading;
         dfe = angle180(dfe);
@@ -157,12 +157,12 @@ bool CourseChangeMRAS::NewHeading(double dfSpeed) {
     // Try to avoid problems with really small speeds since it is in the 
     // denominator of the constants
     if (dfSpeed < 0.1) {
-        //If we aren't resetting, seed it higher
-        if (RESET_THRESHOLD >= 180) {
-            dfSpeed = m_dfCruisingSpeed;
-        } else {
+        //If we aren't resetting, seed it higher - already done in calling code
+        // if (RESET_THRESHOLD >= 180) {
+        //     dfSpeed = m_dfCruisingSpeed;
+        // } else {
             dfSpeed = 0.1;
-        }
+        // }
     }
 
     //from literature:  
@@ -203,6 +203,7 @@ void CourseChangeMRAS::ResetModel(double dfHeading, double dfROT) {
     m_dfSeriesROT = dfROT;
     m_dfPsiRefPP = dfHeading;
     m_dfPsiRefP = dfHeading;
+    m_dfx2 = 0;
 
     //Parallel Model
     m_dfModelHeading = dfHeading;
@@ -261,26 +262,42 @@ void CourseChangeMRAS::UpdateModelTd(double dfDesiredHeading, double dfDeltaT) {
     //and rate of turn from mechanical or user set limits
 
 #if USE_SERIES_MODEL
-    m_dfSeriesHeading += m_dfSeriesROT * dfDeltaT;
-    m_dfSeriesHeading = angle180(m_dfSeriesHeading);
-
-
-
+    double dfTauDelta = fabs(m_dfModelRudder - 
+        TwoSidedLimit(m_dfRudderOut, m_dfRudderLimit)) / m_dfRudderSpeed;
     m_dfF = 1;
     if (fabs(m_dfRudderOut) > m_dfRudderLimit) {
+        //The rudder out is not limited here since this is a reduction based on 
+        //it exceeding the actual limit
         m_dfF = m_dfRudderLimit / fabs(m_dfRudderOut);
     }
+    //Cannot make f < 1 (cannot divide by a fraction)
+    if (dfTauDelta > 1) {
+        m_dfF /= dfTauDelta;
+    } else {
+        dfTauDelta = 1;
+    }
+
     //We split these variables out because they are used to calculate inputs to
     //the parallel model and PID controller
     double x3 = TwoSidedLimit(angle180(dfDesiredHeading - m_dfSeriesHeading) 
         * m_dfKpm, m_dfMaxROT);
-    double x2_dot = m_dfF * x3;
-    m_dfSeriesROT += (x2_dot / m_dfTauM  
-        - 1/m_dfTauM * m_dfSeriesROT) * dfDeltaT;
+    double x2_dot = -1/dfTauDelta * m_dfx2 + m_dfF * x3;
+    // Phi_dot_dot = x1_dot
+    double Phi_dot_dot = -1/m_dfTauM * m_dfModelROT + 1/m_dfTauM * m_dfx2;
+
+    //Update the state variables
+    m_dfSeriesHeading += m_dfSeriesROT * dfDeltaT;
+    m_dfSeriesHeading = angle180(m_dfSeriesHeading);
+    m_dfSeriesROT += Phi_dot_dot * dfDeltaT;
+    m_dfx2 += x2_dot * dfDeltaT;
+
+    MOOSTrace("Series Heading: %0.2f  Series ROT: %0.2f  x2: %0.2f\n", 
+        m_dfSeriesHeading, m_dfSeriesROT, m_dfx2);
+
     //Input to PID as desired heading
     m_dfPsiRefP = angle180(x3 * 1/m_dfKpm + m_dfSeriesHeading);
     //Input to parallel model as desired heading
-    m_dfPsiRefPP = angle180(x2_dot * 1/m_dfKpm + m_dfSeriesHeading);
+    m_dfPsiRefPP = angle180(m_dfx2 * 1/m_dfKpm + m_dfSeriesHeading);
 #else
     m_dfPsiRefPP = dfDesiredHeading;
     m_dfPsiRefP = dfDesiredHeading;
@@ -302,12 +319,13 @@ void CourseChangeMRAS::UpdateRudderModel(double dfDeltaT) {
     //feedback
     double dfRudderOut = TwoSidedLimit(m_dfRudderOut, m_dfRudderLimit);
     double dfRudderInc = dfDeltaT * m_dfRudderSpeed;
-    double dfRudderDiff = m_dfModelRudder - dfRudderOut;
+    double dfRudderDiff = dfRudderOut - m_dfModelRudder;
     if (fabs(dfRudderDiff) > dfRudderInc) {
-        m_dfModelRudder = copysign(dfRudderInc, dfRudderDiff);
+        m_dfModelRudder += copysign(dfRudderInc, dfRudderDiff);
     } else {
         m_dfModelRudder = dfRudderOut;
     }
+    MOOSTrace("Model Rudder: %0.2f\n", m_dfModelRudder);
 }
 
 double CourseChangeMRAS::TwoSidedLimit(double dfNumToLimit, double dfLimit) {
@@ -342,5 +360,5 @@ void CourseChangeMRAS::GetDebugVariables(double * vars) {
     vars[7] = m_dfSeriesROT;
     vars[8] = m_dfPsiRefP;
     vars[9] = m_dfPsiRefPP;
-    vars[10] = m_dfF;
+    vars[10] = m_dfModelRudder;
 }

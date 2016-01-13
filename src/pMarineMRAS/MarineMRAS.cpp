@@ -142,7 +142,7 @@ bool MarineMRAS::Iterate()
     Notify("MRAS_SERIES_MODEL_ROT", vars[7]);
     Notify("MRAS_PSI_REF_P", vars[8]);
     Notify("MRAS_PSI_REF_PP", vars[9]);
-    Notify("MRAS_SERIES_F", vars[10]);
+    Notify("MRAS_MODEL_RUDDER", vars[10]);
     Notify("NAV_ROT", m_current_ROT);
     Notify("NAV_HEADING_180", m_current_heading);
     Notify("DESIRED_HEADING_180", angle180(m_desired_heading));

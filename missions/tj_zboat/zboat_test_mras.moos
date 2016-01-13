@@ -168,6 +168,7 @@ ProcessConfig = pMarineMRAS
 
    // Vessel Characteristics
    RudderLimit = 45
+   RudderSpeed = 30 // deg/s
    CruisingSpeed = 1.6 // m/s
    Length = 2 //m
    MaxROT = 40
@@ -305,7 +306,7 @@ ProcessConfig = pLogger
   Log = MRAS_SERIES_MODEL_ROT @ 0
   Log = MRAS_PSI_REF_P @ 0
   Log = MRAS_PSI_REF_PP @ 0
-  Log = MRAS_SERIES_F @ 0
+  Log = MRAS_MODEL_RUDDER @ 0
   Log = NAV_SPEED @ 0
   Log = DESIRED_SPEED @ 0
   Log = DESIRED_THRUST @ 0
