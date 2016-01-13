@@ -54,8 +54,8 @@ ProcessConfig = ANTLER
 
 ProcessConfig = iZBoat
 {
-  AppTick   = 5
-  CommsTick = 5
+  AppTick   = 10
+  CommsTick = 10
 
   // Serial port configuration
   PORT = /dev/ttyUSB0
@@ -164,14 +164,14 @@ ProcessConfig = pMarineMRAS
    Gamma = 0.001    //Speed of Ki adaptation
    Xi = 1   // <= 1, not used if DecreaseAdaptation = false
    DecreaseAdaptation = false
-   ROTFilter = 3  // >= 1
+   ROTFilter = 5  // >= 1
 
    // Vessel Characteristics
    RudderLimit = 45
    RudderSpeed = 30 // deg/s
    CruisingSpeed = 1.6 // m/s
    Length = 2 //m
-   MaxROT = 40
+   MaxROT = 60
 
    //Speed settings (use one or the other)
    //ThrustPercent = 50
@@ -182,10 +182,6 @@ ProcessConfig = pMarineMRAS
 //==============================================
 // Standard Processes
 //==============================================
-
-//------------------------------------------
-// Find the shoreside and share variables
-//------------------------------------------
 
 //------------------------------------------
 // pMarinePID config block
@@ -232,6 +228,10 @@ ProcessConfig = pHostInfo
   //External (4G) IP of boat network
   DEFAULT_HOSTIP_FORCE = $(BOAT_MODEM_IP)
 }
+
+//------------------------------------------
+// Find the shoreside and share variables
+//------------------------------------------
 
 ProcessConfig = uFldNodeBroker
 {

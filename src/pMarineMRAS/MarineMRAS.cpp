@@ -59,7 +59,7 @@ bool MarineMRAS::OnNewMail(MOOSMSG_LIST &NewMail)
 #if 0 // Keep these around just for template
     string comm  = msg.GetCommunity();
     double dval  = msg.GetDouble();
-    string sval  = msg.GetString(); 
+    string sval  = msg.GetString();
     string msrc  = msg.GetSource();
     double mtime = msg.GetTime();
     bool   mdbl  = msg.IsDouble();
@@ -70,7 +70,7 @@ bool MarineMRAS::OnNewMail(MOOSMSG_LIST &NewMail)
       double curr_time = msg.GetTime();
       double cur_head = msg.GetDouble();
       m_current_heading = angle180(cur_head);
-      
+
       UpdateROT(curr_time);
 
       m_previous_heading = m_current_heading;
@@ -93,7 +93,7 @@ bool MarineMRAS::OnNewMail(MOOSMSG_LIST &NewMail)
      else if(key != "APPCAST_REQ") // handle by AppCastingMOOSApp
        reportRunWarning("Unhandled Mail: " + key);
    }
-	
+
    return(true);
 }
 
@@ -117,7 +117,7 @@ bool MarineMRAS::Iterate()
   if (m_has_control) {
     double desired_rudder = 0;
     if (!m_first_heading) {
-      desired_rudder = m_CourseControl.Run(m_desired_heading, m_current_heading, 
+      desired_rudder = m_CourseControl.Run(m_desired_heading, m_current_heading,
         m_current_ROT, m_current_speed, m_last_heading_time);
     }
     Notify("DESIRED_RUDDER", desired_rudder);
@@ -125,7 +125,7 @@ bool MarineMRAS::Iterate()
     if(m_speed_factor != 0) {
       m_desired_thrust = m_desired_speed * m_speed_factor;
     }
-    m_desired_thrust = CourseChangeMRAS::TwoSidedLimit(m_desired_thrust, 
+    m_desired_thrust = CourseChangeMRAS::TwoSidedLimit(m_desired_thrust,
       m_max_thrust);
     Notify("DESIRED_THRUST", m_desired_thrust);
 
@@ -247,13 +247,13 @@ bool MarineMRAS::OnStartUp()
       reportUnhandledConfigWarning(orig);
 
   }
-  
+
   //Initialize the Control system
-  m_CourseControl.SetParameters(m_k_star, m_tau_star, m_z, m_beta, 
-        m_alpha, m_gamma, m_xi, m_rudder_limit, m_cruising_speed, m_length, 
+  m_CourseControl.SetParameters(m_k_star, m_tau_star, m_z, m_beta,
+        m_alpha, m_gamma, m_xi, m_rudder_limit, m_cruising_speed, m_length,
         m_max_ROT, m_decrease_adapt, m_rudder_speed);
 
-  registerVariables();	
+  registerVariables();
   return(true);
 }
 
@@ -275,7 +275,7 @@ void MarineMRAS::registerVariables()
 //------------------------------------------------------------
 // Procedure: buildReport()
 
-bool MarineMRAS::buildReport() 
+bool MarineMRAS::buildReport()
 {
   m_msgs << "============================================ \n";
   m_msgs << "File: pMarineMRAS                            \n";
@@ -316,7 +316,7 @@ void MarineMRAS::UpdateROT(double curr_time) {
     double diff = angle180(m_current_heading - m_previous_heading);
     double curr_ROT = diff / (curr_time - m_last_heading_time);
     //MOOSTrace("Curr ROT: %f\n", curr_ROT);
-    
+
     //Find the mean and stdev
     if (m_DiffHistory.size() >= 2) {
       double sum = 0;
@@ -374,7 +374,3 @@ void MarineMRAS::PostAllStop()
 
   m_allstop_posted = true;
 }
-
-
-
-

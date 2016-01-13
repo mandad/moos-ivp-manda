@@ -22,13 +22,13 @@ CourseChangeMRAS::CourseChangeMRAS() {
     m_dfRudderOut = 0;
     m_dfF = 1;
     m_dfMaxROTInc = 6;
-    m_dfRudderPos = 0;
+    m_dfModelRudder = 0;
 }
 
-CourseChangeMRAS::CourseChangeMRAS(double dfKStar, double dfTauStar, double dfZ, 
-    double dfBeta, double dfAlpha, double dfGamma, double dfXi, 
-    double dfRudderLimit, double dfCruisingSpeed, double dfShipLength, 
-    double dfMaxROT, bool bDecreaseAdapt) 
+CourseChangeMRAS::CourseChangeMRAS(double dfKStar, double dfTauStar, double dfZ,
+    double dfBeta, double dfAlpha, double dfGamma, double dfXi,
+    double dfRudderLimit, double dfCruisingSpeed, double dfShipLength,
+    double dfMaxROT, bool bDecreaseAdapt)
 {
     m_dfKStar = dfKStar;
     m_dfTauStar = dfTauStar;
@@ -48,16 +48,16 @@ CourseChangeMRAS::CourseChangeMRAS(double dfKStar, double dfTauStar, double dfZ,
     m_dfP12 = m_dfTauM / m_dfKpm;
     m_dfP22 = m_dfTauM * m_dfTauM / m_dfKpm + m_dfTauM;
     m_dfRudderOut = 0;
-    m_dfRudderPos = 0;
+    m_dfModelRudder = 0;
 
     m_lIterations = 0;
     m_bFirstRun = true;
     m_bParametersSet = true;
 }
 
-void CourseChangeMRAS::SetParameters(double dfKStar, double dfTauStar, double dfZ, 
-    double dfBeta, double dfAlpha, double dfGamma, double dfXi, 
-    double dfRudderLimit, double dfCruisingSpeed, double dfShipLength, 
+void CourseChangeMRAS::SetParameters(double dfKStar, double dfTauStar, double dfZ,
+    double dfBeta, double dfAlpha, double dfGamma, double dfXi,
+    double dfRudderLimit, double dfCruisingSpeed, double dfShipLength,
     double dfMaxROT, bool bDecreaseAdapt, double dfRudderSpeed)
 {
     m_dfKStar = dfKStar;
@@ -83,7 +83,7 @@ void CourseChangeMRAS::SetParameters(double dfKStar, double dfTauStar, double df
     m_bParametersSet = true;
 }
 
-double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading, 
+double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
     double dfMeasuredROT, double dfSpeed, double dfTime)
 {
     dfMeasuredHeading = angle180(dfMeasuredHeading);
@@ -91,7 +91,7 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
 
     //m_dfRudderOut = 0;
 
-    if (m_bFirstRun || (abs(angle180(dfDesiredHeading - m_dfPreviousHeading)) 
+    if (m_bFirstRun || (abs(angle180(dfDesiredHeading - m_dfPreviousHeading))
         > RESET_THRESHOLD)) {
         //Initial with no adaptation
         if (m_bFirstRun) {
@@ -122,7 +122,7 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
         double dfTimeReduceFactor = 1;
         if (m_bDecreaseAdapt) {
             dfTimeReduceFactor = m_dfXi / (1 + dfTime - m_dfCourseChangeTime);
-        } 
+        }
         //If using series model, desired heading should be Phi''r
         m_dfKp += m_dfBeta * dfTimeReduceFactor * dfErrorFactor *
             (angle180(m_dfPsiRefPP - dfMeasuredHeading)) * dfDeltaT;
@@ -131,7 +131,7 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
         else if (m_dfKp > 5)
              m_dfKp = 5;
 
-        m_dfKd -= m_dfAlpha * dfTimeReduceFactor * dfErrorFactor * dfMeasuredROT 
+        m_dfKd -= m_dfAlpha * dfTimeReduceFactor * dfErrorFactor * dfMeasuredROT
             * dfDeltaT;
         if (m_dfKd < 0)
             m_dfKd = 0;
@@ -154,7 +154,7 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
 }
 
 bool CourseChangeMRAS::NewHeading(double dfSpeed) {
-    // Try to avoid problems with really small speeds since it is in the 
+    // Try to avoid problems with really small speeds since it is in the
     // denominator of the constants
     if (dfSpeed < 0.1) {
         //If we aren't resetting, seed it higher - already done in calling code
@@ -165,7 +165,7 @@ bool CourseChangeMRAS::NewHeading(double dfSpeed) {
         // }
     }
 
-    //from literature:  
+    //from literature:
     //m_dfKp0 = 2.5 * m_dfCruisingSpeed / dfSpeed;
     m_dfKp0 = 2.5 * m_dfCruisingSpeed / dfSpeed;
     if (m_dfKp0 > 5) {
@@ -173,7 +173,7 @@ bool CourseChangeMRAS::NewHeading(double dfSpeed) {
     }
 
     //This equation is incorrect in Van Amerongen
-    m_dfKd0 = (m_dfShipLength * 2 * m_dfZ * sqrt(m_dfKp0 * m_dfKStar * m_dfTauStar) - 1) / 
+    m_dfKd0 = (m_dfShipLength * 2 * m_dfZ * sqrt(m_dfKp0 * m_dfKStar * m_dfTauStar) - 1) /
         (dfSpeed * m_dfKStar);
     if (m_dfKd0 < m_dfKp0) {
         m_dfKd0 = m_dfKp0;
@@ -225,10 +225,10 @@ void CourseChangeMRAS::UpdateModel(double dfDesiredHeading, double dfDeltaT) {
     }
     //We split these variables out because they are used to calculate inputs to
     //the parallel model and PID controller
-    double dfROTModDiff = TwoSidedLimit(angle180(dfDesiredHeading - m_dfSeriesHeading) 
+    double dfROTModDiff = TwoSidedLimit(angle180(dfDesiredHeading - m_dfSeriesHeading)
         * m_dfKpm, m_dfMaxROT);
     double dfFModDiff = m_dfF * dfROTModDiff;
-    m_dfSeriesROT += (dfFModDiff / m_dfTauM  
+    m_dfSeriesROT += (dfFModDiff / m_dfTauM
         - 1/m_dfTauM * m_dfSeriesROT) * dfDeltaT;
     //Input to PID as desired heading
     m_dfPsiRefP = angle180(dfROTModDiff * 1/m_dfKpm + m_dfSeriesHeading);
@@ -250,7 +250,7 @@ void CourseChangeMRAS::UpdateModel(double dfDesiredHeading, double dfDeltaT) {
 #if LIMIT_ROT_INC
     if (fabs(dfPsiMPP) > m_dfMaxROTInc) {
         dfPsiMPP = TwoSidedLimit(dfPsiMPP, m_dfMaxROTInc);
-    } 
+    }
 #endif
     m_dfModelROT += dfPsiMPP * dfDeltaT;
 }
@@ -262,11 +262,11 @@ void CourseChangeMRAS::UpdateModelTd(double dfDesiredHeading, double dfDeltaT) {
     //and rate of turn from mechanical or user set limits
 
 #if USE_SERIES_MODEL
-    double dfTauDelta = fabs(m_dfModelRudder - 
+    double dfTauDelta = fabs(m_dfModelRudder -
         TwoSidedLimit(m_dfRudderOut, m_dfRudderLimit)) / m_dfRudderSpeed;
     m_dfF = 1;
     if (fabs(m_dfRudderOut) > m_dfRudderLimit) {
-        //The rudder out is not limited here since this is a reduction based on 
+        //The rudder out is not limited here since this is a reduction based on
         //it exceeding the actual limit
         m_dfF = m_dfRudderLimit / fabs(m_dfRudderOut);
     }
@@ -279,7 +279,7 @@ void CourseChangeMRAS::UpdateModelTd(double dfDesiredHeading, double dfDeltaT) {
 
     //We split these variables out because they are used to calculate inputs to
     //the parallel model and PID controller
-    double x3 = TwoSidedLimit(angle180(dfDesiredHeading - m_dfSeriesHeading) 
+    double x3 = TwoSidedLimit(angle180(dfDesiredHeading - m_dfSeriesHeading)
         * m_dfKpm, m_dfMaxROT);
     double x2_dot = -1/dfTauDelta * m_dfx2 + m_dfF * x3;
     // Phi_dot_dot = x1_dot
@@ -291,7 +291,7 @@ void CourseChangeMRAS::UpdateModelTd(double dfDesiredHeading, double dfDeltaT) {
     m_dfSeriesROT += Phi_dot_dot * dfDeltaT;
     m_dfx2 += x2_dot * dfDeltaT;
 
-    MOOSTrace("Series Heading: %0.2f  Series ROT: %0.2f  x2: %0.2f\n", 
+    MOOSTrace("Series Heading: %0.2f  Series ROT: %0.2f  x2: %0.2f\n",
         m_dfSeriesHeading, m_dfSeriesROT, m_dfx2);
 
     //Input to PID as desired heading
@@ -344,7 +344,7 @@ string CourseChangeMRAS::GetStatusInfo() {
 
 string CourseChangeMRAS::GetDebugInfo() {
     stringstream info;
-    info << m_dfPsiRefPP << "|" << m_dfPsiRefP << "|" << m_dfRudderOut << "|" 
+    info << m_dfPsiRefPP << "|" << m_dfPsiRefP << "|" << m_dfRudderOut << "|"
     << m_dfSeriesHeading << "|" << m_dfModelROT << "|" << m_dfSeriesROT;
     return info.str();
 }
