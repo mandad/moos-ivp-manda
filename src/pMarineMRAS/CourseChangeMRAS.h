@@ -23,12 +23,12 @@ public:
     void SetParameters(double dfKStar, double dfTauStar, double dfZ, 
         double dfBeta, double dfAlpha, double dfGamma, double dfXi, 
         double dfRudderLimit, double dfCruisingSpeed, double dfShipLength, 
-        double dfMaxROT, bool bDecreaseAdapt);
+        double dfMaxROT, bool bDecreaseAdapt, double dfRudderSpeed);
     bool NewHeading(double dfSpeed);
     void ResetModel(double dfHeading, double dfROT);
     void UpdateModel(double dfDesiredHeading, double dfDeltaT);
     void UpdateModelTd(double dfDesiredHeading, double dfDeltaT);
-    void UpdateRudderModel(double dfDesiredRudder, double dfDeltaT);
+    void UpdateRudderModel(double dfDeltaT);
     static double TwoSidedLimit(double dfNumToLimit, double dfLimit);
     std::string GetStatusInfo();
     std::string GetDebugInfo();
@@ -81,7 +81,10 @@ public:
     double m_dfPsiRefP;
     double m_dfPsiRefPP;
     double m_dfF;
+    double m_dfModelRudder;
     
+    double m_dfRudderPos;
+    double m_dfRudderSpeed;
 };
 
 #endif

@@ -33,6 +33,7 @@ MarineMRAS::MarineMRAS()
     m_decrease_adapt = true;
     m_speed_factor   = 0;
     m_max_thrust = 100;
+    m_rudder_speed = 15;
 
     m_first_heading = true;
     m_current_ROT = 0;
@@ -237,6 +238,9 @@ bool MarineMRAS::OnStartUp()
     } else if(param == "MAXTHRUST") {
       m_max_thrust = dval;
       handled = true;
+    } else if(param == "RUDDERSPEED") {
+      m_rudder_speed = dval;
+      handled = true;
     }
 
     if(!handled)
@@ -247,7 +251,7 @@ bool MarineMRAS::OnStartUp()
   //Initialize the Control system
   m_CourseControl.SetParameters(m_k_star, m_tau_star, m_z, m_beta, 
         m_alpha, m_gamma, m_xi, m_rudder_limit, m_cruising_speed, m_length, 
-        m_max_ROT, m_decrease_adapt);
+        m_max_ROT, m_decrease_adapt, m_rudder_speed);
 
   registerVariables();	
   return(true);

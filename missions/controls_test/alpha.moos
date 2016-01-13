@@ -54,7 +54,8 @@ ProcessConfig = pMarineMRAS
    ROTFilter = 0  // >= 1
 
    // Vessel Characteristics
-   RudderLimit = 100
+   RudderLimit = 100  //should be deg (but Sim uses 100 as limit)
+   RudderSpeed = 15 // deg/s
    CruisingSpeed = 1.6 // m/s
    Length = 2 //m
    MaxROT = 40

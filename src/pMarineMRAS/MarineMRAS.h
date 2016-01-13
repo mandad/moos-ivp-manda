@@ -48,6 +48,7 @@ class MarineMRAS : public AppCastingMOOSApp
     bool   m_allstop_posted;
     double m_speed_factor;
     double m_max_thrust;
+    double m_rudder_speed;
 
  private: // State variables
     double m_desired_heading;

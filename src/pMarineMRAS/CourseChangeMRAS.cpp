@@ -22,6 +22,7 @@ CourseChangeMRAS::CourseChangeMRAS() {
     m_dfRudderOut = 0;
     m_dfF = 1;
     m_dfMaxROTInc = 6;
+    m_dfRudderPos = 0;
 }
 
 CourseChangeMRAS::CourseChangeMRAS(double dfKStar, double dfTauStar, double dfZ, 
@@ -47,6 +48,7 @@ CourseChangeMRAS::CourseChangeMRAS(double dfKStar, double dfTauStar, double dfZ,
     m_dfP12 = m_dfTauM / m_dfKpm;
     m_dfP22 = m_dfTauM * m_dfTauM / m_dfKpm + m_dfTauM;
     m_dfRudderOut = 0;
+    m_dfRudderPos = 0;
 
     m_lIterations = 0;
     m_bFirstRun = true;
@@ -56,7 +58,7 @@ CourseChangeMRAS::CourseChangeMRAS(double dfKStar, double dfTauStar, double dfZ,
 void CourseChangeMRAS::SetParameters(double dfKStar, double dfTauStar, double dfZ, 
     double dfBeta, double dfAlpha, double dfGamma, double dfXi, 
     double dfRudderLimit, double dfCruisingSpeed, double dfShipLength, 
-    double dfMaxROT, bool bDecreaseAdapt)
+    double dfMaxROT, bool bDecreaseAdapt, double dfRudderSpeed)
 {
     m_dfKStar = dfKStar;
     m_dfTauStar = dfTauStar;
@@ -70,6 +72,7 @@ void CourseChangeMRAS::SetParameters(double dfKStar, double dfTauStar, double df
     m_dfCruisingSpeed = dfCruisingSpeed;
     m_dfShipLength = dfShipLength;
     m_bDecreaseAdapt = bDecreaseAdapt;
+    m_dfRudderSpeed = dfRudderSpeed;
 
     m_dfTauM = 0.5 * m_dfTauStar * m_dfShipLength / m_dfCruisingSpeed;
     m_dfKpm = 1 / (4 * m_dfZ * m_dfZ * m_dfTauM);
@@ -108,7 +111,8 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
         double dfDeltaT = dfTime - m_dfPreviousTime;
         //This includes both the series and parallel models
         UpdateModel(dfDesiredHeading, dfDeltaT);
-        
+        UpdateRudderModel(dfDeltaT);
+
         double dfe = m_dfModelHeading - dfMeasuredHeading;
         dfe = angle180(dfe);
         double dfeDot = m_dfModelROT - dfMeasuredROT;
@@ -292,10 +296,18 @@ void CourseChangeMRAS::UpdateModelTd(double dfDesiredHeading, double dfDeltaT) {
         - 1/m_dfTauM * m_dfModelROT) * dfDeltaT;
 }
 
-void CourseChangeMRAS::UpdateRudderModel(double dfDesiredRudder, double dfDeltaT) {
+void CourseChangeMRAS::UpdateRudderModel(double dfDeltaT) {
     // Update a model of the actual rudder location
     // This is needed for simple systems which do not have a sensor to provide this
     //feedback
+    double dfRudderOut = TwoSidedLimit(m_dfRudderOut, m_dfRudderLimit);
+    double dfRudderInc = dfDeltaT * m_dfRudderSpeed;
+    double dfRudderDiff = m_dfModelRudder - dfRudderOut;
+    if (fabs(dfRudderDiff) > dfRudderInc) {
+        m_dfModelRudder = copysign(dfRudderInc, dfRudderDiff);
+    } else {
+        m_dfModelRudder = dfRudderOut;
+    }
 }
 
 double CourseChangeMRAS::TwoSidedLimit(double dfNumToLimit, double dfLimit) {
