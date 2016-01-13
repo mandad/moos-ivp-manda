@@ -13,6 +13,7 @@
 #define USE_SERIES_MODEL true
 #define LIMIT_ROT_INC false
 #define RESET_THRESHOLD 5
+#define KP_LIMIT 2.5
 
 using namespace std;
 
@@ -128,8 +129,8 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
             (angle180(m_dfPsiRefPP - dfMeasuredHeading)) * dfDeltaT;
         if (m_dfKp < 0)
             m_dfKp = 0;
-        else if (m_dfKp > 5)
-             m_dfKp = 5;
+        else if (m_dfKp > KP_LIMIT)
+             m_dfKp = KP_LIMIT;
 
         m_dfKd -= m_dfAlpha * dfTimeReduceFactor * dfErrorFactor * dfMeasuredROT
             * dfDeltaT;
@@ -167,9 +168,9 @@ bool CourseChangeMRAS::NewHeading(double dfSpeed) {
 
     //from literature:
     //m_dfKp0 = 2.5 * m_dfCruisingSpeed / dfSpeed;
-    m_dfKp0 = 2.5 * m_dfCruisingSpeed / dfSpeed;
-    if (m_dfKp0 > 5) {
-        m_dfKp0 = 5;
+    m_dfKp0 = 1.0 * m_dfCruisingSpeed / dfSpeed;
+    if (m_dfKp0 > KP_LIMIT) {
+        m_dfKp0 = KP_LIMIT;
     }
 
     //This equation is incorrect in Van Amerongen

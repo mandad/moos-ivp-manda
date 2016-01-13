@@ -23,7 +23,7 @@ SET MODE = INPLACE {
 
 //----------------------------------------------
 //Behavior = BHV_Waypoint
-//{ 
+//{
 //  name      = waypt_survey
 //  pwt       = 100
 //  condition = MODE == SURVEY
@@ -63,8 +63,8 @@ Behavior = BHV_ConstantHeading
 {
    // General Behavior Parameters
    // ---------------------------
-   name         = const_hdg1            
-   pwt          = 100                  
+   name         = const_hdg1
+   pwt          = 100
    condition = MODE == SURVEY
    condition = SEQ = 1
    endflag = SEQ = 2
@@ -74,18 +74,18 @@ Behavior = BHV_ConstantHeading
    // Parameters specific to this behavior
    // ------------------------------------
                 heading = 0
-              basewidth = 10        
-               duration = 30         
-              peakwidth = 10          
-            summitdelta = 25           
+              basewidth = 10
+               duration = 45
+              peakwidth = 10
+            summitdelta = 25
 }
 
 Behavior = BHV_ConstantHeading
 {
    // General Behavior Parameters
    // ---------------------------
-   name         = const_hdg2         
-   pwt          = 100                  
+   name         = const_hdg2
+   pwt          = 100
    condition = MODE == SURVEY
    condition = SEQ = 2
    endflag = SEQ = 3
@@ -95,18 +95,18 @@ Behavior = BHV_ConstantHeading
    // Parameters specific to this behavior
    // ------------------------------------
                 heading = 90
-              basewidth = 10        
-               duration = 30       
-              peakwidth = 10          
-            summitdelta = 25           
+              basewidth = 10
+               duration = 30
+              peakwidth = 10
+            summitdelta = 25
 }
 
 Behavior = BHV_ConstantHeading
 {
    // General Behavior Parameters
    // ---------------------------
-   name         = const_hdg3         
-   pwt          = 100                  
+   name         = const_hdg3
+   pwt          = 100
    condition = MODE == SURVEY
    condition = SEQ = 3
    endflag = SEQ = 1
@@ -117,10 +117,10 @@ Behavior = BHV_ConstantHeading
    // Parameters specific to this behavior
    // ------------------------------------
                 heading = 270
-              basewidth = 10        
-               duration = 30        
-              peakwidth = 10          
-            summitdelta = 25           
+              basewidth = 10
+               duration = 30
+              peakwidth = 10
+            summitdelta = 25
 }
 
 Behavior = BHV_ConstantSpeed
@@ -135,11 +135,11 @@ Behavior = BHV_ConstantSpeed
 
    // Parameters specific to this behavior
    // ------------------------------------
-            basewidth = 0.2         
+            basewidth = 0.2
              duration = no-time-limit
                 speed = 1.6
-            peakwidth = 0            
-          summitdelta = 0            
+            peakwidth = 0.5
+          summitdelta = 0.2
  }
 
 Behavior = BHV_StationKeep
@@ -156,8 +156,8 @@ Behavior = BHV_StationKeep
    // ------------------------------------
       center_activate = false   // default
    hibernation_radius = -1      // default
-         inner_radius = $(HOME_INNER_RADIUS)     
-         outer_radius = $(HOME_OUTER_RADIUS)     
+         inner_radius = $(HOME_INNER_RADIUS)
+         outer_radius = $(HOME_OUTER_RADIUS)
          outer_speed  = 1     // default
        transit_speed  = 1.6
            station_pt = $(HOME_POS)     // default
@@ -198,4 +198,3 @@ Behavior = BHV_StationKeep
          visual_hints = label_color  = light_blue       // default
          visual_hints = vertex_color = red         // default
 }
-
