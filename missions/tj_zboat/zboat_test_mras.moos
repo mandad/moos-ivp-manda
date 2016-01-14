@@ -144,8 +144,8 @@ ProcessConfig = pEchoVar
   echo_latest_only = true
 
   //These are used with pMarinePID to maintain compatibility w/ graphing
-  //echo = NAV_HEADING          ->  NAV_HEADING_180
-  //echo = DESIRED_HEADING          ->  DESIRED_HEADING_180
+  echo = NAV_HEADING          ->  NAV_HEADING_180
+  echo = DESIRED_HEADING          ->  DESIRED_HEADING_180
 }
 
 ProcessConfig = pMarineMRAS
@@ -156,15 +156,15 @@ ProcessConfig = pMarineMRAS
    // Initial constant parameters
    K_Star = 1.5   //0.5-2
    Tau_Star = 0.3
-   DampingRatio = 0.9
+   DampingRatio = 0.8
 
    //Adaptation parameters
    Beta = 0.001     //Speed of Kp adaptation
    Alpha = 0.001    //Speed of Kd adaptation
    Gamma = 0.01    //Speed of Ki adaptation
    Xi = 0.9   // <= 1, not used if DecreaseAdaptation = false
-   DecreaseAdaptation = false
-   ROTFilter = 3  // >= 1
+   DecreaseAdaptation = true
+   ROTFilter = 4  // >= 1
 
    // Vessel Characteristics
    RudderLimit = 45
@@ -364,6 +364,7 @@ ProcessConfig = pHelmIvP
   ivp_behavior_dir = /home/ubuntu/moos-ivp-emily
 
   behaviors  = targ_zboat_statichead.bhv
+  //behaviors  = targ_zboat_lines.bhv
   domain     = course:0:359:360
   domain     = speed:0:4:50
 
