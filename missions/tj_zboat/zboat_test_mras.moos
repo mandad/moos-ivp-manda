@@ -154,17 +154,17 @@ ProcessConfig = pMarineMRAS
    CommsTick = 10
 
    // Initial constant parameters
-   K_Star = 1.7   //0.5-2
-   Tau_Star = 0.5
-   DampingRatio = 1
+   K_Star = 1.5   //0.5-2
+   Tau_Star = 0.3
+   DampingRatio = 0.9
 
    //Adaptation parameters
    Beta = 0.001     //Speed of Kp adaptation
    Alpha = 0.001    //Speed of Kd adaptation
-   Gamma = 0.001    //Speed of Ki adaptation
-   Xi = 1   // <= 1, not used if DecreaseAdaptation = false
+   Gamma = 0.01    //Speed of Ki adaptation
+   Xi = 0.9   // <= 1, not used if DecreaseAdaptation = false
    DecreaseAdaptation = false
-   ROTFilter = 10  // >= 1
+   ROTFilter = 3  // >= 1
 
    // Vessel Characteristics
    RudderLimit = 45
@@ -172,6 +172,7 @@ ProcessConfig = pMarineMRAS
    CruisingSpeed = 1.6 // m/s
    Length = 2 //m
    MaxROT = 60
+   DiscardLargeROT = false;
 
    //Speed settings (use one or the other)
    //ThrustPercent = 50

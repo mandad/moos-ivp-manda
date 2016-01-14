@@ -34,6 +34,7 @@ MarineMRAS::MarineMRAS()
     m_speed_factor   = 0;
     m_max_thrust = 100;
     m_rudder_speed = 15;
+    m_discard_large_ROT = false;
 
     m_first_heading = true;
     m_current_ROT = 0;
@@ -241,6 +242,10 @@ bool MarineMRAS::OnStartUp()
     } else if(param == "RUDDERSPEED") {
       m_rudder_speed = dval;
       handled = true;
+    } else if (param == "DISCARDLARGEROT") {
+      if (toupper(value) == "TRUE")
+        m_discard_large_ROT = true;
+      handled = true;
     }
 
     if(!handled)
@@ -332,7 +337,8 @@ void MarineMRAS::UpdateROT(double curr_time) {
 
       //MOOSTrace("Calculated Mean %f\n", mean);
       //Added the +5 to account for small stdev
-      if (fabs(curr_ROT - m_DiffHistory.front()) <= (2 * ROT_stdev + 10))  {
+      if (fabs(curr_ROT - m_DiffHistory.front()) <= (2 * ROT_stdev + 10) || 
+        !m_discard_large_ROT)  {
         m_DiffHistory.push_front(curr_ROT);
         while(m_DiffHistory.size() > m_ROT_filter_len) {
           m_DiffHistory.pop_back();
@@ -355,7 +361,7 @@ void MarineMRAS::UpdateROT(double curr_time) {
     double diff = angle180(m_current_heading - m_previous_heading);
     double curr_ROT = diff / (curr_time - m_last_heading_time);
     //this is an arbitary threshold to eliminate noise from sim
-    if (fabs(curr_ROT - m_current_ROT) < 10) {
+    if (fabs(curr_ROT - m_current_ROT) < 10 || !m_discard_large_ROT) {
       m_current_ROT = curr_ROT;
     }
 
