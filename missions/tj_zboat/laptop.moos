@@ -198,11 +198,11 @@ ProcessConfig = pMarineViewer
   right_context[return] = MOOS_MANUAL_OVERRIDE_ZBOAT=false
   right_context[return] = RETURN_ZBOAT=false
 
+  scope  = ZBOAT_PWM
   scope  = DESIRED_RUDDER
   scope  = RETURN
   scope  = WPT_STAT
   scope  = MODE
-  scope  = ZBOAT_PWM
   scope  = SWATH_WIDTH
   scope  = SONAR_DEPTH_M
   scope  = SWATH_EDGE
