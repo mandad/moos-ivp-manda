@@ -21,7 +21,7 @@ CourseKeepMRAS::CourseKeepMRAS() {
     m_bFirstRun = true;
     m_bParametersSet = false;
     m_dfRudderOut = 0;
-    m_dfF = 1;
+    //m_dfF = 1;
     m_dfMaxROTInc = 6;
     m_dfModelRudder = 0;
 }
@@ -31,8 +31,8 @@ void CourseKeepMRAS::SetParameters(double dfKStar, double dfTauStar, double dfZ,
     double dfRudderLimit, double dfCruisingSpeed, double dfShipLength,
     double dfMaxROT, bool bDecreaseAdapt, double dfRudderSpeed)
 {
-    m_dfKStar = dfKStar;
-    m_dfTauStar = dfTauStar;
+    m_dfKmStar = dfKStar;
+    m_dfTaumStar = dfTauStar;
     m_dfZ = dfZ;
     m_dfBeta = dfBeta;
     m_dfAlpha = dfAlpha;
@@ -45,10 +45,10 @@ void CourseKeepMRAS::SetParameters(double dfKStar, double dfTauStar, double dfZ,
     m_bDecreaseAdapt = bDecreaseAdapt;
     m_dfRudderSpeed = dfRudderSpeed;
 
-    m_dfTauM = 0.5 * m_dfTauStar * m_dfShipLength / m_dfCruisingSpeed;
-    m_dfKpm = 1 / (4 * m_dfZ * m_dfZ * m_dfTauM);
-    m_dfP12 = m_dfTauM / m_dfKpm;
-    m_dfP22 = m_dfTauM * m_dfTauM / m_dfKpm + m_dfTauM;
+    //m_dfTauM = 0.5 * m_dfTauStar * m_dfShipLength / m_dfCruisingSpeed;
+    //m_dfKpm = 1 / (4 * m_dfZ * m_dfZ * m_dfTauM);
+    //m_dfP12 = m_dfTauM / m_dfKpm;
+    //m_dfP22 = m_dfTauM * m_dfTauM / m_dfKpm + m_dfTauM;
 
     m_lIterations = 0;
     m_bParametersSet = true;
@@ -62,18 +62,12 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
 
     //m_dfRudderOut = 0;
 
-    if (m_bFirstRun || (abs(angle180(dfDesiredHeading - m_dfPreviousHeading))
-        > RESET_THRESHOLD)) {
-        //Initial with no adaptation
-        if (m_bFirstRun) {
-            //Otherwise this will nearly always be zero and result in incorrect
-            //initial values for Kp, etc
-            NewHeading(m_dfCruisingSpeed);
-        } else {
-            NewHeading(dfSpeed);
-        }
-        ResetModel(dfMeasuredHeading, dfMeasuredROT);
-        m_dfCourseChangeTime = dfTime;
+    if (m_bFirstRun) {
+        //Otherwise this will nearly always be zero and result in incorrect
+        //initial values for Kp, etc
+        NewHeading(m_dfCruisingSpeed);
+        InitModel(dfMeasuredHeading, dfMeasuredROT, m_dfCruisingSpeed);
+        m_dfInitTime = dfTime;
         MOOSTrace("Model and Controller Initialized.\n");
 
         m_bFirstRun = false;
@@ -82,35 +76,26 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
         double dfDeltaT = dfTime - m_dfPreviousTime;
         //This includes both the series and parallel models
         UpdateRudderModel(dfDeltaT);
-        UpdateModel(dfDesiredHeading, dfDeltaT);
+        UpdateModel(dfMeasuredROT, m_dfModelRudder, dfSpeed, dfDeltaT);
 
-        double dfe = m_dfModelHeading - dfMeasuredHeading;
-        dfe = angle180(dfe);
-        double dfeDot = m_dfModelROT - dfMeasuredROT;
+        // double dfTimeReduceFactor = 1;
+        // if (m_bDecreaseAdapt) {
+        //     dfTimeReduceFactor = m_dfXi / (1 + dfTime - m_dfCourseChangeTime);
+        // }
 
-        //Adapt the parameters
-        double dfErrorFactor = m_dfP12 * dfe + m_dfP22 * dfeDot;
-        double dfTimeReduceFactor = 1;
-        if (m_bDecreaseAdapt) {
-            dfTimeReduceFactor = m_dfXi / (1 + dfTime - m_dfCourseChangeTime);
-        }
-        //If using series model, desired heading should be Phi''r
-        m_dfKp += m_dfBeta * dfTimeReduceFactor * dfErrorFactor *
-            (angle180(m_dfPsiRefPP - dfMeasuredHeading)) * dfDeltaT;
-        if (m_dfKp < 0)
-            m_dfKp = 0;
-        else if (m_dfKp > KP_LIMIT)
-             m_dfKp = KP_LIMIT;
-
-        m_dfKd -= m_dfAlpha * dfTimeReduceFactor * dfErrorFactor * dfMeasuredROT
-            * dfDeltaT;
+        // Determine the PID constants
+        // Kp does not change
+        m_dfKd = (m_dfShipLength * 2 * sqrt(m_dfKp * m_dfKmStar * m_dfTaumStar) - 1) /
+            (dfSpeed * m_dfKmStar);
         if (m_dfKd < 0)
             m_dfKd = 0;
-        else if (m_dfKd0 > (m_dfKp * m_dfShipLength / dfSpeed))
+        else if (m_dfKd > (m_dfKp * m_dfShipLength / dfSpeed))
             m_dfKd = m_dfKp * m_dfShipLength / dfSpeed;
 
-        m_dfKi += m_dfGamma * dfErrorFactor * dfDeltaT;
-        //MOOSTrace("Updated constants\n");
+        m_dfKi = m_dfKim;
+        if (fabs(m_dfKi) > (10 * dfSpeed / m_dfCruisingSpeed)) {
+            m_dfKi = TwoSidedLimit(m_dfKi, 10 * dfSpeed);
+        }
     }
     //PID equation
     double heading_error = angle180(m_dfPsiRefP - dfMeasuredHeading);
@@ -124,65 +109,43 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
     return TwoSidedLimit(m_dfRudderOut, m_dfRudderLimit);
 }
 
-bool CourseKeepMRAS::NewHeading(double dfSpeed) {
-    // Try to avoid problems with really small speeds since it is in the
-    // denominator of the constants
-    if (dfSpeed < 0.1) {
-        //If we aren't resetting, seed it higher - already done in calling code
-        // if (RESET_THRESHOLD >= 180) {
-        //     dfSpeed = m_dfCruisingSpeed;
-        // } else {
-            dfSpeed = 0.1;
-        // }
+void CourseKeepMRAS::InitModel(double dfHeading, double dfROT, double dfSpeed) {
+    m_dfKp = m_dfMu / 2;
+    m_dfKd = (m_dfShipLength * 2 * sqrt(m_dfKp * m_dfKmStar * m_dfTaumStar) - 1) /
+        (dfSpeed * m_dfKmStar);
+    if (m_dfKd < m_dfKp) {
+        m_dfKd = m_dfKp;
+    } else if (m_dfKd > (m_dfKp * m_dfShipLength / dfSpeed)) {
+        m_dfKd = m_dfKp * m_dfShipLength / dfSpeed;
     }
+    m_dfKim = 0;
 
-    //from literature:
-    //m_dfKp0 = 2.5 * m_dfCruisingSpeed / dfSpeed;
-    m_dfKp0 = 1.0 * m_dfCruisingSpeed / dfSpeed;
-    if (m_dfKp0 > KP_LIMIT) {
-        m_dfKp0 = KP_LIMIT;
-    }
-
-    //This equation is incorrect in Van Amerongen
-    m_dfKd0 = (m_dfShipLength * 2 * m_dfZ * sqrt(m_dfKp0 * m_dfKStar * m_dfTauStar) - 1) /
-        (dfSpeed * m_dfKStar);
-    if (m_dfKd0 < m_dfKp0) {
-        m_dfKd0 = m_dfKp0;
-    } else if (m_dfKd0 > (m_dfKp0 * m_dfShipLength / dfSpeed)) {
-        m_dfKd0 = m_dfKp0 * m_dfShipLength / dfSpeed;
-    }
-
-    if (m_bFirstRun) {
-        m_dfKi0 = 0;
-    } else {
-        //should be average of last estimation from course keeping
-        //for now just reset it anyway (or maybe leave same)
-        m_dfKi0 = 0;
-    }
-
-    //Don't think it actually needs both variables
-    m_dfKp = m_dfKp0;
-    m_dfKd = m_dfKd0;
-    m_dfKi = m_dfKi0;
-
-    return true;
-}
-
-void CourseKeepMRAS::ResetModel(double dfHeading, double dfROT) {
-    //Series Model
-    m_dfSeriesHeading = dfHeading;
-    m_dfSeriesROT = dfROT;
-    m_dfPsiRefPP = dfHeading;
-    m_dfPsiRefP = dfHeading;
-    m_dfx2 = 0;
-
-    //Parallel Model
+    //Model variables
+    m_dfTauM = m_dfTaumStar * dfSpeed / m_dfShipLength;
+    m_dfKm = m_dfKmStar * m_dfShipLength / dfSpeed;
     m_dfModelHeading = dfHeading;
     m_dfModelROT = dfROT;
+    m_dfPhiDotDot = m_dfKmStar / m_dfTaumStar * m_dfModelRudder - dfROT / m_dfTauM;
 }
 
-void CourseKeepMRAS::UpdateModel(double dfDesiredHeading, double dfDeltaT) {
- 
+void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder, 
+    double dfSpeed, double dfDeltaT) {
+    //Propagate model
+    m_dfModelPhiDotDot = - m_dfModelROT / m_dfTauM + (m_dfKm * (dfRudder + m_dfKim)) 
+        / m_dfTauM;
+    m_dfModelROT += m_dfPhiDotDot * dfDeltaT;
+    m_dfModelHeading += m_dfModelROT * dfDeltaT;
+
+    //Do adaptation
+    double dfe = m_dfModelROT - dfMeasuredROT;
+    double dfDeltaKmTm = (-m_dfBeta * dfe * (dfRudder - m_dfKim)) * dfDeltaT;
+    double dfDeltaTmRecip = (m_dfAlpha * dfe * m_dfModelROT) * dfDeltaT;
+    m_dfTaumStar += 1/dfDeltaTmRecip;
+    m_dfKmStar += dfDeltaKmTm * m_dfTaumStar;
+    m_dfKim -= m_dfGamma * dfe;
+
+    m_dfTauM = m_dfTaumStar * dfSpeed / m_dfShipLength;
+    m_dfKm = m_dfKmStar * m_dfShipLength / dfSpeed;
 }
 
 void CourseKeepMRAS::UpdateRudderModel(double dfDeltaT) {
@@ -197,7 +160,7 @@ void CourseKeepMRAS::UpdateRudderModel(double dfDeltaT) {
     } else {
         m_dfModelRudder = dfRudderOut;
     }
-    MOOSTrace("Model Rudder: %0.2f\n", m_dfModelRudder);
+    //MOOSTrace("Model Rudder: %0.2f\n", m_dfModelRudder);
 }
 
 double CourseKeepMRAS::TwoSidedLimit(double dfNumToLimit, double dfLimit) {

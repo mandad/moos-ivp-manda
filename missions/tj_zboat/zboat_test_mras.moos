@@ -144,8 +144,8 @@ ProcessConfig = pEchoVar
   echo_latest_only = true
 
   //These are used with pMarinePID to maintain compatibility w/ graphing
-  echo = NAV_HEADING          ->  NAV_HEADING_180
-  echo = DESIRED_HEADING          ->  DESIRED_HEADING_180
+  //echo = NAV_HEADING          ->  NAV_HEADING_180
+  //echo = DESIRED_HEADING          ->  DESIRED_HEADING_180
 }
 
 ProcessConfig = pMarineMRAS
