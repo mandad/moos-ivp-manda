@@ -65,7 +65,7 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
     if (m_bFirstRun) {
         //Otherwise this will nearly always be zero and result in incorrect
         //initial values for Kp, etc
-        NewHeading(m_dfCruisingSpeed);
+        // NewHeading(m_dfCruisingSpeed);
         InitModel(dfMeasuredHeading, dfMeasuredROT, m_dfCruisingSpeed);
         m_dfInitTime = dfTime;
         MOOSTrace("Model and Controller Initialized.\n");
@@ -125,7 +125,7 @@ void CourseKeepMRAS::InitModel(double dfHeading, double dfROT, double dfSpeed) {
     m_dfKm = m_dfKmStar * m_dfShipLength / dfSpeed;
     m_dfModelHeading = dfHeading;
     m_dfModelROT = dfROT;
-    m_dfPhiDotDot = m_dfKmStar / m_dfTaumStar * m_dfModelRudder - dfROT / m_dfTauM;
+    m_dfModelPhiDotDot = m_dfKmStar / m_dfTaumStar * m_dfModelRudder - dfROT / m_dfTauM;
 }
 
 void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder, 
@@ -133,7 +133,7 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
     //Propagate model
     m_dfModelPhiDotDot = - m_dfModelROT / m_dfTauM + (m_dfKm * (dfRudder + m_dfKim)) 
         / m_dfTauM;
-    m_dfModelROT += m_dfPhiDotDot * dfDeltaT;
+    m_dfModelROT += m_dfModelPhiDotDot * dfDeltaT;
     m_dfModelHeading += m_dfModelROT * dfDeltaT;
 
     //Do adaptation

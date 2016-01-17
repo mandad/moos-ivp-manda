@@ -79,9 +79,10 @@ bool MarineMRAS::OnNewMail(MOOSMSG_LIST &NewMail)
     }
     else if (key == "NAV_SPEED")
       m_current_speed = msg.GetDouble();
-    else if (key == "DESIRED_HEADING")
+    else if (key == "DESIRED_HEADING") {
       m_desired_heading = msg.GetDouble();
-    else if (key == "DESIRED_SPEED")
+      AddHeadingHistory(m_desired_heading, msg.GetTime());
+    } else if (key == "DESIRED_SPEED")
       m_desired_speed = msg.GetDouble();
     else if((key == "MOOS_MANUAL_OVERIDE") || (key == "MOOS_MANUAL_OVERRIDE")) {
       if(MOOSStrCmp(msg.GetString(), "FALSE")) {
@@ -118,8 +119,13 @@ bool MarineMRAS::Iterate()
   if (m_has_control) {
     double desired_rudder = 0;
     if (!m_first_heading) {
-      desired_rudder = m_CourseControl.Run(m_desired_heading, m_current_heading,
-        m_current_ROT, m_current_speed, m_last_heading_time);
+      if (DetermineController() ==  ControllerType::CourseChange) {
+        desired_rudder = m_CourseControl.Run(m_desired_heading, m_current_heading,
+          m_current_ROT, m_current_speed, m_last_heading_time);
+      } else {
+        desired_rudder = m_CourseKeepControl.Run(m_desired_heading, m_current_heading,
+          m_current_ROT, m_current_speed, m_last_heading_time);
+      }
     }
     Notify("DESIRED_RUDDER", desired_rudder);
 
@@ -257,6 +263,9 @@ bool MarineMRAS::OnStartUp()
   m_CourseControl.SetParameters(m_k_star, m_tau_star, m_z, m_beta,
         m_alpha, m_gamma, m_xi, m_rudder_limit, m_cruising_speed, m_length,
         m_max_ROT, m_decrease_adapt, m_rudder_speed);
+  m_CourseKeepControl.SetParameters(m_k_star, m_tau_star, m_z, m_beta,
+        m_alpha, m_gamma, m_xi, m_rudder_limit, m_cruising_speed, m_length,
+        m_max_ROT, m_decrease_adapt, m_rudder_speed);
 
   registerVariables();
   return(true);
@@ -379,4 +388,22 @@ void MarineMRAS::PostAllStop()
   Notify("DESIRED_THRUST", 0.0);
 
   m_allstop_posted = true;
+}
+
+void MarineMRAS::AddHeadingHistory(double heading, double heading_time) {
+  m_desired_heading_history.push_front(heading);
+  m_desired_hist_time.push_front(heading_time);
+
+  while (heading_time - m_desired_hist_time.back() > 10) {
+    m_desired_hist_time.pop_back();
+    m_desired_heading_history.pop_back();
+  }
+}
+
+ControllerType MarineMRAS::DetermineController() {
+  if (fabs(m_desired_heading_history.back() - m_desired_heading) < 10) {
+    return ControllerType::CourseKeep;
+  } else {
+    return ControllerType::CourseChange;
+  }
 }

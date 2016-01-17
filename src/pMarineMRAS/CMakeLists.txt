@@ -7,6 +7,7 @@ SET(SRC
   MarineMRAS.cpp
   MarineMRAS_Info.cpp
   CourseChangeMRAS.cpp
+  CourseKeepMRAS.cpp
   main.cpp
 )
 

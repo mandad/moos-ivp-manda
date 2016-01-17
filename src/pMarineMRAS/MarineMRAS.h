@@ -10,12 +10,19 @@
 
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 #include "CourseChangeMRAS.h"
+#include "CourseKeepMRAS.h"
+
+enum class ControllerType {
+  CourseChange,
+  CourseKeep
+};
 
 class MarineMRAS : public AppCastingMOOSApp
 {
  public:
    MarineMRAS();
    ~MarineMRAS() {};
+
 
  protected: // Standard MOOSApp functions to overload  
    bool OnNewMail(MOOSMSG_LIST &NewMail);
@@ -24,6 +31,8 @@ class MarineMRAS : public AppCastingMOOSApp
    bool OnStartUp();
    void UpdateROT(double curr_time);
    void PostAllStop();
+   void AddHeadingHistory(double heading, double heading_time);
+   ControllerType DetermineController();
 
  protected: // Standard AppCastingMOOSApp function to overload 
    bool buildReport();
@@ -63,8 +72,11 @@ class MarineMRAS : public AppCastingMOOSApp
     std::list<double> m_DiffHistory;
     int m_ROT_filter_len;
     bool   m_has_control;
+    std::list<double> m_desired_heading_history;
+    std::list<double> m_desired_hist_time;
 
     CourseChangeMRAS m_CourseControl;
+    CourseKeepMRAS m_CourseKeepControl;
 
 };
 

@@ -68,6 +68,8 @@ public:
     double m_dfKm0;
     double m_dfTaum0;
     double m_dfKim0;
+    double m_dfKim;
+    double m_dfMu;
 
     double m_dfModelHeading;
     double m_dfModelROT;
