@@ -136,7 +136,7 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
             * dfDeltaT;
         if (m_dfKd < 0)
             m_dfKd = 0;
-        else if (m_dfKd0 > (m_dfKp * m_dfShipLength / dfSpeed))
+        else if (m_dfKd > (m_dfKp * m_dfShipLength / dfSpeed))
             m_dfKd = m_dfKp * m_dfShipLength / dfSpeed;
 
         m_dfKi += m_dfGamma * dfErrorFactor * dfDeltaT;
