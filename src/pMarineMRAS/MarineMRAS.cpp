@@ -120,9 +120,11 @@ bool MarineMRAS::Iterate()
     double desired_rudder = 0;
     if (!m_first_heading) {
       if (DetermineController() ==  ControllerType::CourseChange) {
+        MOOSTrace("Using Course Change Controller\n");
         desired_rudder = m_CourseControl.Run(m_desired_heading, m_current_heading,
           m_current_ROT, m_current_speed, m_last_heading_time);
       } else {
+        MOOSTrace("Using Course Keep Controller\n");
         desired_rudder = m_CourseKeepControl.Run(m_desired_heading, m_current_heading,
           m_current_ROT, m_current_speed, m_last_heading_time);
       }
@@ -138,7 +140,11 @@ bool MarineMRAS::Iterate()
 
     //Debug variables for logging
     double vars[11];
-    m_CourseControl.GetDebugVariables(vars);
+    if (DetermineController() ==  ControllerType::CourseChange) {
+      m_CourseControl.GetDebugVariables(vars);
+    } else {
+      m_CourseKeepControl.GetDebugVariables(vars);
+    }
     Notify("MRAS_KP", vars[0]);
     Notify("MRAS_KD", vars[1]);
     Notify("MRAS_KI", vars[2]);
@@ -401,8 +407,12 @@ void MarineMRAS::AddHeadingHistory(double heading, double heading_time) {
 }
 
 ControllerType MarineMRAS::DetermineController() {
-  if (fabs(m_desired_heading_history.back() - m_desired_heading) < 10) {
-    return ControllerType::CourseKeep;
+  if (m_desired_heading_history.size() > 2) {
+    if (fabs(m_desired_heading_history.back() - m_desired_heading) < 10) {
+      return ControllerType::CourseKeep;
+    } else {
+      return ControllerType::CourseChange;
+    }
   } else {
     return ControllerType::CourseChange;
   }

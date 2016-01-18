@@ -46,8 +46,8 @@ ProcessConfig = pMarineMRAS
    DampingRatio = 1
 
    //Adaptation parameters
-   Beta = 0.01     //Speed of Kp adaptation
-   Alpha = 0.01    //Speed of Kd adaptation
+   Beta = 0.001     //Speed of Kp adaptation
+   Alpha = 0.001    //Speed of Kd adaptation
    Gamma = 0.001    //Speed of Ki adaptation
    Xi = 1   // <= 1, not used if DecreaseAdaptation = false
    DecreaseAdaptation = false
@@ -117,6 +117,8 @@ ProcessConfig = pLogger
   WildCardOmitPattern = DB_VARSUMMARY
   WildCardOmitPattern = DB_RWSUMMARY
   WildCardExclusionLog = true
+
+  term_reporting = false
 }
 
 //------------------------------------------
@@ -130,6 +132,8 @@ ProcessConfig = uProcessWatch
   watch_all = true
 	nowatch   = uPokeDB*
 	nowatch   = uXMS*
+
+  term_reporting = false
 }
 
 //------------------------------------------
@@ -152,6 +156,8 @@ ProcessConfig = uSimMarine
   turn_rate     = 60
   thrust_map    = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
   thrust_reflect = true
+
+  term_reporting = false
 }
 
 //------------------------------------------
@@ -214,12 +220,14 @@ ProcessConfig = pEchoVar
 
   echo = NAV_HEADING          ->  NAV_HEADING_180
   echo = DESIRED_HEADING          ->  DESIRED_HEADING_180
+
+  term_reporting = false
 }
 
 ProcessConfig = uTimerScript  
 {
   time_zero = db_start
-  delay_start = 10
+  delay_start = 20
   event = var=MOOS_MANUAL_OVERRIDE, val=false
   event = var=DEPLOY, val=true
   event = quit 
@@ -293,5 +301,7 @@ ProcessConfig = pNodeReporter
 
   platform_type   = KAYAK
   platform_length = 4
+
+  term_reporting = false
 }
 

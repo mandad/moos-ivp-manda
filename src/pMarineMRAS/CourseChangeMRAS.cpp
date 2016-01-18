@@ -326,7 +326,7 @@ void CourseChangeMRAS::UpdateRudderModel(double dfDeltaT) {
     } else {
         m_dfModelRudder = dfRudderOut;
     }
-    MOOSTrace("Model Rudder: %0.2f\n", m_dfModelRudder);
+    //MOOSTrace("Model Rudder: %0.2f\n", m_dfModelRudder);
 }
 
 double CourseChangeMRAS::TwoSidedLimit(double dfNumToLimit, double dfLimit) {
