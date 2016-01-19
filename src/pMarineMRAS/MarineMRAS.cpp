@@ -425,6 +425,7 @@ ControllerType MarineMRAS::DetermineController() {
     if (fabs(m_desired_heading_history.back() - m_desired_heading) < 10) {
       return ControllerType::CourseKeep;
     } else {
+      //Course change is the default if we have less than 10 sec same course
       return ControllerType::CourseChange;
     }
   } else {
