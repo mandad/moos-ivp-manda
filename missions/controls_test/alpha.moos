@@ -46,8 +46,8 @@ ProcessConfig = pMarineMRAS
    DampingRatio = 1
 
    //Adaptation parameters
-   Beta = 0.001     //Speed of Kp adaptation
-   Alpha = 0.001    //Speed of Kd adaptation
+   Beta = 0.01     //Speed of Kp adaptation
+   Alpha = 0.01    //Speed of Kd adaptation
    Gamma = 0.001    //Speed of Ki adaptation
    Xi = 1   // <= 1, not used if DecreaseAdaptation = false
    DecreaseAdaptation = false

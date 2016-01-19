@@ -24,16 +24,19 @@ public:
         double dfBeta, double dfAlpha, double dfGamma, double dfXi, 
         double dfRudderLimit, double dfCruisingSpeed, double dfShipLength, 
         double dfMaxROT, bool bDecreaseAdapt, double dfRudderSpeed);
-    bool NewHeading(double dfSpeed);
-    void ResetModel(double dfHeading, double dfROT);
-    void UpdateModel(double dfDesiredHeading, double dfDeltaT);
-    void UpdateModelTd(double dfDesiredHeading, double dfDeltaT);
-    void UpdateRudderModel(double dfDeltaT);
+    void ResetModel(double dfHeading, double dfROT, double dfRudder);
     static double TwoSidedLimit(double dfNumToLimit, double dfLimit);
+    void SwitchController(double dfTauStar, double dfKStar);
     std::string GetStatusInfo();
     std::string GetDebugInfo();
     void GetDebugVariables(double * vars);
+    double GetModelRudder();
 
+ private:
+    bool NewHeading(double dfSpeed);
+    void UpdateModel(double dfDesiredHeading, double dfDeltaT);
+    void UpdateModelTd(double dfDesiredHeading, double dfDeltaT);
+    void UpdateRudderModel(double dfDeltaT);
 
  private: // Configuration variables
     double m_dfKStar;
@@ -68,6 +71,7 @@ public:
     long   m_lIterations;
     bool   m_bFirstRun;
     bool   m_bParametersSet;
+    bool   m_bControllerSwitch;
     double m_dfRudderOut;
 
     double m_dfKp0;

@@ -20,6 +20,7 @@ using namespace std;
 CourseChangeMRAS::CourseChangeMRAS() {
     m_bFirstRun = true;
     m_bParametersSet = false;
+    m_bControllerSwitch = false;
     m_dfRudderOut = 0;
     m_dfF = 1;
     m_dfMaxROTInc = 6;
@@ -102,11 +103,14 @@ double CourseChangeMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
         } else {
             NewHeading(dfSpeed);
         }
-        ResetModel(dfMeasuredHeading, dfMeasuredROT);
+        ResetModel(dfMeasuredHeading, dfMeasuredROT, m_dfModelRudder);
         m_dfCourseChangeTime = dfTime;
         MOOSTrace("Model and Controller Initialized.\n");
 
         m_bFirstRun = false;
+        m_bControllerSwitch = false;
+    } else if (m_bControllerSwitch) {
+        m_bControllerSwitch = false;
     } else {
         //Normal operation
         double dfDeltaT = dfTime - m_dfPreviousTime;
@@ -198,7 +202,7 @@ bool CourseChangeMRAS::NewHeading(double dfSpeed) {
     return true;
 }
 
-void CourseChangeMRAS::ResetModel(double dfHeading, double dfROT) {
+void CourseChangeMRAS::ResetModel(double dfHeading, double dfROT, double dfRudder) {
     //Series Model
     m_dfSeriesHeading = dfHeading;
     m_dfSeriesROT = dfROT;
@@ -209,6 +213,18 @@ void CourseChangeMRAS::ResetModel(double dfHeading, double dfROT) {
     //Parallel Model
     m_dfModelHeading = dfHeading;
     m_dfModelROT = dfROT;
+
+    //Rudder Model
+    m_dfModelRudder = dfRudder;
+}
+
+void CourseChangeMRAS::SwitchController(double dfTauStar, double dfKStar) {
+    m_bControllerSwitch = true;
+
+    m_dfTauM = 0.5 * dfTauStar * m_dfShipLength / m_dfCruisingSpeed;
+    m_dfKpm = 1 / (4 * m_dfZ * m_dfZ * m_dfTauM);
+    m_dfP12 = m_dfTauM / m_dfKpm;
+    m_dfP22 = m_dfTauM * m_dfTauM / m_dfKpm + m_dfTauM;
 }
 
 void CourseChangeMRAS::UpdateModel(double dfDesiredHeading, double dfDeltaT) {
@@ -327,6 +343,10 @@ void CourseChangeMRAS::UpdateRudderModel(double dfDeltaT) {
         m_dfModelRudder = dfRudderOut;
     }
     //MOOSTrace("Model Rudder: %0.2f\n", m_dfModelRudder);
+}
+
+double CourseChangeMRAS::GetModelRudder() {
+    return m_dfModelRudder;
 }
 
 double CourseChangeMRAS::TwoSidedLimit(double dfNumToLimit, double dfLimit) {

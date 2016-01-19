@@ -42,6 +42,7 @@ MarineMRAS::MarineMRAS()
     m_desired_thrust = 50;
     m_desired_speed = 0;
     m_allstop_posted = false;
+    m_last_controller = ControllerType::CourseChange;
     //m_last_heading_time = MOOSTime();
 }
 
@@ -121,10 +122,23 @@ bool MarineMRAS::Iterate()
     if (!m_first_heading) {
       if (DetermineController() ==  ControllerType::CourseChange) {
         MOOSTrace("Using Course Change Controller\n");
+        if (m_last_controller == ControllerType::CourseKeep) {
+          m_CourseControl.ResetModel(m_current_heading, m_current_ROT, 
+            m_CourseKeepControl.GetModelRudder());
+          m_CourseControl.SwitchController(m_CourseKeepControl.GetTauStar(),
+            m_CourseKeepControl.GetKStar());
+          m_last_controller = ControllerType::CourseChange;
+        }
         desired_rudder = m_CourseControl.Run(m_desired_heading, m_current_heading,
           m_current_ROT, m_current_speed, m_last_heading_time);
       } else {
         MOOSTrace("Using Course Keep Controller\n");
+        if (m_last_controller == ControllerType::CourseChange) {
+          m_CourseKeepControl.ResetModel(m_current_heading, m_current_ROT, 
+            m_CourseControl.GetModelRudder());
+          m_CourseKeepControl.SwitchController();
+          m_last_controller = ControllerType::CourseKeep;
+        }
         desired_rudder = m_CourseKeepControl.Run(m_desired_heading, m_current_heading,
           m_current_ROT, m_current_speed, m_last_heading_time);
       }

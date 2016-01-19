@@ -19,6 +19,7 @@ using namespace std;
 
 CourseKeepMRAS::CourseKeepMRAS() {
     m_bFirstRun = true;
+    m_bControllerSwitch = false;
     m_bParametersSet = false;
     m_dfRudderOut = 0;
     //m_dfF = 1;
@@ -48,11 +49,6 @@ void CourseKeepMRAS::SetParameters(double dfKStar, double dfTauStar, double dfZ,
     m_bDecreaseAdapt = bDecreaseAdapt;
     m_dfRudderSpeed = dfRudderSpeed;
 
-    //m_dfTauM = 0.5 * m_dfTauStar * m_dfShipLength / m_dfCruisingSpeed;
-    //m_dfKpm = 1 / (4 * m_dfZ * m_dfZ * m_dfTauM);
-    //m_dfP12 = m_dfTauM / m_dfKpm;
-    //m_dfP22 = m_dfTauM * m_dfTauM / m_dfKpm + m_dfTauM;
-
     m_lIterations = 0;
     m_bParametersSet = true;
 }
@@ -74,6 +70,8 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
         MOOSTrace("Model and Controller Initialized.\n");
 
         m_bFirstRun = false;
+    } else if (m_bControllerSwitch) {
+        m_bControllerSwitch = false;
     } else {
         //Normal operation
         double dfDeltaT = dfTime - m_dfPreviousTime;
@@ -129,16 +127,27 @@ void CourseKeepMRAS::InitModel(double dfHeading, double dfROT, double dfSpeed) {
     //Model variables
     m_dfTauM = m_dfTaumStar * dfSpeed / m_dfShipLength;
     m_dfKm = m_dfKmStar * m_dfShipLength / dfSpeed;
-    m_dfModelHeading = dfHeading;
-    m_dfModelROT = dfROT;
-    m_dfModelPhiDotDot = m_dfKmStar / m_dfTaumStar * m_dfModelRudder - dfROT / m_dfTauM;
-    m_dfModelRudder = 0;
-    m_dfRudderOut = 0;
+    ResetModel(dfHeading, dfROT, dfSpeed);
 
-    MOOSTrace("Model Init: Y..: %0.2f  Y.: %0.2f  Y: %0.2f\n", m_dfModelPhiDotDot,
-        m_dfModelROT, m_dfModelHeading);
     MOOSTrace("Adaptive Init: TauM*: %0.2f  Km*: %0.2f  Ki,m: %0.2f\n", m_dfTaumStar,
         m_dfKmStar, m_dfKim);
+}
+
+void CourseKeepMRAS::ResetModel(double dfHeading, double dfROT, double dfRudder) {
+    m_dfModelHeading = dfHeading;
+    m_dfModelROT = dfROT;
+    m_dfModelPhiDotDot = m_dfKm / m_dfTauM * dfRudder - dfROT / m_dfTauM;
+    MOOSTrace("Model Init: Y..: %0.2f  Y.: %0.2f  Y: %0.2f\n", m_dfModelPhiDotDot,
+        m_dfModelROT, m_dfModelHeading);
+    MOOSTrace("Model Init: TauM*: %0.2f  Km*: %0.2f  Ki,m: %0.2f\n", m_dfTaumStar,
+        m_dfKmStar, m_dfKim);
+
+    m_dfModelRudder = dfRudder;
+    m_dfRudderOut = dfRudder;
+}
+
+void CourseKeepMRAS::SwitchController() {
+    m_bControllerSwitch = true;
 }
 
 void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder, 
@@ -148,8 +157,9 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
         / m_dfTauM;
     m_dfModelROT += m_dfModelPhiDotDot * dfDeltaT;
     m_dfModelHeading += m_dfModelROT * dfDeltaT;
+    m_dfModelHeading = angle180(m_dfModelHeading);
 
-    MOOSTrace("Process Vars: Y.: %0.2f\n",dfMeasuredROT);
+    MOOSTrace("Process Vars: Y.: %0.2f  dT: %0.2f\n",dfMeasuredROT, dfDeltaT);
     MOOSTrace("Model Update: Y..: %0.2f  Y.: %0.2f  Y: %0.2f  Rudder: %0.2f\n", 
         m_dfModelPhiDotDot, m_dfModelROT, m_dfModelHeading, dfRudder);
 
@@ -163,7 +173,13 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
     double dfDeltaKmTm = (-m_dfBeta * dfe * (dfRudder - m_dfKim)) * dfDeltaT;
     double dfDeltaTmRecip = (m_dfAlpha * dfe * m_dfModelROT) * dfDeltaT;
     m_dfTaumStar = 1 / (1/m_dfTaumStar + dfDeltaTmRecip);
+    if (m_dfTaumStar < 0.1) {
+        m_dfTaumStar = 0.1;
+    }
     m_dfKmStar += dfDeltaKmTm * m_dfTaumStar;
+    if (m_dfKmStar < 0.1) {
+        m_dfKmStar = 0.1;
+    }
     m_dfKim -= m_dfGamma * dfe;
 
     MOOSTrace("Adaptive Update: TauM*: %0.2f  Km*: %0.2f  Ki,m: %0.2f\n", m_dfTaumStar,
@@ -186,6 +202,18 @@ void CourseKeepMRAS::UpdateRudderModel(double dfDeltaT) {
         m_dfModelRudder = dfRudderOut;
     }
     MOOSTrace("Model Rudder: %0.2f  Rudder Out: %0.2f\n", m_dfModelRudder, dfRudderOut);
+}
+
+double CourseKeepMRAS::GetModelRudder() {
+    return m_dfModelRudder;
+}
+
+double CourseKeepMRAS::GetTauStar() {
+    return m_dfTaumStar;
+}
+
+double CourseKeepMRAS::GetKStar() {
+    return m_dfKmStar;
 }
 
 double CourseKeepMRAS::TwoSidedLimit(double dfNumToLimit, double dfLimit) {

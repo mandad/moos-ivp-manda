@@ -77,6 +77,7 @@ class MarineMRAS : public AppCastingMOOSApp
 
     CourseChangeMRAS m_CourseControl;
     CourseKeepMRAS m_CourseKeepControl;
+    ControllerType m_last_controller;
 
 };
 

@@ -20,17 +20,24 @@ public:
         double dfBeta, double dfAlpha, double dfGamma, double dfXi, 
         double dfRudderLimit, double dfCruisingSpeed, double dfShipLength, 
         double dfMaxROT, bool bDecreaseAdapt, double dfRudderSpeed);
-    void InitModel(double dfHeading, double dfROT, double dfSpeed);
-    void UpdateModel(double dfMeasuredROT, double dfRudder, double dfSpeed, 
-        double dfDeltaT);
-    void UpdateRudderModel(double dfDeltaT);
     static double TwoSidedLimit(double dfNumToLimit, double dfLimit);
     std::string GetStatusInfo();
     std::string GetDebugInfo();
     void GetDebugVariables(double * vars);
+    void ResetModel(double dfHeading, double dfROT, double dfRudder);
+    void SwitchController();
+    double GetModelRudder();
+    double GetTauStar();
+    double GetKStar();
+
+private:
+    void InitModel(double dfHeading, double dfROT, double dfSpeed);
+    void UpdateModel(double dfMeasuredROT, double dfRudder, double dfSpeed, 
+        double dfDeltaT);
+    void UpdateRudderModel(double dfDeltaT);
 
 
- private: // Configuration variables
+private: // Configuration variables
 
     double m_dfZ;
     double m_dfBeta;
@@ -62,6 +69,7 @@ public:
     double m_dfInitTime;
     long   m_lIterations;
     bool   m_bFirstRun;
+    bool   m_bControllerSwitch;
     bool   m_bParametersSet;
     double m_dfRudderOut;
 
