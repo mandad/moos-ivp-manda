@@ -154,8 +154,8 @@ ProcessConfig = pMarineMRAS
    CommsTick = 10
 
    // Initial constant parameters
-   K_Star = 0.89   //0.5-2
-   Tau_Star = 0.43
+   K_Star = 2.68   //0.5-2
+   Tau_Star = 0.15
    DampingRatio = 0.8
 
    //Adaptation parameters
@@ -168,6 +168,7 @@ ProcessConfig = pMarineMRAS
 
    // Vessel Characteristics
    RudderLimit = 45
+   RudderDeadband = 0
    RudderSpeed = 30 // deg/s
    CruisingSpeed = 1.6 // m/s
    Length = 2 //m

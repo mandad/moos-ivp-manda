@@ -41,20 +41,21 @@ ProcessConfig = pMarineMRAS
    CommsTick = 10
 
    // Initial constant parameters
-   K_Star = 1   //0.5-2
-   Tau_Star = 1
-   DampingRatio = 1
+   K_Star = 2.68   //0.5-2
+   Tau_Star = 0.15
+   DampingRatio = 0.8
 
    //Adaptation parameters
    Beta = 0.01     //Speed of Kp adaptation
    Alpha = 0.01    //Speed of Kd adaptation
-   Gamma = 0.001    //Speed of Ki adaptation
+   Gamma = 0.01    //Speed of Ki adaptation
    Xi = 1   // <= 1, not used if DecreaseAdaptation = false
    DecreaseAdaptation = false
    ROTFilter = 3  // >= 1
 
    // Vessel Characteristics
    RudderLimit = 45  //should be deg (but Sim uses 100 as limit)
+   RudderDeadband = 0
    RudderSpeed = 30 // deg/s
    CruisingSpeed = 1.6 // m/s
    Length = 2 //m
@@ -201,7 +202,7 @@ ProcessConfig = pMarinePID
   speed_pid_integral_limit = 0.07
 
   //MAXIMUMS
-  maxrudder    = 100
+  maxrudder    = 45
   maxthrust    = 100
 
   // A non-zero SPEED_FACTOR overrides use of SPEED_PID

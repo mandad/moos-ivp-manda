@@ -49,6 +49,7 @@ class MarineMRAS : public AppCastingMOOSApp
     double m_gamma;
     double m_xi;
     double m_rudder_limit;
+    double m_rudder_deadband;
     double m_max_ROT;
     double m_cruising_speed;
     double m_length;

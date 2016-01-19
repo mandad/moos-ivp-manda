@@ -57,6 +57,29 @@ Behavior = BHV_ConstantHeading
    condition = RETURN = false
    condition = DEPLOY = true
    condition = SEQ = 3
+   endflag = SEQ = 4
+   endflag = HEADING_BHV_RESET=true
+   duration_reset = HEADING_BHV_RESET=true
+   updates      = CONST_HDG_UPDATES    // example
+
+   // Parameters specific to this behavior
+   // ------------------------------------
+                heading = 100
+              basewidth = 10        
+               duration = 30        
+              peakwidth = 10          
+            summitdelta = 25           
+}
+
+Behavior = BHV_ConstantHeading
+{
+   // General Behavior Parameters
+   // ---------------------------
+   name         = const_hdg4        
+   pwt          = 100                  
+   condition = RETURN = false
+   condition = DEPLOY = true
+   condition = SEQ = 4
    endflag = SEQ = 1
    endflag = HEADING_BHV_RESET=true
    duration_reset = HEADING_BHV_RESET=true
@@ -64,7 +87,7 @@ Behavior = BHV_ConstantHeading
 
    // Parameters specific to this behavior
    // ------------------------------------
-                heading = 0
+                heading = 270
               basewidth = 10        
                duration = 30        
               peakwidth = 10          

@@ -35,6 +35,7 @@ MarineMRAS::MarineMRAS()
     m_max_thrust = 100;
     m_rudder_speed = 15;
     m_discard_large_ROT = false;
+    m_rudder_deadband = 0;
 
     m_first_heading = true;
     m_current_ROT = 0;
@@ -119,7 +120,7 @@ bool MarineMRAS::Iterate()
 
   if (m_has_control) {
     double desired_rudder = 0;
-    if (!m_first_heading) {
+    if (!m_first_heading && m_desired_speed > 0) {
       if (DetermineController() ==  ControllerType::CourseChange) {
         MOOSTrace("Using Course Change Controller\n");
         if (m_last_controller == ControllerType::CourseKeep) {
@@ -142,6 +143,9 @@ bool MarineMRAS::Iterate()
         desired_rudder = m_CourseKeepControl.Run(m_desired_heading, m_current_heading,
           m_current_ROT, m_current_speed, m_last_heading_time);
       }
+    }
+    if (fabs(desired_rudder) < m_rudder_deadband) {
+      desired_rudder = 0;
     }
     Notify("DESIRED_RUDDER", desired_rudder);
 
@@ -272,6 +276,9 @@ bool MarineMRAS::OnStartUp()
       if (toupper(value) == "TRUE")
         m_discard_large_ROT = true;
       handled = true;
+    } else if (param == "RUDDERDEADBAND") {
+      m_rudder_deadband = dval;
+      handled = true;
     }
 
     if(!handled)
@@ -319,11 +326,17 @@ bool MarineMRAS::buildReport()
     ACTable actab(6);
     actab << "Kp | Kd | Ki | Model Heading | Measured | Desired ";
     actab.addHeaderLines();
-    actab << m_CourseControl.GetStatusInfo();
+    if (DetermineController() == ControllerType::CourseChange)
+      actab << m_CourseControl.GetStatusInfo();
+    else
+      actab << m_CourseKeepControl.GetStatusInfo();
     actab << " | | | | | ";
     actab << "Psi_r'' | Psi_r' | Rudder | Series Heading | Model ROT | Series ROT";
     actab.addHeaderLines();
-    actab << m_CourseControl.GetDebugInfo();
+    if (DetermineController() == ControllerType::CourseChange)
+      actab << m_CourseControl.GetDebugInfo();
+    else
+      actab << m_CourseKeepControl.GetDebugInfo();
     m_msgs << actab.getFormattedString();
   } else {
     m_msgs << "Control not running.";
@@ -414,6 +427,7 @@ void MarineMRAS::AddHeadingHistory(double heading, double heading_time) {
   m_desired_heading_history.push_front(heading);
   m_desired_hist_time.push_front(heading_time);
 
+  //Keep last 10 sec of data
   while (heading_time - m_desired_hist_time.back() > 10) {
     m_desired_hist_time.pop_back();
     m_desired_heading_history.pop_back();
@@ -422,7 +436,8 @@ void MarineMRAS::AddHeadingHistory(double heading, double heading_time) {
 
 ControllerType MarineMRAS::DetermineController() {
   if (m_desired_heading_history.size() > 2) {
-    if (fabs(m_desired_heading_history.back() - m_desired_heading) < 10) {
+    //10 degree heading change threshold for CourseChange
+    if (fabs(m_desired_heading_history.back() - m_desired_heading) <= 10) {
       return ControllerType::CourseKeep;
     } else {
       //Course change is the default if we have less than 10 sec same course
