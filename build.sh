@@ -39,7 +39,7 @@ cd build
 
 cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ../
 
-make ${CMD_LINE_ARGS}
+make ${CMD_LINE_ARGS} -Wno-c++11-extensions
 cd ${INVOCATION_ABS_DIR}
 
 

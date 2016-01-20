@@ -179,6 +179,7 @@ ProcessConfig = pMarineMRAS
    //ThrustPercent = 50
    Speed_Factor = 31.25
    MaxThrust = 100
+   NoOutput = true  //used to record data
 }
 
 //==============================================

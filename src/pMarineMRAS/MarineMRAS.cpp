@@ -36,6 +36,7 @@ MarineMRAS::MarineMRAS()
     m_rudder_speed = 15;
     m_discard_large_ROT = false;
     m_rudder_deadband = 0;
+    m_output = true;
 
     m_first_heading = true;
     m_current_ROT = 0;
@@ -148,14 +149,16 @@ bool MarineMRAS::Iterate()
     if (fabs(desired_rudder) < m_rudder_deadband) {
       desired_rudder = 0;
     }
-    Notify("DESIRED_RUDDER", desired_rudder);
+    if (m_output)
+      Notify("DESIRED_RUDDER", desired_rudder);
 
     if(m_speed_factor != 0) {
       m_desired_thrust = m_desired_speed * m_speed_factor;
     }
     m_desired_thrust = CourseChangeMRAS::TwoSidedLimit(m_desired_thrust,
       m_max_thrust);
-    Notify("DESIRED_THRUST", m_desired_thrust);
+    if (m_output)
+      Notify("DESIRED_THRUST", m_desired_thrust);
 
     //Debug variables for logging
     double vars[11];
@@ -280,6 +283,9 @@ bool MarineMRAS::OnStartUp()
     } else if (param == "RUDDERDEADBAND") {
       m_rudder_deadband = dval;
       handled = true;
+    } else if (param == "NOOUTPUT") {
+      if (toupper(value) == "TRUE")
+        m_output = false;
     }
 
     if(!handled)
@@ -418,8 +424,10 @@ void MarineMRAS::PostAllStop()
   if(m_allstop_posted)
     return;
 
-  Notify("DESIRED_RUDDER", 0.0);
-  Notify("DESIRED_THRUST", 0.0);
+  if (m_output) {
+    Notify("DESIRED_RUDDER", 0.0);
+    Notify("DESIRED_THRUST", 0.0);
+  }
 
   m_allstop_posted = true;
 }
@@ -439,6 +447,7 @@ ControllerType MarineMRAS::DetermineController() {
   if (m_desired_heading_history.size() > 2) {
     //10 degree heading change threshold for CourseChange
     if (fabs(m_desired_heading_history.back() - m_desired_heading) <= 10) {
+      // return ControllerType::CourseChange;
       return ControllerType::CourseKeep;
     } else {
       //Course change is the default if we have less than 10 sec same course

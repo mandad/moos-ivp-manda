@@ -221,10 +221,10 @@ void CourseChangeMRAS::ResetModel(double dfHeading, double dfROT, double dfRudde
 void CourseChangeMRAS::SwitchController(double dfTauStar, double dfKStar) {
     m_bControllerSwitch = true;
 
-    m_dfTauM = 0.5 * dfTauStar * m_dfShipLength / m_dfCruisingSpeed;
-    m_dfKpm = 1 / (4 * m_dfZ * m_dfZ * m_dfTauM);
-    m_dfP12 = m_dfTauM / m_dfKpm;
-    m_dfP22 = m_dfTauM * m_dfTauM / m_dfKpm + m_dfTauM;
+    // m_dfTauM = 0.5 * dfTauStar * m_dfShipLength / m_dfCruisingSpeed;
+    // m_dfKpm = 1 / (4 * m_dfZ * m_dfZ * m_dfTauM);
+    // m_dfP12 = m_dfTauM / m_dfKpm;
+    // m_dfP22 = m_dfTauM * m_dfTauM / m_dfKpm + m_dfTauM;
 }
 
 void CourseChangeMRAS::UpdateModel(double dfDesiredHeading, double dfDeltaT) {

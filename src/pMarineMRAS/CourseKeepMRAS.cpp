@@ -153,7 +153,7 @@ void CourseKeepMRAS::SwitchController() {
 void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder, 
     double dfSpeed, double dfDeltaT) {
     //Propagate model
-    m_dfModelPhiDotDot = (m_dfKm * (dfRudder - m_dfKim) - m_dfModelROT) / m_dfTauM;
+    m_dfModelPhiDotDot = (m_dfKm * (dfRudder + m_dfKim) - m_dfModelROT) / m_dfTauM;
     m_dfModelROT += m_dfModelPhiDotDot * dfDeltaT;
     m_dfModelHeading += m_dfModelROT * dfDeltaT;
     m_dfModelHeading = angle180(m_dfModelHeading);
