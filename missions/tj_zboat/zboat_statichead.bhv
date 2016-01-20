@@ -109,7 +109,7 @@ Behavior = BHV_ConstantHeading
    pwt          = 100
    condition = MODE == SURVEY
    condition = SEQ = 3
-   endflag = SEQ = 1
+   endflag = SEQ = 4
    endflag = HEADING_BHV_RESET=true
    duration_reset = HEADING_BHV_RESET=true
    //updates      = CONST_HDG_UPDATES    // example
@@ -119,6 +119,28 @@ Behavior = BHV_ConstantHeading
                 heading = 270
               basewidth = 10
                duration = 30
+              peakwidth = 10
+            summitdelta = 25
+}
+
+Behavior = BHV_ConstantHeading
+{
+   // General Behavior Parameters
+   // ---------------------------
+   name         = const_hdg4
+   pwt          = 100
+   condition = MODE == SURVEY
+   condition = SEQ = 4
+   endflag = FAULT = true
+   endflag = HEADING_BHV_RESET=true
+   duration_reset = HEADING_BHV_RESET=true
+   //updates      = CONST_HDG_UPDATES    // example
+
+   // Parameters specific to this behavior
+   // ------------------------------------
+                heading = 260
+              basewidth = 10
+               duration = 20
               peakwidth = 10
             summitdelta = 25
 }
