@@ -120,6 +120,7 @@ bool MarineMRAS::Iterate()
 
   if (m_has_control) {
     double desired_rudder = 0;
+    //prevent controller runup when speed is 0
     if (!m_first_heading && m_desired_speed > 0) {
       if (DetermineController() ==  ControllerType::CourseChange) {
         MOOSTrace("Using Course Change Controller\n");
@@ -441,9 +442,11 @@ ControllerType MarineMRAS::DetermineController() {
       return ControllerType::CourseKeep;
     } else {
       //Course change is the default if we have less than 10 sec same course
+      // return ControllerType::CourseKeep;
       return ControllerType::CourseChange;
     }
   } else {
+    // return ControllerType::CourseKeep;
     return ControllerType::CourseChange;
   }
 }

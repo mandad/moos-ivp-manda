@@ -153,13 +153,13 @@ void CourseKeepMRAS::SwitchController() {
 void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder, 
     double dfSpeed, double dfDeltaT) {
     //Propagate model
-    m_dfModelPhiDotDot = - m_dfModelROT / m_dfTauM + (m_dfKm * (dfRudder + m_dfKim)) 
-        / m_dfTauM;
+    m_dfModelPhiDotDot = (m_dfKm * (dfRudder - m_dfKim) - m_dfModelROT) / m_dfTauM;
     m_dfModelROT += m_dfModelPhiDotDot * dfDeltaT;
     m_dfModelHeading += m_dfModelROT * dfDeltaT;
     m_dfModelHeading = angle180(m_dfModelHeading);
 
     MOOSTrace("Process Vars: Y.: %0.2f  dT: %0.2f\n",dfMeasuredROT, dfDeltaT);
+    MOOSTrace("Model Params: Km: %0.2f  Taum: %0.2f\n", m_dfKm, m_dfTauM);
     MOOSTrace("Model Update: Y..: %0.2f  Y.: %0.2f  Y: %0.2f  Rudder: %0.2f\n", 
         m_dfModelPhiDotDot, m_dfModelROT, m_dfModelHeading, dfRudder);
 
@@ -244,9 +244,9 @@ void CourseKeepMRAS::GetDebugVariables(double * vars) {
     vars[3] = m_dfRudderOut;
     vars[4] = m_dfModelHeading;
     vars[5] = m_dfModelROT;
-    vars[6] = m_dfSeriesHeading;
-    vars[7] = m_dfSeriesROT;
-    vars[8] = m_dfPsiRefP;
-    vars[9] = m_dfPsiRefPP;
+    vars[6] = m_dfTaumStar;  //m_dfSeriesHeading
+    vars[7] = m_dfModelPhiDotDot; //m_dfSeriesROT
+    vars[8] = m_dfTauM; //m_dfPsiRefP
+    vars[9] = m_dfKm;   //m_dfPsiRefPP
     vars[10] = m_dfModelRudder;
 }
