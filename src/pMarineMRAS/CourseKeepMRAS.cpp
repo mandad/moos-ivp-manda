@@ -155,6 +155,10 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
     //Propagate model
     m_dfModelPhiDotDot = (m_dfKm * (dfRudder + m_dfKim) - m_dfModelROT) / m_dfTauM;
     m_dfModelROT += m_dfModelPhiDotDot * dfDeltaT;
+    //this is the limit of ROT in this model
+    if (fabs(m_dfModelROT) > fabs(m_dfKm * dfRudder)) {
+        m_dfModelROT = m_dfKm * dfRudder;
+    }
     m_dfModelHeading += m_dfModelROT * dfDeltaT;
     m_dfModelHeading = angle180(m_dfModelHeading);
 

@@ -142,6 +142,7 @@ ProcessConfig = pEchoVar
   echo = GPS_SPEED        -> NAV_SPEED
 
   echo_latest_only = true
+  term_reporting = false
 
   //These are used with pMarinePID to maintain compatibility w/ graphing
   //echo = NAV_HEADING          ->  NAV_HEADING_180
@@ -230,6 +231,8 @@ ProcessConfig = pHostInfo
 
   //External (4G) IP of boat network
   DEFAULT_HOSTIP_FORCE = $(BOAT_MODEM_IP)
+
+  term_reporting = false
 }
 
 //------------------------------------------
@@ -255,6 +258,8 @@ ProcessConfig = uFldNodeBroker
   BRIDGE = src=ZBOAT_PWM
   BRIDGE = src=SONAR_DEPTH_M
   //BRIDGE = src=DESIRED_RUDDER
+
+  term_reporting = false
 }
 
 ProcessConfig = pShare
@@ -280,6 +285,8 @@ ProcessConfig = uProcessWatch
   nowatch   = uPokeDB*
   nowatch   = uTermCommand*
   watch_all = true
+
+  term_reporting = false
 }
 
 
@@ -332,6 +339,8 @@ ProcessConfig = pLogger
   WildCardOmitPattern = DB_VARSUMMARY
   WildCardOmitPattern = DB_RWSUMMARY
   WildCardExclusionLog = true
+
+  term_reporting = false
 }
 
 //------------------------------------------
@@ -385,6 +394,8 @@ ProcessConfig = pNodeReporter
   platform_length = 4
 
   node_report_output = NODE_REPORT_LOCAL
+
+  term_reporting = false
 }
 
 //--------------------------------------------------------
