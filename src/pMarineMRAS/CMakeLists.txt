@@ -2,6 +2,7 @@
 # The CMakeLists.txt for:                       pMarineMRAS
 # Author(s):                              Damian Manda
 #--------------------------------------------------------
+SET(CMAKE_CXX_STANDARD 11) 
 
 SET(SRC
   MarineMRAS.cpp

@@ -75,7 +75,7 @@ Behavior = BHV_ConstantHeading
    // ------------------------------------
                 heading = 0
               basewidth = 10
-               duration = 45
+               duration = 30
               peakwidth = 10
             summitdelta = 25
 }

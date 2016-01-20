@@ -26,8 +26,8 @@ ProcessConfig = ANTLER
 
   Run = MOOSDB          @ NewConsole = false
   Run = pLogger         @ NewConsole = false
-  //Run = pMarinePID      @ NewConsole = false
-  Run = pMarineMRAS     @ NewConsole = false
+  Run = pMarinePID      @ NewConsole = false
+  //Run = pMarineMRAS     @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
   //Run = pBasicContactMgr @ NewConsole = false
   Run = uProcessWatch	  @ NewConsole = false
@@ -145,8 +145,8 @@ ProcessConfig = pEchoVar
   term_reporting = false
 
   //These are used with pMarinePID to maintain compatibility w/ graphing
-  //echo = NAV_HEADING          ->  NAV_HEADING_180
-  //echo = DESIRED_HEADING          ->  DESIRED_HEADING_180
+  echo = NAV_HEADING          ->  NAV_HEADING_180
+  echo = DESIRED_HEADING          ->  DESIRED_HEADING_180
 }
 
 ProcessConfig = pMarineMRAS
@@ -180,7 +180,7 @@ ProcessConfig = pMarineMRAS
    //ThrustPercent = 50
    Speed_Factor = 31.25
    MaxThrust = 100
-   NoOutput = true  //used to record data
+   NoOutput = false  //used to record data
 }
 
 //==============================================
@@ -374,8 +374,8 @@ ProcessConfig = pHelmIvP
   bhv_dir_not_found_ok = true
   ivp_behavior_dir = /home/ubuntu/moos-ivp-emily
 
-  behaviors  = targ_zboat_statichead.bhv
-  //behaviors  = targ_zboat_lines.bhv
+  //behaviors  = targ_zboat_statichead.bhv
+  behaviors  = targ_zboat_lines.bhv
   domain     = course:0:359:360
   domain     = speed:0:4:50
 

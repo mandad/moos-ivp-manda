@@ -126,7 +126,7 @@ bool MarineMRAS::Iterate()
       if (DetermineController() ==  ControllerType::CourseChange) {
         MOOSTrace("Using Course Change Controller\n");
         if (m_last_controller == ControllerType::CourseKeep) {
-          m_CourseControl.ResetModel(m_current_heading, m_current_ROT, 
+          m_CourseControl.ResetModel(m_current_heading, m_current_ROT,
             m_CourseKeepControl.GetModelRudder());
           m_CourseControl.SwitchController(m_CourseKeepControl.GetTauStar(),
             m_CourseKeepControl.GetKStar());
@@ -137,7 +137,7 @@ bool MarineMRAS::Iterate()
       } else {
         MOOSTrace("Using Course Keep Controller\n");
         if (m_last_controller == ControllerType::CourseChange) {
-          m_CourseKeepControl.ResetModel(m_current_heading, m_current_ROT, 
+          m_CourseKeepControl.ResetModel(m_current_heading, m_current_ROT,
             m_CourseControl.GetModelRudder());
           m_CourseKeepControl.SwitchController();
           m_last_controller = ControllerType::CourseKeep;
@@ -286,6 +286,7 @@ bool MarineMRAS::OnStartUp()
     } else if (param == "NOOUTPUT") {
       if (toupper(value) == "TRUE")
         m_output = false;
+      handled = true;
     }
 
     if(!handled)
@@ -386,7 +387,7 @@ void MarineMRAS::UpdateROT(double curr_time) {
 
       //MOOSTrace("Calculated Mean %f\n", mean);
       //Added the +5 to account for small stdev
-      if (fabs(curr_ROT - m_DiffHistory.front()) <= (2 * ROT_stdev + 10) || 
+      if (fabs(curr_ROT - m_DiffHistory.front()) <= (2 * ROT_stdev + 10) ||
         !m_discard_large_ROT)  {
         m_DiffHistory.push_front(curr_ROT);
         while(m_DiffHistory.size() > m_ROT_filter_len) {
