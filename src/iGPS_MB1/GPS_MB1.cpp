@@ -11,7 +11,7 @@
 
 using namespace std;
 
-
+#define DEBUG false
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -196,7 +196,8 @@ bool CGPS_MB1::GetData()
         char buffer[1472];  //traditional max for 1500 MTU
         try
         {
-            MOOSTrace("Receiving message on UDP port\n");
+            if (DEBUG)
+                MOOSTrace("Receiving message on UDP port\n");
             if (m_pListenSocket->iRecieveMessage(buffer, sizeof(buffer), 0)
                 == sizeof(buffer)) {
                 MOOSTrace("Packet Overflows Buffer");
@@ -229,8 +230,10 @@ void CGPS_MB1::ProcessPacket(char* pUdpPacket)
 
     if (HypackMode) {
         //Parses data from network with just strings in the data
-        MOOSTrace("GPS Packet Received:");
-        MOOSTrace(pUdpPacket);
+        if (DEBUG) {
+            MOOSTrace("GPS Packet Received:");
+            MOOSTrace(pUdpPacket);
+        }
         // There can potentially be multiple messages per ethernet packet
         char * pThisMessage;
         pThisMessage = strtok(pUdpPacket, "\r\n");
@@ -238,7 +241,8 @@ void CGPS_MB1::ProcessPacket(char* pUdpPacket)
             string sThisMessage(pThisMessage);
 
             if (!ParseNMEAString(sThisMessage)) {
-                MOOSTrace("Unable to process NMEA string.");
+                if (DEBUG)
+                    MOOSTrace("Unable to process NMEA string.");
             }
             pThisMessage = strtok(NULL, "\r\n");
         }
@@ -258,11 +262,14 @@ void CGPS_MB1::ProcessPacket(char* pUdpPacket)
         if (iMsgLength > 0) {
             string sNMEAMessage(pNMEAMessage, iMsgLength);
             if (!ParseNMEAString(sNMEAMessage)) {
-                MOOSTrace("Unable to process NMEA string.");
+                if (DEBUG)
+                    MOOSTrace("Unable to process NMEA string.");
             }
         } else {
-            MOOSTrace("No GPS data found in RTA message.");
-            MOOSTrace(pNMEAMessage);
+            if (DEBUG) {
+                MOOSTrace("No GPS data found in RTA message.");
+                MOOSTrace(pNMEAMessage);
+            }
         }
     }
     
