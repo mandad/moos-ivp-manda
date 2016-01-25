@@ -25,6 +25,7 @@ CourseKeepMRAS::CourseKeepMRAS() {
     //m_dfF = 1;
     m_dfMaxROTInc = 6;
     m_dfModelRudder = 0;
+    m_dfKi = 0;
 
     //We should read this in as a parameter
     m_dfMu = 2;
@@ -94,9 +95,7 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
             m_dfKd = m_dfKp * m_dfShipLength / dfSpeed;
 
         m_dfKi = m_dfKim;
-        if (fabs(m_dfKi) > (10 * dfSpeed / m_dfCruisingSpeed)) {
-            m_dfKi = TwoSidedLimit(m_dfKi, 10 * dfSpeed);
-        }
+        m_dfKi = TwoSidedLimit(m_dfKi, 10 * dfSpeed / m_dfCruisingSpeed);
     }
     MOOSTrace("PID Constants: Kp: %0.2f  Kd: %0.2f  Ki: %0.2f\n", m_dfKp, 
         m_dfKd, m_dfKi);
