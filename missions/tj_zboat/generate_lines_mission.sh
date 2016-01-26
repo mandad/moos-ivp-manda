@@ -61,7 +61,7 @@ if [ $SCENARIO = 2 ]; then
   PAN_Y=-284
   ZOOM=1.4
   #In this case, the shore VM
-  SHORE_IP="192.168.1.165"
+  SHORE_IP="192.168.1.166"
   SHORE_PORT=9300
   #In this case, the RPi
   BOAT_MODEM_IP="192.168.1.243"
