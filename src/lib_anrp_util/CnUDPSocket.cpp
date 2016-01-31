@@ -9,9 +9,9 @@
 #include <errno.h>
 #include "ssp.h"
 
-using namespace std;
+//using namespace std;
 
-CnUDPSocket::CnUDPSocket(string hostname, int port)
+CnUDPSocket::CnUDPSocket(std::string hostname, int port)
 {
 	this->port = port;
 	this->hostname = hostname;
@@ -33,7 +33,7 @@ CnUDPSocket::CnUDPSocket(string hostname, int port)
 
 	setsockopt(fd, SOL_SOCKET, SO_BROADCAST, &yes, sizeof(int));
 	if(bind(fd, (struct sockaddr *)&any_addr, sizeof(struct sockaddr)) == -1) {
-		throw runtime_error(ssp("CnUDPSocket: cannot bind: %s", strerror(errno)));
+		throw std::runtime_error(ssp("CnUDPSocket: cannot bind: %s", strerror(errno)));
 	}
 	setsockopt(fd, SOL_SOCKET, SO_BROADCAST, &yes, sizeof(int));
 	
