@@ -19,7 +19,8 @@ public:
     void SetParameters(double dfKStar, double dfTauStar, double dfZ, 
         double dfBeta, double dfAlpha, double dfGamma, double dfXi, 
         double dfRudderLimit, double dfCruisingSpeed, double dfShipLength, 
-        double dfMaxROT, bool bDecreaseAdapt, double dfRudderSpeed);
+        double dfMaxROT, bool bDecreaseAdapt, double dfRudderSpeed, 
+        double dfDeadband);
     static double TwoSidedLimit(double dfNumToLimit, double dfLimit);
     std::string GetStatusInfo();
     std::string GetDebugInfo();
@@ -50,6 +51,7 @@ private: // Configuration variables
     double m_dfShipLength;
     double m_bDecreaseAdapt;
     double m_dfMaxROTInc;
+    double m_dfDeadband;
 
  private: //Derived variables
     double m_dfTauM;

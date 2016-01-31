@@ -54,6 +54,7 @@ ProcessConfig = pMarineMRAS
    Xi = 1   // <= 1, not used if DecreaseAdaptation = false
    DecreaseAdaptation = false
    ROTFilter = 3  // >= 1
+   CourseKeepOnly = true
 
    // Vessel Characteristics
    RudderLimit = 45  //should be deg (but Sim uses 100 as limit)

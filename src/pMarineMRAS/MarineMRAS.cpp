@@ -37,6 +37,7 @@ MarineMRAS::MarineMRAS()
     m_discard_large_ROT = false;
     m_rudder_deadband = 0;
     m_output = true;
+    m_course_keep_only = false;
 
     m_first_heading = true;
     m_current_ROT = 0;
@@ -287,7 +288,11 @@ bool MarineMRAS::OnStartUp()
       if (toupper(value) == "TRUE")
         m_output = false;
       handled = true;
-    }
+    } else if (param == "COURSEKEEPONLY") {
+      if (toupper(value) == "TRUE")
+        m_course_keep_only = true;
+      handled = true;
+    } 
 
     if(!handled)
       reportUnhandledConfigWarning(orig);
@@ -300,7 +305,7 @@ bool MarineMRAS::OnStartUp()
         m_max_ROT, m_decrease_adapt, m_rudder_speed);
   m_CourseKeepControl.SetParameters(m_k_star, m_tau_star, m_z, m_beta,
         m_alpha, m_gamma, m_xi, m_rudder_limit, m_cruising_speed, m_length,
-        m_max_ROT, m_decrease_adapt, m_rudder_speed);
+        m_max_ROT, m_decrease_adapt, m_rudder_speed, m_rudder_deadband);
 
   registerVariables();
   return(true);
@@ -445,7 +450,9 @@ void MarineMRAS::AddHeadingHistory(double heading, double heading_time) {
 }
 
 ControllerType MarineMRAS::DetermineController() {
-  if (m_desired_heading_history.size() > 2) {
+  if (m_course_keep_only) {
+    return ControllerType::CourseKeep;
+  } else if (m_desired_heading_history.size() > 2) {
     //10 degree heading change threshold for CourseChange
     if (fabs(m_desired_heading_history.back() - m_desired_heading) <= 10) {
       // return ControllerType::CourseChange;

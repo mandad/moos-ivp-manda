@@ -29,12 +29,13 @@ CourseKeepMRAS::CourseKeepMRAS() {
 
     //We should read this in as a parameter
     m_dfMu = 2;
+    m_dfDeadband = 0;
 }
 
 void CourseKeepMRAS::SetParameters(double dfKStar, double dfTauStar, double dfZ,
     double dfBeta, double dfAlpha, double dfGamma, double dfXi,
     double dfRudderLimit, double dfCruisingSpeed, double dfShipLength,
-    double dfMaxROT, bool bDecreaseAdapt, double dfRudderSpeed)
+    double dfMaxROT, bool bDecreaseAdapt, double dfRudderSpeed, double dfDeadband)
 {
     m_dfKmStar = dfKStar;
     m_dfTaumStar = dfTauStar;
@@ -49,6 +50,7 @@ void CourseKeepMRAS::SetParameters(double dfKStar, double dfTauStar, double dfZ,
     m_dfShipLength = dfShipLength;
     m_bDecreaseAdapt = bDecreaseAdapt;
     m_dfRudderSpeed = dfRudderSpeed;
+    m_dfDeadband = dfDeadband;
 
     m_lIterations = 0;
     m_bParametersSet = true;
