@@ -124,7 +124,8 @@ bool MarineMRAS::Iterate()
     double desired_rudder = 0;
     //prevent controller runup when speed is 0
     if (!m_first_heading && m_desired_speed > 0) {
-      if (DetermineController() ==  ControllerType::CourseChange) {
+      ControllerType controller_to_use = DetermineController();
+      if (controller_to_use ==  ControllerType::CourseChange) {
         MOOSTrace("Using Course Change Controller\n");
         if (m_last_controller == ControllerType::CourseKeep) {
           m_CourseControl.ResetModel(m_current_heading, m_current_ROT,
@@ -143,8 +144,12 @@ bool MarineMRAS::Iterate()
           m_CourseKeepControl.SwitchController();
           m_last_controller = ControllerType::CourseKeep;
         }
+        bool do_adapt = true;
+        if (controller_to_use == ControllerType::CourseKeepNoAdapt)
+          do_adapt = false;
+
         desired_rudder = m_CourseKeepControl.Run(m_desired_heading, m_current_heading,
-          m_current_ROT, m_current_speed, m_last_heading_time);
+          m_current_ROT, m_current_speed, m_last_heading_time, do_adapt);
       }
     }
     if (fabs(desired_rudder) < m_rudder_deadband) {
@@ -339,18 +344,27 @@ bool MarineMRAS::buildReport()
     ACTable actab(6);
     actab << "Kp | Kd | Ki | Model Heading | Measured | Desired ";
     actab.addHeaderLines();
-    if (DetermineController() == ControllerType::CourseChange)
+    ControllerType controller_in_use = DetermineController();
+    if (controller_in_use == ControllerType::CourseChange)
       actab << m_CourseControl.GetStatusInfo();
     else
       actab << m_CourseKeepControl.GetStatusInfo();
     actab << " | | | | | ";
     actab << "Psi_r'' | Psi_r' | Rudder | Series Heading | Model ROT | Series ROT";
     actab.addHeaderLines();
-    if (DetermineController() == ControllerType::CourseChange)
+    if (controller_in_use == ControllerType::CourseChange)
       actab << m_CourseControl.GetDebugInfo();
     else
       actab << m_CourseKeepControl.GetDebugInfo();
     m_msgs << actab.getFormattedString();
+
+    if (controller_in_use == ControllerType::CourseChange)
+      m_msgs << "\nCourse Change Controller in use.";
+    else if (controller_in_use == ControllerType::CourseKeep)
+      m_msgs << "\nCourse Keep Controller in use w/ adaptation.";
+    else if (controller_in_use == ControllerType::CourseKeepNoAdapt) {
+      m_msgs << "\nCourse Keep Controller in use, no adaptation.";
+    }
   } else {
     m_msgs << "Control not running.";
   }
@@ -450,20 +464,24 @@ void MarineMRAS::AddHeadingHistory(double heading, double heading_time) {
 }
 
 ControllerType MarineMRAS::DetermineController() {
-  if (m_course_keep_only) {
-    return ControllerType::CourseKeep;
-  } else if (m_desired_heading_history.size() > 2) {
+  if (m_desired_heading_history.size() > 2) {
     //10 degree heading change threshold for CourseChange
     if (fabs(m_desired_heading_history.back() - m_desired_heading) <= 10) {
-      // return ControllerType::CourseChange;
       return ControllerType::CourseKeep;
     } else {
       //Course change is the default if we have less than 10 sec same course
-      // return ControllerType::CourseKeep;
-      return ControllerType::CourseChange;
+      if (m_course_keep_only) {
+        return ControllerType::CourseKeepNoAdapt;
+      } else {
+        return ControllerType::CourseChange;
+      }
     }
   } else {
-    // return ControllerType::CourseKeep;
-    return ControllerType::CourseChange;
+    //What to do when we don't have much history
+    if (m_course_keep_only) {
+      return ControllerType::CourseKeepNoAdapt;
+    } else {
+      return ControllerType::CourseChange;
+    }
   }
 }

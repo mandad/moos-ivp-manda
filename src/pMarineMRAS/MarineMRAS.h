@@ -14,7 +14,8 @@
 
 enum class ControllerType {
   CourseChange,
-  CourseKeep
+  CourseKeep,
+  CourseKeepNoAdapt
 };
 
 class MarineMRAS : public AppCastingMOOSApp

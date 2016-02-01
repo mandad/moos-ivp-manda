@@ -15,7 +15,7 @@ public:
     ~CourseKeepMRAS() {}
 
     double Run(double dfDesiredHeading, double dfMeasuredHeading, double dfMeasuredROT,
-     double dfSpeed, double dfTime);
+     double dfSpeed, double dfTime, bool bDoAdapt);
     void SetParameters(double dfKStar, double dfTauStar, double dfZ, 
         double dfBeta, double dfAlpha, double dfGamma, double dfXi, 
         double dfRudderLimit, double dfCruisingSpeed, double dfShipLength, 
@@ -34,7 +34,7 @@ public:
 private:
     void InitModel(double dfHeading, double dfROT, double dfSpeed);
     void UpdateModel(double dfMeasuredROT, double dfRudder, double dfSpeed, 
-        double dfDeltaT);
+        double dfDeltaT, bool bDoAdapt);
     void UpdateRudderModel(double dfDeltaT);
 
 
