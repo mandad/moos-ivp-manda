@@ -11,6 +11,7 @@
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 #include "CourseChangeMRAS.h"
 #include "CourseKeepMRAS.h"
+#include "SpeedControl.h"
 
 enum class ControllerType {
   CourseChange,

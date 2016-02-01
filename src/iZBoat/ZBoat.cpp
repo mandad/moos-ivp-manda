@@ -24,6 +24,11 @@ ZBoat::ZBoat()
 
 ZBoat::~ZBoat()
 {
+  //Set the thrusters to stop
+  const char * sStopThrust = "!pwm, *, 0.000, 0.000, 0.000, *, *\r\n";
+  m_Port.Write(sStopThrust, strlen(sStopThrust));
+
+  //Return menual control.
   const char * sInit = "!SetManualControl\r\n";
   MOOSTrace("ZBoat: Sending %s\n", sInit);
   m_Port.Write(sInit, strlen(sInit));
@@ -45,14 +50,14 @@ bool ZBoat::OnNewMail(MOOSMSG_LIST &NewMail)
 // #if 0 // Keep these around just for template
 //     string comm  = msg.GetCommunity();
 //     double dval  = msg.GetDouble();
-//     string sval  = msg.GetString(); 
+//     string sval  = msg.GetString();
 //     string msrc  = msg.GetSource();
 //     double mtime = msg.GetTime();
 //     bool   mdbl  = msg.IsDouble();
 //     bool   mstr  = msg.IsString();
 // #endif
 
-//      if(key == "FOO") 
+//      if(key == "FOO")
 //        cout << "great!";
 
 //      else if(key != "APPCAST_REQ") // handle by AppCastingMOOSApp
@@ -64,7 +69,7 @@ bool ZBoat::OnNewMail(MOOSMSG_LIST &NewMail)
    GeneratePWMMessage();
 
    PublishData();
-	
+
    return(true);
 }
 
@@ -137,7 +142,7 @@ bool ZBoat::OnStartUp()
     else if (param == "MAXTHROTTLE") {
       m_dfMaxThrottle = atof(value.c_str());
     }
-    else if(param == "PORT" || param == "BAUDRATE" || param == "HANDSHAKING" || 
+    else if(param == "PORT" || param == "BAUDRATE" || param == "HANDSHAKING" ||
       param == "STREAMING") {
       // These are all handled by CMOOSInstrument
       handled = true;
@@ -157,7 +162,7 @@ bool ZBoat::OnStartUp()
   AddMOOSVariable("Rudder", "DESIRED_RUDDER", "", dfInputPeriod);
   AddMOOSVariable("PWM", "", "ZBOAT_PWM", dfInputPeriod);
   AddMOOSVariable("SetAutonomy", "SET_AUTONOMY_MODE", "", dfInputPeriod);
-  
+
   registerVariables();
   //try to open
 
@@ -187,7 +192,7 @@ void ZBoat::registerVariables()
 //------------------------------------------------------------
 // Procedure: buildReport()
 
-// bool ZBoat::buildReport() 
+// bool ZBoat::buildReport()
 // {
 //   m_msgs << "============================================ \n";
 //   m_msgs << "File:                                        \n";
@@ -277,7 +282,7 @@ void ZBoat::GeneratePWMMessage()
   double dfThrottleSet = 0;
   double dfRudderSet = 0;
 
-  if (pThrottleSet->IsFresh()) { 
+  if (pThrottleSet->IsFresh()) {
     dfThrottleSet = pThrottleSet->GetDoubleVal();
 
   }
@@ -287,12 +292,12 @@ void ZBoat::GeneratePWMMessage()
 
   MOOSAbsLimit(dfRudderSet, m_dfMaxRudder);
   MOOSAbsLimit(dfThrottleSet, m_dfMaxThrottle);
-  
+
   double dfScaledThrottle = 1.5 - (dfThrottleSet / m_dfMaxThrottle) * 0.5;
   double dfScaledRudder = 1.5 + (dfRudderSet / m_dfMaxRudder) * 0.3;
- 
+
   char cPwmMessage[40];
-  sprintf(cPwmMessage, "!pwm, *, %4.3f, %4.3f, %4.3f, *, *\r\n", dfScaledThrottle, 
+  sprintf(cPwmMessage, "!pwm, *, %4.3f, %4.3f, %4.3f, *, *\r\n", dfScaledThrottle,
     dfScaledThrottle, dfScaledRudder);
   strncpy(m_cPwmMessage, cPwmMessage, sizeof(cPwmMessage));
 
@@ -300,5 +305,3 @@ void ZBoat::GeneratePWMMessage()
   SetMOOSVar("PWM", sPwmMessage, MOOSTime());
 
 }
-
-

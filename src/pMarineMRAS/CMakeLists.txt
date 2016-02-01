@@ -9,6 +9,7 @@ SET(SRC
   MarineMRAS_Info.cpp
   CourseChangeMRAS.cpp
   CourseKeepMRAS.cpp
+  SpeedControl.cpp
   main.cpp
 )
 
