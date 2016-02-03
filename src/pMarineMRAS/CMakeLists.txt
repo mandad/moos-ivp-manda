@@ -10,6 +10,7 @@ SET(SRC
   CourseChangeMRAS.cpp
   CourseKeepMRAS.cpp
   SpeedControl.cpp
+  ThrustMap.cpp
   main.cpp
 )
 

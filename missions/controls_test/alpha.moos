@@ -41,20 +41,23 @@ ProcessConfig = pMarineMRAS
    CommsTick = 10
 
    // Initial constant parameters
-   K_Star = 1.01   //0.5-2
-   Tau_Star = 0.15
-   //K_Star = 1
-   //Tau_Star = 1
+   // Correct parameters for USM
+   //K_Star = 1.01   //0.5-2
+   //Tau_Star = 0.15
+   //Test for adaptation
+   K_Star = 1
+   Tau_Star = 0.5
    DampingRatio = 0.8
 
    //Adaptation parameters
-   Beta = 0.01     //Speed of Kp adaptation
-   Alpha = 0.01    //Speed of Kd adaptation
+   Beta = 0.1     //Speed of Kp adaptation
+   Alpha = 0.1    //Speed of Kd adaptation
    Gamma = 0.01    //Speed of Ki adaptation
    Xi = 1   // <= 1, not used if DecreaseAdaptation = false
    DecreaseAdaptation = false
    ROTFilter = 3  // >= 1
    CourseKeepOnly = true
+   AdaptDuringTurns = true
 
    // Vessel Characteristics
    RudderLimit = 45  //should be deg (but Sim uses 100 as limit)
@@ -157,7 +160,7 @@ ProcessConfig = uSimMarine
 
 	max_rudder_degs_per_sec = 30
 
-  turn_rate     = 60
+  turn_rate     = 133 //this is actually 60 at 45 deg
   thrust_map    = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
   thrust_reflect = true
 

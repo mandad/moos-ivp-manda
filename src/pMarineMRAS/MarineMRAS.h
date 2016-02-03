@@ -64,12 +64,14 @@ class MarineMRAS : public AppCastingMOOSApp
     bool   m_discard_large_ROT;
     bool   m_output;
     bool   m_course_keep_only;
+    bool   m_adapt_turns;
 
  private: // State variables
     double m_desired_heading;
     double m_current_heading;
     double m_desired_speed;
     double m_current_speed;
+    double m_current_speed_time;
     double m_last_heading_time;
     bool   m_first_heading;
     double m_previous_heading;
@@ -82,6 +84,7 @@ class MarineMRAS : public AppCastingMOOSApp
 
     CourseChangeMRAS m_CourseControl;
     CourseKeepMRAS m_CourseKeepControl;
+    SpeedControl m_speed_control;
     ControllerType m_last_controller;
 
 };

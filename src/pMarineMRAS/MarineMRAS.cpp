@@ -38,6 +38,7 @@ MarineMRAS::MarineMRAS()
     m_rudder_deadband = 0;
     m_output = true;
     m_course_keep_only = false;
+    m_adapt_turns = false;
 
     m_first_heading = true;
     m_current_ROT = 0;
@@ -80,15 +81,15 @@ bool MarineMRAS::OnNewMail(MOOSMSG_LIST &NewMail)
 
       m_previous_heading = m_current_heading;
       m_last_heading_time = curr_time;
-    }
-    else if (key == "NAV_SPEED")
+    } else if (key == "NAV_SPEED") {
       m_current_speed = msg.GetDouble();
-    else if (key == "DESIRED_HEADING") {
+      m_current_speed_time = msg.GetTime();
+    } else if (key == "DESIRED_HEADING") {
       m_desired_heading = msg.GetDouble();
       AddHeadingHistory(m_desired_heading, msg.GetTime());
-    } else if (key == "DESIRED_SPEED")
+    } else if (key == "DESIRED_SPEED") {
       m_desired_speed = msg.GetDouble();
-    else if((key == "MOOS_MANUAL_OVERIDE") || (key == "MOOS_MANUAL_OVERRIDE")) {
+    } else if((key == "MOOS_MANUAL_OVERIDE") || (key == "MOOS_MANUAL_OVERRIDE")) {
       if(MOOSStrCmp(msg.GetString(), "FALSE")) {
         m_has_control = true;
       } else if(MOOSStrCmp(msg.GetString(), "TRUE")) {
@@ -204,6 +205,9 @@ bool MarineMRAS::OnStartUp()
 {
   AppCastingMOOSApp::OnStartUp();
 
+  // Variables to be set from the parameters
+  std::string thrust_map = "";
+
   STRING_LIST sParams;
   m_MissionReader.EnableVerbatimQuoting(false);
   if(!m_MissionReader.GetConfiguration(GetAppName(), sParams))
@@ -297,7 +301,14 @@ bool MarineMRAS::OnStartUp()
       if (toupper(value) == "TRUE")
         m_course_keep_only = true;
       handled = true;
-    } 
+    } else if (param == "ADAPTDURINGTURNS") {
+      if (toupper(value) == "TRUE")
+        m_adapt_turns = true;
+      handled = true;
+    } else if (param == "THRUST_MAP") {
+      thrust_map = value;
+      handled = true;
+    }
 
     if(!handled)
       reportUnhandledConfigWarning(orig);
@@ -311,6 +322,7 @@ bool MarineMRAS::OnStartUp()
   m_CourseKeepControl.SetParameters(m_k_star, m_tau_star, m_z, m_beta,
         m_alpha, m_gamma, m_xi, m_rudder_limit, m_cruising_speed, m_length,
         m_max_ROT, m_decrease_adapt, m_rudder_speed, m_rudder_deadband);
+  m_speed_control.SetParameters(thrust_map);
 
   registerVariables();
   return(true);
@@ -471,7 +483,11 @@ ControllerType MarineMRAS::DetermineController() {
     } else {
       //Course change is the default if we have less than 10 sec same course
       if (m_course_keep_only) {
-        return ControllerType::CourseKeepNoAdapt;
+        if (m_adapt_turns) {
+          return ControllerType::CourseKeep;
+        } else {
+          return ControllerType::CourseKeepNoAdapt;
+        }
       } else {
         return ControllerType::CourseChange;
       }
