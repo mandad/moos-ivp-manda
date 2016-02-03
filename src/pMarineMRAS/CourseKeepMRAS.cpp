@@ -187,10 +187,15 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
         m_dfTaumStar = 1 / (1/m_dfTaumStar + dfDeltaTmRecip);
         if (m_dfTaumStar < 0.1) {
             m_dfTaumStar = 0.1;
+        } else if (m_dfTaumStar > 10) {
+            //TODO: think over these limits;
+            m_dfTaumStar = 10;
         }
         m_dfKmStar += dfDeltaKmTm * m_dfTaumStar;
         if (m_dfKmStar < 0.1) {
             m_dfKmStar = 0.1;
+        } else if (m_dfKmStar > 10) {
+            m_dfKmStar = 10;
         }
         m_dfKim -= m_dfGamma * dfe;
 

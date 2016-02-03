@@ -63,6 +63,7 @@ class MarineMRAS : public AppCastingMOOSApp
     double m_rudder_speed;
     bool   m_discard_large_ROT;
     bool   m_output;
+    bool   m_record_mode;
     bool   m_course_keep_only;
     bool   m_adapt_turns;
 

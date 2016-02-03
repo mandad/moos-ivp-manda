@@ -37,6 +37,7 @@ MarineMRAS::MarineMRAS()
     m_discard_large_ROT = false;
     m_rudder_deadband = 0;
     m_output = true;
+    m_record_mode = false;
     m_course_keep_only = false;
     m_adapt_turns = false;
 
@@ -153,9 +154,9 @@ bool MarineMRAS::Iterate()
           m_current_ROT, m_current_speed, m_last_heading_time, do_adapt);
       }
     }
-    if (fabs(desired_rudder) < m_rudder_deadband) {
-      desired_rudder = 0;
-    }
+    // if (fabs(desired_rudder) < m_rudder_deadband) {
+    //   desired_rudder = 0;
+    // }
     if (m_output)
       Notify("DESIRED_RUDDER", desired_rudder);
 
@@ -191,6 +192,13 @@ bool MarineMRAS::Iterate()
     m_allstop_posted = false;
   } else {
     PostAllStop();
+  }
+
+  if (m_record_mode) {
+    MOOSTrace("Recording Mode Running, time %.1f\n", MOOSTime());
+    Notify("NAV_ROT", m_current_ROT);
+    Notify("NAV_HEADING_180", m_current_heading);
+    Notify("DESIRED_HEADING_180", angle180(m_desired_heading));
   }
 
   AppCastingMOOSApp::PostReport();
@@ -297,6 +305,10 @@ bool MarineMRAS::OnStartUp()
       if (toupper(value) == "TRUE")
         m_output = false;
       handled = true;
+    } else if (param == "RECORDMODE") {
+      if (toupper(value) == "TRUE")
+        m_record_mode = true;
+      handled = true;
     } else if (param == "COURSEKEEPONLY") {
       if (toupper(value) == "TRUE")
         m_course_keep_only = true;
@@ -322,7 +334,7 @@ bool MarineMRAS::OnStartUp()
   m_CourseKeepControl.SetParameters(m_k_star, m_tau_star, m_z, m_beta,
         m_alpha, m_gamma, m_xi, m_rudder_limit, m_cruising_speed, m_length,
         m_max_ROT, m_decrease_adapt, m_rudder_speed, m_rudder_deadband);
-  m_speed_control.SetParameters(thrust_map);
+  m_speed_control.SetParameters(thrust_map, m_max_thrust);
 
   registerVariables();
   return(true);
@@ -431,7 +443,7 @@ void MarineMRAS::UpdateROT(double curr_time) {
       }
     } else {  // too small diff history
       //MOOSTrace("Diff Hist Too Small\n");
-      if (fabs(curr_ROT) < m_max_ROT) {
+      if (fabs(curr_ROT) < m_max_ROT || m_record_mode) {
         m_DiffHistory.push_front(curr_ROT);
         m_current_ROT = curr_ROT;
       } else {

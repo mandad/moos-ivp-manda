@@ -247,6 +247,7 @@ void CourseChangeMRAS::UpdateModel(double dfDesiredHeading, double dfDeltaT) {
     double dfFModDiff = m_dfF * dfROTModDiff;
     m_dfSeriesROT += (dfFModDiff / m_dfTauM
         - 1/m_dfTauM * m_dfSeriesROT) * dfDeltaT;
+    m_dfSeriesROT = TwoSidedLimit(m_dfSeriesROT, m_dfMaxROT);
     //Input to PID as desired heading
     m_dfPsiRefP = angle180(dfROTModDiff * 1/m_dfKpm + m_dfSeriesHeading);
     //Input to parallel model as desired heading
@@ -269,7 +270,9 @@ void CourseChangeMRAS::UpdateModel(double dfDesiredHeading, double dfDeltaT) {
         dfPsiMPP = TwoSidedLimit(dfPsiMPP, m_dfMaxROTInc);
     }
 #endif
+    
     m_dfModelROT += dfPsiMPP * dfDeltaT;
+    m_dfModelROT = TwoSidedLimit(m_dfModelROT, m_dfMaxROT);
 }
 
 void CourseChangeMRAS::UpdateModelTd(double dfDesiredHeading, double dfDeltaT) {

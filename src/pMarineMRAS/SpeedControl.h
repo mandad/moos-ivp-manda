@@ -19,7 +19,7 @@ public:
     ~SpeedControl() {}
 
     double Run(double desired_speed, double speed, double heading, double time);
-    void SetParameters(std::string thrust_map);
+    void SetParameters(std::string thrust_map, double max_thrust);
 
 private:
     //Functions
