@@ -18,18 +18,23 @@ public:
     SpeedControl();
     ~SpeedControl() {}
 
-    double Run(double desired_speed, double speed, double heading, double time);
+    double Run(double desired_speed, double speed, double heading, double time,
+               bool turning);
     void SetParameters(std::string thrust_map, double max_thrust);
 
 private:
     //Functions
     void InitControls(double speed, double heading);
+    bool SpeedHistInfo(double time_range, double &slope, double &average);
+    double TimeAtHeading(double allowable_range);
 
     //State variables
     bool m_first_run;
     bool m_thrust_map_set;
     double m_thrust_output;
     double m_desired_speed;
+    double m_previous_desired_speed;
+    bool has_adjust;
 
     // std::list<double> m_speed_hist;
     // std::list<double> m_time_hist;

@@ -7,7 +7,7 @@ ServerHost = localhost
 ServerPort = 9000
 Community  = alpha
 
-MOOSTimeWarp = 4
+MOOSTimeWarp = 1
 
 // Forest Lake
 LatOrigin  = 43.825300 
@@ -21,15 +21,7 @@ ProcessConfig = ANTLER
 
   Run = MOOSDB          @ NewConsole = false, ExtraProcessParams=db
   Run = pLogger         @ NewConsole = false
-  Run = uSimMarine	    @ NewConsole = false
-  Run = pHelmIvP        @ NewConsole = false
-  Run = pMarineViewer	  @ NewConsole = false, ExtraProcessParams=one
-  Run = uProcessWatch	  @ NewConsole = false
-  Run = pNodeReporter	  @ NewConsole = false
-  Run = uTimerScript    @ NewConsole = false
   Run = pMarineMRAS     @ NewConsole = false
-  //Run = pMarinePID      @ NewConsole = false
-  //Run = pEchoVar        @ NewConsole = false
 
   one = --size=1400x800
   db = --event_log=eventlog
@@ -55,9 +47,9 @@ ProcessConfig = pMarineMRAS
    Gamma = 0.01    //Speed of Ki adaptation
    Xi = 1   // <= 1, not used if DecreaseAdaptation = false
    DecreaseAdaptation = false
-   ROTFilter = 3  // >= 1
+   ROTFilter = 1  // >= 1
    CourseKeepOnly = true
-   AdaptDuringTurns = true
+   AdaptDuringTurns = false
 
    // Vessel Characteristics
    RudderLimit = 45  //should be deg (but Sim uses 100 as limit)
@@ -72,7 +64,10 @@ ProcessConfig = pMarineMRAS
    //ThrustPercent = 50
    Speed_Factor = 31.25
    MaxThrust = 100
-   thrust_map = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
+   thrust_map    = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
+
+   NoOutput = true  //used to record data
+   RecordMode = true
 }
 
 //------------------------------------------

@@ -35,6 +35,7 @@ class MarineMRAS : public AppCastingMOOSApp
    void PostAllStop();
    void AddHeadingHistory(double heading, double heading_time);
    ControllerType DetermineController();
+   bool IsTurning();
 
  protected: // Standard AppCastingMOOSApp function to overload 
    bool buildReport();

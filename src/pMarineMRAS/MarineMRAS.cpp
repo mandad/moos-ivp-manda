@@ -13,6 +13,8 @@
 
 using namespace std;
 
+#define TURN_THRESHOLD 10 //degrees
+
 //---------------------------------------------------------
 // Constructor
 
@@ -480,7 +482,7 @@ void MarineMRAS::AddHeadingHistory(double heading, double heading_time) {
   m_desired_heading_history.push_front(heading);
   m_desired_hist_time.push_front(heading_time);
 
-  //Keep last 10 sec of data
+  //Keep last 10 sec of data - this needs to adapt to turn rate of vessel
   while (heading_time - m_desired_hist_time.back() > 10) {
     m_desired_hist_time.pop_back();
     m_desired_heading_history.pop_back();
@@ -490,7 +492,7 @@ void MarineMRAS::AddHeadingHistory(double heading, double heading_time) {
 ControllerType MarineMRAS::DetermineController() {
   if (m_desired_heading_history.size() > 2) {
     //10 degree heading change threshold for CourseChange
-    if (fabs(m_desired_heading_history.back() - m_desired_heading) <= 10) {
+    if (IsTurning()) {
       return ControllerType::CourseKeep;
     } else {
       //Course change is the default if we have less than 10 sec same course
@@ -512,4 +514,14 @@ ControllerType MarineMRAS::DetermineController() {
       return ControllerType::CourseChange;
     }
   }
+}
+
+bool MarineMRAS::IsTurning() {
+  if (m_desired_heading_history.size() > 2) {
+    return fabs(m_desired_heading_history.back() - m_desired_heading) 
+            <= TURN_THRESHOLD;
+  } else {
+    //assume we are turning if we don't know
+    return true;
+  } 
 }

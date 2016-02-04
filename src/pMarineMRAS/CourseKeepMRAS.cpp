@@ -14,6 +14,7 @@
 #define LIMIT_ROT_INC false
 #define RESET_THRESHOLD 5
 #define KP_LIMIT 2.5
+#define DEBUG true
 
 using namespace std;
 
