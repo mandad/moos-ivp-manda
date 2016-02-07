@@ -45,6 +45,7 @@ public:
  public: // Getters
   double getSpeedValue(double thrust) const;
   double getThrustValue(double speed) const;
+  double getSlopeAtThrust(double thrust) const;
   double getThrustFactor() const;
   bool   isAscending() const;
   bool   isConfigured();

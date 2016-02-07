@@ -537,6 +537,59 @@ double ThrustMap::getThrustValueNeg(double speed) const
   return(thrust_val);
 }
 
+
+//--------------------------------------------------------------------
+// Procedure: getSlopeAtThrust
+//
+
+//bool ThrustMap::getSlopeAtThrust(double thrust)
+double ThrustMap::getSlopeAtThrust(double thrust) const
+{
+  if(usingThrustFactor()) {
+    return m_thrust_factor;
+  }
+  
+  map<double, double>::const_reverse_iterator p = m_pos_mapping.rbegin();
+  
+  double right_dom = m_max_thrust;
+  double right_val = p->second;
+
+  if(thrust >= m_max_thrust)
+    return(0);
+
+  double left_dom = 0;
+  double left_val = 0;
+
+  bool found = false;
+  while((p != m_pos_mapping.rend()) && !found) {
+    double ithrust = p->first;
+    double ispeed  = p->second;
+
+    if(thrust >= ithrust) {
+      left_dom = ithrust;
+      left_val = ispeed;
+      found = true;
+    }
+    else {
+      right_dom = ithrust;
+      right_val = ispeed;
+    }    
+    p++;
+  }
+
+  double rise = (right_dom - left_dom);  //delta thrust
+
+  double run  = (right_val - left_val);  //delta speed
+  if(run <= 0) 
+    return(0);
+  
+  double slope = rise / run;
+
+  //double speed_val = ((thrust-left_dom) * slope) + left_val;
+
+  return(slope);
+}
+
 //--------------------------------------------------------------------
 // Procedure: injestMapString
 //

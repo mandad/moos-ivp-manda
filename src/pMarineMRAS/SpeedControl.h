@@ -21,6 +21,7 @@ public:
     double Run(double desired_speed, double speed, double heading, double time,
                bool turning);
     void SetParameters(std::string thrust_map, double max_thrust);
+    std::string AppCastMessage();
 
 private:
     //Functions
@@ -35,6 +36,9 @@ private:
     double m_desired_speed;
     double m_previous_desired_speed;
     bool has_adjust;
+    double m_thrust_change_time;
+    double m_previous_time;
+    double m_initial_speed;
 
     // std::list<double> m_speed_hist;
     // std::list<double> m_time_hist;
