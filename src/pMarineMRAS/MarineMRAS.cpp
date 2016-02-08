@@ -524,7 +524,7 @@ ControllerType MarineMRAS::DetermineController() {
 bool MarineMRAS::IsTurning() {
   if (m_desired_heading_history.size() > 2) {
     return fabs(m_desired_heading_history.back() - m_desired_heading) 
-            <= TURN_THRESHOLD;
+            > TURN_THRESHOLD;
   } else {
     //assume we are turning if we don't know
     return true;
