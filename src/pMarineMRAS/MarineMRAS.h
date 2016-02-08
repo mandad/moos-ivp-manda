@@ -67,6 +67,7 @@ class MarineMRAS : public AppCastingMOOSApp
     bool   m_record_mode;
     bool   m_course_keep_only;
     bool   m_adapt_turns;
+    std::string m_speed_var;
 
  private: // State variables
     double m_desired_heading;

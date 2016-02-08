@@ -14,7 +14,7 @@
 #define LIMIT_ROT_INC false
 #define RESET_THRESHOLD 5
 #define KP_LIMIT 2.5
-#define DEBUG true
+#define DEBUG false
 
 using namespace std;
 
@@ -60,10 +60,11 @@ void CourseKeepMRAS::SetParameters(double dfKStar, double dfTauStar, double dfZ,
 double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
     double dfMeasuredROT, double dfSpeed, double dfTime, bool bDoAdapt)
 {
+    if (DEBUG)
+        MOOSTrace("Using Course Keep Controller\n");
+
     dfMeasuredHeading = angle180(dfMeasuredHeading);
     dfDesiredHeading = angle180(dfDesiredHeading);
-
-    //m_dfRudderOut = 0;
 
     if (m_bFirstRun && m_bParametersSet) {
         //Otherwise this will nearly always be zero and result in incorrect
@@ -71,7 +72,8 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
         // NewHeading(m_dfCruisingSpeed);
         InitModel(dfMeasuredHeading, dfMeasuredROT, m_dfCruisingSpeed);
         m_dfInitTime = dfTime;
-        MOOSTrace("Model and Controller Initialized.\n");
+        if (DEBUG)
+            MOOSTrace("Model and Controller Initialized.\n");
 
         m_bFirstRun = false;
     } else if (m_bControllerSwitch) {
@@ -102,8 +104,9 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
             m_dfKi = TwoSidedLimit(m_dfKi, 10 * dfSpeed / m_dfCruisingSpeed);
         }
     }
-    MOOSTrace("PID Constants: Kp: %0.2f  Kd: %0.2f  Ki: %0.2f\n", m_dfKp, 
-        m_dfKd, m_dfKi);
+    if (DEBUG)
+        MOOSTrace("PID Constants: Kp: %0.2f  Kd: %0.2f  Ki: %0.2f\n", m_dfKp, 
+            m_dfKd, m_dfKi);
     //PID equation
     double heading_error = angle180(dfDesiredHeading - dfMeasuredHeading);
     m_dfRudderOut = m_dfKp * heading_error - m_dfKd * dfMeasuredROT + m_dfKi;
@@ -121,7 +124,8 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
 }
 
 void CourseKeepMRAS::InitModel(double dfHeading, double dfROT, double dfSpeed) {
-    MOOSTrace("Mu: %0.2f\n", m_dfMu);
+    if (DEBUG)
+        MOOSTrace("Mu: %0.2f\n", m_dfMu);
     m_dfKp = m_dfMu / 2;
     m_dfKd = (m_dfShipLength * 2 * sqrt(m_dfKp * m_dfKmStar * m_dfTaumStar) - 1) /
         (dfSpeed * m_dfKmStar);
@@ -137,18 +141,21 @@ void CourseKeepMRAS::InitModel(double dfHeading, double dfROT, double dfSpeed) {
     m_dfKm = m_dfKmStar * m_dfShipLength / dfSpeed;
     ResetModel(dfHeading, dfROT, dfSpeed);
 
-    MOOSTrace("Adaptive Init: TauM*: %0.2f  Km*: %0.2f  Ki,m: %0.2f\n", m_dfTaumStar,
-        m_dfKmStar, m_dfKim);
+    if (DEBUG)
+        MOOSTrace("Adaptive Init: TauM*: %0.2f  Km*: %0.2f  Ki,m: %0.2f\n", m_dfTaumStar,
+            m_dfKmStar, m_dfKim);
 }
 
 void CourseKeepMRAS::ResetModel(double dfHeading, double dfROT, double dfRudder) {
     m_dfModelHeading = dfHeading;
     m_dfModelROT = dfROT;
     m_dfModelPhiDotDot = m_dfKm / m_dfTauM * dfRudder - dfROT / m_dfTauM;
-    MOOSTrace("Model Init: Y..: %0.2f  Y.: %0.2f  Y: %0.2f\n", m_dfModelPhiDotDot,
-        m_dfModelROT, m_dfModelHeading);
-    MOOSTrace("Model Init: TauM*: %0.2f  Km*: %0.2f  Ki,m: %0.2f\n", m_dfTaumStar,
-        m_dfKmStar, m_dfKim);
+    if (DEBUG) {
+        MOOSTrace("Model Init: Y..: %0.2f  Y.: %0.2f  Y: %0.2f\n", m_dfModelPhiDotDot,
+            m_dfModelROT, m_dfModelHeading);
+        MOOSTrace("Model Init: TauM*: %0.2f  Km*: %0.2f  Ki,m: %0.2f\n", m_dfTaumStar,
+            m_dfKmStar, m_dfKim);
+    }
 
     m_dfModelRudder = dfRudder;
     m_dfRudderOut = dfRudder;
@@ -170,15 +177,12 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
     m_dfModelHeading += m_dfModelROT * dfDeltaT;
     m_dfModelHeading = angle180(m_dfModelHeading);
 
-    MOOSTrace("Process Vars: Y.: %0.2f  dT: %0.2f\n",dfMeasuredROT, dfDeltaT);
-    MOOSTrace("Model Params: Km: %0.2f  Taum: %0.2f\n", m_dfKm, m_dfTauM);
-    MOOSTrace("Model Update: Y..: %0.2f  Y.: %0.2f  Y: %0.2f  Rudder: %0.2f\n", 
-        m_dfModelPhiDotDot, m_dfModelROT, m_dfModelHeading, dfRudder);
-
-    // Process Vars: Y.: 0.00
-    // Model Update: Y..: 0.00  Y.: 0.00  Y: 180.00  Rudder: 0.00
-    // Adaptive Update: TauM*: inf  Km*: nan  Ki,m: 0.00
-    // PID Constants: Kp: 1.00  Kd: nan  Ki: 0.00
+    if (DEBUG) {
+        MOOSTrace("Process Vars: Y.: %0.2f  dT: %0.2f\n",dfMeasuredROT, dfDeltaT);
+        MOOSTrace("Model Params: Km: %0.2f  Taum: %0.2f\n", m_dfKm, m_dfTauM);
+        MOOSTrace("Model Update: Y..: %0.2f  Y.: %0.2f  Y: %0.2f  Rudder: %0.2f\n", 
+            m_dfModelPhiDotDot, m_dfModelROT, m_dfModelHeading, dfRudder);
+    }
 
     //Do adaptation
     if (bDoAdapt) {
@@ -200,9 +204,11 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
         }
         m_dfKim -= m_dfGamma * dfe;
 
-        MOOSTrace("Adaptive Update: TauM*: %0.2f  Km*: %0.2f  Ki,m: %0.2f\n", m_dfTaumStar,
-            m_dfKmStar, m_dfKim);
+        if (DEBUG)
+            MOOSTrace("Adaptive Update: TauM*: %0.2f  Km*: %0.2f  Ki,m: %0.2f\n", m_dfTaumStar,
+                m_dfKmStar, m_dfKim);
 
+        //Potential to divide by zero here if dfSpeed == 0
         m_dfTauM = m_dfTaumStar * dfSpeed / m_dfShipLength;
         m_dfKm = m_dfKmStar * m_dfShipLength / dfSpeed;
     }
@@ -221,7 +227,8 @@ void CourseKeepMRAS::UpdateRudderModel(double dfDeltaT) {
     } else {
         m_dfModelRudder = dfRudderOut;
     }
-    MOOSTrace("Model Rudder: %0.2f  Rudder Out: %0.2f\n", m_dfModelRudder, dfRudderOut);
+    if (DEBUG)
+        MOOSTrace("Model Rudder: %0.2f  Rudder Out: %0.2f\n", m_dfModelRudder, dfRudderOut);
 }
 
 double CourseKeepMRAS::GetModelRudder() {

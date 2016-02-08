@@ -42,6 +42,7 @@ MarineMRAS::MarineMRAS()
     m_record_mode = false;
     m_course_keep_only = false;
     m_adapt_turns = false;
+    m_speed_var = "NAV_SPEED_OVER_GROUND";
 
     m_first_heading = true;
     m_current_ROT = 0;
@@ -84,7 +85,7 @@ bool MarineMRAS::OnNewMail(MOOSMSG_LIST &NewMail)
 
       m_previous_heading = m_current_heading;
       m_last_heading_time = curr_time;
-    } else if (key == "NAV_SPEED") {
+    } else if (key == m_speed_var) {
       m_current_speed = msg.GetDouble();
       m_current_speed_time = msg.GetTime();
     } else if (key == "DESIRED_HEADING") {
@@ -125,12 +126,21 @@ bool MarineMRAS::Iterate()
   AppCastingMOOSApp::Iterate();
 
   if (m_has_control) {
+    // ------ Determine the thrust --------
+    if(m_speed_factor != 0) {
+      m_desired_thrust = m_desired_speed * m_speed_factor;
+    } else {
+      m_desired_thrust = m_speed_control.Run(m_desired_speed, m_current_speed, 
+        m_current_heading, m_current_speed_time, IsTurning());
+    }
+
+    // ------- Determine the rudder -------
     double desired_rudder = 0;
     //prevent controller runup when speed is 0
-    if (!m_first_heading && m_desired_speed > 0) {
+    if (!m_first_heading && m_desired_thrust > 0 && m_desired_speed > 0) {
       ControllerType controller_to_use = DetermineController();
       if (controller_to_use ==  ControllerType::CourseChange) {
-        MOOSTrace("Using Course Change Controller\n");
+        //MOOSTrace("Using Course Change Controller\n");
         if (m_last_controller == ControllerType::CourseKeep) {
           m_CourseControl.ResetModel(m_current_heading, m_current_ROT,
             m_CourseKeepControl.GetModelRudder());
@@ -139,9 +149,9 @@ bool MarineMRAS::Iterate()
           m_last_controller = ControllerType::CourseChange;
         }
         desired_rudder = m_CourseControl.Run(m_desired_heading, m_current_heading,
-          m_current_ROT, m_current_speed, m_last_heading_time);
+          m_current_ROT, m_desired_speed, m_last_heading_time);
       } else {
-        MOOSTrace("Using Course Keep Controller\n");
+        // Use the course keep controller
         if (m_last_controller == ControllerType::CourseChange) {
           m_CourseKeepControl.ResetModel(m_current_heading, m_current_ROT,
             m_CourseControl.GetModelRudder());
@@ -151,24 +161,18 @@ bool MarineMRAS::Iterate()
         bool do_adapt = true;
         if (controller_to_use == ControllerType::CourseKeepNoAdapt)
           do_adapt = false;
-
+        //using desired speed instead of current to prevent minor fluctuations
         desired_rudder = m_CourseKeepControl.Run(m_desired_heading, m_current_heading,
-          m_current_ROT, m_current_speed, m_last_heading_time, do_adapt);
+          m_current_ROT, m_desired_speed, m_last_heading_time, do_adapt);
       }
     }
     // if (fabs(desired_rudder) < m_rudder_deadband) {
     //   desired_rudder = 0;
     // }
-    if (m_output)
-      Notify("DESIRED_RUDDER", desired_rudder);
-
-    if(m_speed_factor != 0) {
-      m_desired_thrust = m_desired_speed * m_speed_factor;
-    }
-    m_desired_thrust = CourseChangeMRAS::TwoSidedLimit(m_desired_thrust,
-      m_max_thrust);
-    if (m_output)
+    if (m_output) {
       Notify("DESIRED_THRUST", m_desired_thrust);
+      Notify("DESIRED_RUDDER", desired_rudder);
+    }
 
     //Debug variables for logging
     double vars[11];
@@ -349,7 +353,8 @@ void MarineMRAS::registerVariables()
 {
   AppCastingMOOSApp::RegisterVariables();
   Register("NAV_HEADING", 0);
-  Register("NAV_SPEED", 0);
+  //Register("NAV_SPEED", 0);
+  Register(m_speed_var, 0);
   Register("DESIRED_HEADING", 0);
   Register("DESIRED_SPEED", 0);
   Register("MOOS_MANUAL_OVERIDE", 0);

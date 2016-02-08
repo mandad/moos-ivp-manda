@@ -18,27 +18,35 @@
 
 SpeedControl::SpeedControl() : m_thrust_output(0),  m_first_run(true), 
                                m_thrust_map_set(true), m_max_thrust(100), 
-                               has_adjust(false) {
-  //  = 0;
-  // m_first_run = true;
-  // m_thrust_map_set = false;
+                               has_adjust(false), m_initial_speed(0) {
+  InitControls();
 }
 
 double SpeedControl::Run(double desired_speed, double speed, double heading,
                          double current_time, bool turning) {
+  //MOOSTrace("Speed Control: Desired Speed = %.2f\n", desired_speed);
+  if (isnan(desired_speed)) {
+    MOOSTrace("Speed Control: Passed NaN Desired Speed\n");
+    return m_thrust_output;
+  }
   //default is to not change the thrust output
   double thrust = m_thrust_output;
   bool speed_is_level = false;
   int binned_direction = int(std::round(angle360(heading) / ANGLE_BINS));
+  if (binned_direction > m_direction_average.size())
+    binned_direction = 0;
+  // MOOSTrace("Speed Control: Binned Direction = %i\n", binned_direction);
 
   if (m_first_run && m_thrust_map_set) {
-    InitControls(speed, heading);
+    
     m_first_run = false;
     m_time_at_speed = 0;
 
     m_initial_speed = desired_speed;
     thrust = m_thrust_map.getThrustValue(m_initial_speed);
     m_thrust_change_time = current_time;
+    MOOSTrace("Speed Control: First Run, Desired Speed = %.2f Thrust = %.2f\n", 
+      desired_speed, thrust);
   } else if (m_previous_desired_speed == desired_speed) {
     m_time_at_speed = current_time - m_speed_hist.back().m_time;
   } else {
@@ -48,10 +56,14 @@ double SpeedControl::Run(double desired_speed, double speed, double heading,
     m_speed_hist.clear();
     has_adjust = false;
     //Should add heading history value here
-    double speed_diff_avg = m_direction_average[binned_direction].first /
-      m_direction_average[binned_direction].second;
+    double speed_diff_avg = 0;
+    if (m_direction_average[binned_direction].second > 0)
+      double speed_diff_avg = m_direction_average[binned_direction].first /
+        m_direction_average[binned_direction].second;
     m_initial_speed = desired_speed - speed_diff_avg;
     thrust = m_thrust_map.getThrustValue(m_initial_speed);
+    MOOSTrace("Speed Control: New Setting, Inital Speed = %.2f Thrust = %.2f Speed Diff Avg = %.2f\n", 
+      m_initial_speed, thrust, speed_diff_avg);
   }
 
   //need to figure out way to prevent wind up when under human control
@@ -83,20 +95,27 @@ double SpeedControl::Run(double desired_speed, double speed, double heading,
     
     if (!has_adjust) {
       double des_speed_diff = desired_speed - speed_avg;
+      // TODO: Maybe don't do this when within SPEED_TOLERANCE?
       thrust = m_thrust_map.getThrustValue(m_initial_speed + des_speed_diff);
       has_adjust = true;
+      MOOSTrace("Speed Control: First Adjust, Speed Diff = %.2f Thrust = %.2f\n", 
+        des_speed_diff, thrust);
     } else if (current_time - m_thrust_change_time > 3 * AVERAGING_LEN) {
       //Do minor adjustments after the first big one
       //Rewrite the speed_slope & avg here, maybe should be new vars?
-      history_valid = SpeedHistInfo(AVERAGING_LEN * 2, speed_slope, speed_avg);
-      if (history_valid) {
-        //Note that this has a longer averaging period then the first adjust
-        double des_speed_diff_long = desired_speed - speed_avg;
-        double delta_t = m_previous_time - current_time;
-        if (fabs(des_speed_diff_long) > SPEED_TOLERANCE) {
-          double thrust_slope = m_thrust_map.getSlopeAtThrust(m_thrust_output);
-          //Adjust based on the differential
-          thrust = m_thrust_output + des_speed_diff_long * thrust_slope;
+      if (time_at_heading > AVERAGING_LEN * 2) {
+        history_valid = SpeedHistInfo(AVERAGING_LEN * 2, speed_slope, speed_avg);
+        if (history_valid) {
+          //Note that this has a longer averaging period then the first adjust
+          double des_speed_diff_long = desired_speed - speed_avg;
+          double delta_t = m_previous_time - current_time;
+          if (fabs(des_speed_diff_long) > SPEED_TOLERANCE) {
+            double thrust_slope = m_thrust_map.getSlopeAtThrust(m_thrust_output);
+            //Adjust based on the differential
+            thrust = m_thrust_output + des_speed_diff_long * thrust_slope;
+            MOOSTrace("Speed Control: Small Adjust, Speed Diff = %.2f Thrust = %.2f\n", 
+              des_speed_diff_long, thrust);
+          }
         }
       }
     }
@@ -108,6 +127,7 @@ double SpeedControl::Run(double desired_speed, double speed, double heading,
 
   // Set the output speed (if zero, turn thrust off, no need for control)
   // This may need to be changed if we want to hold against currents
+  MOOSAbsLimit(thrust, m_max_thrust);
   if (thrust != m_thrust_output) {
       m_thrust_change_time = current_time;
   }
@@ -116,13 +136,13 @@ double SpeedControl::Run(double desired_speed, double speed, double heading,
   } else {
     m_thrust_output = thrust;
   }
-  MOOSAbsLimit(m_thrust_output, m_max_thrust);
   return m_thrust_output;
 }
 
-void SpeedControl::InitControls(double speed, double heading) {
+void SpeedControl::InitControls() {
   for (int direction = 0; direction < int(std::round(360 / ANGLE_BINS)); 
        direction++) {
+    MOOSTrace("Speed Control: Setting Direction = %i\n", direction);
     m_direction_average[direction] = std::make_pair(0,0);
   }
 

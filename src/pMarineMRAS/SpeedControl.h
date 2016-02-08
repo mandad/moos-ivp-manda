@@ -25,7 +25,7 @@ public:
 
 private:
     //Functions
-    void InitControls(double speed, double heading);
+    void InitControls();
     bool SpeedHistInfo(double time_range, double &slope, double &average);
     double TimeAtHeading(double allowable_range);
 
