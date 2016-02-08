@@ -37,35 +37,6 @@ double SpeedControl::Run(double desired_speed, double speed, double heading,
     binned_direction = 0;
   // MOOSTrace("Speed Control: Binned Direction = %i\n", binned_direction);
 
-  if (m_first_run && m_thrust_map_set) {
-    
-    m_first_run = false;
-    m_time_at_speed = 0;
-
-    m_initial_speed = desired_speed;
-    thrust = m_thrust_map.getThrustValue(m_initial_speed);
-    m_thrust_change_time = current_time;
-    MOOSTrace("Speed Control: First Run, Desired Speed = %.2f Thrust = %.2f\n", 
-      desired_speed, thrust);
-  } else if (m_previous_desired_speed == desired_speed) {
-    m_time_at_speed = current_time - m_speed_hist.back().m_time;
-  } else {
-    //We have changed desired speeds
-    //need to do something for small speed changes (use same offset)
-    m_time_at_speed = 0;
-    m_speed_hist.clear();
-    m_has_adjust = false;
-    //Should add heading history value here
-    double speed_diff_avg = 0;
-    if (m_direction_average[binned_direction].second > 0)
-      double speed_diff_avg = m_direction_average[binned_direction].first /
-        m_direction_average[binned_direction].second;
-    m_initial_speed = desired_speed - speed_diff_avg;
-    thrust = m_thrust_map.getThrustValue(m_initial_speed);
-    MOOSTrace("Speed Control: New Setting, Inital Speed = %.2f Thrust = %.2f Speed Diff Avg = %.2f\n", 
-      m_initial_speed, thrust, speed_diff_avg);
-  }
-
   //need to figure out way to prevent wind up when under human control
   m_speed_hist.emplace_front(desired_speed, speed, heading, current_time);
   while (current_time - m_speed_hist.back().m_time > HISTORY_TIME) {
@@ -75,21 +46,56 @@ double SpeedControl::Run(double desired_speed, double speed, double heading,
   double speed_avg = 0;
   double speed_slope = 0;
   bool history_valid = SpeedHistInfo(AVERAGING_LEN, speed_slope, speed_avg);
-  double time_at_heading = 0;
+  double time_at_heading = TimeAtHeading(10);
+  MOOSTrace("Speed Control: Time At Heading = %.2f\n", time_at_heading);
   //Largest from calm day straight = 0.04
   //Largest from rough day straight = 0.10
   if (!turning && history_valid && fabs(speed_slope) < MAX_FLAT_SLOPE) {
     speed_is_level = true;
-    time_at_heading = TimeAtHeading(10);
-  } else {
-    m_has_adjust = false;
   }
-  
+  // If we have more than a 1 sec diff in time at the heading (i.e. turning)
+  if (turning || (m_prev_time_at_heading - time_at_heading) > 1) {
+    m_turn_began = true;
+  }
+  // if (turning) {
+  //   m_has_adjust = false;
+  //   m_turning_time = current_time
+  // }
 
-  //round to nearest ANGLE_BINS and add to history
-  //only do this if past a certain time
-  MOOSTrace("Speed Control: Time At Heading = %.2f\n", time_at_heading);
-  if (speed_is_level && time_at_heading > AVERAGING_LEN) {
+
+  if (m_first_run && m_thrust_map_set) {
+    
+    m_first_run = false;
+    m_turn_began = false;
+    // m_time_at_speed = 0;
+
+    m_initial_speed = desired_speed;
+    thrust = m_thrust_map.getThrustValue(m_initial_speed);
+    m_thrust_change_time = current_time;
+    MOOSTrace("Speed Control: First Run, Desired Speed = %.2f Thrust = %.2f\n", 
+      desired_speed, thrust);
+  } else if (m_previous_desired_speed != desired_speed || 
+             (time_at_heading > AVERAGING_LEN && m_turn_began && !turning)) {
+    // m_time_at_speed = current_time - m_speed_hist.back().m_time;
+    //We have changed desired speeds
+    //need to do something for small speed changes (use same offset)
+    // m_time_at_speed = 0;
+    // m_speed_hist.clear();
+    m_has_adjust = false;
+    m_turn_began = false;
+    //Should add heading history value here
+    double speed_diff_avg = 0;
+    if (m_direction_average[binned_direction].second > 0)
+      speed_diff_avg = m_direction_average[binned_direction].first /
+        m_direction_average[binned_direction].second;
+    m_initial_speed = desired_speed - speed_diff_avg;
+    thrust = m_thrust_map.getThrustValue(m_initial_speed);
+    MOOSTrace("Speed Control: New Setting, Inital Speed = %.2f Thrust = %.2f Speed Diff Avg = %.2f Binned Dir = %i\n", 
+      m_initial_speed, thrust, speed_diff_avg, binned_direction);
+  } else if (speed_is_level && time_at_heading > (2 * AVERAGING_LEN)
+      && (current_time - m_thrust_change_time) > (2 * AVERAGING_LEN)) {
+    //round to nearest ANGLE_BINS and add to history
+    //only do this if past a certain time
     double map_speed_diff = speed - m_thrust_map.getSpeedValue(m_thrust_output);
     //this will overflow after a long time
     m_direction_average[binned_direction] = std::make_pair(
@@ -132,6 +138,7 @@ double SpeedControl::Run(double desired_speed, double speed, double heading,
   //Update before the next cycle
   m_previous_desired_speed = desired_speed;
   m_previous_time = current_time;
+  m_prev_time_at_heading = time_at_heading;
 
   // Set the output speed (if zero, turn thrust off, no need for control)
   // This may need to be changed if we want to hold against currents
@@ -220,7 +227,18 @@ double SpeedControl::TimeAtHeading(double allowable_range) {
 
 std::string SpeedControl::AppCastMessage() {
   std::stringstream message;
-  message << "Speed Control Enabled";
+  message << "Speed Control Enabled\n";
+  message << "\nSpeed Averages:\n";
+
+  std::map<int, std::pair<double, int>>::iterator dir_avgs;
+  for (dir_avgs = m_direction_average.begin(); 
+    dir_avgs != m_direction_average.end(); dir_avgs++) {
+    double avg_offset = 0;
+    if (dir_avgs->second.second != 0) {
+      avg_offset = dir_avgs->second.first / dir_avgs->second.second;
+    }
+    message << dir_avgs->first * ANGLE_BINS << ": " << avg_offset << std::endl;
+  }
 
   return message.str();
 }

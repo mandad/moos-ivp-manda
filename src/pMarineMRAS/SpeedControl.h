@@ -39,6 +39,9 @@ private:
     double m_thrust_change_time;
     double m_previous_time;
     double m_initial_speed;
+    double m_turning_time;
+    double m_prev_time_at_heading;
+    bool m_turn_began;
 
     // std::list<double> m_speed_hist;
     // std::list<double> m_time_hist;

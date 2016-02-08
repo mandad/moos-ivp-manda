@@ -396,6 +396,7 @@ bool MarineMRAS::buildReport()
     else if (controller_in_use == ControllerType::CourseKeepNoAdapt) {
       m_msgs << "\nCourse Keep Controller in use, no adaptation.";
     }
+    m_msgs << m_speed_control.AppCastMessage();
   } else {
     m_msgs << "Control not running.";
   }
