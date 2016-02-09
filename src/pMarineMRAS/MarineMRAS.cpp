@@ -131,7 +131,7 @@ bool MarineMRAS::Iterate()
       m_desired_thrust = m_desired_speed * m_speed_factor;
     } else {
       m_desired_thrust = m_speed_control.Run(m_desired_speed, m_current_speed, 
-        m_current_heading, m_current_speed_time, IsTurning());
+        m_desired_heading, m_current_heading, m_current_speed_time, IsTurning());
     }
 
     // ------- Determine the rudder -------

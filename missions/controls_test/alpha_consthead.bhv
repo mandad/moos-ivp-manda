@@ -1,4 +1,4 @@
-//--------    FILE: alpha.bhv   -------------
+//--------    FILE: alpha_consthead.bhv   -------------
 
 initialize   DEPLOY = false
 initialize   RETURN = false
@@ -21,7 +21,7 @@ Behavior = BHV_ConstantHeading
    // ------------------------------------
                 heading = 180
               basewidth = 10        
-               duration = 10         
+               duration = 20         
               peakwidth = 10          
             summitdelta = 25           
 }

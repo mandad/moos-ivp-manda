@@ -18,8 +18,8 @@ public:
     SpeedControl();
     ~SpeedControl() {}
 
-    double Run(double desired_speed, double speed, double heading, double time,
-               bool turning);
+    double Run(double desired_speed, double speed, double heading, 
+               double desired_heading, double time, bool turning);
     void SetParameters(std::string thrust_map, double max_thrust);
     std::string AppCastMessage();
 
@@ -28,6 +28,7 @@ private:
     void InitControls();
     bool SpeedHistInfo(double time_range, double &slope, double &average);
     double TimeAtHeading(double allowable_range);
+    int BinnedHeading(double heading);
 
     //State variables
     bool m_first_run;
@@ -42,6 +43,8 @@ private:
     double m_turning_time;
     double m_prev_time_at_heading;
     bool m_turn_began;
+    bool m_turn_finished;
+    int m_adjustment_state;
 
     // std::list<double> m_speed_hist;
     // std::list<double> m_time_hist;
