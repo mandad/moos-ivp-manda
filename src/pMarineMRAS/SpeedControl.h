@@ -36,6 +36,7 @@ private:
     double m_thrust_output;
     double m_desired_speed;
     double m_previous_desired_speed;
+    double m_previous_desired_heading;
     bool m_has_adjust;
     double m_thrust_change_time;
     double m_previous_time;

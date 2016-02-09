@@ -15,6 +15,7 @@
 #define AVERAGING_LEN 3
 #define MAX_FLAT_SLOPE 0.8 //m/s^2
 #define SPEED_TOLERANCE 0.05
+#define HEADING_TOLERANCE 10
 
 SpeedControl::SpeedControl() : m_thrust_output(0),  m_first_run(true), 
                                m_thrust_map_set(true), m_max_thrust(100), 
@@ -32,6 +33,7 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
     return m_thrust_output;
   }
   //default is to not change the thrust output
+  MOOSTrace("Speed Control: Desired Heading = %.2f\n", desired_heading);
   heading = angle360(heading);
   desired_heading = angle360(desired_heading);
   double thrust = m_thrust_output;
@@ -60,22 +62,20 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
   // Maybe use 2x avg len for time?
   //|| (m_prev_time_at_heading - time_at_heading) > 1
   // TODO: account for desired_heading = 0 when stopped
-  if (fabs(angle180(angle180(heading) - angle180(desired_heading))) > 10 
-    || time_at_heading < AVERAGING_LEN) {
-    heading_is_steady = false;
-  } else {
+  if (time_at_heading > AVERAGING_LEN) {
     heading_is_steady = true;
     //MOOSTrace("Heading Steady\n");
-  }
+  } 
 
   // Determine state
   // 0 = First run, desired speed adjusted, desired heading adjusted
   // 1 = Initial setpoint, waiting for first adjust
   // 2 = Time to do first adjust
   // 3 = Freely do minor adjustments when necessary
-  if ((!heading_is_steady && m_adjustment_state > 1) 
-      || m_previous_desired_speed != desired_speed) {
-    //TODO: Maybe add a tolerance for speed changes here
+  //(!heading_is_steady && m_adjustment_state > 1) 
+  if (fabs(m_previous_desired_speed - desired_speed) > SPEED_TOLERANCE
+      || fabs(angle180(angle180(desired_heading) 
+         - angle180(m_previous_desired_heading))) > HEADING_TOLERANCE) {
     m_adjustment_state = 0;
   } else if (heading_is_steady && speed_is_level && m_adjustment_state == 1) {
     m_adjustment_state = 2;
@@ -124,8 +124,10 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
         m_direction_average[binned_direction].second;
     m_initial_speed = desired_speed - speed_diff_avg;
     thrust = m_thrust_map.getThrustValue(m_initial_speed);
-    MOOSTrace("Speed Control: New Setting, Inital Speed = %.2f Thrust = %.2f Speed Diff Avg = %.2f Binned Dir = %i\n", 
-      m_initial_speed, thrust, speed_diff_avg, binned_direction);
+    MOOSTrace("Speed Control: New Setting, Inital Speed = %.2f Thrust = %.2f Speed Diff Avg = %.2f\n", 
+      m_initial_speed, thrust, speed_diff_avg);
+    MOOSTrace("                            Heading = %.2f Binned Dir = %i\n", 
+      desired_heading, binned_direction);
     m_adjustment_state = 1;
   } else if (m_adjustment_state == 2 && time_at_heading > (2 * AVERAGING_LEN)
       && (current_time - m_thrust_change_time) > (2 * AVERAGING_LEN)) {
@@ -166,6 +168,7 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
   m_previous_desired_speed = desired_speed;
   m_previous_time = current_time;
   m_prev_time_at_heading = time_at_heading;
+  m_previous_desired_heading = desired_heading;
 
   // Set the output speed (if zero, turn thrust off, no need for control)
   // This may need to be changed if we want to hold against currents

@@ -7,7 +7,7 @@ ServerHost = localhost
 ServerPort = 9000
 Community  = alpha
 
-MOOSTimeWarp = 4
+MOOSTimeWarp = 6
 
 // Forest Lake
 LatOrigin  = 43.825300 
@@ -50,9 +50,9 @@ ProcessConfig = pMarineMRAS
    DampingRatio = 0.8
 
    //Adaptation parameters
-   Beta = 0.01     //Speed of Kp adaptation
-   Alpha = 0.01    //Speed of Kd adaptation
-   Gamma = 0.001    //Speed of Ki adaptation
+   Beta = 0 //0.01     //Speed of Kp adaptation
+   Alpha = 0 //0.01    //Speed of Kd adaptation
+   Gamma = 0 //0.001    //Speed of Ki adaptation
    Xi = 1   // <= 1, not used if DecreaseAdaptation = false
    DecreaseAdaptation = false
    ROTFilter = 3  // >= 1
@@ -181,7 +181,7 @@ ProcessConfig = pHelmIvP
 
   bhv_dir_not_found_ok = true
 
-  behaviors  = alpha_consthead.bhv
+  behaviors  = alpha_circle.bhv
   domain     = course:0:359:360
   domain     = speed:0:4:50
 }
