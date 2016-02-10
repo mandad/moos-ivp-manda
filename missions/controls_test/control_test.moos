@@ -1,6 +1,6 @@
 //-------------------------------------------------
 // NAME: Damian Manda, UNH
-// FILE: alpha.moos
+// FILE: control_test.moos
 //-------------------------------------------------
 
 ServerHost = localhost
@@ -26,7 +26,8 @@ ProcessConfig = ANTLER
   Run = pMarineViewer	  @ NewConsole = false, ExtraProcessParams=one
   Run = uProcessWatch	  @ NewConsole = false
   Run = pNodeReporter	  @ NewConsole = false
-  Run = uTimerScript    @ NewConsole = false
+  Run = uTimerScript    @ NewConsole = false ~ uTS_StartTimer
+  Run = uTimerScript    @ NewConsole = false ~ uTS_TurnTimer
   Run = pMarineMRAS     @ NewConsole = false
   //Run = pMarinePID      @ NewConsole = false
   //Run = pEchoVar        @ NewConsole = false
@@ -46,13 +47,13 @@ ProcessConfig = pMarineMRAS
    Tau_Star = 0.15
    //Test for adaptation
    //K_Star = 1
-   //Tau_Star = 0.5
+   //Tau_Star = 1
    DampingRatio = 0.8
 
    //Adaptation parameters
-   Beta = 0 //0.01     //Speed of Kp adaptation
-   Alpha = 0 //0.01    //Speed of Kd adaptation
-   Gamma = 0 //0.001    //Speed of Ki adaptation
+   Beta = 0.01     //Speed of Kp adaptation
+   Alpha = 0.01    //Speed of Kd adaptation
+   Gamma = 0.001    //Speed of Ki adaptation
    Xi = 1   // <= 1, not used if DecreaseAdaptation = false
    DecreaseAdaptation = false
    ROTFilter = 3  // >= 1
@@ -106,6 +107,7 @@ ProcessConfig = pLogger
   Log = DESIRED_SPEED @ 0
   Log = DESIRED_THRUST @ 0
   Log = NAV_SPEED_OVER_GROUND @ 0
+  Log = MRAS_SPEED_STATE @ 0
 
   Log = NODE_REPORT_LOCAL @ 0 NOSYNC
   Log = NODE_REPORT @ 0 NOSYNC
@@ -163,6 +165,8 @@ ProcessConfig = uSimMarine
 	max_rudder_degs_per_sec = 30
 
   turn_rate     = 133 //this is actually 60 at 45 deg
+  max_acceleration = 0.5
+  max_deceleration = 0.3
   thrust_map    = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
   thrust_reflect = true
 
@@ -181,7 +185,7 @@ ProcessConfig = pHelmIvP
 
   bhv_dir_not_found_ok = true
 
-  behaviors  = alpha_circle.bhv
+  behaviors  = consthead_pattern.bhv
   domain     = course:0:359:360
   domain     = speed:0:4:50
 }
@@ -235,13 +239,28 @@ ProcessConfig = pEchoVar
   term_reporting = false
 }
 
-ProcessConfig = uTimerScript  
+ProcessConfig = uTS_StartTimer  
 {
   time_zero = db_start
-  delay_start = 20
+  delay_start = 15
   event = var=MOOS_MANUAL_OVERRIDE, val=false
   event = var=DEPLOY, val=true
   event = quit 
+}
+
+ProcessConfig = uTS_TurnTimer
+{
+  script_name    = TurnTimer
+  //time_zero = db_start
+  delay_start = 15
+  reset_max      = nolimit
+  reset_time  = end
+  upon_awake = restart
+
+  event = var=CONST_HDG_UPDATES, val=heading=90, time=20
+  event = var=CONST_HDG_UPDATES, val=heading=0, time=40
+  event = var=CONST_HDG_UPDATES, val=heading=270, time=60
+  event = var=CONST_HDG_UPDATES, val=heading=180, time=80
 }
 
 //------------------------------------------
