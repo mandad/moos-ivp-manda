@@ -57,6 +57,7 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
   }
 
   double time_at_heading = TimeAtHeading(HEADING_TOLERANCE);
+  double time_since_thrust_change = current_time - m_thrust_change_time;
 
   // If we have more than a 1 sec diff in time at the heading (i.e. turning)
   // Maybe use 2x avg len for time?
@@ -84,7 +85,7 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
     m_adjustment_state);
 
 
-  if (m_adjustment_state > 1) {
+  if (m_adjustment_state > 1 && time_since_thrust_change > 2 * AVERAGING_LEN) {
     //round to nearest ANGLE_BINS and add to history
     //only do this if past a certain time
     double map_speed_diff = speed - m_thrust_map.getSpeedValue(m_thrust_output);
@@ -117,7 +118,7 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
       desired_heading, binned_direction);
     m_adjustment_state = 1;
   } else if (m_adjustment_state == 2 && time_at_heading > (2 * AVERAGING_LEN)
-      && (current_time - m_thrust_change_time) > (2 * AVERAGING_LEN)) {
+      && time_since_thrust_change > (2 * AVERAGING_LEN)) {
     //if (!m_has_adjust) {
     double des_speed_diff = desired_speed - speed_avg;
 
@@ -130,7 +131,7 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
     }
     m_adjustment_state = 3;
   } else if (m_adjustment_state == 3 
-            && (current_time - m_thrust_change_time) > (3 * AVERAGING_LEN)) {
+            && time_since_thrust_change > (3 * AVERAGING_LEN)) {
     //Do minor adjustments after the first big one
     //Rewrite the speed_slope & avg here, maybe should be new vars?
     //if (time_at_heading > (AVERAGING_LEN * 3)) {
@@ -273,6 +274,8 @@ std::string SpeedControl::AppCastMessage() {
     message << dir_avgs->first * ANGLE_BINS << ": " << avg_offset << std::endl;
   }
 
+  message << "\nControl Adjust State: " << m_adjustment_state << std::endl;
+
   return message.str();
 }
 
@@ -281,5 +284,5 @@ double SpeedControl::HeadingAbsDiff(double heading1, double heading2) {
 }
 
 void SpeedControl::GetVarInfo(double * vars) {
-  vars[0] = m_adjustment_state;
+  vars[0] = double(m_adjustment_state);
 }

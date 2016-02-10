@@ -27,7 +27,7 @@ ProcessConfig = ANTLER
   Run = uProcessWatch	  @ NewConsole = false
   Run = pNodeReporter	  @ NewConsole = false
   Run = uTimerScript    @ NewConsole = false ~ uTS_StartTimer
-  Run = uTimerScript    @ NewConsole = false ~ uTS_TurnTimer
+  //Run = uTimerScript    @ NewConsole = false ~ uTS_TurnTimer
   Run = pMarineMRAS     @ NewConsole = false
   //Run = pMarinePID      @ NewConsole = false
   //Run = pEchoVar        @ NewConsole = false
@@ -185,7 +185,9 @@ ProcessConfig = pHelmIvP
 
   bhv_dir_not_found_ok = true
 
-  behaviors  = consthead_pattern.bhv
+  //behaviors  = consthead_pattern.bhv
+  //behaviors = alpha_circle.bhv
+  behaviors = survey_pattern.bhv
   domain     = course:0:359:360
   domain     = speed:0:4:50
 }
@@ -211,7 +213,7 @@ ProcessConfig = pMarinePID
 
   // Speed PID controller
   speed_pid_kp		 = 1.0
-  speed_pid_kd		 = 0.0
+  speed_pid_kd		 = 0.2
   speed_pid_ki		 = 0.0
   speed_pid_integral_limit = 0.07
 
@@ -221,7 +223,7 @@ ProcessConfig = pMarinePID
 
   // A non-zero SPEED_FACTOR overrides use of SPEED_PID
   // Will set DESIRED_THRUST = DESIRED_SPEED * SPEED_FACTOR
-  speed_factor = 31.25
+  //speed_factor = 31.25
 }
 
 //This is used in conjuction with the pMarinePID to maintain compatibility
@@ -257,10 +259,10 @@ ProcessConfig = uTS_TurnTimer
   reset_time  = end
   upon_awake = restart
 
-  event = var=CONST_HDG_UPDATES, val=heading=90, time=20
-  event = var=CONST_HDG_UPDATES, val=heading=0, time=40
-  event = var=CONST_HDG_UPDATES, val=heading=270, time=60
-  event = var=CONST_HDG_UPDATES, val=heading=180, time=80
+  event = var=CONST_HDG_UPDATES, val=heading=90, time=30
+  event = var=CONST_HDG_UPDATES, val=heading=0, time=60
+  event = var=CONST_HDG_UPDATES, val=heading=270, time=90
+  event = var=CONST_HDG_UPDATES, val=heading=180, time=120
 }
 
 //------------------------------------------

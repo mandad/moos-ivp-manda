@@ -20,7 +20,7 @@ Behavior=BHV_Loiter
   acquire_dist = 10
   capture_radius = 3
   slip_radius = 8
-  polygon = format=radial, label=home, x=50, y=-130, radius=60, pts=4
+  polygon = format=radial, label=home, x=50, y=-130, radius=60, pts=9
   
   //----- Visual Display -----
   visual_hints = vertex_size  = 1             // default
