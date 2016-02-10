@@ -11,7 +11,7 @@
 #include <math.h>
 
 #define USE_SERIES_MODEL true
-#define LIMIT_ROT_INC false
+#define LIMIT_ROT_INC true
 #define RESET_THRESHOLD 5
 #define KP_LIMIT 2.5
 
@@ -270,7 +270,7 @@ void CourseChangeMRAS::UpdateModel(double dfDesiredHeading, double dfDeltaT) {
         dfPsiMPP = TwoSidedLimit(dfPsiMPP, m_dfMaxROTInc);
     }
 #endif
-    
+
     m_dfModelROT += dfPsiMPP * dfDeltaT;
     m_dfModelROT = TwoSidedLimit(m_dfModelROT, m_dfMaxROT);
 }

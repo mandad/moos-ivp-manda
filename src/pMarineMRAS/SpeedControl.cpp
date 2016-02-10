@@ -15,7 +15,7 @@
 #define AVERAGING_LEN 3
 #define MAX_FLAT_SLOPE 0.8 //m/s^2
 #define SPEED_TOLERANCE 0.05
-#define HEADING_TOLERANCE 10
+#define HEADING_TOLERANCE 7
 
 SpeedControl::SpeedControl() : m_thrust_output(0),  m_first_run(true), 
                                m_thrust_map_set(true), m_max_thrust(100), 
@@ -53,18 +53,19 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
   //Largest from rough day straight = 0.10
   if (history_valid && fabs(speed_slope) < MAX_FLAT_SLOPE) {
     speed_is_level = true;
-    //MOOSTrace("Speed Steady\n");
+    MOOSTrace("Speed Steady\n");
   }
 
-  double time_at_heading = TimeAtHeading(10);
+  double time_at_heading = TimeAtHeading(HEADING_TOLERANCE);
 
   // If we have more than a 1 sec diff in time at the heading (i.e. turning)
   // Maybe use 2x avg len for time?
   //|| (m_prev_time_at_heading - time_at_heading) > 1
   // TODO: account for desired_heading = 0 when stopped
-  if (time_at_heading > AVERAGING_LEN) {
+  if (time_at_heading > AVERAGING_LEN 
+      && HeadingAbsDiff(desired_heading, heading) < HEADING_TOLERANCE) {
     heading_is_steady = true;
-    //MOOSTrace("Heading Steady\n");
+    MOOSTrace("Heading Steady\n");
   } 
 
   // Determine state
@@ -72,31 +73,17 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
   // 1 = Initial setpoint, waiting for first adjust
   // 2 = Time to do first adjust
   // 3 = Freely do minor adjustments when necessary
-  //(!heading_is_steady && m_adjustment_state > 1) 
   if (fabs(m_previous_desired_speed - desired_speed) > SPEED_TOLERANCE
-      || fabs(angle180(angle180(desired_heading) 
-         - angle180(m_previous_desired_heading))) > HEADING_TOLERANCE) {
+      || HeadingAbsDiff(desired_heading, m_previous_desired_heading) 
+      > HEADING_TOLERANCE) {
     m_adjustment_state = 0;
   } else if (heading_is_steady && speed_is_level && m_adjustment_state == 1) {
     m_adjustment_state = 2;
   }
   MOOSTrace("Speed Control: Time At Heading = %.2f State: %i\n", time_at_heading, 
     m_adjustment_state);
-  /*
-  if (m_adjustment_state == 0) {
-    
-    m_first_run = false;
-    m_turn_began = false;
-    // m_time_at_speed = 0;
 
-    m_initial_speed = desired_speed;
-    thrust = m_thrust_map.getThrustValue(m_initial_speed);
-    m_thrust_change_time = current_time;
-    MOOSTrace("Speed Control: First Run, Desired Speed = %.2f Thrust = %.2f\n", 
-      desired_speed, thrust);
-    m_adjustment_state == 1;
-  } else
-  */
+
   if (m_adjustment_state > 1) {
     //round to nearest ANGLE_BINS and add to history
     //only do this if past a certain time
@@ -133,12 +120,14 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
       && (current_time - m_thrust_change_time) > (2 * AVERAGING_LEN)) {
     //if (!m_has_adjust) {
     double des_speed_diff = desired_speed - speed_avg;
-    // TODO: Maybe don't do this when within SPEED_TOLERANCE?
+
     // Probably should also take into account new heading offsets
-    thrust = m_thrust_map.getThrustValue(m_initial_speed + des_speed_diff);
-    m_has_adjust = true;
-    MOOSTrace("Speed Control: First Adjust, Speed Diff = %.2f Thrust = %.2f\n", 
-      des_speed_diff, thrust);
+    if (des_speed_diff > SPEED_TOLERANCE) {
+      thrust = m_thrust_map.getThrustValue(m_initial_speed + des_speed_diff);
+      m_has_adjust = true;
+      MOOSTrace("Speed Control: First Adjust, Speed Diff = %.2f Thrust = %.2f\n", 
+        des_speed_diff, thrust);
+    }
     m_adjustment_state = 3;
   } else if (m_adjustment_state == 3 
             && (current_time - m_thrust_change_time) > (3 * AVERAGING_LEN)) {
@@ -251,7 +240,7 @@ double SpeedControl::TimeAtHeading(double allowable_range) {
   std::list<SpeedRecord>::iterator record;
   for(record = m_speed_hist.begin(); record != m_speed_hist.end(); record++) {
     oldest_time = record->m_time;
-    if (fabs(record->m_heading - current_heading) > allowable_range) {
+    if (HeadingAbsDiff(record->m_heading, current_heading) > allowable_range) {
       break;
     }
   }
@@ -285,4 +274,12 @@ std::string SpeedControl::AppCastMessage() {
   }
 
   return message.str();
+}
+
+double SpeedControl::HeadingAbsDiff(double heading1, double heading2) {
+  return fabs(angle180(angle180(heading1) - angle180(heading2)));
+}
+
+void SpeedControl::GetVarInfo(double * vars) {
+  vars[0] = m_adjustment_state;
 }

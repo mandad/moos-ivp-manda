@@ -22,6 +22,7 @@ public:
                double desired_heading, double time, bool turning);
     void SetParameters(std::string thrust_map, double max_thrust);
     std::string AppCastMessage();
+    void GetVarInfo(double * vars);
 
 private:
     //Functions
@@ -29,6 +30,7 @@ private:
     bool SpeedHistInfo(double time_range, double &slope, double &average);
     double TimeAtHeading(double allowable_range);
     int BinnedHeading(double heading);
+    double HeadingAbsDiff(double heading1, double heading2);
 
     //State variables
     bool m_first_run;

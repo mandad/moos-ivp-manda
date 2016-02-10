@@ -192,6 +192,11 @@ bool MarineMRAS::Iterate()
     Notify("MRAS_PSI_REF_P", vars[8]);
     Notify("MRAS_PSI_REF_PP", vars[9]);
     Notify("MRAS_MODEL_RUDDER", vars[10]);
+
+    double speed_vars[1];
+    m_speed_control.GetVarInfo(speed_vars);
+    Notify("MRAS_SPEED_STATE", vars[0]);
+
     Notify("NAV_ROT", m_current_ROT);
     Notify("NAV_HEADING_180", m_current_heading);
     Notify("DESIRED_HEADING_180", angle180(m_desired_heading));
@@ -396,7 +401,7 @@ bool MarineMRAS::buildReport()
     else if (controller_in_use == ControllerType::CourseKeepNoAdapt) {
       m_msgs << "\nCourse Keep Controller in use, no adaptation.";
     }
-    m_msgs << m_speed_control.AppCastMessage();
+    m_msgs << "\n\n" << m_speed_control.AppCastMessage();
   } else {
     m_msgs << "Control not running.";
   }
@@ -485,7 +490,7 @@ void MarineMRAS::PostAllStop()
 }
 
 void MarineMRAS::AddHeadingHistory(double heading, double heading_time) {
-  m_desired_heading_history.push_front(heading);
+  m_desired_heading_history.push_front(angle180(heading));
   m_desired_hist_time.push_front(heading_time);
 
   //Keep last 10 sec of data - this needs to adapt to turn rate of vessel
@@ -498,7 +503,7 @@ void MarineMRAS::AddHeadingHistory(double heading, double heading_time) {
 ControllerType MarineMRAS::DetermineController() {
   if (m_desired_heading_history.size() > 2) {
     //10 degree heading change threshold for CourseChange
-    if (IsTurning()) {
+    if (!IsTurning()) {
       return ControllerType::CourseKeep;
     } else {
       //Course change is the default if we have less than 10 sec same course
@@ -524,7 +529,7 @@ ControllerType MarineMRAS::DetermineController() {
 
 bool MarineMRAS::IsTurning() {
   if (m_desired_heading_history.size() > 2) {
-    return fabs(m_desired_heading_history.back() - m_desired_heading) 
+    return fabs(angle180(m_desired_heading_history.back() - angle180(m_desired_heading))) 
             > TURN_THRESHOLD;
   } else {
     //assume we are turning if we don't know
