@@ -11,6 +11,7 @@ SET(SRC
   CourseKeepMRAS.cpp
   SpeedControl.cpp
   ThrustMap.cpp
+  CurrentEstimate.cpp
   main.cpp
 )
 

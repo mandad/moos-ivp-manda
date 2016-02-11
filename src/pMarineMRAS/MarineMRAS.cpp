@@ -166,9 +166,7 @@ bool MarineMRAS::Iterate()
           m_current_ROT, m_desired_speed, m_last_heading_time, do_adapt);
       }
     }
-    // if (fabs(desired_rudder) < m_rudder_deadband) {
-    //   desired_rudder = 0;
-    // }
+
     if (m_output) {
       Notify("DESIRED_THRUST", m_desired_thrust);
       Notify("DESIRED_RUDDER", desired_rudder);
@@ -195,7 +193,7 @@ bool MarineMRAS::Iterate()
 
     double speed_vars[1];
     m_speed_control.GetVarInfo(speed_vars);
-    Notify("MRAS_SPEED_STATE", vars[0]);
+    Notify("MRAS_SPEED_STATE", speed_vars[0]);
 
     Notify("NAV_ROT", m_current_ROT);
     Notify("NAV_HEADING_180", m_current_heading);
@@ -226,6 +224,7 @@ bool MarineMRAS::OnStartUp()
 
   // Variables to be set from the parameters
   std::string thrust_map = "";
+  bool use_thrust_map_only = false;
 
   STRING_LIST sParams;
   m_MissionReader.EnableVerbatimQuoting(false);
@@ -331,6 +330,10 @@ bool MarineMRAS::OnStartUp()
     } else if (param == "THRUST_MAP") {
       thrust_map = value;
       handled = true;
+    } else if (param == "USETHRUSTMAPONLY") {
+      if (toupper(value) == "TRUE")
+        use_thrust_map_only = true;
+      handled = true;
     }
 
     if(!handled)
@@ -345,7 +348,7 @@ bool MarineMRAS::OnStartUp()
   m_CourseKeepControl.SetParameters(m_k_star, m_tau_star, m_z, m_beta,
         m_alpha, m_gamma, m_xi, m_rudder_limit, m_cruising_speed, m_length,
         m_max_ROT, m_decrease_adapt, m_rudder_speed, m_rudder_deadband);
-  m_speed_control.SetParameters(thrust_map, m_max_thrust);
+  m_speed_control.SetParameters(thrust_map, m_max_thrust, use_thrust_map_only);
 
   registerVariables();
   return(true);

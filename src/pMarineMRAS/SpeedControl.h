@@ -5,10 +5,11 @@
 /*    DATE: 2016-02-01                                      */
 /************************************************************/
 
-#ifndef SpeedControl_HEADER
-#define SpeedControl_HEADER
+#ifndef MarineMRAS_SpeedControl_HEADER
+#define MarineMRAS_SpeedControl_HEADER
 
 #include "ThrustMap.h"
+#include "CurrentEstimate.h"
 #include <utility>
 
 class SpeedControl
@@ -20,7 +21,8 @@ public:
 
     double Run(double desired_speed, double speed, double heading, 
                double desired_heading, double time, bool turning);
-    void SetParameters(std::string thrust_map, double max_thrust);
+    void SetParameters(std::string thrust_map, double max_thrust, 
+        bool use_thrust_map_only);
     std::string AppCastMessage();
     void GetVarInfo(double * vars);
 
@@ -35,6 +37,7 @@ private:
     //State variables
     bool m_first_run;
     bool m_thrust_map_set;
+    bool m_use_thrust_map_only;
     double m_thrust_output;
     double m_desired_speed;
     double m_previous_desired_speed;
@@ -49,9 +52,6 @@ private:
     bool m_turn_finished;
     int m_adjustment_state;
 
-    // std::list<double> m_speed_hist;
-    // std::list<double> m_time_hist;
-    // std::list<double> m_des_speed_hist;
     std::map<int, std::pair<double, int>> m_direction_average;
     double m_time_at_speed;
 

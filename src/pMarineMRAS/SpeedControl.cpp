@@ -21,7 +21,7 @@ SpeedControl::SpeedControl() : m_thrust_output(0),  m_first_run(true),
                                m_thrust_map_set(true), m_max_thrust(100), 
                                m_has_adjust(false), m_initial_speed(0), 
                                m_turn_began(false), m_turn_finished(false),
-                               m_adjustment_state(0) {
+                               m_adjustment_state(0), m_use_thrust_map_only(false) {
   InitControls();
 }
 
@@ -32,6 +32,7 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
     MOOSTrace("Speed Control: Passed NaN Desired Speed or No Thrust Map\n");
     return m_thrust_output;
   }
+
   //default is to not change the thrust output
   MOOSTrace("Speed Control: Desired Heading = %.2f\n", desired_heading);
   heading = angle360(heading);
@@ -160,19 +161,17 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
   m_prev_time_at_heading = time_at_heading;
   m_previous_desired_heading = desired_heading;
 
-  // Set the output speed (if zero, turn thrust off, no need for control)
-  // This may need to be changed if we want to hold against currents
+  // Set this here to still allow current estimation, or possibly on the fly
+  // switching.  Overrides the settings above.
+  if (m_use_thrust_map_only) {
+    thrust = m_thrust_map.getThrustValue(desired_speed);
+  }
+
   MOOSAbsLimit(thrust, m_max_thrust);
   if (thrust != m_thrust_output) {
       m_thrust_change_time = current_time;
   }
-  /*
-  if (desired_speed == 0) {
-    m_thrust_output = 0;
-  } else {
-    m_thrust_output = thrust;
-  }
-  */
+
   //Experiment to allow it to compete with currents
   m_thrust_output = thrust;
   return m_thrust_output;
@@ -188,13 +187,15 @@ void SpeedControl::InitControls() {
 }
 
 
-void SpeedControl::SetParameters(std::string thrust_map, double max_thrust) {
+void SpeedControl::SetParameters(std::string thrust_map, double max_thrust, 
+  bool use_thrust_map_only) {
   if (thrust_map != "") {
     bool map_ok = m_thrust_map.injestMapString(thrust_map);
     if (!map_ok) {
       MOOSTrace("Speed Control: Error in Thrust Map");
       m_thrust_map_set = true;
     }
+    m_use_thrust_map_only = use_thrust_map_only;
   }
 
   m_max_thrust = max_thrust;
