@@ -9,16 +9,49 @@
 #define MarineMRAS_CurrentEstimate_HEADER
 
 #include <utility>
+#include "AngleUtils.h"
 
 class CurrentEstimate
 {
 
 public:
-    CurrentEstimate();
+    struct SpeedDiff {
+        SpeedDiff(double time, double sog, double speed_est,
+                  double hdg, double cog = 1000, double stw = 1000) : time(time), 
+                  speed_over_ground{sog}, speed_through_water{stw}, 
+                  speed_estimate{speed_est} {
+            if (cog == 1000) {
+                valid_cog = false;
+            } else {
+                valid_cog = true;
+                course_over_ground = angle360(cog);
+            }
+            if (stw == 1000) {
+                valid_stw = false;
+            } else {
+                valid_stw = true;
+            }
+            heading = angle360(hdg);
+        }
+
+        double time;
+        double speed_over_ground;
+        double speed_through_water;
+        double speed_estimate;
+        double heading;
+        double course_over_ground;
+        bool valid_stw;
+        bool valid_cog;
+    };
+
+    CurrentEstimate(double bin_width=20);
     ~CurrentEstimate() {}  
+    double GetSpeedDiff(double heading);
+    double SaveHistory(SpeedDiff record);
 
 private:
     //Functions
+    int BinnedHeading(double heading);
     
     //State variables
     
@@ -26,18 +59,10 @@ private:
     double m_time_at_speed;
 
     //Configuration variables
+    double m_bin_width;
 
-    struct SpeedRecord {
-        SpeedRecord(double desired_speed, double speed, double heading, 
-                    double time) : m_desired_speed{desired_speed}, m_speed{speed},
-                    m_heading{heading}, m_time{time} {}
 
-        double m_desired_speed;
-        double m_speed;
-        double m_heading;
-        double m_time;
-    };
-    std::list<SpeedRecord> m_speed_hist;
+    std::list<SpeedDiff> m_history;
 
 };
 

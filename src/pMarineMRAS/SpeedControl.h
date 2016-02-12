@@ -58,7 +58,7 @@ private:
     //Configuration variables
     ThrustMap m_thrust_map;
     double m_max_thrust;
-
+    CurrentEstimate m_current_estimate(/*20*/);
 
     struct SpeedRecord {
         SpeedRecord(double desired_speed, double speed, double heading, 
