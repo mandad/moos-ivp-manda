@@ -23,6 +23,7 @@ SpeedControl::SpeedControl() : m_thrust_output(0),  m_first_run(true),
                                m_turn_began(false), m_turn_finished(false),
                                m_adjustment_state(0), m_use_thrust_map_only(false),
                                m_current_estimate(20, 3600) {
+  std::cout << "Initializing Speed Control";
   InitControls();
 }
 
@@ -100,10 +101,12 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
       m_direction_average[binned_direction].second + 1);
     */
 
+    MOOSTrace("Saving History for Current");
     double speed_est = m_thrust_map.getSpeedValue(m_thrust_output);
     SpeedInfoRecord hist_record(current_time, speed, speed_est, heading, 
       course_over_ground);
     m_current_estimate.SaveHistory(hist_record);
+    MOOSTrace("History Saved");
   }
 
   if (m_adjustment_state == 0) {
@@ -116,7 +119,7 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
     m_turn_finished = false;
     //Add heading history value for offset
     //int binned_direction = BinnedHeading(desired_heading);
-    double speed_diff_avg = m_current_estimate.GetSpeedDiff(desired_heading);
+    double speed_diff_avg = 0;// m_current_estimate.GetSpeedDiff(desired_heading);
     /*
     if (m_direction_average[binned_direction].second > 0)
       speed_diff_avg = m_direction_average[binned_direction].first /

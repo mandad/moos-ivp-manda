@@ -20,39 +20,41 @@ using namespace std;
 
 MarineMRAS::MarineMRAS()
 {
-    m_k_star = 1;
-    m_tau_star = 1;
-    m_z = 1;
-    m_beta = 1;
-    m_alpha = 1;
-    m_gamma = 1;
-    m_xi = 1;
-    m_rudder_limit = 45;
-    m_max_ROT = 60; // deg/s
-    m_ROT_filter_len = 4;
-    m_cruising_speed = 2;
-    m_length = 2;
-    m_decrease_adapt = true;
-    m_speed_factor   = 0;
-    m_max_thrust = 100;
-    m_rudder_speed = 15;
-    m_discard_large_ROT = false;
-    m_rudder_deadband = 0;
-    m_output = true;
-    m_record_mode = false;
-    m_course_keep_only = false;
-    m_adapt_turns = false;
-    m_speed_var = "NAV_SPEED_OVER_GROUND";
-    m_cog_var = "NAV_COURSE_OVER_GROUND";
+  std::cout << "Initializing MRAS\n";
 
-    m_first_heading = true;
-    m_current_ROT = 0;
-    m_has_control = false;
-    m_desired_thrust = 50;
-    m_desired_speed = 0;
-    m_allstop_posted = false;
-    m_last_controller = ControllerType::CourseChange;
-    //m_last_heading_time = MOOSTime();
+  m_k_star = 1;
+  m_tau_star = 1;
+  m_z = 1;
+  m_beta = 1;
+  m_alpha = 1;
+  m_gamma = 1;
+  m_xi = 1;
+  m_rudder_limit = 45;
+  m_max_ROT = 60; // deg/s
+  m_ROT_filter_len = 4;
+  m_cruising_speed = 2;
+  m_length = 2;
+  m_decrease_adapt = true;
+  m_speed_factor   = 0;
+  m_max_thrust = 100;
+  m_rudder_speed = 15;
+  m_discard_large_ROT = false;
+  m_rudder_deadband = 0;
+  m_output = true;
+  m_record_mode = false;
+  m_course_keep_only = false;
+  m_adapt_turns = false;
+  m_speed_var = "NAV_SPEED_OVER_GROUND";
+  m_cog_var = "NAV_COURSE_OVER_GROUND";
+
+  m_first_heading = true;
+  m_current_ROT = 0;
+  m_has_control = false;
+  m_desired_thrust = 50;
+  m_desired_speed = 0;
+  m_allstop_posted = false;
+  m_last_controller = ControllerType::CourseChange;
+  //m_last_heading_time = MOOSTime();
 }
 
 //---------------------------------------------------------

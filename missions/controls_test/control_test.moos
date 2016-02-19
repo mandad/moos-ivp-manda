@@ -186,8 +186,8 @@ ProcessConfig = pHelmIvP
   bhv_dir_not_found_ok = true
 
   //behaviors  = consthead_pattern.bhv
-  //behaviors = alpha_circle.bhv
-  behaviors = survey_pattern.bhv
+  behaviors = alpha_circle.bhv
+  //behaviors = survey_pattern.bhv
   domain     = course:0:359:360
   domain     = speed:0:4:50
 }

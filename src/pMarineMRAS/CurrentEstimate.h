@@ -10,7 +10,6 @@
 
 #include <utility>
 #include <vector>
-#include "AngleUtils.h"
 #include "CurrentRecord.h"
 
 class CurrentEstimate

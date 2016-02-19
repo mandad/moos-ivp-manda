@@ -6,12 +6,13 @@
 /************************************************************/
 
 #include "CurrentRecord.h"
-#include "AngleUtils.h"
 #include <cmath>
 
+#define MIN_COG_RECORDS 20
 
 CurrentRecord::CurrentRecord(double save_time, int max_records) :
     m_save_time{save_time}, m_max_records{max_records} {
+    std::cout << "Initializing Current Record\n";
 }
 
 bool CurrentRecord::SaveRecord(SpeedInfoRecord record) {
@@ -25,7 +26,7 @@ bool CurrentRecord::SaveRecord(SpeedInfoRecord record) {
 
     while (m_record_hist.size() > m_max_records ||
            record.time - m_record_hist.back().time > m_save_time) {
-        //SpeedRecord removed_rec = m_record_hist.back();
+        //SpeedInfoRecord removed_rec = m_record_hist.back();
         if (m_record_hist.back().valid_cog) {
             m_vector_hist.pop_back();
         }
@@ -37,7 +38,7 @@ bool CurrentRecord::SaveRecord(SpeedInfoRecord record) {
 // The averages are calculated on demand instead of at insertion since they are
 // only called when switching headings for the vehicle (fairly long period)
 bool CurrentRecord::GetAverageCurrent(double &mag, double &heading) {
-    if (m_vector_hist.empty())
+    if (m_vector_hist.size() < MIN_COG_RECORDS)
         return false;
     std::list<std::complex<double>>::iterator record;
     double sum_y = 0;
@@ -55,12 +56,16 @@ bool CurrentRecord::GetAverageCurrent(double &mag, double &heading) {
 }
 
 double CurrentRecord::GetAverageSpeedDiff() {
-    std::list<SpeedInfoRecord>::iterator record;
-    double sum = 0;
-    for (record = m_record_hist.begin(); record != m_record_hist.end(); record++) {
-        sum += record->speed_over_ground - record->speed_estimate;
+    if (m_record_hist.size() > 0) {
+        std::list<SpeedInfoRecord>::iterator record;
+        double sum = 0;
+        for (record = m_record_hist.begin(); record != m_record_hist.end(); record++) {
+            sum += record->speed_over_ground - record->speed_estimate;
+        }
+        return sum / double(m_record_hist.size());
+    } else {
+        return 0;
     }
-    return sum / double(m_record_hist.size());
 }
 
 int CurrentRecord::NumRecords() {

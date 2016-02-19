@@ -6,16 +6,18 @@
 /************************************************************/
 
 #include "MOOS/libMOOS/MOOSLib.h"
-#include "SpeedControl.h"
+#include "CurrentEstimate.h"
 #include "AngleUtils.h"
 #include <cmath>
 
 CurrentEstimate::CurrentEstimate(double bin_width, double save_time) : 
-    m_bin_width{bin_width}, m_full_hist(save_time, 1000), m_save_time{save_time} {
+    m_bin_width{bin_width}, m_save_time{save_time}, m_full_hist(save_time, 1000) {
+    std::cout << "Initializing Current Estimator\n";
+    // Not sure if this properly sets m_history[0]
     for (int direction = 0; direction < int(std::round(360 / bin_width)); 
        direction++) {
-    //MOOSTrace("Speed Control: Setting Direction = %i\n", direction);
-    m_history[direction] = CurrentRecord(save_time, 100);
+        //MOOSTrace("Speed Control: Setting Direction = %i\n", direction);
+        m_history.push_back(CurrentRecord(save_time, 100));
   }
 }
 
@@ -46,9 +48,11 @@ bool CurrentEstimate::GetEstimate(double &mag, double &heading) {
         }
         // Could refine this by seeing which bin is second highest, where 
         // smallest current is (if not 180 off)
-        mag = max_current;
-        heading = double(this_dir) * m_bin_width;
-        return true;
+        if (max_current > 0) {
+            mag = max_current;
+            heading = double(max_dir) * m_bin_width;
+            return true;
+        }
     }
     return false;
 }
