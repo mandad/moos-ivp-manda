@@ -21,12 +21,14 @@ SpeedControl::SpeedControl() : m_thrust_output(0),  m_first_run(true),
                                m_thrust_map_set(true), m_max_thrust(100), 
                                m_has_adjust(false), m_initial_speed(0), 
                                m_turn_began(false), m_turn_finished(false),
-                               m_adjustment_state(0), m_use_thrust_map_only(false) {
+                               m_adjustment_state(0), m_use_thrust_map_only(false),
+                               m_current_estimate(20, 3600) {
   InitControls();
 }
 
 double SpeedControl::Run(double desired_speed, double speed, double desired_heading,
-                         double heading, double current_time, bool turning) {
+                         double heading, double current_time, bool turning, 
+                         double course_over_ground) {
   //MOOSTrace("Speed Control: Desired Speed = %.2f\n", desired_speed);
   if (isnan(desired_speed) || !m_thrust_map_set) {
     MOOSTrace("Speed Control: Passed NaN Desired Speed or No Thrust Map\n");
@@ -87,6 +89,7 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
 
 
   if (m_adjustment_state > 1 && time_since_thrust_change > 2 * AVERAGING_LEN) {
+    /*
     //round to nearest ANGLE_BINS and add to history
     //only do this if past a certain time
     double map_speed_diff = speed - m_thrust_map.getSpeedValue(m_thrust_output);
@@ -95,6 +98,12 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
     m_direction_average[binned_direction] = std::make_pair(
       m_direction_average[binned_direction].first + map_speed_diff, 
       m_direction_average[binned_direction].second + 1);
+    */
+
+    double speed_est = m_thrust_map.getSpeedValue(m_thrust_output);
+    SpeedInfoRecord hist_record(current_time, speed, speed_est, heading, 
+      course_over_ground);
+    m_current_estimate.SaveHistory(hist_record);
   }
 
   if (m_adjustment_state == 0) {
@@ -105,18 +114,20 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
     m_has_adjust = false;
     m_turn_began = false;
     m_turn_finished = false;
-    //Should add heading history value here
-    int binned_direction = BinnedHeading(desired_heading);
-    double speed_diff_avg = 0;
+    //Add heading history value for offset
+    //int binned_direction = BinnedHeading(desired_heading);
+    double speed_diff_avg = m_current_estimate.GetSpeedDiff(desired_heading);
+    /*
     if (m_direction_average[binned_direction].second > 0)
       speed_diff_avg = m_direction_average[binned_direction].first /
         m_direction_average[binned_direction].second;
+    */
     m_initial_speed = desired_speed - speed_diff_avg;
     thrust = m_thrust_map.getThrustValue(m_initial_speed);
     MOOSTrace("Speed Control: New Setting, Inital Speed = %.2f Thrust = %.2f Speed Diff Avg = %.2f\n", 
       m_initial_speed, thrust, speed_diff_avg);
-    MOOSTrace("                            Heading = %.2f Binned Dir = %i\n", 
-      desired_heading, binned_direction);
+    // MOOSTrace("                            Heading = %.2f Binned Dir = %i\n", 
+    //   desired_heading, binned_direction);
     m_adjustment_state = 1;
   } else if (m_adjustment_state == 2 && time_at_heading > (2 * AVERAGING_LEN)
       && time_since_thrust_change > (2 * AVERAGING_LEN)) {
@@ -178,11 +189,11 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
 }
 
 void SpeedControl::InitControls() {
-  for (int direction = 0; direction < int(std::round(360 / ANGLE_BINS)); 
-       direction++) {
-    MOOSTrace("Speed Control: Setting Direction = %i\n", direction);
-    m_direction_average[direction] = std::make_pair(0,0);
-  }
+  // for (int direction = 0; direction < int(std::round(360 / ANGLE_BINS)); 
+  //      direction++) {
+  //   MOOSTrace("Speed Control: Setting Direction = %i\n", direction);
+  //   m_direction_average[direction] = std::make_pair(0,0);
+  // }
 
 }
 
@@ -250,30 +261,21 @@ double SpeedControl::TimeAtHeading(double allowable_range) {
   return m_speed_hist.front().m_time - oldest_time;
 }
 
-int SpeedControl::BinnedHeading(double heading) {
-  int binned = int(std::round(angle360(heading) / ANGLE_BINS));
-  // This is the case for 360-ANGLE_BINS/2
-  if (binned >= m_direction_average.size())
-    binned = 0;
+// int SpeedControl::BinnedHeading(double heading) {
+//   int binned = int(std::round(angle360(heading) / ANGLE_BINS));
+//   // This is the case for 360-ANGLE_BINS/2
+//   if (binned >= m_direction_average.size())
+//     binned = 0;
 
-  return binned;
-}
+//   return binned;
+// }
 
 std::string SpeedControl::AppCastMessage() {
   std::stringstream message;
   message << "Speed Control Enabled\n";
   message << "\nSpeed Averages:\n";
 
-  std::map<int, std::pair<double, int>>::iterator dir_avgs;
-  for (dir_avgs = m_direction_average.begin(); 
-    dir_avgs != m_direction_average.end(); dir_avgs++) {
-    double avg_offset = 0;
-    if (dir_avgs->second.second != 0) {
-      //speed_diff_sum / num_records
-      avg_offset = dir_avgs->second.first / dir_avgs->second.second;
-    }
-    message << dir_avgs->first * ANGLE_BINS << ": " << avg_offset << std::endl;
-  }
+  message << m_current_estimate.AppCastMessage();
 
   message << "\nControl Adjust State: " << m_adjustment_state << std::endl;
 

@@ -12,6 +12,7 @@ SET(SRC
   SpeedControl.cpp
   ThrustMap.cpp
   CurrentEstimate.cpp
+  CurrentRecord.cpp
   main.cpp
 )
 

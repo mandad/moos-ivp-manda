@@ -2,67 +2,44 @@
 /*    NAME: Damian Manda                                    */
 /*    ORGN: UNH                                             */
 /*    FILE: CurrentEstimate.h                               */
-/*    DATE: 2016-02-01                                      */
+/*    DATE: 2016-02-12                                      */
 /************************************************************/
 
 #ifndef MarineMRAS_CurrentEstimate_HEADER
 #define MarineMRAS_CurrentEstimate_HEADER
 
 #include <utility>
+#include <vector>
 #include "AngleUtils.h"
+#include "CurrentRecord.h"
 
 class CurrentEstimate
 {
 
 public:
-    struct SpeedDiff {
-        SpeedDiff(double time, double sog, double speed_est,
-                  double hdg, double cog = 1000, double stw = 1000) : time(time), 
-                  speed_over_ground{sog}, speed_through_water{stw}, 
-                  speed_estimate{speed_est} {
-            if (cog == 1000) {
-                valid_cog = false;
-            } else {
-                valid_cog = true;
-                course_over_ground = angle360(cog);
-            }
-            if (stw == 1000) {
-                valid_stw = false;
-            } else {
-                valid_stw = true;
-            }
-            heading = angle360(hdg);
-        }
-
-        double time;
-        double speed_over_ground;
-        double speed_through_water;
-        double speed_estimate;
-        double heading;
-        double course_over_ground;
-        bool valid_stw;
-        bool valid_cog;
-    };
-
-    CurrentEstimate(double bin_width=20);
+    CurrentEstimate(double bin_width=20, double save_time=3600);
     ~CurrentEstimate() {}  
     double GetSpeedDiff(double heading);
-    double SaveHistory(SpeedDiff record);
+    bool GetEstimate(double &mag, double &heading);
+    bool SaveHistory(SpeedInfoRecord record);
+    std::string AppCastMessage();
 
 private:
     //Functions
     int BinnedHeading(double heading);
+    void InitRecords();
     
     //State variables
     
-    std::map<int, std::pair<double, int>> m_direction_average;
-    double m_time_at_speed;
+    // std::map<int, std::pair<double, int>> m_direction_average;
+    // double m_time_at_speed;
 
     //Configuration variables
     double m_bin_width;
+    double m_save_time;
 
-
-    std::list<SpeedDiff> m_history;
+    std::vector<CurrentRecord> m_history;
+    CurrentRecord m_full_hist;
 
 };
 

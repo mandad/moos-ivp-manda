@@ -43,6 +43,7 @@ MarineMRAS::MarineMRAS()
     m_course_keep_only = false;
     m_adapt_turns = false;
     m_speed_var = "NAV_SPEED_OVER_GROUND";
+    m_cog_var = "NAV_COURSE_OVER_GROUND";
 
     m_first_heading = true;
     m_current_ROT = 0;

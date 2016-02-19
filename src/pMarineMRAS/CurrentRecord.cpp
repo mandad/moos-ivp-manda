@@ -1,0 +1,83 @@
+/************************************************************/
+/*    NAME: Damian Manda                                    */
+/*    ORGN: UNH                                             */
+/*    FILE: CurrentRecord.cpp                               */
+/*    DATE: 2016-02-16                                      */
+/************************************************************/
+
+#include "CurrentRecord.h"
+#include "AngleUtils.h"
+#include <cmath>
+
+
+CurrentRecord::CurrentRecord(double save_time, int max_records) :
+    m_save_time{save_time}, m_max_records{max_records} {
+}
+
+bool CurrentRecord::SaveRecord(SpeedInfoRecord record) {
+    m_record_hist.push_front(record);
+
+    if (record.valid_cog) {
+        std::complex<double> record_diff = VectorDiff(record);
+        m_vector_hist.push_front(record_diff);
+    }
+    // m_average_diff.imag(m_average_diff.imag() + 
+
+    while (m_record_hist.size() > m_max_records ||
+           record.time - m_record_hist.back().time > m_save_time) {
+        //SpeedRecord removed_rec = m_record_hist.back();
+        if (m_record_hist.back().valid_cog) {
+            m_vector_hist.pop_back();
+        }
+        m_record_hist.pop_back();
+    }
+    return true;
+}
+
+// The averages are calculated on demand instead of at insertion since they are
+// only called when switching headings for the vehicle (fairly long period)
+bool CurrentRecord::GetAverageCurrent(double &mag, double &heading) {
+    if (m_vector_hist.empty())
+        return false;
+    std::list<std::complex<double>>::iterator record;
+    double sum_y = 0;
+    double sum_x = 0;
+    for (record = m_vector_hist.begin(); record != m_vector_hist.end(); record++) {
+        sum_x += record->imag();
+        sum_y += record->real();
+    }
+
+    double num_records(m_vector_hist.size());
+    std::complex<double> avg_current(sum_y / num_records, sum_x / num_records);
+    mag = std::abs(avg_current);
+    heading = radToHeading(std::arg(avg_current));
+    return true;
+}
+
+double CurrentRecord::GetAverageSpeedDiff() {
+    std::list<SpeedInfoRecord>::iterator record;
+    double sum = 0;
+    for (record = m_record_hist.begin(); record != m_record_hist.end(); record++) {
+        sum += record->speed_over_ground - record->speed_estimate;
+    }
+    return sum / double(m_record_hist.size());
+}
+
+int CurrentRecord::NumRecords() {
+    return m_record_hist.size();
+}
+
+std::complex<double> CurrentRecord::VectorDiff(SpeedInfoRecord record) {
+    std::complex<double> expected_vector(std::polar(record.speed_estimate,
+        headingToRadians(record.heading)));
+    if (record.valid_cog) {
+        double cog_rad = headingToRadians(record.course_over_ground);
+        std::complex<double> cog_vector(std::polar(record.speed_over_ground, 
+            cog_rad));
+        return cog_vector - expected_vector;
+    } else {
+        std::complex<double> actual_vector(std::polar(record.speed_over_ground,
+            headingToRadians(record.heading)));
+        return actual_vector - expected_vector;
+    }
+}

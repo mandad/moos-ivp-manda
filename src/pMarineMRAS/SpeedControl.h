@@ -20,7 +20,8 @@ public:
     ~SpeedControl() {}
 
     double Run(double desired_speed, double speed, double heading, 
-               double desired_heading, double time, bool turning);
+               double desired_heading, double time, bool turning, 
+               double course_over_ground = 1000);
     void SetParameters(std::string thrust_map, double max_thrust, 
         bool use_thrust_map_only);
     std::string AppCastMessage();
@@ -31,7 +32,7 @@ private:
     void InitControls();
     bool SpeedHistInfo(double time_range, double &slope, double &average);
     double TimeAtHeading(double allowable_range);
-    int BinnedHeading(double heading);
+    //int BinnedHeading(double heading);
     double HeadingAbsDiff(double heading1, double heading2);
 
     //State variables
@@ -58,7 +59,7 @@ private:
     //Configuration variables
     ThrustMap m_thrust_map;
     double m_max_thrust;
-    CurrentEstimate m_current_estimate(/*20*/);
+    CurrentEstimate m_current_estimate;
 
     struct SpeedRecord {
         SpeedRecord(double desired_speed, double speed, double heading, 
