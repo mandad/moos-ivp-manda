@@ -73,6 +73,7 @@ class MarineMRAS : public AppCastingMOOSApp
  private: // State variables
     double m_desired_heading;
     double m_current_heading;
+    double m_current_cog;
     double m_desired_speed;
     double m_current_speed;
     double m_current_speed_time;

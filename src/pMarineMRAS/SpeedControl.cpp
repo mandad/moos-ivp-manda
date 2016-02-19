@@ -13,7 +13,7 @@
 #define ANGLE_BINS 20
 #define HISTORY_TIME 60
 #define AVERAGING_LEN 3
-#define MAX_FLAT_SLOPE 0.8 //m/s^2
+#define MAX_FLAT_SLOPE 0.08 //m/s^2
 #define SPEED_TOLERANCE 0.05
 #define HEADING_TOLERANCE 7
 
@@ -101,12 +101,10 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
       m_direction_average[binned_direction].second + 1);
     */
 
-    MOOSTrace("Saving History for Current");
     double speed_est = m_thrust_map.getSpeedValue(m_thrust_output);
     SpeedInfoRecord hist_record(current_time, speed, speed_est, heading, 
       course_over_ground);
     m_current_estimate.SaveHistory(hist_record);
-    MOOSTrace("History Saved");
   }
 
   if (m_adjustment_state == 0) {
@@ -119,7 +117,7 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
     m_turn_finished = false;
     //Add heading history value for offset
     //int binned_direction = BinnedHeading(desired_heading);
-    double speed_diff_avg = 0;// m_current_estimate.GetSpeedDiff(desired_heading);
+    double speed_diff_avg = m_current_estimate.GetSpeedDiff(desired_heading);
     /*
     if (m_direction_average[binned_direction].second > 0)
       speed_diff_avg = m_direction_average[binned_direction].first /
@@ -244,6 +242,7 @@ bool SpeedControl::SpeedHistInfo(double time_range, double &slope,
   if (valid_history) {
     slope = (latest_speed - past_speed) / (latest_time - past_time);
     average = speed_sum / num_records;
+    MOOSTrace("Speed Slope: %.2f  ", slope);
   }
 
   return valid_history;

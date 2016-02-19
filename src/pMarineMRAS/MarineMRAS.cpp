@@ -45,7 +45,7 @@ MarineMRAS::MarineMRAS()
   m_course_keep_only = false;
   m_adapt_turns = false;
   m_speed_var = "NAV_SPEED_OVER_GROUND";
-  m_cog_var = "NAV_COURSE_OVER_GROUND";
+  m_cog_var = "NAV_HEADING_OVER_GROUND";
 
   m_first_heading = true;
   m_current_ROT = 0;
@@ -94,6 +94,8 @@ bool MarineMRAS::OnNewMail(MOOSMSG_LIST &NewMail)
     } else if (key == "DESIRED_HEADING") {
       m_desired_heading = msg.GetDouble();
       AddHeadingHistory(m_desired_heading, msg.GetTime());
+    } else if (key == m_cog_var) {
+      m_current_cog = angle180(msg.GetDouble());
     } else if (key == "DESIRED_SPEED") {
       m_desired_speed = msg.GetDouble();
     } else if((key == "MOOS_MANUAL_OVERIDE") || (key == "MOOS_MANUAL_OVERRIDE")) {
@@ -134,7 +136,8 @@ bool MarineMRAS::Iterate()
       m_desired_thrust = m_desired_speed * m_speed_factor;
     } else {
       m_desired_thrust = m_speed_control.Run(m_desired_speed, m_current_speed, 
-        m_desired_heading, m_current_heading, m_current_speed_time, IsTurning());
+        m_desired_heading, m_current_heading, m_current_speed_time, IsTurning(),
+        m_current_cog);
     }
 
     // ------- Determine the rudder -------
@@ -366,6 +369,7 @@ void MarineMRAS::registerVariables()
   Register("NAV_HEADING", 0);
   //Register("NAV_SPEED", 0);
   Register(m_speed_var, 0);
+  Register(m_cog_var, 0);
   Register("DESIRED_HEADING", 0);
   Register("DESIRED_SPEED", 0);
   Register("MOOS_MANUAL_OVERIDE", 0);

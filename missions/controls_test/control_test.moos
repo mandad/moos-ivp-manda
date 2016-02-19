@@ -27,7 +27,7 @@ ProcessConfig = ANTLER
   Run = uProcessWatch	  @ NewConsole = false
   Run = pNodeReporter	  @ NewConsole = false
   Run = uTimerScript    @ NewConsole = false ~ uTS_StartTimer
-  //Run = uTimerScript    @ NewConsole = false ~ uTS_TurnTimer
+  Run = uTimerScript    @ NewConsole = false ~ uTS_TurnTimer
   Run = pMarineMRAS     @ NewConsole = false
   //Run = pMarinePID      @ NewConsole = false
   //Run = pEchoVar        @ NewConsole = false
@@ -185,8 +185,8 @@ ProcessConfig = pHelmIvP
 
   bhv_dir_not_found_ok = true
 
-  //behaviors  = consthead_pattern.bhv
-  behaviors = alpha_circle.bhv
+  behaviors  = consthead_pattern.bhv
+  // behaviors = alpha_circle.bhv
   //behaviors = survey_pattern.bhv
   domain     = course:0:359:360
   domain     = speed:0:4:50
