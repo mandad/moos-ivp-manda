@@ -383,7 +383,7 @@ void MarineMRAS::registerVariables()
 bool MarineMRAS::buildReport()
 {
   m_msgs << "============================================ \n";
-  m_msgs << "File: pMarineMRAS                            \n";
+  m_msgs << "pMarineMRAS                                  \n";
   m_msgs << "============================================ \n";
 
   if (m_has_control) {
@@ -396,12 +396,14 @@ bool MarineMRAS::buildReport()
     else
       actab << m_CourseKeepControl.GetStatusInfo();
     actab << " | | | | | ";
-    actab << "Psi_r'' | Psi_r' | Rudder | Series Heading | Model ROT | Series ROT";
     actab.addHeaderLines();
-    if (controller_in_use == ControllerType::CourseChange)
+    if (controller_in_use == ControllerType::CourseChange) {
+      actab << "Psi_r'' | Psi_r' | Rudder | Series Heading | Model ROT | Series ROT";
       actab << m_CourseControl.GetDebugInfo();
-    else
+    } else {
+      actab << "Km | Km* | Tm | Tm* | Model ROT | Measured ROT";
       actab << m_CourseKeepControl.GetDebugInfo();
+    }
     m_msgs << actab.getFormattedString();
 
     if (controller_in_use == ControllerType::CourseChange)

@@ -22,7 +22,7 @@ SpeedControl::SpeedControl() : m_thrust_output(0),  m_first_run(true),
                                m_has_adjust(false), m_initial_speed(0), 
                                m_turn_began(false), m_turn_finished(false),
                                m_adjustment_state(0), m_use_thrust_map_only(false),
-                               m_current_estimate(20, 3600) {
+                               m_current_estimate(ANGLE_BINS, 3600) {
   std::cout << "Initializing Speed Control";
   InitControls();
 }
@@ -89,18 +89,9 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
     m_adjustment_state);
 
 
-  if (m_adjustment_state > 1 && time_since_thrust_change > 2 * AVERAGING_LEN) {
-    /*
-    //round to nearest ANGLE_BINS and add to history
-    //only do this if past a certain time
-    double map_speed_diff = speed - m_thrust_map.getSpeedValue(m_thrust_output);
-    //this will overflow after a long time
-    int binned_direction = BinnedHeading(heading);
-    m_direction_average[binned_direction] = std::make_pair(
-      m_direction_average[binned_direction].first + map_speed_diff, 
-      m_direction_average[binned_direction].second + 1);
-    */
-
+  if (m_adjustment_state > 1 && speed_is_level && 
+      time_since_thrust_change > 2 * AVERAGING_LEN) {
+    // Add this value to history for current estimation
     double speed_est = m_thrust_map.getSpeedValue(m_thrust_output);
     SpeedInfoRecord hist_record(current_time, speed, speed_est, heading, 
       course_over_ground);

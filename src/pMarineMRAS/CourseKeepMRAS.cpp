@@ -60,6 +60,9 @@ void CourseKeepMRAS::SetParameters(double dfKStar, double dfTauStar, double dfZ,
 double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
     double dfMeasuredROT, double dfSpeed, double dfTime, bool bDoAdapt)
 {
+    bool bAdaptLocal = bDoAdapt;
+    if (dfSpeed < 0.2 || (m_dfRudderOut == m_dfKi))
+        bAdaptLocal = false;
     if (DEBUG)
         MOOSTrace("Using Course Keep Controller\n");
 
@@ -83,7 +86,7 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
         double dfDeltaT = dfTime - m_dfPreviousTime;
         //This includes both the series and parallel models
         UpdateRudderModel(dfDeltaT);
-        UpdateModel(dfMeasuredROT, m_dfModelRudder, dfSpeed, dfDeltaT, bDoAdapt);
+        UpdateModel(dfMeasuredROT, m_dfModelRudder, dfSpeed, dfDeltaT, bAdaptLocal);
 
         // double dfTimeReduceFactor = 1;
         // if (m_bDecreaseAdapt) {
@@ -92,7 +95,7 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
 
         // Determine the PID constants
         // Kp does not change
-        if (bDoAdapt) {
+        if (bAdaptLocal) {
             m_dfKd = (m_dfShipLength * 2 * sqrt(m_dfKp * m_dfKmStar * m_dfTaumStar) - 1) /
                 (dfSpeed * m_dfKmStar);
             if (m_dfKd < 0)
@@ -118,6 +121,7 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
     m_dfPreviousTime = dfTime;
     m_dfPreviousHeading = dfDesiredHeading;
     m_dfMeasuredHeading = dfMeasuredHeading;
+    m_dfMeasuredROT = dfMeasuredROT;
 
     //limit the rudder
     return TwoSidedLimit(m_dfRudderOut, m_dfRudderLimit);
@@ -259,8 +263,8 @@ string CourseKeepMRAS::GetStatusInfo() {
 
 string CourseKeepMRAS::GetDebugInfo() {
     stringstream info;
-    info << m_dfPsiRefPP << "|" << m_dfPsiRefP << "|" << m_dfRudderOut << "|"
-    << m_dfSeriesHeading << "|" << m_dfModelROT << "|" << m_dfSeriesROT;
+    info << m_dfKm << "|" << m_dfKmStar << "|" << m_dfTauM << "|"
+         << m_dfTaumStar << "|" << m_dfModelROT << "|" << m_dfMeasuredROT;
     return info.str();
 }
 
