@@ -271,8 +271,8 @@ ProcessConfig = uTS_TurnTimer
   upon_awake = restart
 
   event = var=CONST_HDG_UPDATES, val=heading=90, time=30
-  event = var=CONST_HDG_UPDATES, val=heading=0, time=60
-  event = var=CONST_HDG_UPDATES, val=heading=270, time=90
+  event = var=CONST_HDG_UPDATES, val=heading=270, time=60
+  event = var=CONST_HDG_UPDATES, val=heading=0, time=90
   event = var=CONST_HDG_UPDATES, val=heading=180, time=120
 }
 

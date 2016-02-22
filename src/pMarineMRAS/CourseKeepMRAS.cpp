@@ -59,11 +59,12 @@ void CourseKeepMRAS::SetParameters(double dfKStar, double dfTauStar, double dfZ,
 }
 
 double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
-    double dfMeasuredROT, double dfSpeed, double dfTime, bool bDoAdapt)
+    double dfMeasuredROT, double dfSpeed, double dfTime, bool bDoAdapt, 
+    bool bTurning)
 {
     bool bAdaptLocal = bDoAdapt;
     // Don't adapt if we are going slow or straight (influence likely due to waves)
-    if (dfSpeed < 0.2 || (m_dfRudderOut == m_dfKi))
+    if (dfSpeed < 0.2 || (fabs(m_dfRudderOut - m_dfKi) < m_dfDeadband))
         bAdaptLocal = false;
     if (DEBUG)
         MOOSTrace("Using Course Keep Controller\n");
@@ -97,7 +98,7 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
 
         // Determine the PID constants
         // Kp does not change
-        if (bAdaptLocal) {
+        if (!bTurning) {
             // m_dfKp = 1 / (4 * m_dfZ * m_dfZ * m_dfTauM);
             // if (m_dfKp > 5) {
             //     m_dfKp = 5;

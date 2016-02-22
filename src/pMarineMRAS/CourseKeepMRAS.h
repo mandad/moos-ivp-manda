@@ -15,7 +15,7 @@ public:
     ~CourseKeepMRAS() {}
 
     double Run(double dfDesiredHeading, double dfMeasuredHeading, double dfMeasuredROT,
-     double dfSpeed, double dfTime, bool bDoAdapt);
+     double dfSpeed, double dfTime, bool bDoAdapt, bool bTurning);
     void SetParameters(double dfKStar, double dfTauStar, double dfZ, 
         double dfBeta, double dfAlpha, double dfGamma, double dfXi, 
         double dfRudderLimit, double dfCruisingSpeed, double dfShipLength, 
