@@ -16,13 +16,13 @@
 #define MAX_FLAT_SLOPE 0.08 //m/s^2
 #define SPEED_TOLERANCE 0.05
 #define HEADING_TOLERANCE 7
-#define DEBUG false
+#define DEBUG true
 
 SpeedControl::SpeedControl() : m_thrust_output(0),  m_first_run(true), 
                                m_thrust_map_set(true), m_max_thrust(100), 
-                               m_has_adjust(false), m_initial_speed(0), 
-                               m_turn_began(false), m_turn_finished(false),
-                               m_adjustment_state(0), m_use_thrust_map_only(false),
+                               m_initial_speed(0), m_turn_began(false), 
+                               m_turn_finished(false), m_adjustment_state(0),
+                               m_use_thrust_map_only(false),
                                m_current_estimate(ANGLE_BINS, 3600) {
   InitControls();
 }
@@ -54,7 +54,7 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
 
   double speed_avg = 0;
   double speed_slope = 0;
-  bool history_valid = SpeedHistInfo(AVERAGING_LEN, speed_slope, speed_avg);
+  bool history_valid = SpeedHistInfo(2 * AVERAGING_LEN, speed_slope, speed_avg);
   //Largest from calm day straight = 0.04
   //Largest from rough day straight = 0.10
   if (history_valid && fabs(speed_slope) < MAX_FLAT_SLOPE) {
@@ -77,6 +77,7 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
       MOOSTrace("Heading Steady\n");
   } 
 
+
   // Determine state
   // 0 = First run, desired speed adjusted, desired heading adjusted
   // 1 = Initial setpoint, waiting for first adjust
@@ -90,8 +91,8 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
     m_adjustment_state = 2;
   }
   if (DEBUG)
-    MOOSTrace("Speed Control: Time At Heading = %.2f State: %i\n", time_at_heading, 
-      m_adjustment_state);
+    MOOSTrace("Speed Control: Time At Heading = %.2f State: %i\n", 
+      time_at_heading, m_adjustment_state);
 
 
   if (m_adjustment_state > 1 && speed_is_level && 
@@ -106,45 +107,39 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
   if (m_adjustment_state == 0) {
     //We have changed desired speeds
     //TODO: need to do something for small speed changes (use same offset)
-    // m_time_at_speed = 0;
-    // m_speed_hist.clear();
-    m_has_adjust = false;
     m_turn_began = false;
     m_turn_finished = false;
     //Add heading history value for offset
-    //int binned_direction = BinnedHeading(desired_heading);
     double speed_diff_avg = m_current_estimate.GetSpeedDiff(desired_heading);
-    /*
-    if (m_direction_average[binned_direction].second > 0)
-      speed_diff_avg = m_direction_average[binned_direction].first /
-        m_direction_average[binned_direction].second;
-    */
     m_initial_speed = desired_speed - speed_diff_avg;
     thrust = m_thrust_map.getThrustValue(m_initial_speed);
     if (DEBUG)
       MOOSTrace("Speed Control: New Setting, Inital Speed = %.2f Thrust = %.2f Speed Diff Avg = %.2f\n", 
         m_initial_speed, thrust, speed_diff_avg);
-    // MOOSTrace("                            Heading = %.2f Binned Dir = %i\n", 
-    //   desired_heading, binned_direction);
     m_adjustment_state = 1;
   } else if (m_adjustment_state == 2 && time_at_heading > (2 * AVERAGING_LEN)
       && time_since_thrust_change > (2 * AVERAGING_LEN)) {
+
+    history_valid = SpeedHistInfo(AVERAGING_LEN, speed_slope, speed_avg);
     double des_speed_diff = desired_speed - speed_avg;
 
     // Probably should also take into account new heading offsets
-    if (des_speed_diff > SPEED_TOLERANCE) {
+    if (fabs(des_speed_diff) > SPEED_TOLERANCE) {
       thrust = m_thrust_map.getThrustValue(m_initial_speed + des_speed_diff);
-      m_has_adjust = true;
       if (DEBUG)
         MOOSTrace("Speed Control: First Adjust, Speed Diff = %.2f Thrust = %.2f\n", 
           des_speed_diff, thrust);
     }
+    // Pretend we change so that the small adjustment has to wait
+    m_thrust_change_time = current_time;
     m_adjustment_state = 3;
-  } else if (m_adjustment_state == 3 
+  } else if (m_adjustment_state == 3 && heading_is_steady && speed_is_level 
             && time_since_thrust_change > (3 * AVERAGING_LEN)) {
-    //Do minor adjustments after the first big one
+    // Do minor adjustments after the first big one
+    // Assume the change doesn't take more than AVERAGING_LEN to manifest since
+    // it is small
     //Rewrite the speed_slope & avg here, maybe should be new vars?
-    history_valid = SpeedHistInfo(AVERAGING_LEN * 2, speed_slope, speed_avg);
+    //history_valid = SpeedHistInfo(AVERAGING_LEN * 2, speed_slope, speed_avg);
     if (history_valid) {
       //Note that this has a longer averaging period then the first adjust
       double des_speed_diff_long = desired_speed - speed_avg;
