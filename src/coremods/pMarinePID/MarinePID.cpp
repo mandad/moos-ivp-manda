@@ -250,6 +250,7 @@ bool MarinePID::Iterate()
     rudder = 0;
   Notify("DESIRED_RUDDER", rudder);
   Notify("DESIRED_THRUST", thrust);
+  Notify("NAV_ROT", m_pengine.getROT());
   m_current_thrust = thrust;
   if(m_depth_control)
     Notify("DESIRED_ELEVATOR", elevator);
