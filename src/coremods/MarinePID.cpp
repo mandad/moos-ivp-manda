@@ -133,7 +133,7 @@ bool MarinePID::OnNewMail(MOOSMSG_LIST &NewMail)
       else if(key == "NAV_SPEED")
 	m_current_speed = msg.m_dfVal;
       else if (key == "NAV_SPEED_OVER_GROUND")
-  m_curent_sog = msg.m_dfVal;
+  m_current_sog = msg.m_dfVal;
       else if(key == "NAV_DEPTH")
 	m_current_depth = msg.m_dfVal;
       else if(key == "NAV_PITCH")
@@ -220,8 +220,8 @@ bool MarinePID::Iterate()
   rudder += bias;
   //--------------------
 
-  if (m_current_sog > 0 && m_curent_sog != m_current_speed) {
-    thrust = m_pengine.getDesiredThrust(m_desired_speed, m_curent_sog,
+  if (m_current_sog > 0 && m_current_sog != m_current_speed) {
+    thrust = m_pengine.getDesiredThrust(m_desired_speed, m_current_sog,
   				    m_current_thrust, m_max_thrust);
   } else {
     thrust = m_pengine.getDesiredThrust(m_desired_speed, m_current_speed,
@@ -306,6 +306,7 @@ void MarinePID::registerVariables()
   m_Comms.Register("NAV_HEADING", 0);
   m_Comms.Register("NAV_YAW", 0);
   m_Comms.Register("NAV_SPEED", 0);
+  m_Comms.Register("NAV_SPEED_OVER_GROUND", 0);
   m_Comms.Register("NAV_DEPTH", 0);
   m_Comms.Register("NAV_PITCH", 0);
   m_Comms.Register("DESIRED_HEADING", 0);

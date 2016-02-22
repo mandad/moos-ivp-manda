@@ -143,8 +143,8 @@ bool MarineMRAS::Iterate()
     // ------- Determine the rudder -------
     double desired_rudder = 0;
     //prevent controller runup when speed is 0
+    ControllerType controller_to_use = DetermineController();
     if (!m_first_heading && m_desired_thrust > 0 && m_desired_speed > 0) {
-      ControllerType controller_to_use = DetermineController();
       if (controller_to_use ==  ControllerType::CourseChange) {
         //MOOSTrace("Using Course Change Controller\n");
         if (m_last_controller == ControllerType::CourseKeep) {
@@ -180,7 +180,7 @@ bool MarineMRAS::Iterate()
 
     //Debug variables for logging
     double vars[11];
-    if (DetermineController() ==  ControllerType::CourseChange) {
+    if (controller_to_use ==  ControllerType::CourseChange) {
       m_CourseControl.GetDebugVariables(vars);
     } else {
       m_CourseKeepControl.GetDebugVariables(vars);
@@ -191,10 +191,17 @@ bool MarineMRAS::Iterate()
     Notify("MRAS_RUDDER_OUT", vars[3]);
     Notify("MRAS_MODEL_HEADING", vars[4]);
     Notify("MRAS_MODEL_ROT", vars[5]);
-    Notify("MRAS_SERIES_MODEL_HEADING", vars[6]);
-    Notify("MRAS_SERIES_MODEL_ROT", vars[7]);
-    Notify("MRAS_PSI_REF_P", vars[8]);
-    Notify("MRAS_PSI_REF_PP", vars[9]);
+    if (controller_to_use == ControllerType::CourseChange) {
+      Notify("MRAS_SERIES_MODEL_HEADING", vars[6]);
+      Notify("MRAS_SERIES_MODEL_ROT", vars[7]);
+      Notify("MRAS_PSI_REF_P", vars[8]);
+      Notify("MRAS_PSI_REF_PP", vars[9]);
+    } else {
+      Notify("MRAS_TAU_M_STAR", vars[6]);
+      Notify("MRAS_PSI_PP", vars[7]);
+      Notify("MRAS_TAU_M", vars[8]);
+      Notify("MRAS_K_M", vars[9]);
+    }
     Notify("MRAS_MODEL_RUDDER", vars[10]);
 
     double speed_vars[1];
@@ -541,8 +548,11 @@ ControllerType MarineMRAS::DetermineController() {
 
 bool MarineMRAS::IsTurning() {
   if (m_desired_heading_history.size() > 2) {
-    return fabs(angle180(m_desired_heading_history.back() - angle180(m_desired_heading))) 
-            > TURN_THRESHOLD;
+    bool recent_change = fabs(angle180(m_desired_heading_history.back() 
+                          - angle180(m_desired_heading))) > TURN_THRESHOLD;
+    bool not_near_desired = fabs(m_current_heading - m_desired_heading) 
+                            > TURN_THRESHOLD;
+    return not_near_desired || recent_change;
   } else {
     //assume we are turning if we don't know
     return true;

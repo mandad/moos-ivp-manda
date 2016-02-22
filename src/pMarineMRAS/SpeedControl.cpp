@@ -16,6 +16,7 @@
 #define MAX_FLAT_SLOPE 0.08 //m/s^2
 #define SPEED_TOLERANCE 0.05
 #define HEADING_TOLERANCE 7
+#define DEBUG false
 
 SpeedControl::SpeedControl() : m_thrust_output(0),  m_first_run(true), 
                                m_thrust_map_set(true), m_max_thrust(100), 
@@ -23,7 +24,6 @@ SpeedControl::SpeedControl() : m_thrust_output(0),  m_first_run(true),
                                m_turn_began(false), m_turn_finished(false),
                                m_adjustment_state(0), m_use_thrust_map_only(false),
                                m_current_estimate(ANGLE_BINS, 3600) {
-  std::cout << "Initializing Speed Control";
   InitControls();
 }
 
@@ -32,12 +32,14 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
                          double course_over_ground) {
   //MOOSTrace("Speed Control: Desired Speed = %.2f\n", desired_speed);
   if (isnan(desired_speed) || !m_thrust_map_set) {
-    MOOSTrace("Speed Control: Passed NaN Desired Speed or No Thrust Map\n");
+    if (DEBUG)
+      MOOSTrace("Speed Control: Passed NaN Desired Speed or No Thrust Map\n");
     return m_thrust_output;
   }
 
   //default is to not change the thrust output
-  MOOSTrace("Speed Control: Desired Heading = %.2f\n", desired_heading);
+  if (DEBUG)
+    MOOSTrace("Speed Control: Desired Heading = %.2f\n", desired_heading);
   heading = angle360(heading);
   desired_heading = angle360(desired_heading);
   double thrust = m_thrust_output;
@@ -57,7 +59,8 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
   //Largest from rough day straight = 0.10
   if (history_valid && fabs(speed_slope) < MAX_FLAT_SLOPE) {
     speed_is_level = true;
-    MOOSTrace("Speed Steady\n");
+    if (DEBUG)
+      MOOSTrace("Speed Steady\n");
   }
 
   double time_at_heading = TimeAtHeading(HEADING_TOLERANCE);
@@ -70,7 +73,8 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
   if (time_at_heading > AVERAGING_LEN 
       && HeadingAbsDiff(desired_heading, heading) < HEADING_TOLERANCE) {
     heading_is_steady = true;
-    MOOSTrace("Heading Steady\n");
+    if (DEBUG)
+      MOOSTrace("Heading Steady\n");
   } 
 
   // Determine state
@@ -85,8 +89,9 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
   } else if (heading_is_steady && speed_is_level && m_adjustment_state == 1) {
     m_adjustment_state = 2;
   }
-  MOOSTrace("Speed Control: Time At Heading = %.2f State: %i\n", time_at_heading, 
-    m_adjustment_state);
+  if (DEBUG)
+    MOOSTrace("Speed Control: Time At Heading = %.2f State: %i\n", time_at_heading, 
+      m_adjustment_state);
 
 
   if (m_adjustment_state > 1 && speed_is_level && 
@@ -116,34 +121,35 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
     */
     m_initial_speed = desired_speed - speed_diff_avg;
     thrust = m_thrust_map.getThrustValue(m_initial_speed);
-    MOOSTrace("Speed Control: New Setting, Inital Speed = %.2f Thrust = %.2f Speed Diff Avg = %.2f\n", 
-      m_initial_speed, thrust, speed_diff_avg);
+    if (DEBUG)
+      MOOSTrace("Speed Control: New Setting, Inital Speed = %.2f Thrust = %.2f Speed Diff Avg = %.2f\n", 
+        m_initial_speed, thrust, speed_diff_avg);
     // MOOSTrace("                            Heading = %.2f Binned Dir = %i\n", 
     //   desired_heading, binned_direction);
     m_adjustment_state = 1;
   } else if (m_adjustment_state == 2 && time_at_heading > (2 * AVERAGING_LEN)
       && time_since_thrust_change > (2 * AVERAGING_LEN)) {
-    //if (!m_has_adjust) {
     double des_speed_diff = desired_speed - speed_avg;
 
     // Probably should also take into account new heading offsets
     if (des_speed_diff > SPEED_TOLERANCE) {
       thrust = m_thrust_map.getThrustValue(m_initial_speed + des_speed_diff);
       m_has_adjust = true;
-      MOOSTrace("Speed Control: First Adjust, Speed Diff = %.2f Thrust = %.2f\n", 
-        des_speed_diff, thrust);
+      if (DEBUG)
+        MOOSTrace("Speed Control: First Adjust, Speed Diff = %.2f Thrust = %.2f\n", 
+          des_speed_diff, thrust);
     }
     m_adjustment_state = 3;
   } else if (m_adjustment_state == 3 
             && time_since_thrust_change > (3 * AVERAGING_LEN)) {
     //Do minor adjustments after the first big one
     //Rewrite the speed_slope & avg here, maybe should be new vars?
-    //if (time_at_heading > (AVERAGING_LEN * 3)) {
     history_valid = SpeedHistInfo(AVERAGING_LEN * 2, speed_slope, speed_avg);
     if (history_valid) {
       //Note that this has a longer averaging period then the first adjust
       double des_speed_diff_long = desired_speed - speed_avg;
-      MOOSTrace("Speed Control: Small Adjust, Speed Diff = %.2f", des_speed_diff_long);
+      if (DEBUG)
+        MOOSTrace("Speed Control: Small Adjust, Speed Diff = %.2f", des_speed_diff_long);
       double delta_t = current_time - m_previous_time;
       if (fabs(des_speed_diff_long) > SPEED_TOLERANCE) {
         double mapped_speed = m_thrust_map.getSpeedValue(m_thrust_output);
@@ -151,11 +157,12 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
         // double thrust_slope = m_thrust_map.getSlopeAtThrust(m_thrust_output);
         //Adjust based on the differential
         // thrust = m_thrust_output + des_speed_diff_long * thrust_slope;
-        MOOSTrace(" Thrust = %.2f", thrust);
+        if (DEBUG)
+          MOOSTrace(" Thrust = %.2f", thrust);
       }
-      MOOSTrace("\n");
+      if (DEBUG)
+        MOOSTrace("\n");
     }
-    //}
   }
 
   //Update before the next cycle
@@ -195,7 +202,8 @@ void SpeedControl::SetParameters(std::string thrust_map, double max_thrust,
   if (thrust_map != "") {
     bool map_ok = m_thrust_map.injestMapString(thrust_map);
     if (!map_ok) {
-      MOOSTrace("Speed Control: Error in Thrust Map");
+      if (DEBUG)
+        MOOSTrace("Speed Control: Error in Thrust Map");
       m_thrust_map_set = true;
     }
     m_use_thrust_map_only = use_thrust_map_only;
@@ -233,7 +241,8 @@ bool SpeedControl::SpeedHistInfo(double time_range, double &slope,
   if (valid_history) {
     slope = (latest_speed - past_speed) / (latest_time - past_time);
     average = speed_sum / num_records;
-    MOOSTrace("Speed Slope: %.2f  ", slope);
+    if (DEBUG)
+      MOOSTrace("Speed Slope: %.2f  ", slope);
   }
 
   return valid_history;

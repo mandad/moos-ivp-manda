@@ -12,7 +12,6 @@
 
 CurrentEstimate::CurrentEstimate(double bin_width, double save_time) : 
     m_bin_width{bin_width}, m_save_time{save_time}, m_full_hist(save_time, 1000) {
-    std::cout << "Initializing Current Estimator\n";
     // Not sure if this properly sets m_history[0]
     for (int direction = 0; direction < int(std::round(360 / bin_width)); 
        direction++) {

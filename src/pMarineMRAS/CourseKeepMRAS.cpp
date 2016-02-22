@@ -10,11 +10,10 @@
 #include "CourseKeepMRAS.h"
 #include <math.h>
 
-#define USE_SERIES_MODEL true
-#define LIMIT_ROT_INC false
 #define RESET_THRESHOLD 5
 #define KP_LIMIT 2.5
-#define DEBUG false
+#define DEBUG true
+#define ROT_THRESHOLD 10
 
 using namespace std;
 
@@ -25,11 +24,13 @@ CourseKeepMRAS::CourseKeepMRAS() {
     m_dfRudderOut = 0;
     //m_dfF = 1;
     m_dfMaxROTInc = 6;
+    m_dfModelROT = 0;
     m_dfModelRudder = 0;
     m_dfKi = 0;
+    m_dfZ = 1;
 
     //We should read this in as a parameter
-    m_dfMu = 2;
+    m_dfMu = 2.4;
     m_dfDeadband = 0;
 }
 
@@ -61,6 +62,7 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
     double dfMeasuredROT, double dfSpeed, double dfTime, bool bDoAdapt)
 {
     bool bAdaptLocal = bDoAdapt;
+    // Don't adapt if we are going slow or straight (influence likely due to waves)
     if (dfSpeed < 0.2 || (m_dfRudderOut == m_dfKi))
         bAdaptLocal = false;
     if (DEBUG)
@@ -96,8 +98,12 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
         // Determine the PID constants
         // Kp does not change
         if (bAdaptLocal) {
-            m_dfKd = (m_dfShipLength * 2 * sqrt(m_dfKp * m_dfKmStar * m_dfTaumStar) - 1) /
-                (dfSpeed * m_dfKmStar);
+            // m_dfKp = 1 / (4 * m_dfZ * m_dfZ * m_dfTauM);
+            // if (m_dfKp > 5) {
+            //     m_dfKp = 5;
+            // }
+            m_dfKd = (m_dfShipLength * 2 * m_dfZ * sqrt(m_dfKp * m_dfKmStar * 
+                m_dfTaumStar) - 1) / (dfSpeed * m_dfKmStar);
             if (m_dfKd < 0)
                 m_dfKd = 0;
             else if (m_dfKd > (m_dfKp * m_dfShipLength / dfSpeed))
@@ -130,19 +136,22 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
 void CourseKeepMRAS::InitModel(double dfHeading, double dfROT, double dfSpeed) {
     if (DEBUG)
         MOOSTrace("Mu: %0.2f\n", m_dfMu);
+
+    //Model variables
+    m_dfTauM = m_dfTaumStar * m_dfShipLength / dfSpeed;
+    m_dfKm = m_dfKmStar * dfSpeed / m_dfShipLength;
+
     m_dfKp = m_dfMu / 2;
-    m_dfKd = (m_dfShipLength * 2 * sqrt(m_dfKp * m_dfKmStar * m_dfTaumStar) - 1) /
+    //m_dfKp = 1 / (4 * m_dfZ * m_dfZ * m_dfTauM);
+    m_dfKd = (m_dfShipLength * 2 * m_dfZ * sqrt(m_dfKp * m_dfKmStar * m_dfTaumStar) - 1) /
         (dfSpeed * m_dfKmStar);
-    if (m_dfKd < m_dfKp) {
-        m_dfKd = m_dfKp;
+    if (m_dfKd < 0) {
+        m_dfKd = 0;
     } else if (m_dfKd > (m_dfKp * m_dfShipLength / dfSpeed)) {
         m_dfKd = m_dfKp * m_dfShipLength / dfSpeed;
     }
     m_dfKim = 0;
 
-    //Model variables
-    m_dfTauM = m_dfTaumStar * dfSpeed / m_dfShipLength;
-    m_dfKm = m_dfKmStar * m_dfShipLength / dfSpeed;
     ResetModel(dfHeading, dfROT, dfSpeed);
 
     if (DEBUG)
@@ -193,7 +202,7 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
         double dfe = m_dfModelROT - dfMeasuredROT;
         double dfDeltaKmTm = (-m_dfBeta * dfe * (dfRudder - m_dfKim)) * dfDeltaT;
         double dfDeltaTmRecip = (m_dfAlpha * dfe * m_dfModelROT) * dfDeltaT;
-        m_dfTaumStar = 1 / (1/m_dfTaumStar + dfDeltaTmRecip);
+        m_dfTaumStar = 1 / (1 / m_dfTaumStar + dfDeltaTmRecip);
         if (m_dfTaumStar < 0.1) {
             m_dfTaumStar = 0.1;
         } else if (m_dfTaumStar > 10) {
@@ -206,15 +215,17 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
         } else if (m_dfKmStar > 10) {
             m_dfKmStar = 10;
         }
-        m_dfKim -= m_dfGamma * dfe;
+        // Avoid integral windup during turns
+        if (fabs(dfMeasuredROT) < ROT_THRESHOLD)
+            m_dfKim -= m_dfGamma * dfe;
 
         if (DEBUG)
             MOOSTrace("Adaptive Update: TauM*: %0.2f  Km*: %0.2f  Ki,m: %0.2f\n", m_dfTaumStar,
                 m_dfKmStar, m_dfKim);
 
         //Potential to divide by zero here if dfSpeed == 0
-        m_dfTauM = m_dfTaumStar * dfSpeed / m_dfShipLength;
-        m_dfKm = m_dfKmStar * m_dfShipLength / dfSpeed;
+        m_dfTauM = m_dfTaumStar * m_dfShipLength / dfSpeed;
+        m_dfKm = m_dfKmStar * dfSpeed / m_dfShipLength;
     }
 
 }

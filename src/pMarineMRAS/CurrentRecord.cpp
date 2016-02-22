@@ -12,7 +12,6 @@
 
 CurrentRecord::CurrentRecord(double save_time, int max_records) :
     m_save_time{save_time}, m_max_records{max_records} {
-    std::cout << "Initializing Current Record\n";
 }
 
 bool CurrentRecord::SaveRecord(SpeedInfoRecord record) {
