@@ -8,13 +8,29 @@
 #ifndef SurveyPath_RecordSwath_HEADER
 #define SurveyPath_RecordSwath_HEADER
 
-#include <geos.h>
+//GEOS Headers
+//#include <geos.h>
+#include <geos/geom/PrecisionModel.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/Polygon.h>
+#include <geos/util/GEOSException.h>
+#include <geos/util/IllegalArgumentException.h>
+
 #include <list>
+#include <vector>
+#include <map>
+
+enum class BoatSide {
+  Stbd,
+  Port
+};
 
 class RecordSwath
 {
  public:
-   RecordSwath();
+   RecordSwath(double interval = 10);
    ~RecordSwath() {};
 
  private:
@@ -28,9 +44,21 @@ class RecordSwath
 
  private:
    // Configuration Variables
+   double m_min_allowable_swath;
 
    // State varables
-   std::list<SwathRecord> interval_record;
+   std::vector<SwathRecord> m_interval_record;
+   std::map<BoatSide, std::vector<double>> m_interval_swath;
+   double m_last_x;
+   double m_last_y;
+   bool m_has_records;
+   double m_acc_dist;
+   double m_interval;
+
+   // Geometry Stuff
+   std::map<BoatSide, std::vector<geos::geom::Point*>> m_outer_points;
+   geos::geom::Polygon* m_coverage;
+   geos::geom::GeometryFactory* m_geom_factory;
 
 };
 
