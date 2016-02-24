@@ -16,7 +16,7 @@
 #define MAX_FLAT_SLOPE 0.08 //m/s^2
 #define SPEED_TOLERANCE 0.05
 #define HEADING_TOLERANCE 7
-#define DEBUG true
+#define DEBUG false
 
 SpeedControl::SpeedControl() : m_thrust_output(0),  m_first_run(true), 
                                m_thrust_map_set(true), m_max_thrust(100), 
@@ -37,11 +37,11 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
     return m_thrust_output;
   }
 
-  //default is to not change the thrust output
   if (DEBUG)
     MOOSTrace("Speed Control: Desired Heading = %.2f\n", desired_heading);
   heading = angle360(heading);
   desired_heading = angle360(desired_heading);
+  //default is to not change the thrust output
   double thrust = m_thrust_output;
   bool speed_is_level = false;
   bool heading_is_steady = false;

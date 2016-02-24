@@ -12,7 +12,7 @@
 
 #define RESET_THRESHOLD 5
 #define KP_LIMIT 2.5
-#define DEBUG false
+#define DEBUG true
 #define ROT_THRESHOLD 10
 
 using namespace std;

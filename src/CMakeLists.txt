@@ -27,6 +27,7 @@ ADD_SUBDIRECTORY(pLLTrackUpdate)
 ADD_SUBDIRECTORY(iCV100)
 ADD_SUBDIRECTORY(pSonarFilter)
 ADD_SUBDIRECTORY(pMarineMRAS)
+ADD_SUBDIRECTORY(pSurveyPath)
 
 ##############################################################################
 #                           END of CMakeLists.txt

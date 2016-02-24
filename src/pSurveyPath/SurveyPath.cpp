@@ -1,8 +1,8 @@
 /************************************************************/
-/*    NAME: Damian Manda                                              */
-/*    ORGN: MIT                                             */
-/*    FILE: SurveyPath.cpp                                        */
-/*    DATE:                                                 */
+/*    NAME: Damian Manda                                    */
+/*    ORGN: UNH                                             */
+/*    FILE: SurveyPath.cpp                                  */
+/*    DATE: 23 Feb 2016                                     */
 /************************************************************/
 
 #include <iterator>
@@ -34,20 +34,20 @@ bool SurveyPath::OnNewMail(MOOSMSG_LIST &NewMail)
 #if 0 // Keep these around just for template
     string comm  = msg.GetCommunity();
     double dval  = msg.GetDouble();
-    string sval  = msg.GetString(); 
+    string sval  = msg.GetString();
     string msrc  = msg.GetSource();
     double mtime = msg.GetTime();
     bool   mdbl  = msg.IsDouble();
     bool   mstr  = msg.IsString();
 #endif
 
-     if(key == "FOO") 
+     if(key == "FOO")
        cout << "great!";
 
      else if(key != "APPCAST_REQ") // handle by AppCastingMOOSApp
        reportRunWarning("Unhandled Mail: " + key);
    }
-	
+
    return(true);
 }
 
@@ -104,8 +104,8 @@ bool SurveyPath::OnStartUp()
       reportUnhandledConfigWarning(orig);
 
   }
-  
-  registerVariables();	
+
+  registerVariables();
   return(true);
 }
 
@@ -122,7 +122,7 @@ void SurveyPath::registerVariables()
 //------------------------------------------------------------
 // Procedure: buildReport()
 
-bool SurveyPath::buildReport() 
+bool SurveyPath::buildReport()
 {
   m_msgs << "============================================ \n";
   m_msgs << "File:                                        \n";
@@ -136,7 +136,3 @@ bool SurveyPath::buildReport()
 
   return(true);
 }
-
-
-
-

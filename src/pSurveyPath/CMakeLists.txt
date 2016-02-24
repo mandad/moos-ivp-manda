@@ -6,15 +6,22 @@
 SET(SRC
   SurveyPath.cpp
   SurveyPath_Info.cpp
+  RecordSwath.cpp
   main.cpp
 )
 
 ADD_EXECUTABLE(pSurveyPath ${SRC})
+
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} geos-config")
+#CFLAGS += `geos-config --cflags`
+#LDFLAGS += `geos-config --ldflags`
 
 TARGET_LINK_LIBRARIES(pSurveyPath
    ${MOOS_LIBRARIES}
    apputil
    mbutil
    m
-   pthread)
-
+   pthread
+   geos
+)
