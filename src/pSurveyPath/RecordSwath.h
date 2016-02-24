@@ -18,6 +18,10 @@
 #include <geos/util/GEOSException.h>
 #include <geos/util/IllegalArgumentException.h>
 
+//MOOS Headers
+#include "XYPoint.h"
+#include "XYSegList.h"
+
 #include <list>
 #include <vector>
 #include <map>
@@ -29,18 +33,31 @@ enum class BoatSide {
 
 class RecordSwath
 {
+private:
+  struct SwathRecord {
+    double loc_x;
+    double loc_y;
+    double heading;
+    double swath_stbd;
+    double swath_port;
+  };
+
  public:
    RecordSwath(double interval = 10);
    ~RecordSwath() {};
+   bool AddRecord(double swath_stbd, double swath_port, double loc_x, double loc_y,
+          double heading);
+   void ResetLine();
+   void SaveLast();
+   void GetSwathOuterPts(BoatSide side, XYSegList& points);
+   bool GetSwathCoverage(BoatSide side, geos::geom::Polygon& coverage);
+   double GetSwathWidth(BoatSide side, unsigned int index);
+   std::vector<double> GetAllSwathWidths(BoatSide side);
+   XYPoint GetSwathLocation(unsigned int index);
 
- private:
-   struct SwathRecord {
-     double loc_x;
-     double loc_y;
-     double heading;
-     double swath_stbd;
-     double swath_port;
-   };
+ protected:
+   void MinInterval();
+   XYPoint GetOuterPoint(SwathRecord record, BoatSide side);
 
  private:
    // Configuration Variables

@@ -1,5 +1,5 @@
 #--------------------------------------------------------
-# The CMakeLists.txt for:                       pSurveyPath
+# The CMakeLists.txt for:                 pSurveyPath
 # Author(s):                              Damian Manda
 #--------------------------------------------------------
 SET(CMAKE_CXX_STANDARD 11)
@@ -21,6 +21,7 @@ ADD_EXECUTABLE(pSurveyPath ${SRC})
 TARGET_LINK_LIBRARIES(pSurveyPath
    ${MOOS_LIBRARIES}
    apputil
+   geometry
    mbutil
    m
    pthread

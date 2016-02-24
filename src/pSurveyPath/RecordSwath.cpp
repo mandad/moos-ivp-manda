@@ -7,6 +7,7 @@
 
 #include "RecordSwath.h"
 #include <cmath>
+#include "AngleUtils.h"
 
 //---------------------------------------------------------
 // Constructor
