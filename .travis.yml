@@ -15,7 +15,8 @@ before_install:
   - sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
   - sudo apt-key adv --keyserver hkp://pool.sks-keyservers.net:80 --recv-key 0xB01FA116
   - sudo apt-get -qq update
-  - sudo apt-get install -y ros-jade-catkin
+  - sudo apt-get install -qq ros-jade-catkin libboost-dev
+  - echo "source /opt/ros/jade/setup.bash" > setup.bash
   - sudo apt-get install -qq xterm libfltk1.3-dev freeglut3-dev libpng12-dev libjpeg-dev libxft-dev libxinerama-dev libtiff5-dev libproj-dev
   - mkdir source_installs
   - cd source_installs
@@ -24,6 +25,7 @@ before_install:
   - cd .. #source_installs
   - git clone https://github.com/wjwwood/serial.git
   - cd serial
+  - source setup.bash
   - make && make install
   - sudo cp -r /tmp/usr/local/* /usr/local/
   - cd .. && cd .. #root dir
