@@ -2,6 +2,7 @@
 build
 lib
 bin
+CMakeFiles
 *.moos++
 .phostinfo
 .LastOpenedMOOSLogDirectory

@@ -4,10 +4,17 @@
 #--------------------------------------------------------
 SET(CMAKE_CXX_STANDARD 11)
 
+# Find package is broken under < 3.3 on Homebrew
+find_package(Eigen3)
+if(NOT EIGEN3_FOUND)
+  include_directories(/usr/local/Cellar/eigen/3.2.8/include/eigen3/)
+endif()
+
 SET(SRC
   SurveyPath.cpp
   SurveyPath_Info.cpp
   RecordSwath.cpp
+  PathPlan.cpp
   main.cpp
 )
 
