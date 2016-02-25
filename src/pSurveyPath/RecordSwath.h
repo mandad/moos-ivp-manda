@@ -82,12 +82,18 @@ private:
     */
    bool SaveLast();
    /**
-    * [GetSwathOuterPts description]
-    * @param side   [description]
-    * @param points [description]
+    * Get all of the points on one side of the swath limits
+    * @param side   The side of the boat on which to return the swath
+    * @return       An ordered list of the points on the outside of the swath
     */
    XYSegList GetSwathOuterPts(BoatSide side);
-   bool GetSwathCoverage(BoatSide side, geos::geom::Polygon &coverage);
+   bool SwathCoverage(BoatSide side, geos::geom::Polygon &coverage);
+   /**
+    * Gets a specific width along a recorded decimated swath
+    * @param  side  Side of the boat on which the swath was recorded
+    * @param  index Position of the desired swath
+    * @return       The swath width in meters
+    */
    double GetSwathWidth(BoatSide side, unsigned int index);
    std::vector<double> GetAllSwathWidths(BoatSide side);
    XYPoint GetSwathLocation(unsigned int index);

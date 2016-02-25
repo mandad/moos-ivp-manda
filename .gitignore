@@ -1,7 +1,7 @@
 *.sublime-workspace
-moos-ivp-emily/build
-moos-ivp-emily/lib
-moos-ivp-emily/bin
+build
+lib
+bin
 *.moos++
 .phostinfo
 .LastOpenedMOOSLogDirectory
