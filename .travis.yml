@@ -16,7 +16,7 @@ before_install:
   - sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 0xB01FA116
   - sudo apt-get -qq update
   - sudo apt-get install -qq ros-jade-catkin libboost-dev
-  - pip install catkin_pkg
+  - pip install --user catkin_pkg
   - sudo apt-get install -qq xterm libfltk1.3-dev freeglut3-dev libpng12-dev libjpeg-dev libxft-dev libxinerama-dev libtiff5-dev libproj-dev
   - mkdir source_installs
   - cd source_installs
