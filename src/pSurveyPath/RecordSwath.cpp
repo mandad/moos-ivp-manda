@@ -112,17 +112,17 @@ void RecordSwath::ResetLine() {
   m_has_records = false;
 }
 
-XYSegList RecordSwath::GetSwathOuterPts(BoatSide side) {
+XYSegList RecordSwath::SwathOuterPts(BoatSide side) {
   XYSegList points;
   std::list<SwathRecord>::iterator record;
   for (record = m_min_record.begin(); record != m_min_record.end(); record++) {
-    XYPoint outer_pt = GetOuterPoint(*record, m_output_side);
+    XYPoint outer_pt = OuterPoint(*record, m_output_side);
     points.add_vertex(outer_pt);
   }
   return points;
 }
 
-XYPoint RecordSwath::GetOuterPoint(const SwathRecord &record, BoatSide side) {
+XYPoint RecordSwath::OuterPoint(const SwathRecord &record, BoatSide side) {
   // Could have SwathRecord be a class with functions to return representation
   // as a vector or point.
   double swath_width = 0;
@@ -141,7 +141,7 @@ XYPoint RecordSwath::GetOuterPoint(const SwathRecord &record, BoatSide side) {
     swath_vector.ypos() + swath_vector.ydot());
 }
 
-double RecordSwath::GetSwathWidth(BoatSide side, unsigned int index) {
+double RecordSwath::SwathWidth(BoatSide side, unsigned int index) {
   if (m_min_record.size() > index) {
     std::list<SwathRecord>::iterator list_record = std::next(m_min_record.begin(),
      index);
@@ -152,4 +152,19 @@ double RecordSwath::GetSwathWidth(BoatSide side, unsigned int index) {
     }
   }
   return 0;
+}
+
+std::vector<double> RecordSwath::AllSwathWidths(BoatSide side) {
+  std::vector<double> widths;
+  widths.reserve(m_min_record.size());
+  std::list<SwathRecord>::iterator list_record;
+  for (list_record = m_min_record.begin(); list_record != m_min_record.end();
+    list_record++) {
+    if (side == BoatSide::Stbd) {
+      widths.push_back(list_record->swath_stbd);
+    } else if (side == BoatSide::Port) {
+      widths.push_back(list_record->swath_port);
+    }
+  }
+  return widths;
 }
