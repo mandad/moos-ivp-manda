@@ -1,0 +1,33 @@
+language: cpp
+
+dist: trusty
+sudo: required
+
+compiler:
+  - clang
+  - gcc
+
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -qq xterm libfltk1.3-dev freeglut3-dev libpng12-dev libjpeg-dev libxft-dev libxinerama-dev libtiff5-dev libproj-dev
+  - svn co https://oceanai.mit.edu/svn/moos-ivp-aro/trunk/ moos-ivp-trunk
+  - cd moos-ivp-trunk && ./build-moos.sh && ./build-ivp.sh
+  - mkdir build
+
+install:
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
+
+script:
+  - cd build
+  - cmake
+  - make
+  - cd ..
+
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - gcc-4.8
+    - g++-4.8
+    - clang
