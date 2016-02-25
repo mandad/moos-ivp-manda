@@ -14,6 +14,7 @@
 
 import sys
 import os
+import subprocess
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -37,6 +38,12 @@ extensions = [
 #Config for Breathe - doxygen conversion
 breathe_projects = {"MOOSApps": "../doxygen/xml"}
 breathe_default_project = "MOOSApps"
+
+
+read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
+
+if read_the_docs_build:
+    subprocess.call('cd ../doxygen; doxygen', shell=True)
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
