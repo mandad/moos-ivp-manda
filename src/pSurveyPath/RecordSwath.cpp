@@ -140,3 +140,11 @@ XYPoint RecordSwath::GetOuterPoint(const SwathRecord &record, BoatSide side) {
   return XYPoint(swath_vector.xpos() + swath_vector.xdot(),
     swath_vector.ypos() + swath_vector.ydot());
 }
+
+double RecordSwath::GetSwathWidth(BoatSide side, unsigned int index) {
+  if (side == BoatSide::Stbd) {
+    return m_min_record[index].swath_stbd;
+  } else if (side == BoatSide::Stbd) {
+    return m_min_record[index].swath_port;
+  }
+}

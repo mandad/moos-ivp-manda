@@ -1,9 +1,11 @@
-/************************************************************/
-/*    NAME: Damian Manda                                    */
-/*    ORGN: UNH                                             */
-/*    FILE: RecordPath.h                                    */
-/*    DATE: 23 Feb 2016                                     */
-/************************************************************/
+/**
+ * @file RecordSwath.h
+ * @brief Records a swath history from a sonar on a moving vehicle.
+ * @details Also gives the outer points at the edge of the swath along a track.
+ * @author Damian Manda
+ * @date 23 Feb 2016
+ * @copyright MIT License
+ */
 
 #ifndef SurveyPath_RecordSwath_HEADER
 #define SurveyPath_RecordSwath_HEADER
