@@ -9,6 +9,8 @@
 #include "MBUtils.h"
 #include "ACTable.h"
 #include "SurveyPath.h"
+#include "RecordSwath.h"
+#include "PathPlan.h"
 
 using namespace std;
 

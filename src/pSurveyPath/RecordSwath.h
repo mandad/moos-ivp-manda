@@ -29,6 +29,8 @@
 #include <vector>
 #include <map>
 
+//#include "PathPlan.h"
+
 /**
  * @enum BoatSide
  * @brief Indicates the side of a boat for the swath
@@ -87,6 +89,7 @@ private:
     * @return       An ordered list of the points on the outside of the swath
     */
    XYSegList SwathOuterPts(BoatSide side);
+  //  std::list<XYpt> SwathOuterPts(BoatSide side);
    bool SwathCoverage(BoatSide side, geos::geom::Polygon &coverage);
    /**
     * Gets a specific width along a recorded decimated swath

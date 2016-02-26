@@ -14,19 +14,39 @@
 #include "XYSegList.h"
 #include "XYPolygon.h"
 #include <Eigen/Core>
+#include <list>
 
 typedef Eigen::Matrix<double, Eigen::Dynamic, 2> PointList;
 
+/**
+ * @struct XYPt
+ * @brief Defines a simple point, for better memory use in lists
+ */
+struct XYPt {
+  double x;
+  double y;
+};
+
+/**
+ * @class PathPlan
+ * @brief Plans a subsequent survey path offset from existing coverage
+ */
 class PathPlan
 {
   public:
-    PathPlan(RecordSwath last_swath, BoatSide side, XYPolygon op_region,
+    PathPlan(const RecordSwath &last_swath, BoatSide side, XYPolygon op_region,
       double margin=0.2, bool restrict_to_region = true);
     ~PathPlan() {};
+    /**
+     * Generates an offset path
+     * @return The path in MOOS XYSegList format;
+     */
     XYSegList GenerateNextPath();
 
-
   private:
+    std::list<XYPt> SegListToXYPt(const XYSegList &to_convert);
+    XYSegList XYPtToSegList(const std::list<XYPt> &to_convert);
+
     // Configuration variables
     bool m_restrict_asv_to_region;
     double m_max_bend_angle;
@@ -36,7 +56,8 @@ class PathPlan
     // State variables
     RecordSwath m_last_line;
     BoatSide m_planning_side;
-    PointList m_next_path_pts;
+    // PointList m_next_path_pts;
+    std::list<XYPt> m_next_path_pts;
 };
 
 #endif

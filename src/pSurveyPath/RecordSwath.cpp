@@ -122,6 +122,17 @@ XYSegList RecordSwath::SwathOuterPts(BoatSide side) {
   return points;
 }
 
+// list<XYPt> RecordSwath::SwathOuterPts(BoatSide side) {
+//   list<XYPt> points;
+//   std::list<SwathRecord>::iterator record;
+//   for (record = m_min_record.begin(); record != m_min_record.end(); record++) {
+//     XYPoint outer_pt = OuterPoint(*record, m_output_side);
+//     XYPt outer_pt_simple = {outer_point.x(), outer_point.y()}
+//     points.add_vertex(outer_pt);
+//   }
+//   return points;
+// }
+
 XYPoint RecordSwath::OuterPoint(const SwathRecord &record, BoatSide side) {
   // Could have SwathRecord be a class with functions to return representation
   // as a vector or point.

@@ -14,6 +14,10 @@ Contents:
 .. doxygenclass:: RecordSwath
    :project: MOOSApps
    :members:
+   :protected-members:
+   :private-members:
+
+.. doxygenfile:: PathPlan.h
 
 Indices and tables
 ==================
