@@ -46,6 +46,7 @@ class PathPlan
   private:
     std::list<XYPt> SegListToXYPt(const XYSegList &to_convert);
     XYSegList XYPtToSegList(const std::list<XYPt> &to_convert);
+    XYSegList VectorListToSegList(const std::list<Eigen::Vector2d> &to_convert);
 
     // Configuration variables
     bool m_restrict_asv_to_region;
@@ -57,7 +58,7 @@ class PathPlan
     RecordSwath m_last_line;
     BoatSide m_planning_side;
     // PointList m_next_path_pts;
-    std::list<XYPt> m_next_path_pts;
+    std::list<Eigen::Vector2d> m_next_path_pts;
 };
 
 #endif
