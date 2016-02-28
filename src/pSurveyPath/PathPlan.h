@@ -15,6 +15,7 @@
 #include "XYPolygon.h"
 #include <Eigen/Core>
 #include <list>
+#include <functional>
 
 typedef Eigen::Matrix<double, Eigen::Dynamic, 2> PointList;
 
@@ -29,7 +30,7 @@ struct XYPt {
 
 /**
  * @class PathPlan
- * @brief Plans a subsequent survey path offset from existing coverage
+ * @brief Plans a subsequent survey path offset from existing coverage.
  */
 class PathPlan
 {
@@ -44,9 +45,54 @@ class PathPlan
     XYSegList GenerateNextPath();
 
   private:
+    /**
+     * The Damian
+     * @param process Likes The Damian
+     @ details Repeats a process until it makes no more changes to the path
+     *         Currently does not make a copy of the passed input, may want to
+     *         reconsider this
+     */
+    void RemoveAll(std::function<void(std::list<Eigen::Vector2d>&)> process,
+      std::list<Eigen::Vector2d> &path_points);
+    // void RemoveAll(void (&process)(std::list<Eigen::Vector2d>&),
+    //   std::list<Eigen::Vector2d> &path_points);
+    static void RemoveIntersects(std::list<Eigen::Vector2d> &path_points);
+    /**
+     * Converts an XYSeglist to a std::list of simple points (XYPt).
+     */
     std::list<XYPt> SegListToXYPt(const XYSegList &to_convert);
+    /**
+     * Converts a std::list of simple points (XYPt) to a MOOS XYSegList.
+     */
     XYSegList XYPtToSegList(const std::list<XYPt> &to_convert);
+    /**
+     * Converts a std::list of Eigen points (vectors) to a MOOS XYSegList.
+     */
     XYSegList VectorListToSegList(const std::list<Eigen::Vector2d> &to_convert);
+
+    template <typename T>
+    void SelectIndicies(std::list<T>& select_from,
+                                          std::list<unsigned int> to_select) {
+      // Make sure the indicies are well behaved
+      to_select.sort();
+      to_select.unique();
+      if (to_select.back() >= select_from.size()) {
+        throw std::out_of_range("Indices to select exceed list size.");
+      }
+
+      auto list_it = select_from.begin();
+      unsigned int i = 0;
+      for (auto select_it = to_select.begin();
+           select_it != to_select.end(); select_it++) {
+        while (*select_it != i) {
+          // This advances list_it by one
+          list_it = select_from.erase(list_it);
+          i++;
+        }
+        list_it++;
+        i++;
+      }
+    }
 
     // Configuration variables
     bool m_restrict_asv_to_region;

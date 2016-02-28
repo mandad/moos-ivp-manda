@@ -10,6 +10,8 @@
 #include "MOOS/libMOOS/MOOSLib.h"
 #include <Eigen/Geometry>
 #include <cmath>
+// #include <stdexcept>
+#include <iterator>
 
 #define DEBUG true
 
@@ -71,9 +73,61 @@ XYSegList PathPlan::GenerateNextPath() {
     m_next_path_pts.push_back(swath_loc + offset_vec);
   }
 
-  //To satisfy the compiler for now
+  // Next line is in opposite direction
+  m_next_path_pts.reverse();
+
+  unsigned int pre_len = m_next_path_pts.size();
+  #if DEBUG
+    MOOSTrace("Eliminating path intersects itself.");
+  #endif
+  RemoveAll(RemoveIntersects, m_next_path_pts);
+
   return VectorListToSegList(m_next_path_pts);
 }
+
+// void PathPlan::RemoveAll(void (&process)(std::list<Eigen::Vector2d>&),
+//   std::list<Eigen::Vector2d> &path_points) {
+void PathPlan::RemoveAll(const std::function<void(std::list<Eigen::Vector2d>&)> process,
+std::list<Eigen::Vector2d> &path_points) {
+  unsigned int pre_len = path_points.size();
+  process(path_points);
+  // keep repeating until no more changes
+  while (path_points.size() < pre_len) {
+    pre_len = path_points.size();
+    process(path_points);
+  }
+}
+
+void PathPlan::RemoveIntersects(std::list<Eigen::Vector2d> &path_pts) {
+  std::list<Eigen::Vector2d>::iterator i = path_pts.begin();
+  // while (i < std::advance(path_pts.end(), -3)) {
+  //
+  // }
+}
+
+// template <typename T>
+// std::list<T> PathPlan::SelectIndicies(std::list<T> select_from,
+//                                       std::list<unsigned int> to_select) {
+//   // Make sure the indicies are well behaved
+//   to_select.sort();
+//   to_select.unique();
+//   if (to_select.back() >= select_from.size()) {
+//     throw std::out_of_range("Indices to select exceed list size.");
+//   }
+//
+//   std::list<T>::iterator list_it = select_from.begin();
+//   unsigned int i = 0;
+//   for (std::list<unsigned int>::iterator select_it = to_select.begin();
+//        select_it != to_select.end(); select_it++) {
+//     while (*select_it != i) {
+//       // This advances list_it by one
+//       list_it = select_from.erase(list_it);
+//       i++;
+//     }
+//     list_it++;
+//     i++;
+//   }
+// }
 
 std::list<XYPt> PathPlan::SegListToXYPt(const XYSegList &to_convert) {
   std::list<XYPt> converted;

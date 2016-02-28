@@ -42,8 +42,8 @@ RecordSwath::RecordSwath(double interval) : m_min_allowable_swath(0),
 }
 
 bool RecordSwath::AddRecord(double swath_stbd, double swath_port, double loc_x,
-                            double loc_y, double heading) {
-  SwathRecord record = {loc_x, loc_y, heading, swath_stbd, swath_port};
+                            double loc_y, double heading, double depth) {
+  SwathRecord record = {loc_x, loc_y, heading, swath_stbd, swath_port, depth};
   m_interval_record.push_back(record);
   m_interval_swath[BoatSide::Stbd].push_back(swath_stbd);
   m_interval_swath[BoatSide::Port].push_back(swath_port);

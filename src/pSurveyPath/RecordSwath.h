@@ -49,6 +49,10 @@ enum class BoatSide {
 class RecordSwath
 {
 private:
+  /**
+   * @struct SwathRecord
+   * @brief Stores the location and width of one measured sonar swath.
+   */
   struct SwathRecord {
     double loc_x;
     double loc_y;
@@ -56,6 +60,9 @@ private:
     // Could make this a map w/ BoatSide index
     double swath_stbd;
     double swath_port;
+    // This will either be the nadir depth (if this is all we have) or outer
+    // swath depth
+    double depth;
   };
 
  public:
@@ -71,7 +78,7 @@ private:
     * @return            True if the record coverage was successfully added
     */
    bool AddRecord(double swath_stbd, double swath_port, double loc_x, double loc_y,
-          double heading);
+          double heading, double depth);
    /**
     * Resets the storage for a new line.
     */
