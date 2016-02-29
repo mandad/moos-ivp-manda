@@ -106,10 +106,16 @@ void PathPlan::RemoveIntersects(std::list<EPoint> &path_pts) {
 
   auto path_iter = path_pts.begin();
   auto last_initial_seg = std::prev(path_pts.end(), 4);
-  auto last_test_seg = std::prev(path_pts.end(), 2);
+  auto back_3 = std::next(last_initial_seg);
+  auto back_2  = std::next(back_3);
+  // This is the actual end of the list
+  auto last_test_seg = std::next(back_2);
+  //auto std::prev(path_pts.end()
   unsigned int i = 0;
 
-  while (path_iter != last_initial_seg && std::next(path_iter, 2) != path_pts.end()) {
+  // The < operator doesn't work with non-random-access iterators
+  while (path_iter != last_test_seg &&
+    path_iter != back_3 && path_iter != back_2) {
     // Segment to test
     Eigen::Vector2d this_seg_a = *path_iter;
     Eigen::Vector2d this_seg_b = *(++path_iter);

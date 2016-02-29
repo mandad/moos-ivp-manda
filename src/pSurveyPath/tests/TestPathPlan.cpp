@@ -11,6 +11,14 @@ std::string ListString(const T& print_list) {
   return list_els.str();
 }
 
+std::string PrintPath(std::list<EPoint> print_list) {
+  std::stringstream list_els;
+  for (const auto& element : print_list) {
+    list_els << "(" << element.transpose() << ") ";
+  }
+  return list_els.str();
+}
+
 TEST_CASE("Test Index selection") {
   std::list<unsigned int> test_list;
   unsigned int num_entries(10);
@@ -49,15 +57,53 @@ TEST_CASE("Test Index selection") {
 }
 
 TEST_CASE("Intersection removal") {
-  std::list<EPoint> path = {EPoint(0, 2), EPoint(3, 2), EPoint(5, 0),
-    EPoint(4,0), EPoint(5,2), EPoint(7, 1)};
-
-    INFO("Path before processing: \n" << ListString(path));
-
   SECTION("Removal from the middle") {
-    PathPlan::RemoveIntersects(path);
+    std::list<EPoint> path = {EPoint(0, 2), EPoint(3, 2), EPoint(5, 0),
+      EPoint(4,0), EPoint(5,2), EPoint(7, 1)};
+    INFO("Path before processing: \n" << PrintPath(path));
 
-    INFO("Path after processing: \n" << ListString(path));
+    PathPlan::RemoveIntersects(path);
+    INFO("Path after processing: \n" << PrintPath(path));
+
     REQUIRE(path.size() == 4);
+    REQUIRE(*std::next(path.begin(), 2) == EPoint(5, 2));
+  }
+
+  SECTION("Removal of multiple segs") {
+    std::list<EPoint> path = {EPoint(0, 2), EPoint(2, 2), EPoint(4, 1),
+      EPoint(5, 0), EPoint(3, 0), EPoint(4, 2), EPoint(6, 2), EPoint(8, 2)};
+    INFO("Path before processing: \n" << PrintPath(path));
+
+    PathPlan::RemoveIntersects(path);
+    INFO("Path after processing: \n" << PrintPath(path));
+
+    REQUIRE(path.size() == 5);
+    REQUIRE(*std::next(path.begin(), 2) == EPoint(4, 2));
+  }
+
+  SECTION("First seg has intersect") {
+    std::list<EPoint> path = {EPoint(0, 1), EPoint(2, 0), EPoint(1, 0),
+      EPoint(2, 1), EPoint(3, 1)};
+    INFO("Path before processing: \n" << PrintPath(path));
+
+    PathPlan::RemoveIntersects(path);
+    INFO("Path after processing: \n" << PrintPath(path));
+
+    REQUIRE(path.size() == 3);
+    REQUIRE(path.front() == EPoint(0, 1));
+    REQUIRE(*std::next(path.begin(), 1) == EPoint(2, 1));
+  }
+
+  SECTION("Last seg has intersect") {
+    std::list<EPoint> path = {EPoint(0, 1), EPoint(2, 1), EPoint(3, 1),
+      EPoint(4, 0), EPoint(3, 0), EPoint(4, 1)};
+    INFO("Path before processing: \n" << PrintPath(path));
+
+    PathPlan::RemoveIntersects(path);
+    INFO("Path after processing: \n" << PrintPath(path));
+
+    REQUIRE(path.size() == 4);
+    REQUIRE(path.back() == EPoint(4, 1));
+    REQUIRE(*std::prev(path.end(), 2) == EPoint(3, 1));
   }
 }
