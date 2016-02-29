@@ -11,13 +11,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-.. doxygenclass:: RecordSwath
-   :project: MOOSApps
-   :members:
-   :protected-members:
-   :private-members:
-
-.. doxygenfile:: PathPlan.h
+   p_survey_path
 
 Indices and tables
 ==================
