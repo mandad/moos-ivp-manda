@@ -87,7 +87,7 @@ XYSegList PathPlan::GenerateNextPath() {
 
 // void PathPlan::RemoveAll(void (&process)(std::list<Eigen::Vector2d>&),
 //   std::list<Eigen::Vector2d> &path_points) {
-void PathPlan::RemoveAll(const std::function<void(std::list<Eigen::Vector2d>&)> process,
+void PathPlan::RemoveAll(std::function<void(std::list<Eigen::Vector2d>&)> process,
 std::list<Eigen::Vector2d> &path_points) {
   unsigned int pre_len = path_points.size();
   process(path_points);
@@ -99,35 +99,50 @@ std::list<Eigen::Vector2d> &path_points) {
 }
 
 void PathPlan::RemoveIntersects(std::list<Eigen::Vector2d> &path_pts) {
-  std::list<Eigen::Vector2d>::iterator i = path_pts.begin();
-  // while (i < std::advance(path_pts.end(), -3)) {
-  //
-  // }
+  // Can't be an intersection between two segments (unless collinear)
+  if (path_pts.size() < 4)
+    return;
+
+  auto path_iter = path_pts.begin();
+  auto last_initial_seg = std::prev(path_pts.end(), 3);
+  // std::advance(last_intial_seg, 3);
+  auto last_test_seg = std::prev(path_pts.end());
+  unsigned int i = 0;
+
+  while (path_iter != last_initial_seg) {
+    //std::forward_list<unsigned> seg_pts;
+    // Segment to test
+    Eigen::Vector2d this_seg_a = *path_iter;
+    Eigen::Vector2d this_seg_b = *(++path_iter);
+
+    // Test following segments in the list
+    auto j = std::next(path_iter);
+    auto next_non_intersect(path_iter);
+    while(j != last_test_seg) {
+      Eigen::Vector2d check_seg_a = *j;
+      Eigen::Vector2d check_seg_b = *(++j);
+      if (Intersect(this_seg_a, this_seg_b, check_seg_a, check_seg_b)) {
+        next_non_intersect = j;
+      }
+    }
+    // If an intersection was found, remove the elements causing it.  Otherwise
+    // the iterator advances to the next element
+    if (next_non_intersect != path_iter) {
+      path_iter = path_pts.erase(path_iter, next_non_intersect);
+    }
+  }
+
+  // Should not need to port the code adding the end points, as this removes
+  // from the list instead
 }
 
-// template <typename T>
-// std::list<T> PathPlan::SelectIndicies(std::list<T> select_from,
-//                                       std::list<unsigned int> to_select) {
-//   // Make sure the indicies are well behaved
-//   to_select.sort();
-//   to_select.unique();
-//   if (to_select.back() >= select_from.size()) {
-//     throw std::out_of_range("Indices to select exceed list size.");
-//   }
-//
-//   std::list<T>::iterator list_it = select_from.begin();
-//   unsigned int i = 0;
-//   for (std::list<unsigned int>::iterator select_it = to_select.begin();
-//        select_it != to_select.end(); select_it++) {
-//     while (*select_it != i) {
-//       // This advances list_it by one
-//       list_it = select_from.erase(list_it);
-//       i++;
-//     }
-//     list_it++;
-//     i++;
-//   }
-// }
+bool PathPlan::Intersect(EPoint A, EPoint B, EPoint C, EPoint D) {
+  return CCW(A, C, D) != CCW(B, C, D) && CCW(A, B, C) != CCW(A, B, D);
+}
+
+bool PathPlan::CCW(EPoint A, EPoint B, EPoint C) {
+  return (C.y() - A.y()) * (B.x() - A.x()) > (B.y() - A.y()) * (C.x() - A.x());
+}
 
 std::list<XYPt> PathPlan::SegListToXYPt(const XYSegList &to_convert) {
   std::list<XYPt> converted;

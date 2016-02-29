@@ -34,3 +34,6 @@ TARGET_LINK_LIBRARIES(pSurveyPath
    pthread
    geos
 )
+
+# Add the tests at the end so they can find the eigen library
+ADD_SUBDIRECTORY(tests)

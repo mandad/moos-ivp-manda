@@ -17,7 +17,9 @@
 #include <list>
 #include <functional>
 
-typedef Eigen::Matrix<double, Eigen::Dynamic, 2> PointList;
+// To get a single point EPointList.col(i)
+typedef Eigen::Matrix<double, 2, Eigen::Dynamic> EPointList;
+typedef Eigen::Vector2d EPoint;
 
 /**
  * @struct XYPt
@@ -44,11 +46,11 @@ class PathPlan
      */
     XYSegList GenerateNextPath();
 
-  private:
+  public:
     /**
      * The Damian
      * @param process Likes The Damian
-     @ details Repeats a process until it makes no more changes to the path
+     * @details Repeats a process until it makes no more changes to the path
      *         Currently does not make a copy of the passed input, may want to
      *         reconsider this
      */
@@ -57,6 +59,9 @@ class PathPlan
     // void RemoveAll(void (&process)(std::list<Eigen::Vector2d>&),
     //   std::list<Eigen::Vector2d> &path_points);
     static void RemoveIntersects(std::list<Eigen::Vector2d> &path_points);
+
+    static bool CCW(EPoint A, EPoint B, EPoint C);
+    static bool Intersect(EPoint A, EPoint B, EPoint C, EPoint D);
     /**
      * Converts an XYSeglist to a std::list of simple points (XYPt).
      */
@@ -70,9 +75,13 @@ class PathPlan
      */
     XYSegList VectorListToSegList(const std::list<Eigen::Vector2d> &to_convert);
 
+    /**
+     * @brief Selects specific elements from a list by index.
+     * @details Replicates the select by index functionality of
+     */
     template <typename T>
-    void SelectIndicies(std::list<T>& select_from,
-                                          std::list<unsigned int> to_select) {
+    static void SelectIndicies(std::list<T>& select_from,
+                              std::list<unsigned int> to_select) {
       // Make sure the indicies are well behaved
       to_select.sort();
       to_select.unique();
@@ -89,10 +98,17 @@ class PathPlan
           list_it = select_from.erase(list_it);
           i++;
         }
-        list_it++;
-        i++;
+        if (list_it != select_from.end()) {
+          list_it++;
+          i++;
+        }
+      }
+      if (list_it != select_from.end()) {
+        select_from.erase(list_it, select_from.end());
       }
     }
+
+  private:
 
     // Configuration variables
     bool m_restrict_asv_to_region;
