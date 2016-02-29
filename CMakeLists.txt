@@ -9,6 +9,8 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 PROJECT( IVP_EXTEND )
 
+enable_testing()
+
 #=============================================================================
 # Set the output directories for the binary and library files
 #=============================================================================

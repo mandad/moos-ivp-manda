@@ -58,7 +58,7 @@ class PathPlan
       std::list<Eigen::Vector2d> &path_points);
     // void RemoveAll(void (&process)(std::list<Eigen::Vector2d>&),
     //   std::list<Eigen::Vector2d> &path_points);
-    static void RemoveIntersects(std::list<Eigen::Vector2d> &path_points);
+    static void RemoveIntersects(std::list<EPoint> &path_pts);
 
     static bool CCW(EPoint A, EPoint B, EPoint C);
     static bool Intersect(EPoint A, EPoint B, EPoint C, EPoint D);

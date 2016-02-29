@@ -98,22 +98,25 @@ std::list<Eigen::Vector2d> &path_points) {
   }
 }
 
-void PathPlan::RemoveIntersects(std::list<Eigen::Vector2d> &path_pts) {
+void PathPlan::RemoveIntersects(std::list<EPoint> &path_pts) {
   // Can't be an intersection between two segments (unless collinear)
+  std::cout << "Running Remove Intersects\n";
   if (path_pts.size() < 4)
     return;
 
   auto path_iter = path_pts.begin();
-  auto last_initial_seg = std::prev(path_pts.end(), 3);
-  // std::advance(last_intial_seg, 3);
-  auto last_test_seg = std::prev(path_pts.end());
+  auto last_initial_seg = std::prev(path_pts.end(), 4);
+  auto last_test_seg = std::prev(path_pts.end(), 2);
   unsigned int i = 0;
 
-  while (path_iter != last_initial_seg) {
-    //std::forward_list<unsigned> seg_pts;
+  while (path_iter != last_initial_seg && std::next(path_iter, 2) != path_pts.end()) {
     // Segment to test
     Eigen::Vector2d this_seg_a = *path_iter;
     Eigen::Vector2d this_seg_b = *(++path_iter);
+    #if DEBUG
+    std::cout << "First Seg Point 1: " << this_seg_a.transpose() << std::endl;
+    std::cout << "First Seg Point 2: " << this_seg_b.transpose() << std::endl;
+    #endif
 
     // Test following segments in the list
     auto j = std::next(path_iter);
@@ -121,8 +124,13 @@ void PathPlan::RemoveIntersects(std::list<Eigen::Vector2d> &path_pts) {
     while(j != last_test_seg) {
       Eigen::Vector2d check_seg_a = *j;
       Eigen::Vector2d check_seg_b = *(++j);
+      #if DEBUG
+      std::cout << "Check Seg Point 1: " << check_seg_a.transpose() << std::endl;
+      std::cout << "Check Seg Point 2: " << check_seg_b.transpose() << std::endl;
+      #endif
       if (Intersect(this_seg_a, this_seg_b, check_seg_a, check_seg_b)) {
         next_non_intersect = j;
+        std::cout << "Found Intersect!\n";
       }
     }
     // If an intersection was found, remove the elements causing it.  Otherwise

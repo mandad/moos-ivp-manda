@@ -4,20 +4,28 @@
 #--------------------------------------------------------
 SET(CMAKE_CXX_STANDARD 11)
 
-FILE(GLOB SRC *.cpp)
+set(TEST_SRCS
+  ../PathPlan.cpp
+  ../RecordSwath.cpp
+  TestPathPlan.cpp
+  TestMain.cpp
+  )
 
 set(TEST_EXE "test-pathplan")
 
-ADD_EXECUTABLE(${TEST_EXE} ${SRC})
+ADD_EXECUTABLE(${TEST_EXE} ${TEST_SRCS})
 
 TARGET_LINK_LIBRARIES(${TEST_EXE}
-   #pSurveyPath
+  ${MOOS_LIBRARIES}
+  apputil
+  geometry
+  mbutil
+  m
+  geos
    )
 
 
  # Add a target to actually run the tests.
 #add_custom_target(catch COMMAND ${TEST_EXE})
 
-add_test(NAME test-pathplan COMMAND test-pathplan)
-
-enable_testing(true)
+add_test(NAME test-pathplan COMMAND ${TEST_EXE})

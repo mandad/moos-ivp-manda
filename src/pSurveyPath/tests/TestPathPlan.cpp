@@ -1,5 +1,5 @@
-#include "catch.hpp"
 #include "../PathPlan.h"
+#include "catch.hpp"
 //#include <stringstream>
 
 template <class T>
@@ -45,5 +45,19 @@ TEST_CASE("Test Index selection") {
     REQUIRE(test_list.size() == 1);
     REQUIRE(test_list.front() == 9);
     REQUIRE(test_list.back() == 9);
+  }
+}
+
+TEST_CASE("Intersection removal") {
+  std::list<EPoint> path = {EPoint(0, 2), EPoint(3, 2), EPoint(5, 0),
+    EPoint(4,0), EPoint(5,2), EPoint(7, 1)};
+
+    INFO("Path before processing: \n" << ListString(path));
+
+  SECTION("Removal from the middle") {
+    PathPlan::RemoveIntersects(path);
+
+    INFO("Path after processing: \n" << ListString(path));
+    REQUIRE(path.size() == 4);
   }
 }
