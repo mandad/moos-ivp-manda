@@ -57,7 +57,7 @@ ProcessConfig = pMarineMRAS
    RudderSpeed = 30 // deg/s
    CruisingSpeed = 1.6 // m/s
    Length = 2 //m
-   MaxROT = 60
+   MaxROT = 150 
    DiscardLargeROT = false;
 
    //Speed settings (use one or the other)

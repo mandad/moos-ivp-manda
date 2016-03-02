@@ -66,6 +66,8 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
     // Don't adapt if we are going slow or straight (influence likely due to waves)
     if (dfSpeed < 0.2 || (fabs(m_dfRudderOut - m_dfKi) < m_dfDeadband))
         bAdaptLocal = false;
+    if (dfSpeed < 0.2)
+        dfSpeed = 0.2;
     if (DEBUG)
         MOOSTrace("Using Course Keep Controller\n");
 
@@ -224,10 +226,10 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
             MOOSTrace("Adaptive Update: TauM*: %0.2f  Km*: %0.2f  Ki,m: %0.2f\n", m_dfTaumStar,
                 m_dfKmStar, m_dfKim);
 
-        //Potential to divide by zero here if dfSpeed == 0
-        m_dfTauM = m_dfTaumStar * m_dfShipLength / dfSpeed;
-        m_dfKm = m_dfKmStar * dfSpeed / m_dfShipLength;
     }
+    //Potential to divide by zero here if dfSpeed == 0
+    m_dfTauM = m_dfTaumStar * m_dfShipLength / dfSpeed;
+    m_dfKm = m_dfKmStar * dfSpeed / m_dfShipLength;
 
 }
 
