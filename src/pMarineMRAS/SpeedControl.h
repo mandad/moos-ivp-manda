@@ -19,10 +19,10 @@ public:
     SpeedControl();
     ~SpeedControl() {}
 
-    double Run(double desired_speed, double speed, double heading, 
-               double desired_heading, double time, bool turning, 
+    double Run(double desired_speed, double speed, double heading,
+               double desired_heading, double time, bool turning,
                double course_over_ground = 1000);
-    void SetParameters(std::string thrust_map, double max_thrust, 
+    void SetParameters(std::string thrust_map, double max_thrust,
         bool use_thrust_map_only);
     std::string AppCastMessage();
     void GetVarInfo(double * vars);
@@ -61,7 +61,7 @@ private:
     CurrentEstimate m_current_estimate;
 
     struct SpeedRecord {
-        SpeedRecord(double desired_speed, double speed, double heading, 
+        SpeedRecord(double desired_speed, double speed, double heading,
                     double time) : m_desired_speed{desired_speed}, m_speed{speed},
                     m_heading{heading}, m_time{time} {}
 

@@ -15,7 +15,10 @@ enable_testing()
 # Set the output directories for the binary and library files
 #=============================================================================
 
-SET(CMAKE_CXX_STANDARD 11) 
+SET(CMAKE_CXX_STANDARD 11)
+# This seems to also be needed for g++ 4.8.4 on Ubuntu 14.04 
+add_definitions(-std=c++11)
+
 GET_FILENAME_COMPONENT(IVP_EXTEND_BIN_DIR "${CMAKE_SOURCE_DIR}/bin"  ABSOLUTE )
 GET_FILENAME_COMPONENT(IVP_EXTEND_LIB_DIR "${CMAKE_SOURCE_DIR}/lib"  ABSOLUTE )
 
@@ -34,16 +37,16 @@ find_package(MOOS 10.0)
 INCLUDE_DIRECTORIES(${MOOS_INCLUDE_DIRS})
 
 #=============================================================================
-# FINDING MOOSGeodesy HEADERS AND LIBRARIES...  
+# FINDING MOOSGeodesy HEADERS AND LIBRARIES...
 #=============================================================================
-find_package(MOOSGeodesy) 
-include_directories(${MOOSGeodesy_INCLUDE_DIRS}) 
-link_directories(${MOOSGeodesy_LIBRARY_PATH})       
+find_package(MOOSGeodesy)
+include_directories(${MOOSGeodesy_INCLUDE_DIRS})
+link_directories(${MOOSGeodesy_LIBRARY_PATH})
 
 message("+++++++++++++++++++++++++++++++++++++++++")
 message("MOOSGeodesy_INCLUDE_DIRS:" ${MOOSGeodesy_INCLUDE_DIRS})
-message("MOOSGeodesy_LIB_PATH:"     ${MOOSGeodesy_LIBRARY_PATH}) 
-message("+++++++++++++++++++++++++++++++++++++++++")         
+message("MOOSGeodesy_LIB_PATH:"     ${MOOSGeodesy_LIBRARY_PATH})
+message("+++++++++++++++++++++++++++++++++++++++++")
 
 #=============================================================================
 # Find the "moos-ivp" base directory
@@ -87,7 +90,7 @@ IF( ${WIN32} )
    #---------------------------------------------
    IF(MSVC)
       # Flags for Microsoft Visual Studio
-      SET( WALL_ON OFF CACHE BOOL 
+      SET( WALL_ON OFF CACHE BOOL
          "tell me about all compiler warnings (-Wall) ")
       IF(WALL_ON)
          SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
@@ -106,13 +109,13 @@ ELSE( ${WIN32} )
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -g")
    IF(CMAKE_COMPILER_IS_GNUCXX)
       # Flags for the GNU C++ Compiler
-      SET( WALL_ON OFF CACHE BOOL 
+      SET( WALL_ON OFF CACHE BOOL
          "tell me about all compiler warnings (-Wall) ")
       IF(WALL_ON)
          SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
       ENDIF( WALL_ON)
    ELSE(CMAKE_COMPILER_IS_GNUCXX)
-    
+
    ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ENDIF( ${WIN32} )

@@ -1,8 +1,8 @@
 /************************************************************/
-/*    NAME: Damian Manda                                              */
-/*    ORGN: UNH                                              */
-/*    FILE: MarineMRAS.h                                          */
-/*    DATE: 2015-12-06                            */
+/*    NAME: Damian Manda                                    */
+/*    ORGN: UNH                                             */
+/*    FILE: MarineMRAS.h                                    */
+/*    DATE: 2015-12-06                                      */
 /************************************************************/
 
 #ifndef MarineMRAS_HEADER
@@ -26,7 +26,7 @@ class MarineMRAS : public AppCastingMOOSApp
    ~MarineMRAS() {};
 
 
- protected: // Standard MOOSApp functions to overload  
+ protected: // Standard MOOSApp functions to overload
    bool OnNewMail(MOOSMSG_LIST &NewMail);
    bool Iterate();
    bool OnConnectToServer();
@@ -37,7 +37,7 @@ class MarineMRAS : public AppCastingMOOSApp
    ControllerType DetermineController();
    bool IsTurning();
 
- protected: // Standard AppCastingMOOSApp function to overload 
+ protected: // Standard AppCastingMOOSApp function to overload
    bool buildReport();
 
  protected:
@@ -94,4 +94,4 @@ class MarineMRAS : public AppCastingMOOSApp
 
 };
 
-#endif 
+#endif

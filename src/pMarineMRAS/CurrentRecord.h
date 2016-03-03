@@ -17,8 +17,8 @@
 
 struct SpeedInfoRecord {
     SpeedInfoRecord(double time, double sog, double speed_est,
-              double hdg, double cog = 1000, double stw = 1000) : time(time), 
-                         speed_over_ground{sog}, speed_through_water{stw}, 
+              double hdg, double cog = 1000, double stw = 1000) : time(time),
+                         speed_over_ground{sog}, speed_through_water{stw},
                          speed_estimate{speed_est} {
         // 0.5 m/s limit from experimental observation
         if (cog == 1000 || sog < 0.5) {
@@ -46,8 +46,8 @@ struct SpeedInfoRecord {
 };
 
 // SpeedInfoRecord::SpeedInfoRecord(double time, double sog, double speed_est,
-//                          double hdg, double cog, double stw) : time(time), 
-//                          speed_over_ground{sog}, speed_through_water{stw}, 
+//                          double hdg, double cog, double stw) : time(time),
+//                          speed_over_ground{sog}, speed_through_water{stw},
 //                          speed_estimate{speed_est} {
 //     // 0.5 m/s limit from experimental observation
 //     if (cog == 1000 || sog < 0.5) {
@@ -69,7 +69,7 @@ class CurrentRecord
 
 public:
     CurrentRecord(double save_time=3600, int max_records=100);
-    ~CurrentRecord() {}  
+    ~CurrentRecord() {}
     bool GetAverageCurrent(double &mag, double &heading);
     double GetAverageSpeedDiff();
     bool SaveRecord(SpeedInfoRecord record);
@@ -78,7 +78,7 @@ public:
 private:
     //Functions
     std::complex<double> VectorDiff(SpeedInfoRecord record);
-    
+
     //State variables
     std::list<SpeedInfoRecord> m_record_hist;
     std::complex<double> m_average_diff;

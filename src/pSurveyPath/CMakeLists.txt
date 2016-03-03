@@ -8,6 +8,8 @@ SET(CMAKE_CXX_STANDARD 11)
 find_package(Eigen3)
 if(NOT EIGEN3_FOUND)
   include_directories(/usr/local/Cellar/eigen/3.2.8/include/eigen3/)
+else()
+  include_directories(${EIGEN3_INCLUDE_DIR})
 endif()
 
 SET(SRC

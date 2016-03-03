@@ -21,7 +21,7 @@ bool CurrentRecord::SaveRecord(SpeedInfoRecord record) {
         std::complex<double> record_diff = VectorDiff(record);
         m_vector_hist.push_front(record_diff);
     }
-    // m_average_diff.imag(m_average_diff.imag() + 
+    // m_average_diff.imag(m_average_diff.imag() +
 
     while (m_record_hist.size() > m_max_records ||
            record.time - m_record_hist.back().time > m_save_time) {
@@ -76,7 +76,7 @@ std::complex<double> CurrentRecord::VectorDiff(SpeedInfoRecord record) {
         headingToRadians(record.heading)));
     if (record.valid_cog) {
         double cog_rad = headingToRadians(record.course_over_ground);
-        std::complex<double> cog_vector(std::polar(record.speed_over_ground, 
+        std::complex<double> cog_vector(std::polar(record.speed_over_ground,
             cog_rad));
         return cog_vector - expected_vector;
     } else {

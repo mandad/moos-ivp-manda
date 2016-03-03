@@ -1,8 +1,8 @@
 /************************************************************/
-/*    NAME: Damian Manda                                              */
-/*    ORGN: UNH                                              */
-/*    FILE: MarineMRAS.cpp                                        */
-/*    DATE: 2015-12-06                                                */
+/*    NAME: Damian Manda                                    */
+/*    ORGN: UNH                                             */
+/*    FILE: MarineMRAS.cpp                                  */
+/*    DATE: 2015-12-06                                      */
 /************************************************************/
 
 #include <iterator>
@@ -135,7 +135,7 @@ bool MarineMRAS::Iterate()
     if(m_speed_factor != 0) {
       m_desired_thrust = m_desired_speed * m_speed_factor;
     } else {
-      m_desired_thrust = m_speed_control.Run(m_desired_speed, m_current_speed, 
+      m_desired_thrust = m_speed_control.Run(m_desired_speed, m_current_speed,
         m_desired_heading, m_current_heading, m_current_speed_time, IsTurning(),
         m_current_cog);
     }
@@ -548,13 +548,13 @@ ControllerType MarineMRAS::DetermineController() {
 
 bool MarineMRAS::IsTurning() {
   if (m_desired_heading_history.size() > 2) {
-    bool recent_change = fabs(angle180(m_desired_heading_history.back() 
+    bool recent_change = fabs(angle180(m_desired_heading_history.back()
                           - angle180(m_desired_heading))) > TURN_THRESHOLD;
-    bool not_near_desired = fabs(m_current_heading - m_desired_heading) 
+    bool not_near_desired = fabs(m_current_heading - m_desired_heading)
                             > TURN_THRESHOLD;
     return not_near_desired || recent_change;
   } else {
     //assume we are turning if we don't know
     return true;
-  } 
+  }
 }
