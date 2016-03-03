@@ -111,7 +111,7 @@ class PathPlan
      * @param  segment The beginning and end of the segment.
      * @return         A segment vector between the selected points.
      */
-    static EPoint VectorFromSegment(const std::vector<EPoint>& points,
+    EPoint VectorFromSegment(const std::vector<EPoint>& points,
       SegIndex segment);
 
     /**
@@ -136,7 +136,7 @@ class PathPlan
      */
     template <typename T>
     static void SelectIndicies(std::list<T>& select_from,
-                              std::list<unsigned int> to_select) {
+                              std::list<std::size_t> to_select) {
       // Make sure the indicies are well behaved
       to_select.sort();
       to_select.unique();
@@ -145,7 +145,7 @@ class PathPlan
       }
 
       auto list_it = select_from.begin();
-      unsigned int i = 0;
+      std::size_t i = 0;
       for (auto select_it = to_select.begin();
            select_it != to_select.end(); select_it++) {
         while (*select_it != i) {
@@ -167,7 +167,7 @@ class PathPlan
 
     // Configuration variables
     bool m_restrict_asv_to_region;
-    static constexpr double m_max_bend_angle = 60;
+    double m_max_bend_angle;
     double m_margin;
 
 

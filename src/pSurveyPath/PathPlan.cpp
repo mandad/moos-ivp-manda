@@ -17,7 +17,7 @@
 
 PathPlan::PathPlan(const RecordSwath &last_swath, BoatSide side, XYPolygon op_region,
   double margin, bool restrict_to_region) : m_last_line(last_swath),
-  m_restrict_asv_to_region(restrict_to_region),
+  m_max_bend_angle(60), m_restrict_asv_to_region(restrict_to_region),
   m_planning_side(side), m_margin(margin) {
 
 }
@@ -180,8 +180,11 @@ void PathPlan::RemoveBends(std::list<EPoint> &path_pts) {
 
   SegIndex this_seg = {0, 1};
   SegIndex next_seg = {1, 2};
+  SegIndex inc_seg = {0, 1};
 
-  while (next_seg[1] < v_pts.size() - 1) {
+  std::size_t last_index = v_pts.size() - 1;
+
+  while (next_seg[1] < last_index) {
     EPoint this_vec = v_pts[this_seg[1]] - v_pts[this_seg[0]];
     EPoint next_vec = v_pts[next_seg[1]] - v_pts[next_seg[0]];
 
@@ -189,29 +192,135 @@ void PathPlan::RemoveBends(std::list<EPoint> &path_pts) {
     if (VectorAngle(this_vec, next_vec) > m_max_bend_angle) {
       // If too large, have to find the next point that makes it small enough
       // -- Method 1: Points from end of current --
-      SegIndex test_seg = next_seg + SegIndex{0, 1};
+      SegIndex test_seg = next_seg + inc_seg;
       // TODO: Added this in response to an error, not sure if correct sln
       double angle1 = 500;
       double angle2 = 500;
-      while (test_seg[1] < v_pts.size() - 1) {
+      while (test_seg[1] < last_index) {
         EPoint test_vec = v_pts[test_seg[1]] - v_pts[test_seg[0]];
         angle1 = VectorAngle(this_vec, test_vec);
         if (angle1 < m_max_bend_angle)
           break;
-        test_seg = test_seg + SegIndex{0, 1};
+        test_seg += inc_seg;
       }
-      unsigned int pts_elim1 = test_seg[1] - test_seg[0];
+      std::size_t pts_elim1 = test_seg[1] - test_seg[0];
 
       // -- Method 2: Points from beginning of current --
       // check if it would be better to remove the end of "this_vec"
       // TODO: Not entirely sure why we can't use first point
+
+      // force it to not choose the second method by default
+      std::size_t pts_elim2 = pts_elim1 + 1;
+      SegIndex test2_seg2;
       if (non_bend_idx.size() > 1) {
         EPoint test2_vec1 = VectorFromSegment(v_pts, SegIndex{
           *(std::prev(non_bend_idx.end(), 3)), this_seg[0]});
-      }
-    }
+        test2_seg2 = SegIndex{this_seg[0], next_seg[1]};
+        if (test2_seg2[1] > last_index)
+          break;  // from outer while loop
+        while (test2_seg2[1] < last_index) {
+          EPoint test2_vec2 = VectorFromSegment(v_pts, test2_seg2);
+          angle2 = VectorAngle(test2_vec1, test2_vec2);
+          if (angle2 < m_max_bend_angle)
+            break;
+          test2_seg2 += inc_seg;
+        }
+        pts_elim2 = test2_seg2[1] - test2_seg2[0];
 
-    //if VectorAngle()
+        // Check if one method angle is better
+        // may need to refine this threshold or only use angle (or add
+        // a buffer to the angle for ones that are close)
+        // really needs to be total points removed in region that would
+        // have been affected by the other method, but this requires additional
+        // loops to know
+        if (angle1 == 500 || angle2 == 500) {
+          // Means we are checking a segment at the end of the line
+          #if DEBUG
+            MOOSTrace("Encountered default angle state, this is not good.");
+          #endif
+        } else {
+          if (pts_elim1 > pts_elim2 && pts_elim1 < (pts_elim2 * 2)
+              && angle1 < angle2) {
+            #if DEBUG
+            MOOSTrace("Bend Fudging - pts_elim1: %d, pts_elim2: %d\n\t"
+                       "angle1: %.2f, angle2: %.2f", pts_elim1, pts_elim2,
+                       angle1, angle2);
+            #endif
+            pts_elim2 = pts_elim1 + 1;
+          } else if (pts_elim2 >= pts_elim1 && pts_elim2 < (pts_elim1 * 2)
+                     && angle2 < angle1) {
+            #if DEBUG
+            MOOSTrace("Bend Fudging - pts_elim1: %d, pts_elim2: %d\n\t"
+                      "angle1: %.2f, angle2: %.2f", pts_elim1, pts_elim2,
+                      angle1, angle2);
+            #endif
+            pts_elim1 = pts_elim2 + 1;
+          }
+        }
+      }
+
+      // Make the new vector to check next
+      if (pts_elim1 <= pts_elim2) {
+        this_seg = test_seg;
+        next_seg = SegIndex{test_seg[1], test_seg[1]+1};
+      } else {
+        this_seg = test2_seg2;
+        next_seg = SegIndex{test2_seg2[1], test2_seg2[1]+1};
+      }
+    } else {
+      this_seg = next_seg;
+      next_seg += 1;
+    }
+    // don't re-add an existing index
+    if (*(--non_bend_idx.end()) != this_seg[0]) {
+      non_bend_idx.push_back(this_seg[0]);
+    }
+  } // end main while
+
+  //------------ Final Processing to ensure good path ----------------
+
+  if (this_seg[1] == path_pts.size() - 1) {
+    // Looped to the end, this indicates a large skip, otherwise we don't
+    // get to the last index for this_seg, so remove the test point which
+    // could be causing the problem
+    //this might also work with this_seg[0]+1
+
+    // does this work now that the lists are passed by reference?
+    path_pts.erase(std::next(path_pts.begin(), this_seg[0]));
+    // might want to put this recursion path at the end
+    RemoveBends(path_pts);
+    return;
+  } else {
+    // Extend to the end of the path
+    for (auto i = this_seg[1]; i < path_pts.size(); i++) {
+      non_bend_idx.push_back(i);
+    }
+  }
+
+  // Remove the end if it causes a bend
+  while (non_bend_idx.size() > 2) {
+    SegIndex first_vec{*(std::prev(non_bend_idx.end(), 3)),
+                       *(std::prev(non_bend_idx.end(), 2))};
+    SegIndex second_vec{*(std::prev(non_bend_idx.end(), 2)),
+                        *(std::prev(non_bend_idx.end(), 1))};
+    double end_angle = VectorAngle(VectorFromSegment(v_pts, first_vec),
+                                   VectorFromSegment(v_pts, second_vec));
+    if (end_angle > m_max_bend_angle) {
+      non_bend_idx.pop_back();
+    } else {
+      break;
+    }
+  }
+
+  // if only have first seg + last point
+  //  need to possibly worry about eliminating first point
+  // Better way - advance along edge by distance of last swath offset
+  if (non_bend_idx.size() <= 3 && v_pts.size() > 5) {
+    // Try again eliminating the first segment
+    path_pts.erase(++path_pts.begin());
+    RemoveBends(path_pts);
+  } else {
+    SelectIndicies(path_pts, non_bend_idx);
   }
 
 }

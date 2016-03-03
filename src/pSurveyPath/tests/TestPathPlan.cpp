@@ -20,7 +20,7 @@ std::string PrintPath(std::list<EPoint> print_list) {
 }
 
 TEST_CASE("Test Index selection") {
-  std::list<unsigned int> test_list;
+  std::list<std::size_t> test_list;
   unsigned int num_entries(10);
   for (unsigned int i = 0; i < num_entries; i++) {
     test_list.push_back(i);
@@ -29,7 +29,7 @@ TEST_CASE("Test Index selection") {
   REQUIRE(test_list.size() == num_entries);
 
   SECTION("Selecting middle indicies") {
-    std::list<unsigned int> selection_ind = {3, 4, 5};
+    std::list<std::size_t> selection_ind = {3, 4, 5};
     PathPlan::SelectIndicies(test_list, selection_ind);
     INFO("Test List: " << ListString(test_list));
     REQUIRE(test_list.size() == 3);
@@ -38,7 +38,7 @@ TEST_CASE("Test Index selection") {
   }
 
   SECTION("Selecting only first index") {
-    std::list<unsigned int> selection_ind = {0};
+    std::list<std::size_t> selection_ind = {0};
     PathPlan::SelectIndicies(test_list, selection_ind);
     INFO("Test List: " << ListString(test_list));
     REQUIRE(test_list.size() == 1);
@@ -47,7 +47,7 @@ TEST_CASE("Test Index selection") {
   }
 
   SECTION("Selecting only last index") {
-    std::list<unsigned int> selection_ind = {num_entries - 1};
+    std::list<std::size_t> selection_ind = {num_entries - 1};
     PathPlan::SelectIndicies(test_list, selection_ind);
     INFO("Test List: " << ListString(test_list));
     REQUIRE(test_list.size() == 1);
