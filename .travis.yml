@@ -3,9 +3,37 @@ language: cpp
 dist: trusty
 sudo: required
 
-compiler:
-  - clang
-  - gcc
+matrix:
+  include:
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-4.8']
+      env: COMPILER=g++-4.8  # Version on Raspberry pi   
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-4.9']
+      env: COMPILER=g++-4.9
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-5']
+      env: COMPILER=g++-5
+    - os: osx
+      osx_image: xcode7
+      compiler: clang
+      env: COMPILER=clang++ V='Apple LLVM 7.0.0' # Apple LLVM version 7.0.0 (clang-700.0.72)
+    - os: osx
+      osx_image: xcode7.3
+      compiler: clang
+      env: COMPILER=clang++
 
 # Have to install dependencies:
 #  + Serial (for GP9 driver)
@@ -31,13 +59,13 @@ before_install:
   - cd .. && cd .. #root dir
   - mkdir build && cd build
 
-install:
-  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
+#install:
+#  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
 
 # Actually build my code
 script:
   - cmake ../
-  - make
+  - make CXX=$COMPILER
   - make test
 
 after_script:
