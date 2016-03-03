@@ -65,7 +65,7 @@ private:
     double depth;
   };
 
- public:
+public:
    RecordSwath(double interval = 10);
    ~RecordSwath() {};
    /**
@@ -83,6 +83,7 @@ private:
     * Resets the storage for a new line.
     */
    void ResetLine();
+
    /**
     * Saves the last point to a record.
     * This makes sure that the last swath (after crossing the boundary) is
@@ -90,6 +91,7 @@ private:
     * @return If the min_record is valid
     */
    bool SaveLast();
+
    /**
     * Get all of the points on one side of the swath limits
     * @param side   The side of the boat on which to return the swath
@@ -98,6 +100,7 @@ private:
    XYSegList SwathOuterPts(BoatSide side);
   //  std::list<XYpt> SwathOuterPts(BoatSide side);
    bool SwathCoverage(BoatSide side, geos::geom::Polygon &coverage);
+
    /**
     * Gets a specific width along a recorded decimated swath
     * @param  side  Side of the boat on which the swath was recorded
@@ -107,6 +110,7 @@ private:
    double SwathWidth(BoatSide side, unsigned int index);
    std::vector<double> AllSwathWidths(BoatSide side);
    XYPoint SwathLocation(unsigned int index);
+
    /**
     * Sets the side that will be used for outer point determination
     * @param side Side of the boat on which to generate outer swath points
@@ -119,6 +123,7 @@ private:
     * a list of minimums.
     */
    void MinInterval();
+
    /**
     * Gets the x,y position of the edge of a swath from a record
     * @param  record The swath record to use for location and width
@@ -126,6 +131,13 @@ private:
     * @return        Location of the swath outer points
     */
    XYPoint OuterPoint(const SwathRecord &record, BoatSide side);
+
+   /**
+    * Adds a record to the coverage model.
+    * @param  record The record to add
+    * @return        Whether the record was able to be added sucessfully (no
+    * geometry errors).
+    */
    bool AddToCoverage(SwathRecord record);
 
  private:
