@@ -117,7 +117,9 @@ std::list<Eigen::Vector2d> &path_points) {
 
 void PathPlan::RemoveIntersects(std::list<EPoint> &path_pts) {
   // Can't be an intersection between two segments (unless collinear)
+  #if DEBUG
   std::cout << "Running Remove Intersects\n";
+  #endif
   if (path_pts.size() < 4)
     return;
 
@@ -137,8 +139,8 @@ void PathPlan::RemoveIntersects(std::list<EPoint> &path_pts) {
     Eigen::Vector2d this_seg_a = *path_iter;
     Eigen::Vector2d this_seg_b = *(++path_iter);
     #if DEBUG
-    std::cout << "First Seg Point 1: " << this_seg_a.transpose() << std::endl;
-    std::cout << "First Seg Point 2: " << this_seg_b.transpose() << std::endl;
+    //std::cout << "First Seg Point 1: " << this_seg_a.transpose() << std::endl;
+    //std::cout << "First Seg Point 2: " << this_seg_b.transpose() << std::endl;
     #endif
 
     // Test following segments in the list
@@ -148,12 +150,14 @@ void PathPlan::RemoveIntersects(std::list<EPoint> &path_pts) {
       Eigen::Vector2d check_seg_a = *j;
       Eigen::Vector2d check_seg_b = *(++j);
       #if DEBUG
-      std::cout << "Check Seg Point 1: " << check_seg_a.transpose() << std::endl;
-      std::cout << "Check Seg Point 2: " << check_seg_b.transpose() << std::endl;
+      //std::cout << "Check Seg Point 1: " << check_seg_a.transpose() << std::endl;
+      //std::cout << "Check Seg Point 2: " << check_seg_b.transpose() << std::endl;
       #endif
       if (Intersect(this_seg_a, this_seg_b, check_seg_a, check_seg_b)) {
         next_non_intersect = j;
+        #if DEBUG
         std::cout << "Found Intersect!\n";
+        #endif
       }
     }
     // If an intersection was found, remove the elements causing it.  Otherwise
@@ -170,6 +174,9 @@ void PathPlan::RemoveIntersects(std::list<EPoint> &path_pts) {
 void PathPlan::RemoveBends(std::list<EPoint> &path_pts) {
   // Maybe should process in both directions, remove pts common to both
   // Or take the method with less points removed
+  #if DEBUG
+  std::cout << "Running remove bends.\n";
+  #endif
 
   std::list<std::size_t> non_bend_idx = {0};
   // Need to be able to randomly access the path points

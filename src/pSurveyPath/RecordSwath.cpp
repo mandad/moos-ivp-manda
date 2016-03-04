@@ -32,7 +32,7 @@ RecordSwath::RecordSwath(double interval) : m_min_allowable_swath(0),
 	delete pm;
   */
 
-  m_coverage = m_geom_factory->createPolygon();
+  //m_coverage = m_geom_factory->createPolygon();
 
   // Initialize the point records
   m_interval_swath[BoatSide::Port] = std::vector<double>();

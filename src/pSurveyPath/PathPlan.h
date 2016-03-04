@@ -22,6 +22,7 @@
 typedef Eigen::Matrix<double, 2, Eigen::Dynamic> EPointList;
 typedef Eigen::Vector2d EPoint;
 typedef std::valarray<std::size_t> SegIndex;
+typedef std::list<EPoint> PathList;
 
 /**
  * @struct XYPt
