@@ -183,7 +183,11 @@ void PathPlan::RemoveBends(std::list<EPoint> &path_pts) {
   //std::vector<EPoint> v_pts{ std::begin(path_pts), std::end(path_pts) };
   std::vector<EPoint> v_pts;
   v_pts.reserve(path_pts.size());
-  std::copy(std::begin(path_pts), std::end(path_pts), std::back_inserter(path_pts));
+  std::copy(std::begin(path_pts), std::end(path_pts), std::back_inserter(v_pts));
+  #if DEBUG
+  std::cout << "Copied elements to vector, size = " << v_pts.size() << "\n";
+  #endif
+
 
   SegIndex this_seg = {0, 1};
   SegIndex next_seg = {1, 2};
@@ -192,6 +196,10 @@ void PathPlan::RemoveBends(std::list<EPoint> &path_pts) {
   std::size_t last_index = v_pts.size() - 1;
 
   while (next_seg[1] < last_index) {
+    #if DEBUG
+    std::cout << "Looping through path: (" << this_seg[0] << "," << this_seg[1] << ")";
+    std::cout << " - " << next_seg[0] << "," << next_seg[1] << ")\n";
+    #endif
     EPoint this_vec = v_pts[this_seg[1]] - v_pts[this_seg[0]];
     EPoint next_vec = v_pts[next_seg[1]] - v_pts[next_seg[0]];
 
@@ -243,14 +251,14 @@ void PathPlan::RemoveBends(std::list<EPoint> &path_pts) {
         if (angle1 == 500 || angle2 == 500) {
           // Means we are checking a segment at the end of the line
           #if DEBUG
-            MOOSTrace("Encountered default angle state, this is not good.");
+            MOOSTrace("Encountered default angle state, this is not good.\n");
           #endif
         } else {
           if (pts_elim1 > pts_elim2 && pts_elim1 < (pts_elim2 * 2)
               && angle1 < angle2) {
             #if DEBUG
             MOOSTrace("Bend Fudging - pts_elim1: %d, pts_elim2: %d\n\t"
-                       "angle1: %.2f, angle2: %.2f", pts_elim1, pts_elim2,
+                       "angle1: %.2f, angle2: %.2f\n", pts_elim1, pts_elim2,
                        angle1, angle2);
             #endif
             pts_elim2 = pts_elim1 + 1;
@@ -258,7 +266,7 @@ void PathPlan::RemoveBends(std::list<EPoint> &path_pts) {
                      && angle2 < angle1) {
             #if DEBUG
             MOOSTrace("Bend Fudging - pts_elim1: %d, pts_elim2: %d\n\t"
-                      "angle1: %.2f, angle2: %.2f", pts_elim1, pts_elim2,
+                      "angle1: %.2f, angle2: %.2f\n", pts_elim1, pts_elim2,
                       angle1, angle2);
             #endif
             pts_elim1 = pts_elim2 + 1;
