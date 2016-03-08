@@ -12,6 +12,11 @@ else()
   include_directories(${EIGEN3_INCLUDE_DIR})
 endif()
 
+# Find boost
+# COMPONENTS geometry
+FIND_PACKAGE(Boost REQUIRED )
+INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIRS}  )
+
 SET(SRC
   SurveyPath.cpp
   SurveyPath_Info.cpp
@@ -29,6 +34,7 @@ ADD_EXECUTABLE(pSurveyPath ${SRC})
 
 TARGET_LINK_LIBRARIES(pSurveyPath
    ${MOOS_LIBRARIES}
+   ${Boost_LIBRARIES}
    apputil
    geometry
    mbutil

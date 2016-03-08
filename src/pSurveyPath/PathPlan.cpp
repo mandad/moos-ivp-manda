@@ -13,6 +13,8 @@
 // #include <stdexcept>
 #include <iterator>
 
+namespace bg = boost::geometry;
+
 #define DEBUG true
 
 PathPlan::PathPlan(const RecordSwath &last_swath, BoatSide side, XYPolygon op_region,
@@ -20,6 +22,7 @@ PathPlan::PathPlan(const RecordSwath &last_swath, BoatSide side, XYPolygon op_re
   m_max_bend_angle(60), m_restrict_asv_to_region(restrict_to_region),
   m_planning_side(side), m_margin(margin) {
 
+  m_op_region = XYPolygonToBoostPolygon(op_region);
 }
 
 XYSegList PathPlan::GenerateNextPath() {
@@ -98,6 +101,14 @@ XYSegList PathPlan::GenerateNextPath() {
     MOOSTrace("Removed %d points.\n", pre_len - m_next_path_pts.size());
     pre_len = m_next_path_pts.size();
   #endif
+
+  // ---------- Restrict to Region -----------
+  if (m_restrict_asv_to_region) {
+    #if DEBUG
+    MOOSTrace("Eliminating points outside op region.\n");
+    #endif
+    //if
+  }
 
   return VectorListToSegList(m_next_path_pts);
 }
@@ -384,12 +395,23 @@ XYSegList PathPlan::XYPtToSegList(const std::list<XYPt> &to_convert) {
   return converted;
 }
 
-XYSegList PathPlan::VectorListToSegList(const std::list<Eigen::Vector2d> &to_convert) {
+XYSegList PathPlan::VectorListToSegList(const std::list<EPoint> &to_convert) {
   XYSegList converted;
   for (const Eigen::Vector2d &i : to_convert) {
     converted.add_vertex(i.x(), i.y());
   }
   return converted;
+}
+
+BPolygon PathPlan::XYPolygonToBoostPolygon(XYPolygon& poly) {
+  BPolygon output_poly;
+  XYSegList poly_pts = poly.exportSegList();
+  for (std::size_t i = 0; i < poly_pts.size(); i++) {
+    bg::append(output_poly.outer(), BPoint(poly_pts.get_vx(i),
+               poly_pts.get_vy(i)));
+  }
+
+  return output_poly;
 }
 
 // Eigen::Vector2d PathPlan::UnitVector(Eigen::Vector2d vector_in) {

@@ -17,12 +17,18 @@
 #include <list>
 #include <functional>
 #include <valarray>
+#include <boost/geometry.hpp>
+#include <boost/geometry/geometries/geometries.hpp>
+#include <boost/geometry/geometries/point_xy.hpp>
 
 // To get a single point EPointList.col(i)
 typedef Eigen::Matrix<double, 2, Eigen::Dynamic> EPointList;
 typedef Eigen::Vector2d EPoint;
 typedef std::valarray<std::size_t> SegIndex;
 typedef std::list<EPoint> PathList;
+typedef boost::geometry::model::d2::point_xy<double> BPoint;
+typedef boost::geometry::model::polygon<BPoint> BPolygon;
+typedef boost::geometry::model::linestring<BPoint> BLinestring;
 
 /**
  * @struct XYPt
@@ -130,6 +136,8 @@ class PathPlan
      */
     XYSegList VectorListToSegList(const std::list<Eigen::Vector2d> &to_convert);
 
+    BPolygon XYPolygonToBoostPolygon(XYPolygon& poly);
+
     /**
      * @brief Selects specific elements from a list by index.
      * @details Replicates the select by index functionality of numpy or
@@ -170,6 +178,7 @@ class PathPlan
     bool m_restrict_asv_to_region;
     double m_max_bend_angle;
     double m_margin;
+    BPolygon m_op_region;
 
 
     // State variables
