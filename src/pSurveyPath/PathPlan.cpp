@@ -92,23 +92,51 @@ XYSegList PathPlan::GenerateNextPath() {
 
   // ---------- Bends -----------
   #if DEBUG
-    MOOSTrace("Eliminating sharp bends.\n");
+  MOOSTrace("Eliminating sharp bends.\n");
   #endif
+
   std::function<void(std::list<EPoint>&)> remove_func =
     std::bind(&PathPlan::RemoveBends, this, std::placeholders::_1);
   RemoveAll(remove_func, m_next_path_pts);
+
   #if DEBUG
-    MOOSTrace("Removed %d points.\n", pre_len - m_next_path_pts.size());
-    pre_len = m_next_path_pts.size();
+  MOOSTrace("Removed %d points.\n", pre_len - m_next_path_pts.size());
+  pre_len = m_next_path_pts.size();
   #endif
 
   // ---------- Restrict to Region -----------
+  // Would be good to check for segment intersectin with the border and use
+  // these points instead
   if (m_restrict_asv_to_region) {
     #if DEBUG
     MOOSTrace("Eliminating points outside op region.\n");
     #endif
-    //if
+
+    RestrictToRegion(m_next_path_pts);
+
+    #if DEBUG
+    MOOSTrace("Removed %d points.\n", pre_len - m_next_path_pts.size());
+    pre_len = m_next_path_pts.size();
+    #endif
+
+    if (pre_len <= 1) {
+      return VectorListToSegList(m_next_path_pts);
+    }
   }
+
+  // ---------- Extend -----------
+  // Idea: Maybe extend from the point to the nearest edge, not along the
+  // vector of the last segment
+  #if DEBUG
+  MOOSTrace("Extending ends of path to edge of region.\n");
+  #endif
+
+  ExtendToEdge(m_next_path_pts);
+
+  #if DEBUG
+  MOOSTrace("Removed %d points.\n", pre_len - m_next_path_pts.size());
+  pre_len = m_next_path_pts.size();
+  #endif
 
   return VectorListToSegList(m_next_path_pts);
 }
@@ -348,6 +376,20 @@ void PathPlan::RemoveBends(std::list<EPoint> &path_pts) {
   } else {
     SelectIndicies(path_pts, non_bend_idx);
   }
+
+}
+
+void PathPlan::RestrictToRegion(std::list<EPoint>& path_points) {
+  for(auto point = path_points.begin(); point != path_points.end();) {
+    if (m_op_region_moos.contains(point->x(), point->y())) {
+      point = path_points.erase(point);
+    } else {
+      ++point;
+    }
+  }
+}
+
+void PathPlan::ExtendToEdge(std::list<EPoint> &path_pts) {
 
 }
 

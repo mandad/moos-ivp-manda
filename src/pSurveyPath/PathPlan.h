@@ -81,6 +81,10 @@ class PathPlan
      */
     void RemoveBends(std::list<EPoint> &path_pts);
 
+    void RestrictToRegion(std::list<EPoint> &path_pts);
+
+    void ExtendToEdge(std::list<EPoint> &path_pts);
+
     /**
      * Determines whether segments are counter clockwise in smalles angle with
      * respect to each other.
@@ -179,6 +183,7 @@ class PathPlan
     double m_max_bend_angle;
     double m_margin;
     BPolygon m_op_region;
+    XYPolygon m_op_region_moos;
 
 
     // State variables
