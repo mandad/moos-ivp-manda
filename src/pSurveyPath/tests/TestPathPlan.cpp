@@ -217,5 +217,32 @@ TEST_CASE("Test sharp bend removal") {
 TEST_CASE("Ray with segment intersection") {
   PathPlan planner = GetDefaultPlan();
 
-  SECTION()
+  SECTION("Has an intersection") {
+    auto segment = std::make_pair(BPoint(0,0), BPoint(0,3));
+    auto int_pt = planner.IntersectRaySegment(EPoint(-1, 1), EPoint(2, 0), segment);
+
+    REQUIRE(int_pt.first);
+    REQUIRE(int_pt.second.x() == 0);
+    REQUIRE(int_pt.second.y() == 2);
+  }
+
+  SECTION("Has no intersection") {
+    auto segment = std::make_pair(BPoint(0,0), BPoint(0,3));
+    auto int_pt = planner.IntersectRaySegment(EPoint(0, 1), EPoint(2, 1), segment);
+
+    REQUIRE(!int_pt.first);
+  }
+
+  SECTION("Intersection at end point of segment") {
+    auto segment = std::make_pair(BPoint(0,0), BPoint(0,3));
+    auto int_pt = planner.IntersectRaySegment(EPoint(-1, 0), EPoint(2, 3), segment);
+
+    REQUIRE(int_pt.first);
+    REQUIRE(int_pt.second.x() == 0);
+    REQUIRE(int_pt.second.y() == 3);
+  }
+}
+
+TEST_CASE("Polygon ray intersection") {
+  
 }

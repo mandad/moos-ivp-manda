@@ -17,12 +17,13 @@ namespace bg = boost::geometry;
 
 #define DEBUG true
 
-PathPlan::PathPlan(const RecordSwath &last_swath, BoatSide side, XYPolygon op_region,
+PathPlan::PathPlan(const RecordSwath &last_swath, BoatSide side, BPolygon op_region,
   double margin, bool restrict_to_region) : m_last_line(last_swath),
   m_max_bend_angle(60), m_restrict_asv_to_region(restrict_to_region),
-  m_planning_side(side), m_margin(margin) {
+  m_planning_side(side), m_margin(margin), m_op_region{op_region} {
 
-  m_op_region = XYPolygonToBoostPolygon(op_region);
+  //m_op_region = XYPolygonToBoostPolygon(op_region);
+
 }
 
 XYSegList PathPlan::GenerateNextPath() {
@@ -448,7 +449,10 @@ std::pair<double, EPoint> PathPlan::FindNearestIntersect(EPoint ray_vector,
     }
   }
 
-  return std::make_pair(0, EPoint(0,0));
+  // What should be done when equadistant from two?
+  auto min_index = std::min_element(intersect_dist.begin(), intersect_dist.end())
+    - intersect_dist.begin();
+  return std::make_pair(intersect_dist[min_index], intersect_pts[min_index]);
 }
 
 std::pair<bool, EPoint> PathPlan::IntersectRaySegment(EPoint ray_vector, EPoint start_pt,
@@ -472,7 +476,8 @@ std::pair<bool, EPoint> PathPlan::IntersectRaySegment(EPoint ray_vector, EPoint 
 }
 
 double PathPlan::Cross2d(EPoint vec1, EPoint vec2) {
-  return (vec1[1] * vec2[2]) - (vec2[1] * vec1[2]);
+  // This is the determinant of ||v1||v2||
+  return (vec1[0] * vec2[1]) - (vec2[0] * vec1[1]);
 }
 
 EPoint PathPlan::EPointFromBPoint(BPoint boost_point) {

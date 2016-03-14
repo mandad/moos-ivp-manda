@@ -71,7 +71,7 @@ void RecordSwath::MinInterval() {
   // Get the record from the side we are offsetting
   std::vector<double>* side_record = &m_interval_swath[m_output_side];
 
-  int min_index = 0;
+  std::size_t min_index = 0;
   if (side_record->size() > 0) {
     min_index = std::min_element(side_record->begin(), side_record->end())
       - side_record->begin();

@@ -214,8 +214,7 @@ class PathPlan
     double m_max_bend_angle;
     double m_margin;
     BPolygon m_op_region;
-    XYPolygon m_op_region_moos;
-
+    //XYPolygon m_op_region_moos;
 
     // State variables
     RecordSwath m_last_line;
