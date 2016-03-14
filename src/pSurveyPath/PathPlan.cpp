@@ -383,7 +383,8 @@ void PathPlan::RemoveBends(std::list<EPoint> &path_pts) {
 
 void PathPlan::RestrictToRegion(std::list<EPoint>& path_points) {
   for(auto point = path_points.begin(); point != path_points.end();) {
-    if (m_op_region_moos.contains(point->x(), point->y())) {
+    BPoint boost_point(point->x(), point->y());
+    if (boost::geometry::within(boost_point, m_op_region)) {
       point = path_points.erase(point);
     } else {
       ++point;

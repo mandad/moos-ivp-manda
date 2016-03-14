@@ -23,7 +23,7 @@ std::string PrintPath(std::list<EPoint> print_list) {
 
 PathPlan GetDefaultPlan() {
   RecordSwath record_swath;
-  XYPolygon poly;
+  BPolygon poly;
   return PathPlan(record_swath, BoatSide::Port, poly);
 }
 
@@ -149,15 +149,7 @@ TEST_CASE("Intersection removal") {
 }
 
 TEST_CASE("Test sharp bend removal") {
-  //INFO("Before RecordSwath()");
-  RecordSwath record_swath;
-  //INFO("Before XYPolygon()");
-  XYPolygon poly;
-  //INFO("Before PathPlan()");
-  PathPlan planner(record_swath, BoatSide::Port, poly);
-
-
-
+  PathPlan planner = GetDefaultPlan();
   // gp << "splot ";
 
   SECTION("Test Path 1") {
@@ -216,9 +208,9 @@ TEST_CASE("Test sharp bend removal") {
 
 TEST_CASE("Ray with segment intersection") {
   PathPlan planner = GetDefaultPlan();
+  auto segment = std::make_pair(BPoint(0,0), BPoint(0,3));
 
   SECTION("Has an intersection") {
-    auto segment = std::make_pair(BPoint(0,0), BPoint(0,3));
     auto int_pt = planner.IntersectRaySegment(EPoint(-1, 1), EPoint(2, 0), segment);
 
     REQUIRE(int_pt.first);
@@ -227,14 +219,12 @@ TEST_CASE("Ray with segment intersection") {
   }
 
   SECTION("Has no intersection") {
-    auto segment = std::make_pair(BPoint(0,0), BPoint(0,3));
     auto int_pt = planner.IntersectRaySegment(EPoint(0, 1), EPoint(2, 1), segment);
 
     REQUIRE(!int_pt.first);
   }
 
   SECTION("Intersection at end point of segment") {
-    auto segment = std::make_pair(BPoint(0,0), BPoint(0,3));
     auto int_pt = planner.IntersectRaySegment(EPoint(-1, 0), EPoint(2, 3), segment);
 
     REQUIRE(int_pt.first);
@@ -244,5 +234,17 @@ TEST_CASE("Ray with segment intersection") {
 }
 
 TEST_CASE("Polygon ray intersection") {
-  
+  RecordSwath record_swath;
+  BPolygon poly;
+  boost::geometry::read_wkt("POLYGON((0 0, 0 2, 2 2, 2 0))", poly);
+  PathPlan planner(record_swath, BoatSide::Port, poly);
+
+  SECTION("Intersect nearest to pt") {
+    auto int_pt = planner.FindNearestIntersect(EPoint(-1, -1), EPoint(1, 1.5),
+      poly);
+    REQUIRE(int_pt.first == Approx(2/std::sqrt(2)));
+    REQUIRE(int_pt.second.x() == 0);
+    REQUIRE(int_pt.second.y() == 0.5);
+  }
+
 }

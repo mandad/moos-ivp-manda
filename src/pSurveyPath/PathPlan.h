@@ -46,7 +46,7 @@ struct XYPt {
 class PathPlan
 {
   public:
-    PathPlan(const RecordSwath &last_swath, BoatSide side, XYPolygon op_region,
+    PathPlan(const RecordSwath &last_swath, BoatSide side, BPolygon op_region,
       double margin=0.2, bool restrict_to_region = true);
     ~PathPlan() {};
     /**
