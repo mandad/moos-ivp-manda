@@ -83,7 +83,38 @@ class PathPlan
 
     void RestrictToRegion(std::list<EPoint> &path_pts);
 
-    void ExtendToEdge(std::list<EPoint> &path_pts);
+    void ExtendToEdge(std::list<EPoint> &path_pts, bool begin);
+
+    /**
+     * Finds the closest intersection of a ray with a polygon
+     *
+     * @param ray_vec  EPoint(dx,dy)
+     * @param start_pt EPoint(x,y)
+     * @param poly     XYPolygon([(x1,y1), (x2,y2), ...])
+     */
+    std::pair<double, EPoint> FindNearestIntersect(EPoint ray_vec,
+      EPoint starting_pt, BPolygon& poly);
+
+    /**
+     * Finds the intersection point of a ray with a segment, if it exists.
+     * Derived from:
+     * http://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect/565282#565282
+     * @param  ray_vector The vector describing the direction of the ray
+     * @param  start_pt   Starting location of the ray
+     * @param  segment    Segment to test for intersection
+     * @return            <intersection exists, Intersection point, if exists>
+     */
+    std::pair<bool, EPoint> IntersectRaySegment(EPoint ray_vector, EPoint start_pt,
+      std::pair<BPoint, BPoint> segment);
+
+    /**
+     * Replicates the functionality of 2d cross product from numpy.  This is the
+     * z component of a cross product (which does not require a z input).
+     * @return      The z component of the cross product
+     */
+    double Cross2d(EPoint vec1, EPoint vec2);
+
+    EPoint EPointFromBPoint(BPoint boost_point);
 
     /**
      * Determines whether segments are counter clockwise in smalles angle with

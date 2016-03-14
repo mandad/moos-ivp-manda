@@ -21,6 +21,12 @@ std::string PrintPath(std::list<EPoint> print_list) {
   return list_els.str();
 }
 
+PathPlan GetDefaultPlan() {
+  RecordSwath record_swath;
+  XYPolygon poly;
+  return PathPlan(record_swath, BoatSide::Port, poly);
+}
+
 std::pair<std::size_t, std::size_t> ProcessRemoveBend(std::list<EPoint>& path_bend,
   PathPlan planner, unsigned int plot_num, bool remove_intersects = true) {
   // Plot before
@@ -206,4 +212,10 @@ TEST_CASE("Test sharp bend removal") {
   // SECTION("Bend At Beginning") {
   //   PathList begin = {EPoint()}
   // }
+}
+
+TEST_CASE("Ray with segment intersection") {
+  PathPlan planner = GetDefaultPlan();
+
+  SECTION()
 }

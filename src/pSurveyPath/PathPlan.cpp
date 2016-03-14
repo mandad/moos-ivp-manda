@@ -131,7 +131,8 @@ XYSegList PathPlan::GenerateNextPath() {
   MOOSTrace("Extending ends of path to edge of region.\n");
   #endif
 
-  ExtendToEdge(m_next_path_pts);
+  ExtendToEdge(m_next_path_pts, true);
+  ExtendToEdge(m_next_path_pts, false);
 
   #if DEBUG
   MOOSTrace("Removed %d points.\n", pre_len - m_next_path_pts.size());
@@ -389,8 +390,93 @@ void PathPlan::RestrictToRegion(std::list<EPoint>& path_points) {
   }
 }
 
-void PathPlan::ExtendToEdge(std::list<EPoint> &path_pts) {
+void PathPlan::ExtendToEdge(std::list<EPoint> &path_points, bool begin) {
+  // Start of the path
+  EPoint starting_pt;
+  EPoint extend_vec;
 
+  if (begin) {
+    auto first_pt = std::next(path_points.begin()); // [1]
+    auto second_pt = path_points.begin();           // [0]
+    starting_pt = *second_pt;
+    extend_vec = *second_pt - *first_pt;
+  } else {
+    auto second_pt = std::prev(path_points.end());  // [-1]
+    auto first_pt = std::prev(second_pt);           // [-2]
+    starting_pt = *second_pt;
+    extend_vec = *second_pt - *first_pt;
+  }
+  std::pair<double, EPoint> intersection = FindNearestIntersect(extend_vec,
+    starting_pt, m_op_region);
+
+  double extend_max = 15 * m_last_line.IntervalDist();
+  if (intersection.first < extend_max) {
+    if (begin) {
+      path_points.push_front(intersection.second);
+    } else {
+      path_points.push_back(intersection.second);
+    }
+  } else {
+    #if DEBUG
+    MOOSTrace("Reached edge extension max.\n");
+    #endif
+  }
+}
+
+std::pair<double, EPoint> PathPlan::FindNearestIntersect(EPoint ray_vector,
+  EPoint start_pt, BPolygon& poly) {
+
+  //The ring is a vector of points_xy<double>
+  //This should make it closed by default definition
+  boost::geometry::correct(poly);
+  auto ext_ring = poly.outer();
+
+  // These store all the found intersections
+  std::vector<double> intersect_dist;
+  std::vector<EPoint> intersect_pts;
+
+  for (auto poly_vertex = ext_ring.begin();
+       poly_vertex != std::prev(ext_ring.end()); ++poly_vertex) {
+    auto next_vertex = std::next(poly_vertex);
+    std::pair<BPoint, BPoint> poly_seg = std::make_pair(*poly_vertex, *next_vertex);
+    std::pair<bool, EPoint> intersection = IntersectRaySegment(ray_vector,
+      start_pt, poly_seg);
+    // If an intersection exists
+    if (intersection.first) {
+      intersect_dist.push_back((intersection.second - start_pt).norm());
+      intersect_pts.push_back(intersection.second);
+    }
+  }
+
+  return std::make_pair(0, EPoint(0,0));
+}
+
+std::pair<bool, EPoint> PathPlan::IntersectRaySegment(EPoint ray_vector, EPoint start_pt,
+  std::pair<BPoint, BPoint> segment) {
+  EPoint seg_start = EPointFromBPoint(segment.first);
+  EPoint seg_vector = EPointFromBPoint(segment.second) -
+    EPointFromBPoint(segment.first);
+  double rxs = Cross2d(ray_vector, seg_vector);
+  if (rxs != 0) {
+    // EPoint t = seg_start - start_pt;
+    // EPoint u{t};
+    double t = Cross2d(seg_start - start_pt, seg_vector) / rxs;
+    double u = Cross2d(seg_start - start_pt, ray_vector) / rxs;
+    // EPoint u = seg_start - start_pt;
+    // u = u.cross(ray_vector) / rxs;
+    if (t >= 0 && u >= 0 && u <= 1) {
+      return std::make_pair(true, start_pt + (t * ray_vector));
+    }
+  }
+  return std::make_pair(false, EPoint(0,0));
+}
+
+double PathPlan::Cross2d(EPoint vec1, EPoint vec2) {
+  return (vec1[1] * vec2[2]) - (vec2[1] * vec1[2]);
+}
+
+EPoint PathPlan::EPointFromBPoint(BPoint boost_point) {
+  return EPoint(boost_point.x(), boost_point.y());
 }
 
 bool PathPlan::Intersect(EPoint A, EPoint B, EPoint C, EPoint D) {

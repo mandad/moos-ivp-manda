@@ -50,7 +50,7 @@ ProcessConfig = pMarineMRAS
    // Tau_Star = 0.17
    //Test for adaptation
    K_Star = 0.8
-   Tau_Star = 0.3
+   Tau_Star = git s0.3
    DampingRatio = 0.8
 
    //Adaptation parameters
