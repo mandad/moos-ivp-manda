@@ -46,8 +46,9 @@ bool SonarFilter::OnNewMail(MOOSMSG_LIST &NewMail)
   double dfDepth = -1;
   if (pDepth->IsFresh()) {
     dfDepth = pDepth->GetDoubleVal();
-    if (dfDepth != 0) {
-        InjestDepthVal(dfDepth);
+    // This sets a static 0.5m min depth at this time
+    if (dfDepth > 0.5) {
+      InjestDepthVal(dfDepth);
     }
   }
 
@@ -60,7 +61,7 @@ bool SonarFilter::OnNewMail(MOOSMSG_LIST &NewMail)
 #if 0 // Keep these around just for template
     string comm  = msg.GetCommunity();
     double dval  = msg.GetDouble();
-    string sval  = msg.GetString(); 
+    string sval  = msg.GetString();
     string msrc  = msg.GetSource();
     double mtime = msg.GetTime();
     bool   mdbl  = msg.IsDouble();
@@ -71,7 +72,7 @@ bool SonarFilter::OnNewMail(MOOSMSG_LIST &NewMail)
        reportRunWarning("Unhandled Mail: " + key);
    }
    */
-	
+
    return(true);
 }
 
@@ -151,8 +152,8 @@ bool SonarFilter::OnStartUp()
   AddMOOSVariable("Depth", "SONAR_DEPTH_M", "", 0);
   AddMOOSVariable("SonarWidth", "SONAR_WIDTH", "", 0);
   AddMOOSVariable("Swath", "", "SWATH_WIDTH", 0);
-  
-  registerVariables();	
+
+  registerVariables();
   return(true);
 }
 
@@ -170,7 +171,7 @@ void SonarFilter::registerVariables()
 //------------------------------------------------------------
 // Procedure: buildReport()
 
-bool SonarFilter::buildReport() 
+bool SonarFilter::buildReport()
 {
   m_msgs << "============================================ \n";
   m_msgs << "Sonar Filter                                 \n";
@@ -198,7 +199,7 @@ void SonarFilter::InjestDepthVal(double depth) {
       MOOSTrace("SonarFilt - Testing StDev\n");
       // Only call a depth good if it is within the stdev limit
       //TODO: Maybe add a fixed factor since the stdev could be low (zero)
-      if (depth <= (m_last_valid_depth + std * m_std_limit) && 
+      if (depth <= (m_last_valid_depth + std * m_std_limit) &&
         depth >= (m_last_valid_depth - std * m_std_limit)) {
         MOOSTrace("SonarFilt - Have Valid Depth: %0.2f\n", depth);
         m_fresh_depth = true;
@@ -264,7 +265,7 @@ string SonarFilter::GenerateSwathMessage() {
   double swath_width = 0;
   swath_width = tan(m_sim_swath_angle) * m_last_valid_depth;
 
-  snprintf (message, 200, "x=%0.2f;y=%0.2f;hdg=%0.2f;port=%0.1f;stbd=%0.1f", 
+  snprintf (message, 200, "x=%0.2f;y=%0.2f;hdg=%0.2f;port=%0.1f;stbd=%0.1f",
     x_var->GetDoubleVal(), y_var->GetDoubleVal(), heading_var->GetDoubleVal(),
     swath_width, swath_width);
 

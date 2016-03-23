@@ -26,6 +26,8 @@ PathPlan::PathPlan(const RecordSwath &last_swath, BoatSide side, BPolygon op_reg
 
 }
 
+//void PathPlan::SetBasisPath(RecordSwath)
+
 XYSegList PathPlan::GenerateNextPath() {
   #if DEBUG
   MOOSTrace("\n======== Generating Next Path ========\n");

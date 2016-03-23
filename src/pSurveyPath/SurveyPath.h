@@ -9,6 +9,8 @@
 #define SurveyPath_HEADER
 
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
+#include "RecordSwath.h"
+#include "PathPlan.h"
 
 class SurveyPath : public AppCastingMOOSApp
 {
@@ -27,10 +29,31 @@ class SurveyPath : public AppCastingMOOSApp
 
  protected:
    void registerVariables();
+   BoatSide AdvanceSide(BoatSide side);
+   bool InjestSwathMessage(std::string msg);
 
  private: // Configuration variables
+  BoatSide m_first_swath_side;
+  double m_swath_interval;
+  double m_alignment_line_len;
+  double m_turn_pt_offset;
+  bool m_remove_in_coverage;
+  double m_swath_overlap;
 
  private: // State variables
+  BoatSide m_next_swath_side;
+  double m_swath_width;
+  double m_nav_x;
+  double m_nav_y;
+  double m_nav_heading;
+  bool m_line_end;
+  bool m_line_begin;
+  bool m_turn_reached;
+  // bool m_post_ready;
+  // bool m_path_ready;
+  bool m_recording;
+  BPolygon m_op_region;
+  RecordSwath m_swath_record;
 };
 
 #endif

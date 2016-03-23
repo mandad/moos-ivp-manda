@@ -32,7 +32,7 @@ std::pair<std::size_t, std::size_t> ProcessRemoveBend(std::list<EPoint>& path_be
   // Plot before
   Gnuplot gp;
   gp << "set terminal png size 1000,1000 enhanced font 'Verdana,10'\n";
-  gp << "set output 'bend_graph" << plot_num << ".png'\n";
+  gp << "set output 'bend_graph_" << plot_num << ".png'\n";
   gp << "set loadpath 'src/pSurveyPath/tests/'\n";
   gp << "load 'parula.pal'\n";
   gp << "load 'noborder.cfg'\n";
@@ -242,9 +242,17 @@ TEST_CASE("Polygon ray intersection") {
   SECTION("Intersect nearest to pt") {
     auto int_pt = planner.FindNearestIntersect(EPoint(-1, -1), EPoint(1, 1.5),
       poly);
-    REQUIRE(int_pt.first == Approx(2/std::sqrt(2)));
+    REQUIRE(int_pt.first == Approx(std::sqrt(2)));
     REQUIRE(int_pt.second.x() == 0);
     REQUIRE(int_pt.second.y() == 0.5);
+  }
+
+  SECTION("Intersect vertex") {
+    auto int_pt = planner.FindNearestIntersect(EPoint(1, -1), EPoint(1, 2),
+      poly);
+    REQUIRE(int_pt.first == Approx(2 * std::sqrt(2)));
+    REQUIRE(int_pt.second.x() == 3);
+    REQUIRE(int_pt.second.y() == 0);
   }
 
 }
