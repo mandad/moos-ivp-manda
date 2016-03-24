@@ -22,7 +22,7 @@ SurveyPath::SurveyPath() : m_first_swath_side{BoatSide::Port},
   m_swath_interval{10}, m_alignment_line_len{10}, m_turn_pt_offset{15},
   m_remove_in_coverage{false}, m_swath_overlap{0.2}, m_line_end{false},
   m_line_begin{false}, m_turn_reached{false}, m_recording{false},
-  m_swath_record(10), m_swath_side{BoatSide::Port}
+  m_swath_record(10), m_swath_side{BoatSide::Port}, m_turn_pt_set{false}
 {
   m_swath_side = AdvanceSide(m_first_swath_side);
   //m_swath_side = m_next_swath_side;
@@ -157,6 +157,12 @@ bool SurveyPath::Iterate()
           m_swath_info["depth"]);
       }
     }
+  } else {
+    auto turn_msg = GetMOOSVar("TurnReached");
+    if (m_turn_pt_set && turn_msg->IsFresh()) {
+      SetMOOSVar("TurnPoint", "point=" + m_turn_pt.get_spec(), MOOSTime());
+      m_turn_pt_set = false;
+    }
   }
 
   auto end_msg = GetMOOSVar("LineEnd");
@@ -189,19 +195,44 @@ void SurveyPath::CreateNewPath() {
     #if DEBUG
     MOOSTrace("Number of pts in new_path: %d\n",m_survey_path.size());
     #endif
-    if (m_survey_path.size() > 0) {
+    if (m_survey_path.size() > 2) {
       m_posted_path_str = m_survey_path.get_spec_pts(2);  //2 decimal precision
       SetMOOSVar("SurveyPath", m_posted_path_str, MOOSTime());
-      DetermineStartAndTurn();
+      DetermineStartAndTurn(m_survey_path);
     } else {
       SetMOOSVar("Stop", "true", MOOSTime());
+      #if DEBUG
+      MOOSTrace("Path too short, ending survey\n");
+      #endif
     }
   }
   m_swath_record.ResetLine();
 }
 
-bool SurveyPath::DetermineStartAndTurn() {
-  
+bool SurveyPath::DetermineStartAndTurn(XYSegList& next_pts) {
+  std::size_t pts_len = next_pts.size();
+
+  // The turn point, extended from the end of the path
+  EPoint end_heading(next_pts.get_vx(pts_len-1) - next_pts.get_vx(pts_len-2),
+    next_pts.get_vy(pts_len-1) - next_pts.get_vy(pts_len-2));
+  end_heading.normalize();
+  end_heading *= m_turn_pt_offset;
+  m_turn_pt = XYPoint(end_heading.x(), end_heading.y());
+  m_turn_pt.set_spec_digits(2);
+  m_turn_pt_set = true;
+  // This is not posted until the current turn point is reached
+
+  // The alignment line, added to the beginning of the path
+  EPoint start_heading(next_pts.get_vx(0) - next_pts.get_vx(1),
+    next_pts.get_vy(0) - next_pts.get_vy(1));
+  start_heading.normalize();
+  start_heading *= m_alignment_line_len;
+  m_alignment_line.clear();
+  m_alignment_line.add_vertex(start_heading.x(), start_heading.y());
+  m_alignment_line.add_vertex(next_pts.get_vx(0), next_pts.get_vy(0));
+  SetMOOSVar("StartPath", m_alignment_line.get_spec_pts(2), MOOSTime());
+
+  return true;
 }
 
 BoatSide SurveyPath::AdvanceSide(BoatSide side) {

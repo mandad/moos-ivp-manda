@@ -9,6 +9,7 @@
 #define SurveyPath_HEADER
 
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
+#include "XYPoint.h"
 #include "RecordSwath.h"
 #include "PathPlan.h"
 
@@ -31,6 +32,7 @@ class SurveyPath : public AppCastingMOOSApp
    void registerVariables();
    BoatSide AdvanceSide(BoatSide side);
    bool InjestSwathMessage(std::string msg);
+   bool DetermineStartAndTurn(XYSegList& next_pts);
    void CreateNewPath();
 
  private: // Configuration variables
@@ -44,10 +46,10 @@ class SurveyPath : public AppCastingMOOSApp
  private: // State variables
   BoatSide m_next_swath_side;
   BoatSide m_swath_side;
-  double m_swath_width;
-  double m_nav_x;
-  double m_nav_y;
-  double m_nav_heading;
+  // double m_swath_width;
+  // double m_nav_x;
+  // double m_nav_y;
+  // double m_nav_heading;
   bool m_line_end;
   bool m_line_begin;
   bool m_turn_reached;
@@ -59,6 +61,9 @@ class SurveyPath : public AppCastingMOOSApp
   std::map<std::string, double> m_swath_info;
   std::string m_posted_path_str;
   XYSegList m_survey_path;
+  XYPoint m_turn_pt;
+  bool m_turn_pt_set;
+  XYSegList m_alignment_line;
 };
 
 #endif
