@@ -192,11 +192,16 @@ void SurveyPath::CreateNewPath() {
     if (m_survey_path.size() > 0) {
       m_posted_path_str = m_survey_path.get_spec_pts(2);  //2 decimal precision
       SetMOOSVar("SurveyPath", m_posted_path_str, MOOSTime());
+      DetermineStartAndTurn();
     } else {
       SetMOOSVar("Stop", "true", MOOSTime());
     }
   }
   m_swath_record.ResetLine();
+}
+
+bool SurveyPath::DetermineStartAndTurn() {
+  
 }
 
 BoatSide SurveyPath::AdvanceSide(BoatSide side) {
