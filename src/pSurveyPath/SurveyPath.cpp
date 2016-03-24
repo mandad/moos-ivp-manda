@@ -18,13 +18,14 @@
 //---------------------------------------------------------
 // Constructor
 
-SurveyPath::SurveyPath() : m_first_swath_side{BoatSide::Stbd},
+SurveyPath::SurveyPath() : m_first_swath_side{BoatSide::Port},
   m_swath_interval{10}, m_alignment_line_len{10}, m_turn_pt_offset{15},
   m_remove_in_coverage{false}, m_swath_overlap{0.2}, m_line_end{false},
   m_line_begin{false}, m_turn_reached{false}, m_recording{false},
-  m_swath_record(10)
+  m_swath_record(10), m_swath_side{BoatSide::Port}
 {
-  m_next_swath_side = AdvanceSide(m_first_swath_side);
+  m_swath_side = AdvanceSide(m_first_swath_side);
+  //m_swath_side = m_next_swath_side;
 }
 
 //---------------------------------------------------------
@@ -67,10 +68,10 @@ bool SurveyPath::OnStartUp()
   AddMOOSVariable("TurnReached", "TURN_REACHED", "", 0);
 
   // Publish variables
-  AddMOOSVariable("TurnUpdate", "", "TURN_UPDATE", 0);
+  AddMOOSVariable("TurnPoint", "", "TURN_UPDATE", 0);
   AddMOOSVariable("Stop", "", "FAULT", 0);
-  AddMOOSVariable("SurveyUpdate", "", "SURVEY_UPDATE", 0);
-  AddMOOSVariable("StartUpdate", "", "START_UPDATE", 0);
+  AddMOOSVariable("SurveyPath", "", "SURVEY_UPDATE", 0);
+  AddMOOSVariable("StartPath", "", "START_UPDATE", 0);
 
   return(true);
 }
@@ -125,10 +126,7 @@ bool SurveyPath::OnNewMail(MOOSMSG_LIST &NewMail)
 //        reportRunWarning("Unhandled Mail: " + key);
 //    }
 
-  auto swath_msg = GetMOOSVar("Swath");
-  if (swath_msg->IsFresh()) {
-    InjestSwathMessage(swath_msg->GetStringVal());
-  }
+
 
   return(true);
 }
@@ -141,10 +139,64 @@ bool SurveyPath::Iterate()
 {
   AppCastingMOOSApp::Iterate();
 
+  // Process received data
+  auto begin_msg = GetMOOSVar("LineBegin");
+  if (begin_msg->IsFresh()) {
+    #if DEBUG
+    MOOSTrace("\n**** Line beginning, starting to record swath ****");
+    #endif
+    m_recording = true;
+  }
+
+  if (m_recording) {
+    auto swath_msg = GetMOOSVar("Swath");
+    if (swath_msg->IsFresh()) {
+      if(InjestSwathMessage(swath_msg->GetStringVal())) {
+        m_swath_record.AddRecord(m_swath_info["stbd"], m_swath_info["port"],
+          m_swath_info["x"], m_swath_info["y"], m_swath_info["hdg"],
+          m_swath_info["depth"]);
+      }
+    }
+  }
+
+  auto end_msg = GetMOOSVar("LineEnd");
+  if (end_msg->IsFresh()) {
+    m_recording = false;
+    CreateNewPath();
+  }
+
   bool published = PublishFreshMOOSVariables();
 
   AppCastingMOOSApp::PostReport();
   return(published);
+}
+
+void SurveyPath::CreateNewPath() {
+  m_swath_side = AdvanceSide(m_swath_side);
+  #if DEBUG
+  MOOSTrace("End of Line, outputting swath points on ---- side.'");
+  #endif
+  m_swath_record.SaveLast();
+  if (m_swath_record.ValidRecord()) {
+    // TODO: Check for all swath widths being zero to end area
+    // Build full coverage model at some point? Or do this in PathPlan...
+    #if DEBUG
+    MOOSTrace("Planning next path.\n");
+    #endif
+    PathPlan planner = PathPlan(m_swath_record, m_swath_side, m_op_region,
+      m_swath_overlap, true);
+    m_survey_path = planner.GenerateNextPath();
+    #if DEBUG
+    MOOSTrace("Number of pts in new_path: %d\n",m_survey_path.size());
+    #endif
+    if (m_survey_path.size() > 0) {
+      m_posted_path_str = m_survey_path.get_spec_pts(2);  //2 decimal precision
+      SetMOOSVar("SurveyPath", m_posted_path_str, MOOSTime());
+    } else {
+      SetMOOSVar("Stop", "true", MOOSTime());
+    }
+  }
+  m_swath_record.ResetLine();
 }
 
 BoatSide SurveyPath::AdvanceSide(BoatSide side) {
@@ -159,6 +211,13 @@ BoatSide SurveyPath::AdvanceSide(BoatSide side) {
 bool SurveyPath::InjestSwathMessage(std::string msg) {
   std::vector<std::string> split_msg;
   boost::split(split_msg, msg, boost::is_any_of(";"), boost::token_compress_on);
+  if (split_msg.size() != 6) {
+    return false;
+  }
+  for (std::string component : split_msg) {
+    std::string param = tolower(biteStringX(component, '='));
+    m_swath_info[param] = std::stod(component);
+  }
   return true;
 }
 
@@ -168,14 +227,16 @@ bool SurveyPath::InjestSwathMessage(std::string msg) {
 bool SurveyPath::buildReport()
 {
   m_msgs << "============================================ \n";
-  m_msgs << "File:                                        \n";
+  m_msgs << "File: pSurveyPath                            \n";
   m_msgs << "============================================ \n";
 
-  ACTable actab(4);
-  actab << "Alpha | Bravo | Charlie | Delta";
-  actab.addHeaderLines();
-  actab << "one" << "two" << "three" << "four";
-  m_msgs << actab.getFormattedString();
+  m_msgs << m_posted_path_str;
+
+  // ACTable actab(4);
+  // actab << "Alpha | Bravo | Charlie | Delta";
+  // actab.addHeaderLines();
+  // actab << "one" << "two" << "three" << "four";
+  // m_msgs << actab.getFormattedString();
 
   return(true);
 }

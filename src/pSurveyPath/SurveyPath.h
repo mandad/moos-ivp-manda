@@ -31,6 +31,7 @@ class SurveyPath : public AppCastingMOOSApp
    void registerVariables();
    BoatSide AdvanceSide(BoatSide side);
    bool InjestSwathMessage(std::string msg);
+   void CreateNewPath();
 
  private: // Configuration variables
   BoatSide m_first_swath_side;
@@ -42,6 +43,7 @@ class SurveyPath : public AppCastingMOOSApp
 
  private: // State variables
   BoatSide m_next_swath_side;
+  BoatSide m_swath_side;
   double m_swath_width;
   double m_nav_x;
   double m_nav_y;
@@ -54,6 +56,9 @@ class SurveyPath : public AppCastingMOOSApp
   bool m_recording;
   BPolygon m_op_region;
   RecordSwath m_swath_record;
+  std::map<std::string, double> m_swath_info;
+  std::string m_posted_path_str;
+  XYSegList m_survey_path;
 };
 
 #endif

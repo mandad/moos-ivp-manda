@@ -122,6 +122,11 @@ public:
    */
   double IntervalDist() { return m_interval; }
 
+  /**
+   * Determines if the record has valid points for building a path.
+   */
+  bool ValidRecord();
+
  protected:
   /**
   * Determines the minimum swath over the recorded interval and places it into

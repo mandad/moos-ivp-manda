@@ -179,3 +179,7 @@ std::vector<double> RecordSwath::AllSwathWidths(BoatSide side) {
   }
   return widths;
 }
+
+bool RecordSwath::ValidRecord() {
+  return (m_min_record.size() > 1);
+}

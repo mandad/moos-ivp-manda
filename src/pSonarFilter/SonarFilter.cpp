@@ -259,15 +259,15 @@ string SonarFilter::GenerateSwathMessage() {
   CMOOSVariable * x_var = GetMOOSVar("X");
   CMOOSVariable * y_var = GetMOOSVar("Y");
   CMOOSVariable * heading_var = GetMOOSVar("Heading");
-  // CMOOSVariable * depth_var = GetMOOSVar("Depth");
+  //CMOOSVariable * depth_var = GetMOOSVar("Depth");
 
   // There is a danger that the variables could not be set yet
   double swath_width = 0;
   swath_width = tan(m_sim_swath_angle) * m_last_valid_depth;
 
-  snprintf (message, 200, "x=%0.2f;y=%0.2f;hdg=%0.2f;port=%0.1f;stbd=%0.1f",
+  snprintf (message, 200, "x=%0.2f;y=%0.2f;hdg=%0.2f;port=%0.1f;stbd=%0.1f;depth=%0.2f",
     x_var->GetDoubleVal(), y_var->GetDoubleVal(), heading_var->GetDoubleVal(),
-    swath_width, swath_width);
+    swath_width, swath_width, m_last_valid_depth);
 
   strncpy(m_last_msg, message, sizeof(message));
   string msg_string(message);
