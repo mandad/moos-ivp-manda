@@ -108,7 +108,7 @@ XYSegList PathPlan::GenerateNextPath() {
   #endif
 
   // ---------- Restrict to Region -----------
-  // Would be good to check for segment intersectin with the border and use
+  // Would be good to check for segment intersecting with the border and use
   // these points instead
   if (m_restrict_asv_to_region) {
     #if DEBUG

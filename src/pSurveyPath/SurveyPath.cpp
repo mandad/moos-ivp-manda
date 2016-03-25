@@ -51,6 +51,7 @@ bool SurveyPath::OnStartUp()
     bool handled = false;
     if(param == "OP_REGION") {
       boost::geometry::read_wkt(value, m_op_region);
+      boost::geometry::correct(m_op_region);
     }
     else if(param == "BAR") {
       handled = true;
@@ -82,7 +83,9 @@ bool SurveyPath::OnStartUp()
 bool SurveyPath::OnConnectToServer()
 {
   registerVariables();
-  return(true);
+  PostSurveyRegion();
+  bool published = PublishFreshMOOSVariables();
+  return(published);
 }
 
 //---------------------------------------------------------
@@ -177,6 +180,31 @@ bool SurveyPath::Iterate()
   return(published);
 }
 
+void SurveyPath::PostSurveyRegion() {
+  m_survey_path.clear();
+
+  // Survey Region limits (currently only the outer ring)
+  auto ext_ring = m_op_region.outer();
+  XYSegList survey_limits;
+  for (auto poly_vertex : ext_ring) {
+    survey_limits.add_vertex(poly_vertex.x(), poly_vertex.y());
+  }
+  Notify("VIEW_SEGLIST", survey_limits.get_spec_pts(2) + ",label=op_region," +
+    "label_color=red,edge_color=red,vertex_color=red,edge_size=2", MOOSTime());
+
+  // Set the first path of the survey
+  m_survey_path.add_vertex(survey_limits.get_vx(0), survey_limits.get_vy(0));
+  m_survey_path.add_vertex(survey_limits.get_vx(1), survey_limits.get_vy(1));
+  SetMOOSVar("SurveyPath", m_survey_path.get_spec_pts(2), MOOSTime());
+
+  // Set the alignment lines and turn for the first line
+  DetermineStartAndTurn(m_survey_path, true);
+
+  // Set home location = beginning of alignment line
+  XYPoint home_pt(m_alignment_line.get_vx(0), m_alignment_line.get_vy(0));
+  Notify("HOME_UPDATE", "station_pt=" + home_pt.get_spec());
+}
+
 void SurveyPath::CreateNewPath() {
   m_swath_side = AdvanceSide(m_swath_side);
   #if DEBUG
@@ -209,7 +237,7 @@ void SurveyPath::CreateNewPath() {
   m_swath_record.ResetLine();
 }
 
-bool SurveyPath::DetermineStartAndTurn(XYSegList& next_pts) {
+bool SurveyPath::DetermineStartAndTurn(XYSegList& next_pts, bool post_turn) {
   std::size_t pts_len = next_pts.size();
 
   // The turn point, extended from the end of the path
@@ -220,6 +248,10 @@ bool SurveyPath::DetermineStartAndTurn(XYSegList& next_pts) {
   m_turn_pt = XYPoint(end_heading.x(), end_heading.y());
   m_turn_pt.set_spec_digits(2);
   m_turn_pt_set = true;
+  if (post_turn) {
+    SetMOOSVar("TurnPoint", m_turn_pt.get_spec(), MOOSTime());
+    m_turn_pt_set = false;
+  }
   // This is not posted until the current turn point is reached
 
   // The alignment line, added to the beginning of the path

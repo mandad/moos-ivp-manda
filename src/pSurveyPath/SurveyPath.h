@@ -32,7 +32,8 @@ class SurveyPath : public AppCastingMOOSApp
    void registerVariables();
    BoatSide AdvanceSide(BoatSide side);
    bool InjestSwathMessage(std::string msg);
-   bool DetermineStartAndTurn(XYSegList& next_pts);
+   void PostSurveyRegion();
+   bool DetermineStartAndTurn(XYSegList& next_pts, bool post_turn = false);
    void CreateNewPath();
 
  private: // Configuration variables
