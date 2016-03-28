@@ -49,9 +49,10 @@ ProcessConfig = pMarineMRAS
    // K_Star = 1.3
    // Tau_Star = 0.17
    //Test for adaptation
-   K_Star = 0.8
-   Tau_Star = git s0.3
-   DampingRatio = 0.8
+   K_Star = 1.3
+   Tau_Star = 0.95
+   DampingRatio = 1
+   NaturalFrequency = 1.2
 
    //Adaptation parameters
    Beta = 0.0001     //Speed of Kp or Km/Tm adaptation

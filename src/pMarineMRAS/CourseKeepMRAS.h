@@ -16,7 +16,7 @@ public:
 
     double Run(double dfDesiredHeading, double dfMeasuredHeading, double dfMeasuredROT,
      double dfSpeed, double dfTime, bool bDoAdapt, bool bTurning);
-    void SetParameters(double dfKStar, double dfTauStar, double dfZ, 
+    void SetParameters(double dfKStar, double dfTauStar, double dfZ, double dfWn,
         double dfBeta, double dfAlpha, double dfGamma, double dfXi, 
         double dfRudderLimit, double dfCruisingSpeed, double dfShipLength, 
         double dfMaxROT, bool bDecreaseAdapt, double dfRudderSpeed, 
@@ -41,6 +41,7 @@ private:
 private: // Configuration variables
 
     double m_dfZ;
+    double m_dfWn;
     double m_dfBeta;
     double m_dfAlpha;
     double m_dfGamma;

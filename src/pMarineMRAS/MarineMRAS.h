@@ -47,6 +47,7 @@ class MarineMRAS : public AppCastingMOOSApp
     double m_k_star;
     double m_tau_star;
     double m_z;
+    double m_wn;
     double m_beta;
     double m_alpha;
     double m_gamma;

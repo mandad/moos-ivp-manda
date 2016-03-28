@@ -25,6 +25,7 @@ MarineMRAS::MarineMRAS()
   m_k_star = 1;
   m_tau_star = 1;
   m_z = 1;
+  m_wn = 2;
   m_beta = 1;
   m_alpha = 1;
   m_gamma = 1;
@@ -265,6 +266,10 @@ bool MarineMRAS::OnStartUp()
       m_z = dval;
       handled = true;
     }
+    else if (param == "NATURALFREQUENCY") {
+      m_wn = dval;
+      handled = true;
+    }
     else if(param == "BETA") {
       m_beta = dval;
       handled = true;
@@ -358,7 +363,7 @@ bool MarineMRAS::OnStartUp()
   m_CourseControl.SetParameters(m_k_star, m_tau_star, m_z, m_beta,
         m_alpha, m_gamma, m_xi, m_rudder_limit, m_cruising_speed, m_length,
         m_max_ROT, m_decrease_adapt, m_rudder_speed);
-  m_CourseKeepControl.SetParameters(m_k_star, m_tau_star, m_z, m_beta,
+  m_CourseKeepControl.SetParameters(m_k_star, m_tau_star, m_z, m_wn, m_beta,
         m_alpha, m_gamma, m_xi, m_rudder_limit, m_cruising_speed, m_length,
         m_max_ROT, m_decrease_adapt, m_rudder_speed, m_rudder_deadband);
   m_speed_control.SetParameters(thrust_map, m_max_thrust, use_thrust_map_only);

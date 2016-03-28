@@ -28,6 +28,7 @@ ADD_SUBDIRECTORY(iCV100)
 ADD_SUBDIRECTORY(pSonarFilter)
 ADD_SUBDIRECTORY(pMarineMRAS)
 ADD_SUBDIRECTORY(pSurveyPath)
+ADD_SUBDIRECTORY(uSimNomoto)
 
 ##############################################################################
 #                           END of CMakeLists.txt

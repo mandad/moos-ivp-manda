@@ -12,15 +12,15 @@ class CourseChangeMRAS
 {
 public:
     CourseChangeMRAS();
-    CourseChangeMRAS(double dfKStar, double dfTauStar, double dfZ, double dfBeta, 
-        double dfAlpha, double dfGamma, double dfXi, double dfRudderLimit, 
-        double dfCruisingSpeed, double dfShipLength, double dfMaxROT, 
-        bool bDecreaseAdapt);
+    CourseChangeMRAS(double dfKStar, double dfTauStar, double dfZ,  
+        double dfBeta, double dfAlpha, double dfGamma, double dfXi, 
+        double dfRudderLimit, double dfCruisingSpeed, double dfShipLength, 
+        double dfMaxROT, bool bDecreaseAdapt);
     ~CourseChangeMRAS() {}
 
     double Run(double dfDesiredHeading, double dfMeasuredHeading, double dfMeasuredROT,
      double dfSpeed, double dfTime);
-    void SetParameters(double dfKStar, double dfTauStar, double dfZ, 
+    void SetParameters(double dfKStar, double dfTauStar, double dfZ,
         double dfBeta, double dfAlpha, double dfGamma, double dfXi, 
         double dfRudderLimit, double dfCruisingSpeed, double dfShipLength, 
         double dfMaxROT, bool bDecreaseAdapt, double dfRudderSpeed);

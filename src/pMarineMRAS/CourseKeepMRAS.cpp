@@ -28,6 +28,7 @@ CourseKeepMRAS::CourseKeepMRAS() {
     m_dfModelRudder = 0;
     m_dfKi = 0;
     m_dfZ = 1;
+    m_dfWn = 1.2;
 
     //We should read this in as a parameter
     m_dfMu = 2.4;
@@ -35,13 +36,14 @@ CourseKeepMRAS::CourseKeepMRAS() {
 }
 
 void CourseKeepMRAS::SetParameters(double dfKStar, double dfTauStar, double dfZ,
-    double dfBeta, double dfAlpha, double dfGamma, double dfXi,
+    double dfWn, double dfBeta, double dfAlpha, double dfGamma, double dfXi,
     double dfRudderLimit, double dfCruisingSpeed, double dfShipLength,
     double dfMaxROT, bool bDecreaseAdapt, double dfRudderSpeed, double dfDeadband)
 {
     m_dfKmStar = dfKStar;
     m_dfTaumStar = dfTauStar;
     m_dfZ = dfZ;
+    m_dfWn = dfWn;
     m_dfBeta = dfBeta;
     m_dfAlpha = dfAlpha;
     m_dfGamma = dfGamma;
@@ -99,14 +101,13 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
         // }
 
         // Determine the PID constants
-        // Kp does not change
         if (!bTurning) {
-            // m_dfKp = 1 / (4 * m_dfZ * m_dfZ * m_dfTauM);
-            // if (m_dfKp > 5) {
-            //     m_dfKp = 5;
-            // }
-            m_dfKd = (m_dfShipLength * 2 * m_dfZ * sqrt(m_dfKp * m_dfKmStar * 
-                m_dfTaumStar) - 1) / (dfSpeed * m_dfKmStar);
+            m_dfKp = m_dfWn * m_dfWn * m_dfTauM / m_dfKm;
+            if (m_dfKp > 5) {
+                m_dfKp = 5;
+            }
+            m_dfKd = (2 * m_dfZ * sqrt(m_dfKp * m_dfKm * 
+                m_dfTauM) - 1) / (m_dfKm);
             if (m_dfKd < 0)
                 m_dfKd = 0;
             else if (m_dfKd > (m_dfKp * m_dfShipLength / dfSpeed))
@@ -144,8 +145,9 @@ void CourseKeepMRAS::InitModel(double dfHeading, double dfROT, double dfSpeed) {
     m_dfTauM = m_dfTaumStar * m_dfShipLength / dfSpeed;
     m_dfKm = m_dfKmStar * dfSpeed / m_dfShipLength;
 
-    m_dfKp = m_dfMu / 2;
+    //m_dfKp = m_dfMu / 2;
     //m_dfKp = 1 / (4 * m_dfZ * m_dfZ * m_dfTauM);
+    m_dfKp = m_dfWn * m_dfWn * m_dfTauM / m_dfKm;
     m_dfKd = (m_dfShipLength * 2 * m_dfZ * sqrt(m_dfKp * m_dfKmStar * m_dfTaumStar) - 1) /
         (dfSpeed * m_dfKmStar);
     if (m_dfKd < 0) {
@@ -228,8 +230,10 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
 
     }
     //Potential to divide by zero here if dfSpeed == 0
-    m_dfTauM = m_dfTaumStar * m_dfShipLength / dfSpeed;
-    m_dfKm = m_dfKmStar * dfSpeed / m_dfShipLength;
+    if (dfSpeed > 0.1) {
+        m_dfTauM = m_dfTaumStar * m_dfShipLength / dfSpeed;
+        m_dfKm = m_dfKmStar * dfSpeed / m_dfShipLength;
+    }
 
 }
 
