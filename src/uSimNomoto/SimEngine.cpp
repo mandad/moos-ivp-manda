@@ -192,12 +192,14 @@ void SimEngine::propagateHeading(NodeRecord& record,
 
   double km = km_star * speed / plat_len;
   double tm = tm_star * plat_len / speed;
+  double kim = 0;
 
   // Even if speed is zero, need to continue on in case the 
   // torque is non-zero.
   rudder    = vclip(rudder, -100, 100);
   turn_rate = vclip(turn_rate, 0, 100);
   
+  /*
   // Step 1: Calculate raw delta change in heading
   double delta_deg = rudder * (turn_rate/100) * delta_time;
 
@@ -206,10 +208,20 @@ void SimEngine::propagateHeading(NodeRecord& record,
 
   // Step 3: Calculate change in heading factoring external drift
   delta_deg += (delta_time * rotate_speed);
+  */
+
+  //New version
+  double prev_heading = record.getHeading();
+  double m_dfModelPhiDotDot = (km * (rudder + kim) - m_rot) / tm;
+  m_rot += m_dfModelPhiDotDot * delta_time;
+  //this is the limit of ROT in this model
+  if (fabs(m_rot) > fabs(km * rudder)) {
+      m_rot = km * rudder;
+  }
+  double new_heading = prev_heading + m_rot * delta_time;
 
   // Step 4: Calculate final new heading in the range [0,359]
-  double prev_heading = record.getHeading();
-  double new_heading  = angle360(delta_deg + prev_heading);
+  new_heading = angle360(new_heading);
   record.setHeading(new_heading);
   record.setYaw(-degToRadians(angle180(new_heading)));
 }

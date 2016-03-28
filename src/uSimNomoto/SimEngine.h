@@ -30,7 +30,7 @@
 class SimEngine
 {
 public:
-  SimEngine() {}
+  SimEngine() : m_rot{0} {}
   ~SimEngine() {}
   
  public:
@@ -64,6 +64,7 @@ public:
 
  protected:
   bool m_thrust_mode_reverse;
+  double m_rot;
 };
 
 #endif
