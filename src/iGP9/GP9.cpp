@@ -341,6 +341,13 @@ void GP9::configureSensor(gp9::Comms* sensor)
   {
     throw std::runtime_error("Unable to set CREG_COM_RATES2.");
   }
+  
+  uint32_t proc_indiv_rate = 0 //(10 << RATE3_PROC_ACCEL_START);
+  r.comrate3.set(0, proc_indiv_rate);
+  if (!sensor->sendWaitAck(r.comrate3))
+  {
+    throw std::runtime_error("Unable to set CREG_COM_RATES2.");
+  }
 
   uint32_t proc_rate = (1 << RATE4_ALL_PROC_START);
   r.comrate4.set(0, proc_rate);
@@ -381,7 +388,7 @@ void GP9::configureSensor(gp9::Comms* sensor)
   uint32_t filter_config_reg = 0;  // initialize all options off
 
   // Optionally disable mag updates in the sensor's EKF.
-  bool mag_updates = false;
+  bool mag_updates = true;
   // ros::param::param<bool>("~mag_updates", mag_updates, true);
   if (mag_updates)
   {
