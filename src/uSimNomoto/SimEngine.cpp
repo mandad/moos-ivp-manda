@@ -215,9 +215,9 @@ void SimEngine::propagateHeading(NodeRecord& record,
   double m_dfModelPhiDotDot = (km * (rudder + kim) - m_rot) / tm;
   m_rot += m_dfModelPhiDotDot * delta_time;
   //this is the limit of ROT in this model
-  if (fabs(m_rot) > fabs(km * rudder)) {
-      m_rot = km * rudder;
-  }
+  // if (fabs(m_rot) > fabs(km * rudder)) {
+  //     m_rot = km * rudder;
+  // }
   double new_heading = prev_heading + m_rot * delta_time;
 
   // Step 4: Calculate final new heading in the range [0,359]
