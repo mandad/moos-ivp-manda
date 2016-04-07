@@ -29,6 +29,7 @@ ADD_SUBDIRECTORY(pSonarFilter)
 ADD_SUBDIRECTORY(pMarineMRAS)
 ADD_SUBDIRECTORY(pSurveyPath)
 ADD_SUBDIRECTORY(uSimNomoto)
+ADD_SUBDIRECTORY(iSonar)
 
 ##############################################################################
 #                           END of CMakeLists.txt

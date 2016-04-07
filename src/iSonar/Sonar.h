@@ -1,36 +1,50 @@
-/************************************************************/
-/*    NAME: Damian Manda                                              */
-/*    ORGN: MIT                                             */
-/*    FILE: Sonar.h                                          */
-/*    DATE: December 29th, 1963                             */
-/************************************************************/
+// Sonar.h: interface for the Sonar interface class.
+//
+//////////////////////////////////////////////////////////////////////
 
-#ifndef Sonar_HEADER
-#define Sonar_HEADER
+//This is a hack since apparently Clang doesn't define this
+#define UNIX
 
-#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
+#include "NMEAMessage.h"
+#include "MOOS/libMOOS/MOOSLib.h"
+#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
+#include "MOOS/libMOOS/Comms/XPCUdpSocket.h"
 
-class Sonar : public AppCastingMOOSApp
-{
- public:
-   Sonar();
-   ~Sonar() {};
+#include <iostream>
+#include <math.h>
 
- protected: // Standard MOOSApp functions to overload  
-   bool OnNewMail(MOOSMSG_LIST &NewMail);
-   bool Iterate();
-   bool OnConnectToServer();
-   bool OnStartUp();
-
- protected: // Standard AppCastingMOOSApp function to overload 
-   bool buildReport();
-
- protected:
-   void registerVariables();
-
- private: // Configuration variables
-
- private: // State variables
+enum class InputMode {
+	Serial,
+	UDP,
 };
 
-#endif 
+class Sonar : public CMOOSInstrument
+{
+
+	public:
+		Sonar();
+		virtual ~Sonar();
+
+	protected:
+		CMOOSGeodesy m_Geodesy;
+		bool ParseNMEAString(string & sNMEAString);
+		bool InitialiseSensor();
+		bool Iterate();
+		bool OnNewMail(MOOSMSG_LIST &NewMail);
+		bool OnConnectToServer();
+		bool OnStartUp();
+		bool GetData();
+		bool PublishData();
+
+		void ProcessPacket(char* pUdpPacket);
+		bool SetupUDPPort();
+		string m_sType;
+		unsigned int m_iUDPPort;
+		bool m_bIgnoreNumSats;
+		XPCUdpSocket* m_pListenSocket;
+
+		//Configuration params
+		InputMode m_mode;
+		double m_transducer_depth;
+
+};

@@ -1,11 +1,6 @@
-// $Header: /raid/cvs-server/REPOSITORY/software/MOOS/interface/general/iGPS/GPSInstrument.h,v 5.1 2005/04/27 20:41:40 anrp Exp $
-// copyright (2001-2003) Massachusetts Institute of Technology (pnewman et al.)
-
 // GPSInstrument.h: interface for the CGPSInstrument class.
 //
 //////////////////////////////////////////////////////////////////////
-
-//can you blow me where the pampers is?
 
 #include "NMEAMessage.h"
 #include "MOOS/libMOOS/MOOSLib.h"
