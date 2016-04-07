@@ -6,7 +6,7 @@
 
 ServerHost = localhost		
 ServerPort = 9000
-Community  = emily
+Community  = sonartest
 
 MOOSTimeWarp = 1
 TERM_REPORTING = true
@@ -99,5 +99,7 @@ ProcessConfig = iSonar
   BaudRate = 115200
   Handshaking = false
   Streaming = false
+
+  PublishRaw = true
 }
 

@@ -96,10 +96,6 @@ bool Sonar::OnStartUp()
 
     if (m_MissionReader.GetValue("TranducerDepth", sVal)) {
         m_transducer_depth = atof(sVal.c_str());
-    } else {
-        MOOSTrace("LongOrigin not set - FAIL\n");
-
-        return false;
     }
 
 	//here we make the variables that we are managing
@@ -188,20 +184,25 @@ bool Sonar::GetData()
     	string sWhat;
     	double dfWhen;
 
+	#if DEBUG
+	MOOSTrace("Getting Serial Data\n");
+	#endif
     	if (m_Port.IsStreaming()) {
     		if (!m_Port.GetLatest(sWhat, dfWhen)) {
-    			return false;
+    			//return false;
     		}
     	} else {
     		if (!m_Port.GetTelegram(sWhat, 0.5)) {
-    			return false;
+    			//return false;
     		}
     	}
-
+	
         if (PublishRaw()) {
             SetMOOSVar("Raw", sWhat, MOOSTime());
         }
-
+	#if DEBUG
+	MOOSTrace("Parsing Data: " + sWhat + "\n");
+	#endif
         ParseNMEAString(sWhat);
     } else if (m_mode == InputMode::UDP) {
         char buffer[1472];  //traditional max for 1500 MTU
@@ -216,7 +217,7 @@ bool Sonar::GetData()
                 ProcessPacket(buffer);
             }
         } catch (int e) {
-            MOOSTrace("Error Receiving Data from GPS");
+            MOOSTrace("Error Receiving Data from GPS\n");
             return false;
         }
 
@@ -226,7 +227,7 @@ bool Sonar::GetData()
     	}
     }
 
-	return true;
+    return true;
 
 }
 
