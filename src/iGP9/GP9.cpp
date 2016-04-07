@@ -13,7 +13,7 @@
 
 using namespace std;
 
-const char VERSION[10] = "0.0.2";   // gp9_driver version
+const char VERSION[10] = "0.0.3";   // gp9_driver version
 
 // Don't try to be too clever. Arrival of this message triggers
 // us to publish everything we have.
@@ -341,6 +341,13 @@ void GP9::configureSensor(gp9::Comms* sensor)
   {
     throw std::runtime_error("Unable to set CREG_COM_RATES2.");
   }
+  
+  uint32_t proc_indiv_rate = 0 //(10 << RATE3_PROC_ACCEL_START);
+  r.comrate3.set(0, proc_indiv_rate);
+  if (!sensor->sendWaitAck(r.comrate3))
+  {
+    throw std::runtime_error("Unable to set CREG_COM_RATES2.");
+  }
 
   uint32_t proc_rate = (1 << RATE4_ALL_PROC_START);
   r.comrate4.set(0, proc_rate);
@@ -349,7 +356,7 @@ void GP9::configureSensor(gp9::Comms* sensor)
     throw std::runtime_error("Unable to set CREG_COM_RATES4.");
   }
 
-  uint32_t misc_rate = (20 << RATE5_EULER_START) | (10 << RATE5_POSITION_START)
+  uint32_t misc_rate = (10 << RATE5_EULER_START) | (10 << RATE5_POSITION_START)
            | (10 << RATE5_VELOCITY_START) | (0 << RATE5_QUAT_START);
   r.comrate5.set(0, misc_rate);
   if (!sensor->sendWaitAck(r.comrate5))
@@ -377,56 +384,53 @@ void GP9::configureSensor(gp9::Comms* sensor)
   }
 
   // Options available using parameters)
-  // uint32_t misc_config_reg = 0;  // initialize all options off
+ // Options available using parameters)
+  uint32_t filter_config_reg = 0;  // initialize all options off
 
   // Optionally disable mag updates in the sensor's EKF.
-  /*
-  bool mag_updates;
-  ros::param::param<bool>("~mag_updates", mag_updates, true);
+  bool mag_updates = true;
   if (mag_updates)
   {
-    misc_config_reg |= MAG_UPDATES_ENABLED;
+    filter_config_reg |= MAG_UPDATES_ENABLED;
   }
   else
   {
-    ROS_WARN("Excluding magnetometer updates from EKF.");
+    MOOSTrace("Excluding magnetometer updates from EKF.");
   }
 
-  // Optionally enable quaternion mode .
-  bool quat_mode;
-  ros::param::param<bool>("~quat_mode", quat_mode, true);
-  if (quat_mode)
+  // Optionally disable accelerometer updates in the sensor's EKF.
+  bool acc_updates = true;
+  if (acc_updates)
   {
-    misc_config_reg |= QUATERNION_MODE_ENABLED;
+    filter_config_reg |= ACC_UPDATES_ENABLED;
   }
   else
   {
-    ROS_WARN("Excluding quaternion mode.");
+    MOOSTrace("Excluding accelerometer updates from EKF.");
   }
 
-  r.misc_config.set(0, misc_config_reg);
-  if (!sensor->sendWaitAck(r.misc_config))
+  // Optionally disable gps updates in the sensor's EKF.
+  bool gps_updates = true;
+  if (gps_updates)
   {
-    throw std::runtime_error("Unable to set CREG_MISC_SETTINGS.");
+    filter_config_reg |= GPS_UPDATES_ENABLED;
+  }
+  else
+  {
+    MOOSTrace("Excluding GPS updates from EKF.");
+  }
+
+  r.filter_config.set(0, filter_config_reg);
+  if (!sensor->sendWaitAck(r.filter_config))
+  {
+    throw std::runtime_error("Unable to set CREG_FILTER_SETTINGS.");
   }
 
   // Optionally disable performing a zero gyros command on driver startup.
-  bool zero_gyros;
-  ros::param::param<bool>("~zero_gyros", zero_gyros, true);
+  bool zero_gyros = true;
   if (zero_gyros) sendCommand(sensor, r.cmd_zero_gyros, "zero gyroscopes");
-  */
 }
 
-
-// bool GP9::handleResetService(gp9::Comms* sensor,
-//     const gp9::Reset::Request& req, const gp9::Reset::Response& resp)
-// {
-//   gp9::Registers r;
-//   if (req.zero_gyros) sendCommand(sensor, r.cmd_zero_gyros, "zero gyroscopes");
-//   if (req.reset_ekf) sendCommand(sensor, r.cmd_reset_ekf, "reset EKF");
-//   if (req.set_mag_ref) sendCommand(sensor, r.cmd_set_mag_ref, "set magnetometer reference");
-//   return true;
-// }
 
 /**
  * Uses the register accessors to grab data from the IMU, and populate
@@ -434,67 +438,13 @@ void GP9::configureSensor(gp9::Comms* sensor)
  */
 void GP9::publishMsgs(gp9::Registers& r)
 {
-  // static ros::Publisher imu_pub = n->advertise<sensor_msgs::Imu>("imu/data", 1, false);
-  // static ros::Publisher mag_pub = n->advertise<geometry_msgs::Vector3Stamped>("imu/mag", 1, false);
-  // static ros::Publisher rpy_pub = n->advertise<geometry_msgs::Vector3Stamped>("imu/rpy", 1, false);
-  // static ros::Publisher temp_pub = n->advertise<std_msgs::Float32>("imu/temperature", 1, false);
-
-  // if (imu_pub.getNumSubscribers() > 0)
-  // {
-  //   sensor_msgs::Imu imu_msg;
-  //   imu_msg.header = header;
-
-  //   // IMU outputs [w,x,y,z], convert to [x,y,z,w] & transform to ROS axes
-  //   imu_msg.orientation.x =  r.quat.get_scaled(1);
-  //   imu_msg.orientation.y = -r.quat.get_scaled(2);
-  //   imu_msg.orientation.z = -r.quat.get_scaled(3);
-  //   imu_msg.orientation.w = r.quat.get_scaled(0);
-
-  //   // Covariance of attitude.  set to constant default or parameter values
-  //   imu_msg.orientation_covariance[0] = covar[0];
-  //   imu_msg.orientation_covariance[1] = covar[1];
-  //   imu_msg.orientation_covariance[2] = covar[2];
-  //   imu_msg.orientation_covariance[3] = covar[3];
-  //   imu_msg.orientation_covariance[4] = covar[4];
-  //   imu_msg.orientation_covariance[5] = covar[5];
-  //   imu_msg.orientation_covariance[6] = covar[6];
-  //   imu_msg.orientation_covariance[7] = covar[7];
-  //   imu_msg.orientation_covariance[8] = covar[8];
-
-  //   // Angular velocity.  transform to ROS axes
-  //   imu_msg.angular_velocity.x =  r.gyro.get_scaled(0);
-  //   imu_msg.angular_velocity.y = -r.gyro.get_scaled(1);
-  //   imu_msg.angular_velocity.z = -r.gyro.get_scaled(2);
-
-  //   // Linear accel.  transform to ROS axes
-  //   imu_msg.linear_acceleration.x =  r.accel.get_scaled(0);
-  //   imu_msg.linear_acceleration.y = -r.accel.get_scaled(1);
-  //   imu_msg.linear_acceleration.z = -r.accel.get_scaled(2);
-
-  //   imu_pub.publish(imu_msg);
-  // }
-
-  // Magnetometer.  transform to ROS axes
-  // if (mag_pub.getNumSubscribers() > 0)
-  // {
-  //   geometry_msgs::Vector3Stamped mag_msg;
-  //   mag_msg.header = header;
-  //   mag_msg.vector.x =  r.mag.get_scaled(0);
-  //   mag_msg.vector.y = -r.mag.get_scaled(1);
-  //   mag_msg.vector.z = -r.mag.get_scaled(2);
-  //   mag_pub.publish(mag_msg);
-  // }
 
   // Euler attitudes.  transform to ROS axes
   m_Comms.Notify("GP9_Roll", r.euler.get_scaled(0), MOOSTime());
   m_Comms.Notify("GP9_Pitch", r.euler.get_scaled(1), MOOSTime());
   m_Comms.Notify("GP9_Yaw", r.euler.get_scaled(2), MOOSTime());
-  double heading = r.euler.get_scaled(2)*180/3.14159-90;
-  if (heading < 0) {
- 	heading = heading + 360;
-  }
-  m_Comms.Notify("GP9_Yaw_Heading", heading, MOOSTime());
-
+  double dfHeading = (r.euler.get_scaled(2)*180/3.14159);
+  m_Comms.Notify("GP9_Yaw_Heading", angle360(dfHeading), MOOSTime());
 
   m_Comms.Notify("GP9_VelE", r.velocity_e.get_scaled(1), MOOSTime());
   m_Comms.Notify("GP9_VelN", r.velocity_n.get_scaled(1), MOOSTime());
@@ -526,5 +476,5 @@ void GP9::publishMsgs(gp9::Registers& r)
   }
 
   m_Comms.Notify("GP9_GPS_SPEED", r.gps_speed.get_scaled(0), MOOSTime());
-  m_Comms.Notify("GP9_GPS_HEADING", r.gps_course.get_scaled(0), MOOSTime());
+  m_Comms.Notify("GP9_GPS_HEADING", angle360(r.gps_course.get_scaled(0)), MOOSTime());
 }
