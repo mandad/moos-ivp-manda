@@ -23,6 +23,7 @@ TARGET_LINK_LIBRARIES(iGP9
    ${MOOS_LIBRARIES}
    ${MOOSGeodesy_LIBRARIES}
    apputil
+   geometry
    mbutil
    m
    pthread

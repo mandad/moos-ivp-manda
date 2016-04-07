@@ -189,6 +189,7 @@ class Registers {
       communication(this, CREG_COM_SETTINGS, 1),
       comrate1(this, CREG_COM_RATES1, 1),
       comrate2(this, CREG_COM_RATES2, 1),
+      comrate3(this, CREG_COM_RATES3, 1),
       comrate4(this, CREG_COM_RATES4, 1),
       comrate5(this, CREG_COM_RATES5, 1), 
       comrate6(this, CREG_COM_RATES6, 1),
@@ -219,7 +220,7 @@ class Registers {
 
     // Configs
     const Accessor<uint32_t> communication, filter_config, comrate1, comrate2,
-                            comrate4, comrate5, comrate6, comrate7;
+                            comrate3, comrate4, comrate5, comrate6, comrate7;
 
     const Accessor<float> home_north, home_east, zero_pressure; 
 

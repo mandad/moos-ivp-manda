@@ -9,6 +9,7 @@
 #include <string>
 #include "MBUtils.h"
 #include "ACTable.h"
+#include "AngleUtils.h"
 #include "GP9.h"
 
 using namespace std;
@@ -342,7 +343,7 @@ void GP9::configureSensor(gp9::Comms* sensor)
     throw std::runtime_error("Unable to set CREG_COM_RATES2.");
   }
   
-  uint32_t proc_indiv_rate = 0 //(10 << RATE3_PROC_ACCEL_START);
+  uint32_t proc_indiv_rate = 0; //(10 << RATE3_PROC_ACCEL_START);
   r.comrate3.set(0, proc_indiv_rate);
   if (!sensor->sendWaitAck(r.comrate3))
   {
