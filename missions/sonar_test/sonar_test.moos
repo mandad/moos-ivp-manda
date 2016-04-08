@@ -27,6 +27,9 @@ ProcessConfig = ANTLER
   //Run = uProcessWatch	  @ NewConsole = false
   //Run = pNodeReporter	  @ NewConsole = false
   Run = iSonar            @ NewConsole = false
+  Run = iGP9              @ NewConsole = false
+  Run = pEchoVar          @ NewConsole = false
+  //Run = uSimNomoto        @ NewConsole = false
 }
 
 //------------------------------------------
@@ -63,12 +66,43 @@ ProcessConfig = uProcessWatch
 
   summary_wait = 5
 
-  //nowatch   = uXMS*
+  nowatch   = uXMS*
   nowatch   = uMAC*
   nowatch   = uPokeDB*
   nowatch   = uTermCommand*
   watch_all = true
 }
+
+
+//------------------------------------------
+// uSimNomoto config block
+
+ProcessConfig = uSimNomoto
+{
+  AppTick  	= 10
+  CommsTick	= 10
+
+  start_x       = 0
+  start_y       = 0
+  start_heading = 180
+  start_speed   = 1
+
+  prefix        = NAV
+
+  max_rudder_degs_per_sec = 30
+  turn_rate     = 133 //this is actually 60 at 45 deg
+  
+  max_acceleration = 0.5
+  max_deceleration = 0.3
+  
+  thrust_map    = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
+  thrust_reflect = true
+
+  //drift_vector = 90, 0.5
+
+  term_reporting = false
+}
+
 
 //------------------------------------------
 // pNodeReporter config block
@@ -85,17 +119,48 @@ ProcessConfig = pNodeReporter
 }
 
 //------------------------------------------------
+// iGP9 config block
+
+ProcessConfig = iGP9
+{
+   AppTick   = 50  
+   CommsTick = 50
+
+   SerialPort = /dev/ttyAMA0
+   //SerialPort = /dev/rfcomm0
+   BaudRate = 115200
+   Covariance = "0 0 0 0 0 0 0 0 0"
+}
+
+ProcessConfig = pEchoVar
+{
+  AppTick   = 30
+  CommsTick = 30
+
+  // Use iGPS_MB1 for the GPS device
+  echo = GP9_LAT      -> NAV_LAT
+  echo = GP9_LONG    -> NAV_LONG
+  echo = GP9_X            -> NAV_X
+  echo = GP9_Y            -> NAV_Y
+  //echo = GP9_GPS_HEADING      -> NAV_HEADING
+  echo = GP9_Yaw_Heading      -> NAV_HEADING
+  //echo = GPS_SPEED        -> NAV_SPEED
+  echo = GP9_GPS_SPEED        -> NAV_SPEED
+}
+
+
+//------------------------------------------------
 // iSonar config block
 
 ProcessConfig = iSonar
 {
   AppTick   = 20
-  CommsTick = 12
+  CommsTick = 20
 
   Mode = Serial //or UDP
 
   // Serial port settings
-  Port = /dev/rfcomm0
+  Port = /dev/ttyUSB_1Port
   BaudRate = 115200
   Handshaking = false
   Streaming = false

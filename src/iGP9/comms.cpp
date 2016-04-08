@@ -43,6 +43,8 @@
 #include "serial/serial.h"
 #include "registers.h"
 
+#define DEBUG false
+
 namespace gp9
 {
 
@@ -101,11 +103,15 @@ int16_t Comms::receive(Registers* registers = NULL)
       if (type & PACKET_IS_BATCH)
       {
         data_length = (type >> PACKET_BATCH_LENGTH_OFFSET) & PACKET_BATCH_LENGTH_MASK;
+	#if DEBUG
         MOOSTrace("Received packet %02x with batched (%d) data.", address, data_length);
+	#endif
       }
       else
       {
+	#if DEBUG
         MOOSTrace("Received packet %02x with non-batched data.", address);
+	#endif
       }
 
       // Read data bytes initially into a buffer so that we can compute the checksum.

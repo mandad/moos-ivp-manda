@@ -34,16 +34,13 @@ Sonar::~Sonar()
 
 bool Sonar::Iterate()
 {
-    #if DEBUG
-    MOOSTrace("Iterate called\n");
-    #endif
 	if (GetData()) {
+	    if (m_log_hypack) {
+		LogHypack();
+	    }
 		PublishData();
 	}
 
-    if (m_log_hypack) {
-        LogHypack();
-    }
 
 
 	return true;
@@ -130,7 +127,7 @@ bool Sonar::OnStartUp()
 
 	//here we make the variables that we are managing
     //update @ 10Hz
-	double dfUpdatePeriod = 0.01;
+	double dfUpdatePeriod = 0.05;
 
 	AddMOOSVariable("X", "NAV_X", "", dfUpdatePeriod);
 	AddMOOSVariable("Y", "NAV_X", "", dfUpdatePeriod);
@@ -141,6 +138,8 @@ bool Sonar::OnStartUp()
 
     AddMOOSVariable("Depth", "", "SONAR_DEPTH_M", 0);
     AddMOOSVariable("Raw", "", "SONAR_RAW", 0);
+
+	RegisterMOOSVariables();
 
     //try to open port
     if (m_mode == InputMode::Serial) {
@@ -187,9 +186,8 @@ bool Sonar::PublishData()
 
 bool Sonar::OnConnectToServer()
 {
-	RegisterMOOSVariables();
-
-	return true;
+	// For some reason this never gets called
+	return RegisterMOOSVariables();
 }
 
 
@@ -197,10 +195,7 @@ bool Sonar::OnConnectToServer()
 // here we initialise the sensor, giving it start up values
 bool Sonar::InitialiseSensor()
 {
-    //We don't have any need to initialize the RTA
-
 	return true;
-
 }
 
 
@@ -236,7 +231,7 @@ bool Sonar::GetData()
     	#if DEBUG
     	MOOSTrace("Parsing Data: " + sWhat + "\n");
 	    #endif
-        ParseNMEAString(sWhat);
+        return ParseNMEAString(sWhat);
     } else if (m_mode == InputMode::UDP) {
         char buffer[1472];  //traditional max for 1500 MTU
         try
@@ -328,10 +323,16 @@ bool Sonar::LogHypack() {
     if (!m_hypack_log_file.is_open()) {
         return false;
     }
+    #if DEBUG
+    MOOSTrace("Hypack Logging\n");
+    #endif
     auto curr_x = GetMOOSVar("X");
     auto curr_y = GetMOOSVar("Y");
     auto sonar_depth = GetMOOSVar("Depth");
     if ((curr_y->IsFresh() || curr_x->IsFresh()) && sonar_depth->IsFresh()) {
+	#if DEBUG
+	MOOSTrace("Hypack Log Write\n");
+	#endif
         double UTM_x = curr_x->GetDoubleVal() + m_Geodesy.GetOriginEasting();
         double UTM_y = curr_y->GetDoubleVal() + m_Geodesy.GetOriginNorthing();
         double timestamp = SecondsPastMidnight();
@@ -339,7 +340,7 @@ bool Sonar::LogHypack() {
         m_hypack_log_file << std::fixed << std::setprecision(3);
         m_hypack_log_file << "POS 1 " << timestamp << " " << UTM_x << " " << UTM_y << "\n";
         m_hypack_log_file << "GYR 1 " << timestamp << " " << heading->GetDoubleVal() << "\n";
-        m_hypack_log_file << "EC1 0 " << timestamp << " " << sonar_depth->GetDoubleVal() << endl        ;
+        m_hypack_log_file << "EC1 0 " << timestamp << " " << sonar_depth->GetDoubleVal() << endl;
     }
 
     return true;
@@ -358,26 +359,27 @@ void Sonar::LogHeader() {
 
 double Sonar::SecondsPastMidnight() {
     // The C++ way
-    // auto now = std::chrono::system_clock::now();
+    auto now = std::chrono::high_resolution_clock::now();
 
-    // time_t tnow = std::chrono::system_clock::to_time_t(now);
-    // tm *date = std::localtime(&tnow);
-    // date->tm_hour = 0;
-    // date->tm_min = 0;
-    // date->tm_sec = 0;
-    // auto midnight = std::chrono::system_clock::from_time_t(std::mktime(date));
+    time_t tnow = std::chrono::high_resolution_clock::to_time_t(now);
+    tm *date = std::gmtime(&tnow);
+    date->tm_hour = 0;
+    date->tm_min = 0;
+    date->tm_sec = 0;
+    auto midnight = std::chrono::high_resolution_clock::from_time_t(std::mktime(date));
 
-    // std::chrono::system_clock::duration duration_past = now-midnight;
+    std::chrono::duration<double> duration_past = std::chrono::duration_cast<std::chrono::duration<double>>(now-midnight);
+    return duration_past.count();
 
-    time_t t1, t2;
-    struct tm tms;
-    time(&t1);
-    gmtime_r(&t1, &tms);
-    tms.tm_hour = 0;
-    tms.tm_min = 0;
-    tms.tm_sec = 0;
-    t2 = mktime(&tms);
-    return t1 - t2;
+    //time_t t1, t2;
+    //struct tm tms;
+    //time(&t1);
+    //gmtime_r(&t1, &tms);
+    //tms.tm_hour = 0;
+    //tms.tm_min = 0;
+    //tms.tm_sec = 0;
+    //t2 = mktime(&tms);
+    //return t1 - t2;
 }
 
 // =========  From MOOSLogger.cpp (pLogger)  ================
