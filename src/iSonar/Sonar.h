@@ -23,11 +23,11 @@ class Sonar : public CMOOSInstrument
 
 	public:
 		Sonar();
-		virtual ~Sonar();
+		~Sonar();
 
 	protected:
 		CMOOSGeodesy m_Geodesy;
-		bool ParseNMEAString(string & sNMEAString);
+		bool ParseNMEAString(std::string & sNMEAString);
 		bool InitialiseSensor();
 		bool Iterate();
 		bool OnNewMail(MOOSMSG_LIST &NewMail);
@@ -35,16 +35,27 @@ class Sonar : public CMOOSInstrument
 		bool OnStartUp();
 		bool GetData();
 		bool PublishData();
-
 		void ProcessPacket(char* pUdpPacket);
 		bool SetupUDPPort();
-		string m_sType;
+
+		//Logging
+		bool LogHypack();
+		void LogHeader();
+		std::string MakeLogName(string sStem);
+		bool OpenFile(std::ofstream & of, const std::string & sName, bool bBinary);
+		bool CloseFiles();
+		double SecondsPastMidnight();
+
+		std::string m_sType;
 		unsigned int m_iUDPPort;
-		bool m_bIgnoreNumSats;
 		XPCUdpSocket* m_pListenSocket;
+		//Logging
+		std::ofstream m_hypack_log_file;
 
 		//Configuration params
 		InputMode m_mode;
 		double m_transducer_depth;
+		bool m_log_hypack;
+		bool m_use_utc_log_names;
 
 };

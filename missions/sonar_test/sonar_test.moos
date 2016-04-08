@@ -92,7 +92,7 @@ ProcessConfig = iSonar
   AppTick   = 20
   CommsTick = 12
 
-  Mode = Serial
+  Mode = Serial //or UDP
 
   // Serial port settings
   Port = /dev/rfcomm0
@@ -101,5 +101,7 @@ ProcessConfig = iSonar
   Streaming = false
 
   PublishRaw = true
+  LogHypack = true
+  TranducerDepth = 0.5 //m
 }
 

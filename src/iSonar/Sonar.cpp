@@ -4,33 +4,47 @@
 //////////////////////////////////////////////////////////////////////
 #include <cstring>
 #include <string>
+#include <chrono>
+#include <iostream>
+#include <time.h>
+
 #include "Sonar.h"
 
 using namespace std;
 
-#define DEBUG false
+#define DEBUG true
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-Sonar::Sonar() : m_mode{InputMode::Serial}, m_transducer_depth{0}
+Sonar::Sonar() : m_mode{InputMode::Serial}, m_transducer_depth{0}, 
+                 m_use_utc_log_names{true}
 {
 	m_sType = "VANILLA";
 }
 
 Sonar::~Sonar()
 {
+    std::cout << "iSonar Destructor called" << endl;
+    CloseFiles();
+    //m_Port.Close();
 }
 
 
-/////////////////////////////////////////////
-///this is where it all happens..
 bool Sonar::Iterate()
 {
+    #if DEBUG
+    MOOSTrace("Iterate called\n");
+    #endif
 	if (GetData()) {
 		PublishData();
 	}
+
+    if (m_log_hypack) {
+        LogHypack();
+    }
+
 
 	return true;
 }
@@ -94,9 +108,25 @@ bool Sonar::OnStartUp()
         }
     }
 
+    //----- Optional Config Values ----------
     if (m_MissionReader.GetValue("TranducerDepth", sVal)) {
-        m_transducer_depth = atof(sVal.c_str());
+        m_transducer_depth = std::stod(sVal);
     }
+
+    if (m_MissionReader.GetValue("LogHypack", sVal)) {
+        m_log_hypack = MOOSStrCmp(sVal, "TRUE");
+        if (m_log_hypack) {
+            string log_name = MakeLogName("SonarData_") + ".RAW";
+            MOOSTrace("iSonar Logging sonar data to: " + log_name + "\n");
+            if (OpenFile(m_hypack_log_file, log_name, false)) {
+                LogHeader();
+            } else {
+                MOOSTrace("iSonar Error: Could not open log file for writing.\n");
+                m_log_hypack = false;
+            }
+        }
+    }
+
 
 	//here we make the variables that we are managing
     //update @ 10Hz
@@ -104,6 +134,7 @@ bool Sonar::OnStartUp()
 
 	AddMOOSVariable("X", "NAV_X", "", dfUpdatePeriod);
 	AddMOOSVariable("Y", "NAV_X", "", dfUpdatePeriod);
+    AddMOOSVariable("Heading", "NAV_HEADING", "", dfUpdatePeriod);
 
 	AddMOOSVariable("Lat", "NAV_LAT", "", dfUpdatePeriod);
 	AddMOOSVariable("Lon", "NAV_LON", "", dfUpdatePeriod);
@@ -114,10 +145,12 @@ bool Sonar::OnStartUp()
     //try to open port
     if (m_mode == InputMode::Serial) {
         if (!SetupPort()) {
+            MOOSTrace("iSonar Error: Could not open serial port.\n");
             return false;
         }
     } else if (m_mode == InputMode::UDP) {
     	if (!SetupUDPPort()) {
+            MOOSTrace("iSonar Error: Could not open UDP port.\n");
     		return false;
     	}
     }
@@ -184,9 +217,9 @@ bool Sonar::GetData()
     	string sWhat;
     	double dfWhen;
 
-	#if DEBUG
-	MOOSTrace("Getting Serial Data\n");
-	#endif
+    	#if DEBUG
+    	MOOSTrace("Getting Serial Data\n");
+    	#endif
     	if (m_Port.IsStreaming()) {
     		if (!m_Port.GetLatest(sWhat, dfWhen)) {
     			//return false;
@@ -200,9 +233,9 @@ bool Sonar::GetData()
         if (PublishRaw()) {
             SetMOOSVar("Raw", sWhat, MOOSTime());
         }
-	#if DEBUG
-	MOOSTrace("Parsing Data: " + sWhat + "\n");
-	#endif
+    	#if DEBUG
+    	MOOSTrace("Parsing Data: " + sWhat + "\n");
+	    #endif
         ParseNMEAString(sWhat);
     } else if (m_mode == InputMode::UDP) {
         char buffer[1472];  //traditional max for 1500 MTU
@@ -233,53 +266,23 @@ bool Sonar::GetData()
 
 void Sonar::ProcessPacket(char* pUdpPacket)
 {
-    const bool HypackMode = true;
+    //Parses data from network with just strings in the data
+    #if DEBUG
+        MOOSTrace("Sonar Packet Received:");
+        MOOSTrace(pUdpPacket);
+    #endif
+    // There can potentially be multiple messages per ethernet packet
+    char * pThisMessage;
+    pThisMessage = strtok(pUdpPacket, "\r\n");
+    while (pThisMessage != NULL) {
+        string sThisMessage(pThisMessage);
 
-    if (HypackMode) {
-        //Parses data from network with just strings in the data
-        if (DEBUG) {
-            MOOSTrace("Sonar Packet Received:");
-            MOOSTrace(pUdpPacket);
+        if (!ParseNMEAString(sThisMessage)) {
+            if (DEBUG)
+                MOOSTrace("Unable to process NMEA string.");
         }
-        // There can potentially be multiple messages per ethernet packet
-        char * pThisMessage;
-        pThisMessage = strtok(pUdpPacket, "\r\n");
-        while (pThisMessage != NULL) {
-            string sThisMessage(pThisMessage);
-
-            if (!ParseNMEAString(sThisMessage)) {
-                if (DEBUG)
-                    MOOSTrace("Unable to process NMEA string.");
-            }
-            pThisMessage = strtok(NULL, "\r\n");
-        }
-    } else {
-        char * pNMEAMessage = &pUdpPacket[31];
-        unsigned int iMsgLength = 0;
-        // There could also be a sound velocity message
-        // Could also uses pNMEAMessage[7] as numerical indicator
-        if (strstr(pNMEAMessage, "$GPGGA") != NULL) {
-            iMsgLength = 80;
-
-        } else if (strstr(pNMEAMessage, "$GPHDT") != NULL) {
-            iMsgLength = 19;
-        }
-
-        // If a message was found, process it
-        if (iMsgLength > 0) {
-            string sNMEAMessage(pNMEAMessage, iMsgLength);
-            if (!ParseNMEAString(sNMEAMessage)) {
-                if (DEBUG)
-                    MOOSTrace("Unable to process NMEA string.");
-            }
-        } else {
-            if (DEBUG) {
-                MOOSTrace("No GPS data found in RTA message.");
-                MOOSTrace(pNMEAMessage);
-            }
-        }
-    }
-    
+        pThisMessage = strtok(NULL, "\r\n");
+    }   
 }
 
 
@@ -317,4 +320,135 @@ bool Sonar::ParseNMEAString(string &sNMEAString)
     }
 
     return false;
+}
+
+//=========== Logging Functions =============================
+
+bool Sonar::LogHypack() {
+    if (!m_hypack_log_file.is_open()) {
+        return false;
+    }
+    auto curr_x = GetMOOSVar("X");
+    auto curr_y = GetMOOSVar("Y");
+    auto sonar_depth = GetMOOSVar("Depth");
+    if ((curr_y->IsFresh() || curr_x->IsFresh()) && sonar_depth->IsFresh()) {
+        double UTM_x = curr_x->GetDoubleVal() + m_Geodesy.GetOriginEasting();
+        double UTM_y = curr_y->GetDoubleVal() + m_Geodesy.GetOriginNorthing();
+        double timestamp = SecondsPastMidnight();
+        auto heading = GetMOOSVar("Heading");
+        m_hypack_log_file << std::fixed << std::setprecision(3);
+        m_hypack_log_file << "POS 1 " << timestamp << " " << UTM_x << " " << UTM_y << "\n";
+        m_hypack_log_file << "GYR 1 " << timestamp << " " << heading->GetDoubleVal() << "\n";
+        m_hypack_log_file << "EC1 0 " << timestamp << " " << sonar_depth->GetDoubleVal() << endl        ;
+    }
+
+    return true;
+}
+
+void Sonar::LogHeader() {
+    m_hypack_log_file << "FTP NEW 2\n";
+    m_hypack_log_file << "VER 15.0.9.71\n";
+    m_hypack_log_file << "INF \"Manda\" \"ASV\" \"Project\" 0.000000 0.000000 1500.000000\n";
+    m_hypack_log_file << "DEV 0 16 \"CEEPULSE 100\"\n";
+    m_hypack_log_file << "OFF 0 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000\n";
+    m_hypack_log_file << "DEV 1 100 \"GP9 GPS/IMU\"\n";
+    m_hypack_log_file << "OFF 0 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000\n";
+    m_hypack_log_file << "EOH" << endl;
+}
+
+double Sonar::SecondsPastMidnight() {
+    // The C++ way
+    // auto now = std::chrono::system_clock::now();
+
+    // time_t tnow = std::chrono::system_clock::to_time_t(now);
+    // tm *date = std::localtime(&tnow);
+    // date->tm_hour = 0;
+    // date->tm_min = 0;
+    // date->tm_sec = 0;
+    // auto midnight = std::chrono::system_clock::from_time_t(std::mktime(date));
+
+    // std::chrono::system_clock::duration duration_past = now-midnight;
+
+    time_t t1, t2;
+    struct tm tms;
+    time(&t1);
+    gmtime_r(&t1, &tms);
+    tms.tm_hour = 0;
+    tms.tm_min = 0;
+    tms.tm_sec = 0;
+    t2 = mktime(&tms);
+    return t1 - t2;
+}
+
+// =========  From MOOSLogger.cpp (pLogger)  ================
+std::string Sonar::MakeLogName(string sStem)
+{
+    struct tm *Now;
+    time_t aclock;
+    time( &aclock );
+
+    // We should probably always use UTC
+    if(m_use_utc_log_names)
+    {
+        Now = gmtime(&aclock);
+    }
+    else
+    {
+        Now = localtime( &aclock );
+    }
+
+    std::string  sTmp;
+
+    // Always append the timestamp
+    if(true)
+    {
+        // Print local time as a string
+
+        sTmp = MOOSFormat( "%s_%d_%02d_%02d__%.2d_%.2d_%.2d",
+            sStem.c_str(),
+            Now->tm_year+1900,
+            Now->tm_mon+1,
+            Now->tm_mday,
+            Now->tm_hour,
+            Now->tm_min,
+            Now->tm_sec);
+    }
+    else
+    {
+        sTmp = MOOSFormat("%s",sStem.c_str());
+    }
+
+    return sTmp;
+
+}
+
+bool Sonar::OpenFile(std::ofstream & of, const std::string & sName, bool bBinary)
+{
+    if(!bBinary)
+        of.open(sName.c_str());
+    else
+    {
+        of.open(sName.c_str(), std::ios::binary);
+    }
+
+
+    if(!of.is_open())
+    {
+        string sErr = MOOSFormat("ERROR: Failed to open File: %s",sName.c_str());
+        MOOSDebugWrite(sErr);
+        return false;
+    }
+
+    return true;
+}
+
+bool Sonar::CloseFiles()
+{
+    if(m_hypack_log_file.is_open())
+    {
+        MOOSTrace("iSonar Closing Log File.\n");
+        m_hypack_log_file << std::endl;
+        m_hypack_log_file.close();
+    }
+    return true;
 }
