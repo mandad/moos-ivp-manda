@@ -1,6 +1,6 @@
 //-------------------------------------------------
 // NAME: Damian Manda, UNH
-// FILE: control_test.moos
+// FILE: swain_controls.moos
 //-------------------------------------------------
 
 ServerHost = localhost
@@ -41,20 +41,6 @@ ProcessConfig = ANTLER
   db = --event_log=eventlog
 }
 
-ProcessConfig = pHostInfo
-{
-  AppTick   = 1
-  CommsTick = 1
-
-  TEMP_FILE_DIR  = ./
-  //DEFAULT_HOSTIP = 192.168.2.71   // default is "localhost"
-
-  //External (4G) IP of boat network
-  //DEFAULT_HOSTIP_FORCE = 10.42.0.11
-
-  term_reporting = false
-}
-
 //------------------------------------------
 // Find the shoreside and share variables
 //------------------------------------------
@@ -78,6 +64,20 @@ ProcessConfig = uFldNodeBroker
   BRIDGE = src=ZBOAT_PWM
   BRIDGE = src=SONAR_DEPTH_M
   BRIDGE = src=DESIRED_RUDDER
+
+  term_reporting = false
+}
+
+ProcessConfig = pHostInfo
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  TEMP_FILE_DIR  = ./
+  //DEFAULT_HOSTIP = 192.168.2.71   // default is "localhost"
+
+  //External (4G) IP of boat network
+  //DEFAULT_HOSTIP_FORCE = 10.42.0.11
 
   term_reporting = false
 }

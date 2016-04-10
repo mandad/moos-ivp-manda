@@ -34,8 +34,7 @@ ProcessConfig = ANTLER
   Run = pShare            @ NewConsole = false
   Run = pHostInfo       @ NewConsole = false
   Run = uFldShoreBroker  @ NewConsole = false
-  Run = iRemoteLite     @ NewConsole = true
-  //Run = uFldNodeComms   @ NewConsole = false
+  //Run = iRemoteLite     @ NewConsole = true
 }
 
 //------------------------------------------
@@ -86,25 +85,6 @@ ProcessConfig = pShare
   CommsTick = 2
 
   Input = route = localhost:9300
-}
-
-//--------------------------------------------------
-// ufldnodecomms Configuration Block
-
-ProcessConfig = uFldNodeComms
-{
-  AppTick       = 2
-  CommsTick     = 2
-
-  comms_range      = 1000
-  critical_range   = 50
-
-  min_msg_interval = 15
-  max_msg_length   = 1000
-
-  groups           = true
-
-  view_node_rpt_pulses = false
 }
 
 //------------------------------------------
