@@ -1,11 +1,12 @@
 //-------------------------------------------------
 // NAME: Damian Manda, UNH
 // FILE: control_test.moos
+// Runs a test pattern for adaptive control
 //-------------------------------------------------
 
 ServerHost = localhost
 ServerPort = 9000
-Community  = alpha
+Community  = asv
 
 MOOSTimeWarp = 6
 
@@ -20,7 +21,7 @@ ProcessConfig = ANTLER
   MSBetweenLaunches = 200
 
   Run = MOOSDB          @ NewConsole = false, ExtraProcessParams=db
-  Run = pLogger         @ NewConsole = false
+  //Run = pLogger         @ NewConsole = false
   Run = uSimNomoto	    @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
   Run = pMarineViewer	  @ NewConsole = false, ExtraProcessParams=one
@@ -49,8 +50,8 @@ ProcessConfig = pMarineMRAS
    // K_Star = 1.3
    // Tau_Star = 0.17
    //Test for adaptation
-   K_Star = 1.66 //1.66
-   Tau_Star = 0.76 //0.76
+   K_Star = 1.3 //1.66
+   Tau_Star = 1 //0.76 but actually more like 0.9 with rudder delay
    DampingRatio = 1
    NaturalFrequency = 1.3 //1.3 for Kp = 1.2
 
@@ -167,7 +168,7 @@ ProcessConfig = uSimNomoto
   CommsTick	= 10
 
   start_x       = 0
-  start_y       = -20
+  start_y       = -60
   start_heading = 180
   start_speed   = 0
 
@@ -256,7 +257,7 @@ ProcessConfig = pEchoVar
 ProcessConfig = uTS_StartTimer  
 {
   time_zero = db_start
-  delay_start = 15
+  delay_start = 45
   event = var=MOOS_MANUAL_OVERRIDE, val=false
   event = var=DEPLOY, val=true
   event = quit 
@@ -266,7 +267,7 @@ ProcessConfig = uTS_TurnTimer
 {
   script_name    = TurnTimer
   //time_zero = db_start
-  delay_start = 15
+  delay_start = 45
   reset_max      = nolimit
   reset_time  = end
   upon_awake = restart

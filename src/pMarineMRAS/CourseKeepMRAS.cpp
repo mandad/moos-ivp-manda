@@ -230,7 +230,7 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
 
     }
     //Potential to divide by zero here if dfSpeed == 0
-    if (dfSpeed > 0.1) {
+    if (dfSpeed > 0.2) {
         m_dfTauM = m_dfTaumStar * m_dfShipLength / dfSpeed;
         m_dfKm = m_dfKmStar * dfSpeed / m_dfShipLength;
     }
