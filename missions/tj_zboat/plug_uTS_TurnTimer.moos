@@ -2,10 +2,11 @@ ProcessConfig = uTS_TurnTimer
 {
   script_name    = TurnTimer
   //time_zero = db_start
-  delay_start = 15
+  delay_start = 0
   reset_max      = nolimit
   reset_time  = end
   upon_awake = restart
+  condition = DEPLOY = true
 
   event = var=CONST_HDG_UPDATES, val=heading=90, time=30
   event = var=CONST_HDG_UPDATES, val=heading=270, time=60

@@ -3,10 +3,10 @@ ProcessConfig = pHelmIvP
   AppTick    = 10
   CommsTick  = 10
 
-  term_report_interval=5
+  term_report_interval=0
 
   bhv_dir_not_found_ok = true
-  ivp_behavior_dir = /home/ubuntu/Code/moos-ivp-manda
+  //ivp_behavior_dir = /home/ubuntu/Code/moos-ivp-manda
 
   behaviors  = $(BHV_FILE)
   domain     = course:0:359:360

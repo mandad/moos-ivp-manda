@@ -22,5 +22,5 @@ ProcessConfig = uSimNomoto
 
   //drift_vector = 90, 0.5
 
-  term_reporting = false
+  //term_reporting = false
 }

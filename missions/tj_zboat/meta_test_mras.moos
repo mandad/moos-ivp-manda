@@ -17,7 +17,7 @@ ProcessConfig = ANTLER
   MSBetweenLaunches = 400
 
   Run = MOOSDB          @ NewConsole = false
-  Run = uTimerScript    @ NewConsole = false ~ uTS_StartTimer
+  //Run = uTimerScript    @ NewConsole = false ~ uTS_StartTimer
   Run = uTimerScript    @ NewConsole = false ~ uTS_TurnTimer
   Run = pLogger         @ NewConsole = false
   //Run = pMarinePID      @ NewConsole = false
@@ -31,8 +31,8 @@ ProcessConfig = ANTLER
   Run = pLLTrackUpdate  @ NewConsole = false
   //Run = pBasicContactMgr @ NewConsole = false
 #ifdef SIMULATION TRUE
-  //Run = uSimNomoto      @ NewConsole = false
-  Run = uSimMarine      @ NewConsole = false
+  Run = uSimNomoto      @ NewConsole = false
+  //Run = uSimMarine      @ NewConsole = false
 #else
   Run = pEchoVar        @ NewConsole = false
   Run = iGPS_MB1        @ NewConsole = false
