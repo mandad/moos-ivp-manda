@@ -1,0 +1,9 @@
+//This reads from a Network NMEA output
+ProcessConfig = iGPS_MB1
+{
+  AppTick    = 40
+  CommsTick  = 40
+
+  PORT = 56007
+  IgnoreSats = true
+}

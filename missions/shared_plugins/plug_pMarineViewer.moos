@@ -1,0 +1,71 @@
+ProcessConfig = pMarineViewer
+{
+  AppTick    = 10
+  CommsTick  = 10
+
+  tiff_file            = $(TIFF_FILE)
+  tiff_file_b          = $(TIFF_FILE_B)
+
+  set_pan_x            = $(PAN_X)
+  set_pan_y            = $(PAN_Y)
+  zoom                 = $(ZOOM)
+  vehicle_shape_scale  = 1.5
+  hash_delta           = 100
+  hash_shade           = 0.4
+  hash_viewable        = false
+
+  trails_point_size   = 2
+  trails_length       = 10000
+  trails_color        = blue
+  vehicles_name_color = darkred
+  vehicles_active_color = red //default
+
+
+  // Appcast configuration
+  appcast_height       = 75
+  appcast_width        = 30
+  appcast_viewable     = true
+  appcast_color_scheme = indigo
+  nodes_font_size      = medium
+  procs_font_size      = medium
+  appcast_font_size    = small
+  
+  //datum_viewable = true
+  //datum_size     = 18
+  //gui_size = small
+
+  left_context[home-point] = RETURN_ZBOAT=true
+  left_context[home-point] = HOME_UPDATE_ZBOAT=station_pt=$(XPOS),$(YPOS)
+  left_context[home-point] = LOITER_ZBOAT=false
+  left_context[survey-point] = DEPLOY_ALL=true
+  left_context[survey-point] = MOOS_MANUAL_OVERRIDE_ALL=false
+  left_context[survey-point] = RETURN_ALL=false
+
+  right_context[return] = DEPLOY_ZBOAT=true
+  right_context[return] = MOOS_MANUAL_OVERRIDE_ZBOAT=false
+  right_context[return] = RETURN_ZBOAT=false
+
+  scope  = ZBOAT_PWM
+  scope  = DESIRED_RUDDER
+  scope  = RETURN
+  scope  = WPT_STAT
+  scope  = MODE
+  scope  = SWATH_WIDTH
+  scope  = SONAR_DEPTH_M
+  scope  = SWATH_EDGE
+  scope  = SWATH_WIDTH_RECORD
+  scope  = NEXT_SWATH_SIDE
+  scope  = NEW_PATH
+
+  button_one = DEPLOY # DEPLOY_ZBOAT=true 
+  button_one = MOOS_MANUAL_OVERRIDE_ZBOAT=false # RETURN_ZBOAT=false
+  button_two = RETURN # RETURN_ZBOAT=true # FAULT_ZBOAT=false
+  button_three = CONTINUE # FAULT_ZBOAT=false
+  button_four = FAULT # FAULT_ZBOAT=true
+
+  action  = MENU_KEY=deploy # DEPLOY = true # RETURN = false
+  action+ = MENU_KEY=deploy # MOOS_MANUAL_OVERRIDE=false
+  action  = RETURN=true
+  action  = UPDATES_RETURN=speed=1.6
+  action  = MENU_KEY=SetAutonomy # SET_AUTONOMY_MODE=1
+}

@@ -1,0 +1,13 @@
+ProcessConfig = pHostInfo
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  TEMP_FILE_DIR  = ./
+  //DEFAULT_HOSTIP = 192.168.2.71   // default is "localhost"
+
+  //External (4G) IP of boat network
+  DEFAULT_HOSTIP_FORCE = $(BOAT_MODEM_IP)
+
+  term_reporting = false
+}

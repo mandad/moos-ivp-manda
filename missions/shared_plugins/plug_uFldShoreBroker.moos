@@ -1,0 +1,22 @@
+ProcessConfig = uFldShoreBroker                                 
+{                                                               
+  AppTick   = 1
+  CommsTick = 1                   
+
+  qbridge  = DEPLOY, RETURN, STATION_KEEP, NODE_REPORT, NODE_MESSAGE, FAULT
+  qbridge  = MOOS_MANUAL_OVERRIDE, MOOS_MANUAL_OVERIDE, APPCAST_REQ, AVOID
+  qbridge = HOME_UPDATE, SONAR_DEPTH_M
+  bridge = src=SET_AUTONOMY_MODE
+  bridge = src=UTM_SURVEYLINE
+  // These are used for iRemoteLite
+  bridge = src=DESIRED_RUDDER
+  bridge = src=DESIRED_THRUST
+  bridge = src=RESTART_HELM
+  bridge = src=LOGGER_RESTART
+  bridge = src=MOOS_MANUAL_OVERIDE
+
+                                                                
+  // Note: [qbridge = FOO]  is shorthand for
+  //       [bridge = src=FOO_$V,  alias=FOO] and
+  //       [bridge = src=FOO_ALL, alias=FOO]
+} 

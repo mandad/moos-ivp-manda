@@ -1,0 +1,26 @@
+ProcessConfig = uSimNomoto
+{
+  AppTick   = 10
+  CommsTick = 10
+
+  //start_x       = 0
+  //start_y       = -60
+  //start_heading = 180
+  //start_speed   = 0
+  START_POS = $(START_POS)
+
+  prefix        = NAV
+
+  max_rudder_degs_per_sec = 30
+  turn_rate     = 195 //this is actually 88 at 45 deg, estimated Z-Boat max
+  
+  max_acceleration = 0.5
+  max_deceleration = 0.3
+  
+  thrust_map    = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
+  thrust_reflect = true
+
+  //drift_vector = 90, 0.5
+
+  term_reporting = false
+}

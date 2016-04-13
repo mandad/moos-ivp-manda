@@ -1,0 +1,8 @@
+ProcessConfig = uTS_StartTimer  
+{
+  time_zero = db_start
+  delay_start = 15
+  event = var=MOOS_MANUAL_OVERRIDE, val=false
+  event = var=DEPLOY, val=true
+  event = quit 
+}

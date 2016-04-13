@@ -1,0 +1,13 @@
+ProcessConfig = pHostInfo                                       
+{                                                               
+  AppTick   = 1                                                 
+  CommsTick = 1                                                 
+                                                                
+  TEMP_FILE_DIR  = ./                                           
+  
+  //DEFAULT_HOSTIP = 10.42.0.1
+    
+  //External IP Address of Laptop
+  DEFAULT_HOSTIP_FORCE = $(SHORE_IP)
+
+} 

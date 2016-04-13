@@ -1,0 +1,5 @@
+ProcessConfig = pLLTrackUpdate
+{
+  AppTick = 1
+  CommsTick = 1
+}
