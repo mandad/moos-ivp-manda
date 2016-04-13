@@ -1,4 +1,4 @@
-#!/bin/bash
+ #!/bin/bash
 #-------------------------------------------------------
 #  Part 1: Check for and handle command-line arguments
 #-------------------------------------------------------
@@ -112,7 +112,7 @@ if [ $SCENARIO = 4 ]; then
   PAN_Y=-2100
   ZOOM=0.72
   #In this case, the shore VM
-  SHORE_IP="192.168.1.115"
+  SHORE_IP="192.168.1.26"
   SHORE_PORT=9300
   #In this case, the RPi
   BOAT_MODEM_IP="192.168.1.243"
