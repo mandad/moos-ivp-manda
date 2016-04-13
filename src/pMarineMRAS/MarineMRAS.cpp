@@ -100,6 +100,7 @@ bool MarineMRAS::OnNewMail(MOOSMSG_LIST &NewMail)
     } else if (key == "DESIRED_SPEED") {
       m_desired_speed = msg.GetDouble();
     } else if((key == "MOOS_MANUAL_OVERIDE") || (key == "MOOS_MANUAL_OVERRIDE")) {
+      MOOSTrace("pMarineMRAS: Received Manual Override Change\n");
       if(MOOSStrCmp(msg.GetString(), "FALSE")) {
         m_has_control = true;
       } else if(MOOSStrCmp(msg.GetString(), "TRUE")) {
@@ -223,6 +224,7 @@ bool MarineMRAS::Iterate()
     Notify("NAV_HEADING_180", m_current_heading);
     Notify("DESIRED_HEADING_180", angle180(m_desired_heading));
   }
+  MOOSTrace("pMarineMRAS: Posting Appcast Report (iterate)\n");
 
   AppCastingMOOSApp::PostReport();
   return(true);
