@@ -25,6 +25,7 @@ ProcessConfig = ANTLER
   Run = pShare            @ NewConsole = false
   Run = pHostInfo       @ NewConsole = false
   Run = uFldShoreBroker  @ NewConsole = false
+  Run = uJoystick        @ NewConsole = false
   //Run = iRemoteLite     @ NewConsole = true
   //Run = uFldNodeComms   @ NewConsole = false
 }
@@ -44,3 +45,9 @@ ProcessConfig = ANTLER
 #include plug_uProcessWatch.moos
 #include plug_pLogger_async.moos
 #include plug_pMarineViewer.moos
+
+//==============================================
+// Custom Processes
+//==============================================
+
+#include plug_uJoystick
