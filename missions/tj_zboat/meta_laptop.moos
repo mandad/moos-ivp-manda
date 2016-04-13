@@ -26,6 +26,11 @@ ProcessConfig = ANTLER
   Run = pHostInfo       @ NewConsole = false
   Run = uFldShoreBroker  @ NewConsole = false
   Run = uJoystick        @ NewConsole = false
+  
+  // For testing the Joystick
+  //Run = uSimNomoto       @ NewConsole = false
+  //Run = pNodeReporter    @ NewConsole = false
+  
   //Run = iRemoteLite     @ NewConsole = true
   //Run = uFldNodeComms   @ NewConsole = false
 }
@@ -50,4 +55,6 @@ ProcessConfig = ANTLER
 // Custom Processes
 //==============================================
 
-#include plug_uJoystick
+#include plug_uJoystick.moos
+#include plug_uSimNomoto.moos
+#include plug_pNodeReporter.moos
