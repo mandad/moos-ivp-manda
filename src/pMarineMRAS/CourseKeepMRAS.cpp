@@ -61,13 +61,15 @@ void CourseKeepMRAS::SetParameters(double dfKStar, double dfTauStar, double dfZ,
 }
 
 double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
-    double dfMeasuredROT, double dfSpeed, double dfTime, bool bDoAdapt, 
+    double dfMeasuredROT, double dfSpeed, double dfTime, bool bDoAdapt,
     bool bTurning)
 {
     bool bAdaptLocal = bDoAdapt;
     // Don't adapt if we are going slow or straight (influence likely due to waves)
-    if (dfSpeed < 0.2 || (fabs(m_dfRudderOut - m_dfKi) < m_dfDeadband))
+    if (dfSpeed < 0.2 || (fabs(m_dfRudderOut - m_dfKi) < m_dfDeadband)) {
         bAdaptLocal = false;
+        MOOSTrace("CourseKeep: No local adaptation");
+    }
     if (dfSpeed < 0.2)
         dfSpeed = 0.2;
     if (DEBUG)
@@ -106,7 +108,7 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
             if (m_dfKp > 5) {
                 m_dfKp = 5;
             }
-            m_dfKd = (2 * m_dfZ * sqrt(m_dfKp * m_dfKm * 
+            m_dfKd = (2 * m_dfZ * sqrt(m_dfKp * m_dfKm *
                 m_dfTauM) - 1) / (m_dfKm);
             if (m_dfKd < 0)
                 m_dfKd = 0;
@@ -118,7 +120,7 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
         }
     }
     if (DEBUG)
-        MOOSTrace("PID Constants: Kp: %0.2f  Kd: %0.2f  Ki: %0.2f\n", m_dfKp, 
+        MOOSTrace("PID Constants: Kp: %0.2f  Kd: %0.2f  Ki: %0.2f\n", m_dfKp,
             m_dfKd, m_dfKi);
     //PID equation
     double heading_error = angle180(dfDesiredHeading - dfMeasuredHeading);
@@ -183,7 +185,7 @@ void CourseKeepMRAS::SwitchController() {
     m_bControllerSwitch = true;
 }
 
-void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder, 
+void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
     double dfSpeed, double dfDeltaT, bool bDoAdapt) {
     //Propagate model
     m_dfModelPhiDotDot = (m_dfKm * (dfRudder + m_dfKim) - m_dfModelROT) / m_dfTauM;
@@ -198,7 +200,7 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
     if (DEBUG) {
         MOOSTrace("Process Vars: Y.: %0.2f  dT: %0.2f\n",dfMeasuredROT, dfDeltaT);
         MOOSTrace("Model Params: Km: %0.2f  Taum: %0.2f\n", m_dfKm, m_dfTauM);
-        MOOSTrace("Model Update: Y..: %0.2f  Y.: %0.2f  Y: %0.2f  Rudder: %0.2f\n", 
+        MOOSTrace("Model Update: Y..: %0.2f  Y.: %0.2f  Y: %0.2f  Rudder: %0.2f\n",
             m_dfModelPhiDotDot, m_dfModelROT, m_dfModelHeading, dfRudder);
     }
 

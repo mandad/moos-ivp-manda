@@ -209,6 +209,7 @@ bool MarineMRAS::Iterate()
       Notify("MRAS_K_M", vars[9]);
     }
     Notify("MRAS_MODEL_RUDDER", vars[10]);
+    Notify("MRAS_IS_TURNING", IsTurning());
 
     double speed_vars[1];
     m_speed_control.GetVarInfo(speed_vars);
@@ -431,6 +432,11 @@ bool MarineMRAS::buildReport()
       m_msgs << "\nCourse Keep Controller in use w/ adaptation.";
     else if (controller_in_use == ControllerType::CourseKeepNoAdapt) {
       m_msgs << "\nCourse Keep Controller in use, no adaptation.";
+    }
+    if (IsTurning()) {
+      m_msgs << "\nIs Turning? yes";
+    } else {
+      m_msgs << "\nIs Turning? no";
     }
     m_msgs << "\n\n" << m_speed_control.AppCastMessage();
   } else {

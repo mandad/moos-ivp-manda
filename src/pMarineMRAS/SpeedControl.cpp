@@ -13,10 +13,10 @@
 #define ANGLE_BINS 20
 #define HISTORY_TIME 60
 #define AVERAGING_LEN 3
-#define MAX_FLAT_SLOPE 0.08 //m/s^2
-#define SPEED_TOLERANCE 0.05
+#define MAX_FLAT_SLOPE 0.5 //m/s^2
+#define SPEED_TOLERANCE 0.1
 #define HEADING_TOLERANCE 7
-#define DEBUG true
+#define DEBUG false
 
 SpeedControl::SpeedControl() : m_thrust_output(0),  m_first_run(true),
                                m_thrust_map_set(true), m_max_thrust(100),

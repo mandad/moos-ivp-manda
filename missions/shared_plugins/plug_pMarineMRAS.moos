@@ -22,7 +22,7 @@ ProcessConfig = pMarineMRAS
    Gamma = 0.00001    //Speed of Ki adaptation
    Xi = 1   // <= 1, not used if DecreaseAdaptation = false
    DecreaseAdaptation = false
-   ROTFilter = 1  // >= 1
+   ROTFilter = 3  // >= 1
    CourseKeepOnly = true
    AdaptDuringTurns = true
 

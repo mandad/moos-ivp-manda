@@ -9,8 +9,8 @@ ProcessConfig = uFldShoreBroker
   bridge = src=SET_AUTONOMY_MODE
   bridge = src=UTM_SURVEYLINE
   // These are used for iRemoteLite
-  bridge = src=DESIRED_RUDDER
-  bridge = src=DESIRED_THRUST
+  //bridge = src=DESIRED_RUDDER
+  //bridge = src=DESIRED_THRUST
   bridge = src=RESTART_HELM
   bridge = src=LOGGER_RESTART
   bridge = src=MOOS_MANUAL_OVERIDE
