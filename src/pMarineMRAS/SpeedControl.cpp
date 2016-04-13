@@ -22,7 +22,8 @@ SpeedControl::SpeedControl() : m_thrust_output(0),  m_first_run(true),
                                m_thrust_map_set(true), m_max_thrust(100),
                                m_initial_speed(0), m_turn_began(false),
                                m_turn_finished(false), m_adjustment_state(0),
-                               m_use_thrust_map_only(false),
+                               m_use_thrust_map_only(false), m_previous_desired_speed(0),
+                               m_previous_desired_heading(0),
                                m_current_estimate(ANGLE_BINS, 3600) {
   InitControls();
 }
@@ -87,7 +88,7 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
   }
 
   if (DEBUG)
-    MOOSTrace("Speed Control: Debug 3\n");
+    MOOSTrace("Speed Control: Debug 3, previous_des: %0.2f\n", m_previous_desired_speed);
 
   // Determine state
   // 0 = First run, desired speed adjusted, desired heading adjusted

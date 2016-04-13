@@ -125,9 +125,9 @@ if [ $SCENARIO = 4 ]; then
   HOME_OUTER_RADIUS=5
   SURVEY_SPEED=1.6
   TEST_SPEED=1.6
-  SIMULATION=TRUE
+  SIMULATION=FALSE
   #BHV_FILE=targ_consthead_pattern.bhv
-fi  
+fi
 # What is nsplug? Type "nsplug --help" or "nsplug --manual"
 
 #nsplug zboat_lines_remote.moos targ_zboat_lines_remote.moos -f WARP=$TIME_WARP \
