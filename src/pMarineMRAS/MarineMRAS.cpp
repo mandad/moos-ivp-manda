@@ -130,10 +130,12 @@ bool MarineMRAS::OnConnectToServer()
 
 bool MarineMRAS::Iterate()
 {
+  MOOSTrace("pMarineMRAS: Starting iterate\n");
   AppCastingMOOSApp::Iterate();
 
   if (m_has_control) {
     // ------ Determine the thrust --------
+    MOOSTrace("pMarineMRAS: Determining Thrust\n");
     if(m_speed_factor != 0) {
       m_desired_thrust = m_desired_speed * m_speed_factor;
     } else {
@@ -143,6 +145,7 @@ bool MarineMRAS::Iterate()
     }
 
     // ------- Determine the rudder -------
+    MOOSTrace("pMarineMRAS: Determining Rudder\n");
     double desired_rudder = 0;
     //prevent controller runup when speed is 0
     ControllerType controller_to_use = DetermineController();
@@ -180,6 +183,7 @@ bool MarineMRAS::Iterate()
       Notify("DESIRED_RUDDER", desired_rudder);
     }
 
+    MOOSTrace("pMarineMRAS: Logging Variables\n");
     //Debug variables for logging
     double vars[11];
     if (controller_to_use ==  ControllerType::CourseChange) {
@@ -215,6 +219,7 @@ bool MarineMRAS::Iterate()
     Notify("DESIRED_HEADING_180", angle180(m_desired_heading));
     m_allstop_posted = false;
   } else {
+    MOOSTrace("pMarineMRAS: Posting All Stop\n");
     PostAllStop();
   }
 
@@ -224,7 +229,7 @@ bool MarineMRAS::Iterate()
     Notify("NAV_HEADING_180", m_current_heading);
     Notify("DESIRED_HEADING_180", angle180(m_desired_heading));
   }
-  MOOSTrace("pMarineMRAS: Posting Appcast Report (iterate)\n");
+  MOOSTrace("pMarineMRAS: Posting Appcast Report (end iterate)\n");
 
   AppCastingMOOSApp::PostReport();
   return(true);
