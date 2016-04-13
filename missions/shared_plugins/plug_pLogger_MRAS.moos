@@ -6,6 +6,9 @@ ProcessConfig = pLogger
   AsyncLog = true
   Synclog = true @ 0.1
 
+  Path = ../logs/
+  UTCLogDirectories = true
+
   Log = NAV_HEADING_180 @ 0
   Log = NAV_ROT @ 0
   Log = DESIRED_HEADING_180 @ 0
