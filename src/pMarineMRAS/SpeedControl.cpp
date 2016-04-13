@@ -23,9 +23,10 @@ SpeedControl::SpeedControl() : m_thrust_output(0),  m_first_run(true),
                                m_initial_speed(0), m_turn_began(false),
                                m_turn_finished(false), m_adjustment_state(0),
                                m_use_thrust_map_only(false), m_previous_desired_speed(0),
-                               m_previous_desired_heading(0),
+                               m_previous_desired_heading(0), m_prev_time_at_heading(0),
+                               m_previous_time(0),
                                m_current_estimate(ANGLE_BINS, 3600) {
-  InitControls();
+  //InitControls();
 }
 
 double SpeedControl::Run(double desired_speed, double speed, double desired_heading,
@@ -37,6 +38,11 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
     if (DEBUG)
       MOOSTrace("Speed Control: Passed NaN Desired Speed or No Thrust Map\n");
     return m_thrust_output;
+  }
+
+  if (m_first_run) {
+    InitControls(desired_heading, current_time);
+    m_first_run = false;
   }
 
   if (DEBUG)
@@ -205,12 +211,14 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
   return m_thrust_output;
 }
 
-void SpeedControl::InitControls() {
+void SpeedControl::InitControls(double desired_heading, double curr_time) {
   // for (int direction = 0; direction < int(std::round(360 / ANGLE_BINS));
   //      direction++) {
   //   MOOSTrace("Speed Control: Setting Direction = %i\n", direction);
   //   m_direction_average[direction] = std::make_pair(0,0);
   // }
+  m_previous_desired_heading = desired_heading;
+  m_previous_time = curr_time - 1;
 
 }
 
