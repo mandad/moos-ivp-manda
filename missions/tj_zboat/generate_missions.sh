@@ -156,7 +156,7 @@ nsplug meta_zboat_lines.moos targ_zboat_lines.moos --path=../shared_plugins \
    -f WARP=$TIME_WARP  LAT_ORIGIN=$LAT_ORIGIN  LONG_ORIGIN=$LONG_ORIGIN  \
    START_POS=$START_POS  SHORE_IP=$SHORE_IP   BOAT_MODEM_IP=$BOAT_MODEM_IP \
    SHORE_PORT=$SHORE_PORT BOAT_PORT=$BOAT_PORT  SIMULATION=$SIMULATION  \
-   BHV_FILE=targ_zboat_lines_pattern.bhv
+   BHV_FILE=targ_zboat_lines.bhv
 
 nsplug meta_zboat_lines.moos targ_circle_pattern.moos --path=../shared_plugins \
    -f WARP=$TIME_WARP  LAT_ORIGIN=$LAT_ORIGIN  LONG_ORIGIN=$LONG_ORIGIN  \
