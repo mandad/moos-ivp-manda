@@ -29,7 +29,7 @@ public:
 
 private:
     //Functions
-    void InitControls();
+    void InitControls(double desired_heading, double curr_time);
     bool SpeedHistInfo(double time_range, double &slope, double &average);
     double TimeAtHeading(double allowable_range);
     //int BinnedHeading(double heading);
