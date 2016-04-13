@@ -1,0 +1,34 @@
+// Drives boat in a circle pattern 
+
+#include plug_StandardModeblock.bhv
+
+Behavior=BHV_Loiter
+{
+  name = loiter_circle
+  pwt  = 100
+  condition = MODE == RUN
+  updates = LOITER_UPDATE
+  
+  //----- Specific To This Behavior -----
+  speed = $(TEST_SPEED) // 1.6 = 50% thrust
+  clockwise = best
+  center_activate = false
+  acquire_dist = 10
+  capture_radius = 3
+  slip_radius = 8
+  polygon = format=radial, label=home, x=75, y=-75, radius=50, pts=9
+  
+  //----- Visual Display -----
+  visual_hints = vertex_size  = 1             // default
+  visual_hints = edge_size    = 1             // default
+  visual_hints = vertex_color = dodger_blue   // default
+  visual_hints = edge_color   = white         // default
+  visual_hints = nextpt_color = yellow        // default
+  visual_hints = nextpt_lcolor = aqua         // default
+  visual_hints = nextpt_vertex_size = 5       // default
+  //visual_hints = label        = Home
+}
+
+#include plug_StationKeep_home.bhv
+
+#include plug_StationKeep_inplace.bhv

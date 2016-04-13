@@ -124,49 +124,66 @@ if [ $SCENARIO = 4 ]; then
   SURVEY_SPEED=1.6
   TEST_SPEED=1.6
   SIMULATION=TRUE
-  BHV_FILE=targ_consthead_pattern.bhv
+  #BHV_FILE=targ_consthead_pattern.bhv
 fi  
 # What is nsplug? Type "nsplug --help" or "nsplug --manual"
 
-nsplug zboat_lines_remote.moos targ_zboat_lines_remote.moos -f WARP=$TIME_WARP \
-   LAT_ORIGIN=$LAT_ORIGIN   LONG_ORIGIN=$LONG_ORIGIN   START_POS=$START_POS \
-   SHORE_IP=$SHORE_IP   BOAT_MODEM_IP=$BOAT_MODEM_IP  SHORE_PORT=$SHORE_PORT \
-   BOAT_PORT=$BOAT_PORT  SIMULATION=$SIMULATION  BHV_FILE=$BHV_FILE
+#nsplug zboat_lines_remote.moos targ_zboat_lines_remote.moos -f WARP=$TIME_WARP \
+#   LAT_ORIGIN=$LAT_ORIGIN   LONG_ORIGIN=$LONG_ORIGIN   START_POS=$START_POS \
+#   SHORE_IP=$SHORE_IP   BOAT_MODEM_IP=$BOAT_MODEM_IP  SHORE_PORT=$SHORE_PORT \
+#   BOAT_PORT=$BOAT_PORT  SIMULATION=$SIMULATION  BHV_FILE=$BHV_FILE
 
-nsplug zboat_test_mras.moos targ_zboat_test_mras.moos -f WARP=$TIME_WARP \
-   LAT_ORIGIN=$LAT_ORIGIN   LONG_ORIGIN=$LONG_ORIGIN   START_POS=$START_POS \
-   SHORE_IP=$SHORE_IP   BOAT_MODEM_IP=$BOAT_MODEM_IP  SHORE_PORT=$SHORE_PORT \
-   BOAT_PORT=$BOAT_PORT  SIMULATION=$SIMULATION  BHV_FILE=$BHV_FILE
 
-#nsplug laptop.moos targ_laptop.moos -f WARP=$TIME_WARP \
-#   LAT_ORIGIN=$LAT_ORIGIN   LONG_ORIGIN=$LONG_ORIGIN \
-#   TIFF_FILE="$TIFF_FILE"  PAN_X=$PAN_X  PAN_Y=$PAN_Y  ZOOM=$ZOOM \
-#   SHORE_IP=$SHORE_IP  SHORE_PORT=$SHORE_PORT  TIFF_FILE_B=$TIFF_FILE_B
 
-nsplug zboat_lines.bhv targ_zboat_lines.bhv -f HOME_POS=$HOME_POS \
-  SURVEY_SPEED=$SURVEY_SPEED HOME_INNER_RADIUS=$HOME_INNER_RADIUS \
-  HOME_OUTER_RADIUS=$HOME_OUTER_RADIUS
+#nsplug zboat_statichead.bhv targ_zboat_statichead.bhv -f HOME_POS=$HOME_POS \
+#  SURVEY_SPEED=$SURVEY_SPEED HOME_INNER_RADIUS=$HOME_INNER_RADIUS \
+#  HOME_OUTER_RADIUS=$HOME_OUTER_RADIUS
 
-nsplug zboat_statichead.bhv targ_zboat_statichead.bhv -f HOME_POS=$HOME_POS \
-  SURVEY_SPEED=$SURVEY_SPEED HOME_INNER_RADIUS=$HOME_INNER_RADIUS \
-  HOME_OUTER_RADIUS=$HOME_OUTER_RADIUS
-
-#---------------------------------------------------
+#===================================================
 # New Style meta files
+#===================================================
+
+# Mission Configs
 #---------------------------------------------------
+
 nsplug meta_test_mras.moos targ_test_mras.moos --path=../shared_plugins \
    -f WARP=$TIME_WARP  LAT_ORIGIN=$LAT_ORIGIN  LONG_ORIGIN=$LONG_ORIGIN  \
    START_POS=$START_POS  SHORE_IP=$SHORE_IP   BOAT_MODEM_IP=$BOAT_MODEM_IP \
    SHORE_PORT=$SHORE_PORT BOAT_PORT=$BOAT_PORT  SIMULATION=$SIMULATION  \
-   BHV_FILE=$BHV_FILE
+   BHV_FILE=targ_consthead_pattern.bhv
+
+nsplug meta_zboat_lines.moos targ_zboat_lines.moos --path=../shared_plugins \
+   -f WARP=$TIME_WARP  LAT_ORIGIN=$LAT_ORIGIN  LONG_ORIGIN=$LONG_ORIGIN  \
+   START_POS=$START_POS  SHORE_IP=$SHORE_IP   BOAT_MODEM_IP=$BOAT_MODEM_IP \
+   SHORE_PORT=$SHORE_PORT BOAT_PORT=$BOAT_PORT  SIMULATION=$SIMULATION  \
+   BHV_FILE=targ_zboat_lines_pattern.bhv
+
+nsplug meta_zboat_lines.moos targ_circle_pattern.moos --path=../shared_plugins \
+   -f WARP=$TIME_WARP  LAT_ORIGIN=$LAT_ORIGIN  LONG_ORIGIN=$LONG_ORIGIN  \
+   START_POS=$START_POS  SHORE_IP=$SHORE_IP   BOAT_MODEM_IP=$BOAT_MODEM_IP \
+   SHORE_PORT=$SHORE_PORT BOAT_PORT=$BOAT_PORT  SIMULATION=$SIMULATION  \
+   BHV_FILE=targ_circle_pattern.bhv
 
 nsplug meta_laptop.moos targ_laptop.moos --path=../shared_plugins \
    -f WARP=$TIME_WARP  LAT_ORIGIN=$LAT_ORIGIN   LONG_ORIGIN=$LONG_ORIGIN \
    TIFF_FILE="$TIFF_FILE"  PAN_X=$PAN_X  PAN_Y=$PAN_Y  ZOOM=$ZOOM \
    SHORE_IP=$SHORE_IP  SHORE_PORT=$SHORE_PORT  TIFF_FILE_B=$TIFF_FILE_B
 
+# Behaviors
+#---------------------------------------------------
+
 nsplug meta_consthead_pattern.bhv targ_consthead_pattern.bhv -f HOME_POS=$HOME_POS \
   SURVEY_SPEED=$SURVEY_SPEED TEST_SPEED=$TEST_SPEED HOME_INNER_RADIUS=$HOME_INNER_RADIUS \
+  HOME_OUTER_RADIUS=$HOME_OUTER_RADIUS
+
+nsplug meta_zboat_lines.bhv targ_zboat_lines.bhv --path=../shared_plugins/behavior \
+ -f HOME_POS=$HOME_POS \
+  SURVEY_SPEED=$SURVEY_SPEED HOME_INNER_RADIUS=$HOME_INNER_RADIUS \
+  HOME_OUTER_RADIUS=$HOME_OUTER_RADIUS
+
+nsplug meta_circle_pattern.bhv targ_circle_pattern.bhv --path=../shared_plugins/behavior \
+ -f HOME_POS=$HOME_POS TEST_SPEED=$TEST_SPEED \
+  SURVEY_SPEED=$SURVEY_SPEED HOME_INNER_RADIUS=$HOME_INNER_RADIUS \
   HOME_OUTER_RADIUS=$HOME_OUTER_RADIUS
 
 if [ ${JUST_MAKE} = "yes" ] ; then

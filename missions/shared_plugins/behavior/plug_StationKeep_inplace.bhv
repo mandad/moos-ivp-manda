@@ -1,0 +1,28 @@
+Behavior = BHV_StationKeep
+{
+   // General Behavior Parameters
+   // ---------------------------
+   name         = loiter_inplace
+   pwt          = 100                   // default
+   condition    = MODE == INPLACE
+   // inactiveflag = STATIONING = false    // example
+   // activeflag   = STATIONING = true     // example
+
+
+   // Parameters specific to this behavior
+   // ------------------------------------
+      center_activate = true 
+   hibernation_radius = -1    
+         inner_radius = 4      
+         outer_radius = 10     
+         outer_speed  = 1    
+       transit_speed  = 2    
+           station_pt = 0,0    
+           swing_time = 4   //in sec - allow the vessel to keep moving this long
+
+         visual_hints = vertex_size  = 1           // default
+         visual_hints = edge_color   = light_blue  // default
+         visual_hints = edge_size    = 1           // default
+         visual_hints = label_color  = light_blue       // default
+         visual_hints = vertex_color = red         // default
+}

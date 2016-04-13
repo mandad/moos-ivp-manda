@@ -1,0 +1,27 @@
+Behavior = BHV_StationKeep
+{
+   // General Behavior Parameters
+   // ---------------------------
+   name         = sk_home
+   pwt          = 100                   // default
+   condition    = MODE == HOME
+   endflag      = REACHED_HOME = true
+   updates      = HOME_UPDATE
+
+   // Parameters specific to this behavior
+   // ------------------------------------
+      center_activate = false   // default
+   hibernation_radius = -1      // default
+         inner_radius = $(HOME_INNER_RADIUS)
+         outer_radius = $(HOME_OUTER_RADIUS)
+         outer_speed  = 1     // default
+       transit_speed  = 1.6
+           station_pt = $(HOME_POS)     // default
+           swing_time = 0       // default
+
+         visual_hints = vertex_size  = 1           // default
+         visual_hints = edge_color   = light_blue  // default
+         visual_hints = edge_size    = 1           // default
+         visual_hints = label_color  = light_blue       // default
+         visual_hints = vertex_color = red         // default
+}

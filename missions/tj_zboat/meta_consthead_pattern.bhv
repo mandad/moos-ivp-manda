@@ -63,7 +63,7 @@ Behavior = BHV_ConstantSpeed
  }
 
 
- Behavior = BHV_StationKeep
+Behavior = BHV_StationKeep
 {
    // General Behavior Parameters
    // ---------------------------

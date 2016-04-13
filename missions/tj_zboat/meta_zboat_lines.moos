@@ -1,8 +1,7 @@
 //-------------------------------------------------
 // NAME: Damian Manda
-// FILE: meta_test_mras.moos
-// DATE: 12 Apr 2016
-// Intended for running MRAS control system tests on a ZBoat
+// FILE: meta_zboat_lines.moos
+// DATE: 10 Dec 2015
 //-------------------------------------------------
 
 ServerHost = localhost
@@ -18,30 +17,30 @@ ProcessConfig = ANTLER
   MSBetweenLaunches = 400
 
   Run = MOOSDB          @ NewConsole = false
-  //Run = uTimerScript    @ NewConsole = false ~ uTS_StartTimer
-  Run = uTimerScript    @ NewConsole = false ~ uTS_TurnTimer
+  Run = pEchoVar        @ NewConsole = false
   Run = pLogger         @ NewConsole = false
   //Run = pMarinePID      @ NewConsole = false
   Run = pMarineMRAS     @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
+  //Run = pBasicContactMgr @ NewConsole = false
   Run = uProcessWatch     @ NewConsole = false
   Run = pNodeReporter     @ NewConsole = false
   Run = pShare          @ NewConsole = false
   Run = pHostInfo       @ NewConsole = false
   Run = uFldNodeBroker  @ NewConsole = false
   Run = pLLTrackUpdate  @ NewConsole = false
-  //Run = pBasicContactMgr @ NewConsole = false
 #ifdef SIMULATION TRUE
   Run = uSimNomoto      @ NewConsole = false
-  //Run = uSimMarine      @ NewConsole = false
 #else
-  Run = pEchoVar        @ NewConsole = false
+  //Run = iGPS            @ NewConsole = false
   Run = iGPS_MB1        @ NewConsole = false
+  //Run = iCV100          @ NewConsole = false
+  //Run = pSonarFilter    @ NewConsole = false
   Run = iZBoat          @ NewConsole = false
 #endif
 }
 
-//==============================================
+/==============================================
 // ZBoat Interfaces
 //==============================================
 
@@ -60,8 +59,7 @@ ProcessConfig = ANTLER
 //==============================================
 // Behavioral Timer Scripts
 //==============================================
-//#include plug_uTS_StartTimer.moos
-#include plug_uTS_TurnTimer.moos
+
 
 //==============================================
 // Standard Processes

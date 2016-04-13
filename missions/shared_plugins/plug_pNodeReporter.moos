@@ -1,7 +1,7 @@
 ProcessConfig = pNodeReporter
 {
-  AppTick    = 2
-  CommsTick  = 2
+  AppTick    = 5
+  CommsTick  = 5
 
   platform_type   = SHIP
   platform_length = 4
