@@ -87,7 +87,7 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
   }
 
   if (DEBUG)
-    MOOSTrace("Speed Control: Debug 3\n");
+    MOOSTrace("Speed Control: Debug 3, prev_des: %0.2f, \n");
 
   // Determine state
   // 0 = First run, desired speed adjusted, desired heading adjusted
