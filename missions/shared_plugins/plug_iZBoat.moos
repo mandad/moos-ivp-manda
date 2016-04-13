@@ -5,7 +5,7 @@ ProcessConfig = iZBoat
 
   // Serial port configuration
   PORT = /dev/ttyUSB0
-  BAUDRATE = 38400
+  BAUDRATE = 115200 // 38400 for Z1
   HANDSHAKING = FALSE
   STREAMING = FALSE
 
