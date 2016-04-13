@@ -152,6 +152,11 @@ nsplug meta_test_mras.moos targ_test_mras.moos --path=../shared_plugins \
    SHORE_PORT=$SHORE_PORT BOAT_PORT=$BOAT_PORT  SIMULATION=$SIMULATION  \
    BHV_FILE=targ_consthead_pattern.bhv
 
+nsplug meta_manual_control.moos targ_manual_control.moos --path=../shared_plugins \
+   -f WARP=$TIME_WARP  LAT_ORIGIN=$LAT_ORIGIN  LONG_ORIGIN=$LONG_ORIGIN  \
+   START_POS=$START_POS  SHORE_IP=$SHORE_IP   BOAT_MODEM_IP=$BOAT_MODEM_IP \
+   SHORE_PORT=$SHORE_PORT BOAT_PORT=$BOAT_PORT  SIMULATION=$SIMULATION
+
 nsplug meta_zboat_lines.moos targ_zboat_lines.moos --path=../shared_plugins \
    -f WARP=$TIME_WARP  LAT_ORIGIN=$LAT_ORIGIN  LONG_ORIGIN=$LONG_ORIGIN  \
    START_POS=$START_POS  SHORE_IP=$SHORE_IP   BOAT_MODEM_IP=$BOAT_MODEM_IP \
@@ -167,7 +172,8 @@ nsplug meta_zboat_lines.moos targ_circle_pattern.moos --path=../shared_plugins \
 nsplug meta_laptop.moos targ_laptop.moos --path=../shared_plugins \
    -f WARP=$TIME_WARP  LAT_ORIGIN=$LAT_ORIGIN   LONG_ORIGIN=$LONG_ORIGIN \
    TIFF_FILE="$TIFF_FILE"  PAN_X=$PAN_X  PAN_Y=$PAN_Y  ZOOM=$ZOOM \
-   SHORE_IP=$SHORE_IP  SHORE_PORT=$SHORE_PORT  TIFF_FILE_B=$TIFF_FILE_B
+   SHORE_IP=$SHORE_IP  SHORE_PORT=$SHORE_PORT  TIFF_FILE_B=$TIFF_FILE_B \
+   START_POS=$START_POS
 
 # Behaviors
 #---------------------------------------------------

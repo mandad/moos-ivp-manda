@@ -47,6 +47,7 @@ ProcessConfig = pMarineViewer
 
   scope  = ZBOAT_PWM
   scope  = DESIRED_RUDDER
+  scope  = DESIRED_THRUST
   scope  = RETURN
   scope  = WPT_STAT
   scope  = MODE
