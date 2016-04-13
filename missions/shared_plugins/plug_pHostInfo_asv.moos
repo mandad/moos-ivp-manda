@@ -9,5 +9,4 @@ ProcessConfig = pHostInfo
   //External (4G) IP of boat network
   DEFAULT_HOSTIP_FORCE = $(BOAT_MODEM_IP)
 
-  term_reporting = false
 }

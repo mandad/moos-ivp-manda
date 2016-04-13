@@ -31,7 +31,7 @@ ProcessConfig = ANTLER
   Run = pLLTrackUpdate  @ NewConsole = false
   //Run = pBasicContactMgr @ NewConsole = false
 #ifdef SIMULATION TRUE
-  Run = uSimMarine      @ NewConsole = false
+  Run = uSimNomoto      @ NewConsole = false
 #else
   Run = pEchoVar        @ NewConsole = false
   Run = iGPS_MB1        @ NewConsole = false

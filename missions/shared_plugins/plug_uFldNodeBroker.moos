@@ -17,6 +17,4 @@ ProcessConfig = uFldNodeBroker
   BRIDGE = src=ZBOAT_PWM
   BRIDGE = src=SONAR_DEPTH_M
   //BRIDGE = src=DESIRED_RUDDER
-
-  term_reporting = false
 }

@@ -8,5 +8,4 @@ ProcessConfig = pNodeReporter
 
   node_report_output = NODE_REPORT_LOCAL
 
-  term_reporting = false
 }
