@@ -188,7 +188,7 @@ bool MarineMRAS::Iterate()
             do_adapt = false;
           //using desired speed instead of current to prevent minor fluctuations
           desired_rudder = m_CourseKeepControl.Run(m_desired_heading, m_current_heading,
-            m_current_ROT, m_desired_speed, m_last_heading_time, do_adapt, IsTurning());
+            m_current_ROT, m_current_speed, m_last_heading_time, do_adapt, IsTurning());
         }
       }
 
