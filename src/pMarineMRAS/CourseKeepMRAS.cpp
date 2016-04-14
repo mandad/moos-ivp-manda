@@ -103,7 +103,7 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
         double dfDeltaT = dfTime - m_dfPreviousTime;
         //This includes both the series and parallel models
         UpdateRudderModel(dfDeltaT);
-        UpdateModel(dfMeasuredROT, m_dfModelRudder, dfSpeed, dfDeltaT, true);
+        UpdateModel(dfMeasuredROT, m_dfModelRudder, dfSpeed, dfDeltaT, bAdaptLocal);
 
         // double dfTimeReduceFactor = 1;
         // if (m_bDecreaseAdapt) {

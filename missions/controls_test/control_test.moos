@@ -50,14 +50,14 @@ ProcessConfig = pMarineMRAS
    // K_Star = 1.3
    // Tau_Star = 0.17
    //Test for adaptation
-   K_Star = 1.3 //1.66
-   Tau_Star = 1.2 //0.76 but actually more like 0.9 with rudder delay
+   K_Star = 3 //1.66
+   Tau_Star = 0.3 //0.76 but actually more like 0.9 with rudder delay
    DampingRatio = 1
    NaturalFrequency = 1.3 //1.3 for Kp = 1.2
 
    //Adaptation parameters
-   Beta = 0.0005     //Speed of Kp or Km/Tm adaptation
-   Alpha = 0.00005    //Speed of Kd or 1/Tm adaptation
+   Beta =  0.0005     //Speed of Kp or Km/Tm adaptation
+   Alpha = 0.0001    //Speed of Kd or 1/Tm adaptation
    Gamma = 0.00001    //Speed of Ki adaptation
    Xi = 1   // <= 1, not used if DecreaseAdaptation = false
    DecreaseAdaptation = false
