@@ -14,10 +14,14 @@
 #define KP_LIMIT 2.5
 #define DEBUG true
 #define ROT_THRESHOLD 10
+#define MIN_SPEED 0.5
+
+#define DEBUG true
 
 using namespace std;
 
-CourseKeepMRAS::CourseKeepMRAS() {
+CourseKeepMRAS::CourseKeepMRAS() : m_dfKp{1}, m_dfKd{0.3}, m_dfTauM{0.5}, 
+    m_dfKm{1.2} {
     m_bFirstRun = true;
     m_bControllerSwitch = false;
     m_bParametersSet = false;
@@ -42,6 +46,8 @@ void CourseKeepMRAS::SetParameters(double dfKStar, double dfTauStar, double dfZ,
 {
     m_dfKmStar = dfKStar;
     m_dfTaumStar = dfTauStar;
+    m_dfTauM = m_dfTaumStar * dfShipLength / dfCruisingSpeed;
+    m_dfKm = m_dfKmStar * dfCruisingSpeed / dfShipLength;
     m_dfZ = dfZ;
     m_dfWn = dfWn;
     m_dfBeta = dfBeta;
@@ -66,12 +72,13 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
 {
     bool bAdaptLocal = bDoAdapt;
     // Don't adapt if we are going slow or straight (influence likely due to waves)
-    if (dfSpeed < 0.2 || (fabs(m_dfRudderOut - m_dfKi) < m_dfDeadband)) {
+    if (dfSpeed < MIN_SPEED || (fabs(m_dfRudderOut - m_dfKi) < m_dfDeadband) 
+        || !bTurning) {
         bAdaptLocal = false;
-        MOOSTrace("CourseKeep: No local adaptation");
+        MOOSTrace("CourseKeep: No model adaptation\n");
     }
-    if (dfSpeed < 0.2)
-        dfSpeed = 0.2;
+    if (dfSpeed < MIN_SPEED)
+        dfSpeed = MIN_SPEED;
     if (DEBUG)
         MOOSTrace("Using Course Keep Controller\n");
 
@@ -232,7 +239,7 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
 
     }
     //Potential to divide by zero here if dfSpeed == 0
-    if (dfSpeed > 0.2) {
+    if (dfSpeed > MIN_SPEED) {
         m_dfTauM = m_dfTaumStar * m_dfShipLength / dfSpeed;
         m_dfKm = m_dfKmStar * dfSpeed / m_dfShipLength;
     }
@@ -260,6 +267,10 @@ double CourseKeepMRAS::GetModelRudder() {
 }
 
 double CourseKeepMRAS::GetTauStar() {
+    return m_dfTaumStar;
+}
+
+double CourseKeepMRAS::GetTauM() {
     return m_dfTaumStar;
 }
 
@@ -300,4 +311,5 @@ void CourseKeepMRAS::GetDebugVariables(double * vars) {
     vars[8] = m_dfTauM; //m_dfPsiRefP
     vars[9] = m_dfKm;   //m_dfPsiRefPP
     vars[10] = m_dfModelRudder;
+    vars[11] = m_dfKmStar;
 }
