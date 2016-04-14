@@ -13,9 +13,12 @@
 #define ANGLE_BINS 20
 #define HISTORY_TIME 60
 #define AVERAGING_LEN 3
-#define MAX_FLAT_SLOPE 0.5 //m/s^2
+//Largest from calm day straight = 0.04
+//Largest from rough day straight = 0.10
+//From lake bradford 0.05 looks good for 3 sec AVG
+#define MAX_FLAT_SLOPE 0.05 //m/s^2
 #define SPEED_TOLERANCE 0.1
-#define HEADING_TOLERANCE 7
+#define HEADING_TOLERANCE 10 // 7 for sim
 #define DEBUG true
 
 SpeedControl::SpeedControl() : m_thrust_output(0),  m_first_run(true),
@@ -65,26 +68,18 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
   double speed_avg = 0;
   double speed_slope = 0;
   bool history_valid = SpeedHistInfo(2 * AVERAGING_LEN, speed_slope, speed_avg);
-  //Largest from calm day straight = 0.04
-  //Largest from rough day straight = 0.10
+
   if (history_valid && fabs(speed_slope) < MAX_FLAT_SLOPE) {
     speed_is_level = true;
     if (DEBUG)
       MOOSTrace("Speed Steady\n");
   }
 
-  if (DEBUG)
-    MOOSTrace("Speed Control: Debug 1\n");
-
   double time_at_heading = TimeAtHeading(HEADING_TOLERANCE);
   double time_since_thrust_change = current_time - m_thrust_change_time;
 
-  if (DEBUG)
-    MOOSTrace("Speed Control: Debug 2\n");
-
   // If we have more than a 1 sec diff in time at the heading (i.e. turning)
   // Maybe use 2x avg len for time?
-  //|| (m_prev_time_at_heading - time_at_heading) > 1
   // TODO: account for desired_heading = 0 when stopped
   if (time_at_heading > AVERAGING_LEN
       && HeadingAbsDiff(desired_heading, heading) < HEADING_TOLERANCE) {
@@ -92,9 +87,6 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
     if (DEBUG)
       MOOSTrace("Heading Steady\n");
   }
-
-  if (DEBUG)
-    MOOSTrace("Speed Control: Debug 3, previous_des: %0.2f\n", m_previous_desired_speed);
 
   // Determine state
   // 0 = First run, desired speed adjusted, desired heading adjusted
@@ -105,15 +97,9 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
       || HeadingAbsDiff(desired_heading, m_previous_desired_heading)
       > HEADING_TOLERANCE) {
     m_adjustment_state = 0;
-    if (DEBUG)
-      MOOSTrace("Speed Control: Debug 3.1\n");
   } else if (heading_is_steady && speed_is_level && m_adjustment_state == 1) {
     m_adjustment_state = 2;
-    if (DEBUG)
-      MOOSTrace("Speed Control: Debug 3.2\n");
   }
-  if (DEBUG)
-    MOOSTrace("Speed Control: Debug 3.3\n");
   if (DEBUG)
     MOOSTrace("Speed Control: Time At Heading = %.2f State: %i\n",
       time_at_heading, m_adjustment_state);
@@ -126,9 +112,6 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
       course_over_ground);
     m_current_estimate.SaveHistory(hist_record);
   }
-
-  if (DEBUG)
-    MOOSTrace("Speed Control: Debug 4\n");
 
   if (m_adjustment_state == 0) {
     //We have changed desired speeds

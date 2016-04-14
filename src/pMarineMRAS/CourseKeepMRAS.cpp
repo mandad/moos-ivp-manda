@@ -13,8 +13,9 @@
 #define RESET_THRESHOLD 5
 #define KP_LIMIT 2.5
 #define DEBUG true
-#define ROT_THRESHOLD 10
+#define KI_ROT_THRESHOLD 10
 #define MIN_SPEED 0.5
+#define MIN_ADAPT_RUDDER 10
 
 #define DEBUG true
 
@@ -73,7 +74,7 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
     bool bAdaptLocal = bDoAdapt;
     // Don't adapt if we are going slow or straight (influence likely due to waves)
     if (dfSpeed < MIN_SPEED || (fabs(m_dfRudderOut - m_dfKi) < m_dfDeadband) 
-        || !bTurning) {
+        || (!bTurning && fabs(m_dfModelRudder - m_dfKi) < MIN_ADAPT_RUDDER)) {
         bAdaptLocal = false;
         MOOSTrace("CourseKeep: No model adaptation\n");
     }
@@ -121,10 +122,10 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
                 m_dfKd = 0;
             else if (m_dfKd > (m_dfKp * m_dfShipLength / dfSpeed))
                 m_dfKd = m_dfKp * m_dfShipLength / dfSpeed;
-
-            m_dfKi = m_dfKim;
-            m_dfKi = TwoSidedLimit(m_dfKi, 10 * dfSpeed / m_dfCruisingSpeed);
         }
+        // Always want to update Ki, because it can make the turn complete
+        m_dfKi = m_dfKim;
+        m_dfKi = TwoSidedLimit(m_dfKi, 10 * dfSpeed / m_dfCruisingSpeed);
     }
     if (DEBUG)
         MOOSTrace("PID Constants: Kp: %0.2f  Kd: %0.2f  Ki: %0.2f\n", m_dfKp,
@@ -132,7 +133,7 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
     //PID equation
     double heading_error = angle180(dfDesiredHeading - dfMeasuredHeading);
     m_dfRudderOut = m_dfKp * heading_error - m_dfKd * dfMeasuredROT + m_dfKi;
-    if (m_dfDeadband > 0 && (m_dfRudderOut - m_dfKi < m_dfDeadband)) {
+    if (m_dfDeadband > 0 && (fabs(m_dfRudderOut - m_dfKi) < m_dfDeadband)) {
         //Ki is the rudder that needs to be carried to go straight, oscillations are about it
         m_dfRudderOut = m_dfKi;
     }
@@ -212,8 +213,13 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
     }
 
     //Do adaptation
+    double dfe = m_dfModelROT - dfMeasuredROT;
+    // Always adapt the Ki, want it modified even during deadband and waves
+    // Double check the sign of this
+    // Avoid integral windup during turns
+    if (fabs(dfMeasuredROT) < KI_ROT_THRESHOLD)
+        m_dfKim += m_dfGamma * dfe * dfDeltaT;
     if (bDoAdapt) {
-        double dfe = m_dfModelROT - dfMeasuredROT;
         double dfDeltaKmTm = (-m_dfBeta * dfe * (dfRudder - m_dfKim)) * dfDeltaT;
         double dfDeltaTmRecip = (m_dfAlpha * dfe * m_dfModelROT) * dfDeltaT;
         m_dfTaumStar = 1 / (1 / m_dfTaumStar + dfDeltaTmRecip);
@@ -229,15 +235,12 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
         } else if (m_dfKmStar > 10) {
             m_dfKmStar = 10;
         }
-        // Avoid integral windup during turns
-        if (fabs(dfMeasuredROT) < ROT_THRESHOLD)
-            m_dfKim -= m_dfGamma * dfe;
 
         if (DEBUG)
             MOOSTrace("Adaptive Update: TauM*: %0.2f  Km*: %0.2f  Ki,m: %0.2f\n", m_dfTaumStar,
                 m_dfKmStar, m_dfKim);
-
     }
+
     //Potential to divide by zero here if dfSpeed == 0
     if (dfSpeed > MIN_SPEED) {
         m_dfTauM = m_dfTaumStar * m_dfShipLength / dfSpeed;

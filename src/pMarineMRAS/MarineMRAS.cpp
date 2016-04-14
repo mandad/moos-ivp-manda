@@ -14,7 +14,9 @@
 
 using namespace std;
 
-#define TURN_THRESHOLD 10 //degrees
+// Found to be ~20 when does not align with desired
+// Could be ~10 with proper KI
+#define TURN_THRESHOLD 20 //degrees
 #define HEADING_HIST_SEC 5
 #define ADAPT_AFTER_TURN 2
 

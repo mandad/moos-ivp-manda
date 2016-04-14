@@ -38,6 +38,8 @@ ProcessConfig = pLogger
   Log = NAV_SPEED_OVER_GROUND @ 0
   Log = MRAS_SPEED_STATE @ 0
   Log = MRAS_K_M_STAR @ 0
+  Log = MRAS_IS_TURNING @ 0
+  Log = NAV_HEADING_OVER_GROUND @ 0
 
   Log = NODE_REPORT_LOCAL @ 0 NOSYNC
   Log = NODE_REPORT @ 0 NOSYNC

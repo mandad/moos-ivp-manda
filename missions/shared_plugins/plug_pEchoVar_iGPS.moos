@@ -10,6 +10,8 @@ ProcessConfig = pEchoVar
   echo = GPS_Y            -> NAV_Y
   echo = GPS_HEADING      -> NAV_HEADING
   echo = GPS_SPEED        -> NAV_SPEED
+  echo = GPS_SPEED        -> NAV_SPEED_OVER_GROUND
+  echo = GPS_VTG_HEADING  -> NAV_HEADING_OVER_GROUND
 
   echo_latest_only = true
   term_reporting = false
