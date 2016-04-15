@@ -84,6 +84,13 @@ nsplug meta_test_mras.moos targ_test_circle.moos --path=../shared_plugins \
    BOAT_LENGTH=$BOAT_LENGTH ASV_NAME=$ASV_NAME MANUAL_CONTROL=FALSE \
    BHV_FILE=targ_circle_pattern.bhv
 
+nsplug meta_test_mras.moos targ_test_lines.moos --path=../shared_plugins \
+   -f WARP=$TIME_WARP  LAT_ORIGIN=$LAT_ORIGIN  LONG_ORIGIN=$LONG_ORIGIN  \
+   START_POS=$START_POS  SHORE_IP=$SHORE_IP   BOAT_MODEM_IP=$BOAT_MODEM_IP \
+   SHORE_PORT=$SHORE_PORT BOAT_PORT=$BOAT_PORT  SIMULATION=$SIMULATION  \
+   BOAT_LENGTH=$BOAT_LENGTH ASV_NAME=$ASV_NAME MANUAL_CONTROL=FALSE \
+   BHV_FILE=targ_lines.bhv
+
 nsplug meta_laptop.moos targ_laptop.moos --path=../shared_plugins \
    -f WARP=$TIME_WARP  LAT_ORIGIN=$LAT_ORIGIN   LONG_ORIGIN=$LONG_ORIGIN \
    TIFF_FILE="$TIFF_FILE"  PAN_X=$PAN_X  PAN_Y=$PAN_Y  ZOOM=$ZOOM \

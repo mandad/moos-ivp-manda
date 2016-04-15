@@ -34,7 +34,7 @@ Behavior = BHV_Waypoint
              //Norfolk, L shape near TJ
              //points = 80,38 : 80,-34 : 141, -34
              //Lake Bradford L shape
-             points = 20,-20 : 20,-70 : 70,-70
+             points = 0,-55 : 0,-100 : 40,-100
              repeat = 10
 
     visual_hints = nextpt_color=yellow
