@@ -34,16 +34,18 @@ ProcessConfig = pMarineViewer
   //datum_size     = 18
   //gui_size = small
 
-  left_context[home-point] = RETURN_ZBOAT=true
-  left_context[home-point] = HOME_UPDATE_ZBOAT=station_pt=$(XPOS),$(YPOS)
-  left_context[home-point] = LOITER_ZBOAT=false
-  left_context[survey-point] = DEPLOY_ALL=true
-  left_context[survey-point] = MOOS_MANUAL_OVERRIDE_ALL=false
-  left_context[survey-point] = RETURN_ALL=false
+  left_context[home-point] = RETURN_$(ASV_NAME)=true
+  left_context[home-point] = HOME_UPDATE_$(ASV_NAME)=station_pt=$(XPOS),$(YPOS)
+  left_context[home-point] = LOITER_$(ASV_NAME)=false
 
-  right_context[return] = DEPLOY_ZBOAT=true
-  right_context[return] = MOOS_MANUAL_OVERRIDE_ZBOAT=false
-  right_context[return] = RETURN_ZBOAT=false
+  left_context[deploy-all] = DEPLOY_ALL=true
+  left_context[deploy-all] = MOOS_MANUAL_OVERRIDE_ALL=false
+  left_context[deploy-all] = RETURN_ALL=false
+
+  right_context[continue] = DEPLOY_$(ASV_NAME)=true
+  right_context[continue] = MOOS_MANUAL_OVERRIDE_$(ASV_NAME)=false
+  right_context[continue] = RETURN_$(ASV_NAME)=false
+  right_context[continue] = LOITER_$(ASV_NAME)=false
 
   scope  = ZBOAT_PWM
   scope  = DESIRED_RUDDER
@@ -58,16 +60,14 @@ ProcessConfig = pMarineViewer
   scope  = NEXT_SWATH_SIDE
   scope  = NEW_PATH
 
-  button_one = DEPLOY # DEPLOY_ZBOAT=true 
-  button_one = MOOS_MANUAL_OVERRIDE_ZBOAT=false # RETURN_ZBOAT=false
-  button_two = RETURN # RETURN_ZBOAT=true # FAULT_ZBOAT=false
-  button_three = CONTINUE # FAULT_ZBOAT=false
-  button_four = FAULT # FAULT_ZBOAT=true
+  button_one = DEPLOY # DEPLOY_$(ASV_NAME)=true 
+  button_one = MOOS_MANUAL_OVERRIDE_$(ASV_NAME)=false # RETURN_$(ASV_NAME)=false
+  button_two = RETURN # RETURN_$(ASV_NAME)=true # FAULT_$(ASV_NAME)=false
+  button_three = CONTINUE # FAULT_$(ASV_NAME)=false
+  button_four = FAULT # FAULT_$(ASV_NAME)=true
 
-  action  = MENU_KEY=deploy # DEPLOY = true # RETURN = false
-  action+ = MENU_KEY=deploy # MOOS_MANUAL_OVERRIDE=false
-  action =  MOOS_MANUAL_OVERRIDE_ZBOAT=false
-  action =  MOOS_MANUAL_OVERRIDE_ZBOAT=true
+  action =  MOOS_MANUAL_OVERRIDE_$(ASV_NAME)=false
+  action =  MOOS_MANUAL_OVERRIDE_$(ASV_NAME)=true
   action  = RETURN=true
   action  = UPDATES_RETURN=speed=1.6
   action  = MENU_KEY=SetAutonomy # SET_AUTONOMY_MODE=1

@@ -127,7 +127,7 @@ ProcessConfig = iGP9
    CommsTick = 50
 
    SerialPort = /dev/ttyAMA0
-   //SerialPort = /dev/rfcomm0
+
    BaudRate = 115200
    Covariance = "0 0 0 0 0 0 0 0 0"
 }
@@ -161,6 +161,7 @@ ProcessConfig = iSonar
 
   // Serial port settings
   Port = /dev/ttyUSB_1Port
+  //Port = /dev/rfcomm0
   BaudRate = 115200
   Handshaking = false
   Streaming = false

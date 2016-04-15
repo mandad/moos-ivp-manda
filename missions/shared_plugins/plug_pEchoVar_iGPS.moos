@@ -3,7 +3,7 @@ ProcessConfig = pEchoVar
   AppTick   = 30
   CommsTick = 30
 
-  // Use iGPS for the GPS device
+  // Use iGPS/iGPS_MB1 for the GPS device
   echo = GPS_LATITUDE     -> NAV_LAT
   echo = GPS_LONGITUDE    -> NAV_LONG
   echo = GPS_X            -> NAV_X

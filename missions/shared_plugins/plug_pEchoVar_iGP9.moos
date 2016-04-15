@@ -1,0 +1,22 @@
+ProcessConfig = pEchoVar
+{
+  AppTick   = 30
+  CommsTick = 30
+
+  // Use iGPS for the GPS device
+  echo = GP9_LAT          -> NAV_LAT
+  echo = GP9_LONG         -> NAV_LONG
+  echo = GP9_X            -> NAV_X
+  echo = GP9_Y            -> NAV_Y
+  echo = GP9_Yaw_Heading  -> NAV_HEADING
+  echo = GP9_GPS_SPEED    -> NAV_SPEED
+  echo = GP9_GPS_SPEED    -> NAV_SPEED_OVER_GROUND
+  echo = GP9_GPS_HEADING  -> NAV_HEADING_OVER_GROUND
+
+  echo_latest_only = true
+  term_reporting = false
+
+  //These are used with pMarinePID to maintain compatibility w/ graphing
+  echo = NAV_HEADING       ->  NAV_HEADING_180
+  echo = DESIRED_HEADING   ->  DESIRED_HEADING_180
+}
