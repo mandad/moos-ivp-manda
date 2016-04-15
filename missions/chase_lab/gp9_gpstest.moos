@@ -11,18 +11,18 @@
 //Local server with pShare
 ServerHost = localhost
 ServerPort = 9000
-Community  = zboat
+Community  = asv
 
 MOOSTimeWarp = 1
 TERM_REPORTING = true
 
 // Chase Tank
-//LatOrigin  = 43.1358694
-//LongOrigin = -70.9391542
+LatOrigin  = 43.1358694
+LongOrigin = -70.9391542
 
 //My House
-LatOrigin = 43.201957
-LongOrigin = -70.874862
+//LatOrigin = 43.201957
+//LongOrigin = -70.874862
 
 
 //------------------------------------------
@@ -32,17 +32,17 @@ ProcessConfig = ANTLER
   MSBetweenLaunches = 400
 
   Run = MOOSDB          @ NewConsole = false
-  Run = pLogger         @ NewConsole = false
+  //Run = pLogger         @ NewConsole = false
   //Run = pMarineViewer	  @ NewConsole = false
-  //Run = uProcessWatch	  @ NewConsole = false
+  Run = uProcessWatch	  @ NewConsole = false
   Run = iGP9            @ NewConsole = false
   Run = pEchoVar        @ NewConsole = false
-  //Run = pNodeReporter     @ NewConsole = false
+  Run = pNodeReporter     @ NewConsole = false
   //Run = pMarinePID      @ NewConsole = false
   //Run = pHelmIvP        @ NewConsole = false
-  //Run = pShare            @ NewConsole = false
-  // Run = pHostInfo       @ NewConsole = false
-  // Run = uFldShoreBroker  @ NewConsole = false
+  Run = pShare            @ NewConsole = false
+  Run = pHostInfo       @ NewConsole = false
+  Run = uFldNodeBroker  @ NewConsole = false
 }
 
 //------------------------------------------
@@ -73,27 +73,24 @@ ProcessConfig = iGP9
    Covariance = "0 0 0 0 0 0 0 0 0"
 }
 
-ProcessConfig = uFldShoreBroker                                 
-{                                                               
+ProcessConfig = uFldNodeBroker
+{
   AppTick   = 1
-  CommsTick = 1                   
-                                                                
-  //bridge = src=DEPLOY_ALL, alias=DEPLOY
-  //bridge = src=DEPLOY_$V,  alias=DEPLOY
-                                                                
-  bridge = src=RETURN, alias=RETURN
-  bridge = src=DEPLOY, alias=DEPLOY
-  bridge = src=FAULT
-  bridge = src=NODE_REPORT_LOCAL, alias=NODE_REPORT
-  bridge  = src=APPCAST_REQ, alias=APPCAST_REQ
-  bridge  = src=MOOS_MANUAL_OVERIDE, alias=MOOS_MANUAL_OVERIDE
-  bridge  = src=MOOS_MANUAL_OVERRIDE, alias=MOOS_MANUAL_OVERRIDE
+  CommsTick = 1
 
-                                                                
-  // Note: [qbridge = FOO]  is shorthand for
-  //       [bridge = src=FOO_$V,  alias=FOO] and
-  //       [bridge = src=FOO_ALL, alias=FOO]
-}                                                                          
+  //TRY_SHORE_HOST = pshare_route=multicast_2
+  //TRY_SHORE_HOST = pshare_route=192.168.200.130:9300
+  //TRY_SHORE_HOST = pshare_route=192.168.8.202:9300
+  TRY_SHORE_HOST = pshare_route=10.42.0.97:9300
+
+  BRIDGE = src=VIEW_POLYGON
+  BRIDGE = src=VIEW_POINT
+  BRIDGE = src=VIEW_SEGLIST
+  BRIDGE = src=APPCAST
+  BRIDGE = src=NODE_REPORT_LOCAL,  alias=NODE_REPORT
+  BRIDGE = src=NODE_MESSAGE_LOCAL, alias=NODE_MESSAGE
+}
+
 
 //------------------------------------------                                                            
 ProcessConfig = pShare
@@ -101,7 +98,7 @@ ProcessConfig = pShare
   AppTick   = 2
   CommsTick = 2
 
-  input = route = localhost:9300 // & multicast_1
+  input = route = localhost:9301 // & multicast_1
 
   //Input = route = multicast_1
 
@@ -241,6 +238,7 @@ ProcessConfig = pEchoVar
   echo = GP9_Yaw_Heading      -> NAV_HEADING
   echo = GP9_GPS_SPEED        -> NAV_SPEED
 }
+
 
 //------------------------------------------
 // pHelmIvP config block
