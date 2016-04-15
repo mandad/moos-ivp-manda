@@ -35,17 +35,17 @@ ProcessConfig = ANTLER
 }
 
 //==============================================
-// ZBoat Interfaces
+// Boat Interfaces
 //==============================================
 
-#include plug_iZBoat.moos
-#include plug_iGPS_MB1.moos
+#include plug_iMOOSArduino.moos
+#include plug_iGP9.moos
 
 //==============================================
 // Custom Background Processes
 //==============================================
 
-#include plug_pEchoVar_iGPS.moos
+#include plug_pEchoVar_iGP9.moos
 
 //==============================================
 // Behavioral Timer Scripts

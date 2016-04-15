@@ -39,8 +39,8 @@ ProcessConfig = ANTLER
 #else
   Run = pEchoVar        @ NewConsole = false
   Run = iGP9            @ NewConsole = false
-  Run = iMOOSArduino    @ NewConsole = false
 #endif
+  Run = iMOOSArduino    @ NewConsole = false
 }
 
 //==============================================
