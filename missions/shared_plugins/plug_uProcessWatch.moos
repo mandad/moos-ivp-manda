@@ -1,0 +1,13 @@
+ProcessConfig = uProcessWatch
+{
+  AppTick   = 4
+  CommsTick = 4
+
+  summary_wait = 5
+
+  nowatch   = uXMS*
+  nowatch   = uMAC*
+  nowatch   = uPokeDB*
+  nowatch   = uTermCommand*
+  watch_all = true
+}

@@ -1,0 +1,11 @@
+ProcessConfig = pNodeReporter
+{
+  AppTick    = 2
+  CommsTick  = 2
+
+  platform_type   = SHIP
+  platform_length = 4
+
+  node_report_output = NODE_REPORT_LOCAL
+
+}

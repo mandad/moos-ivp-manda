@@ -6,6 +6,7 @@
 /************************************************************/
 
 #include <iterator>
+#include <cmath>
 #include "MBUtils.h"
 #include "ACTable.h"
 #include "MarineMRAS.h"
@@ -13,7 +14,13 @@
 
 using namespace std;
 
-#define TURN_THRESHOLD 10 //degrees
+// Found to be ~20 when does not align with desired
+// Could be ~10 with proper KI
+#define TURN_THRESHOLD 20 //degrees
+#define HEADING_HIST_SEC 5
+#define ADAPT_AFTER_TURN 2
+
+#define DEBUG false
 
 //---------------------------------------------------------
 // Constructor
@@ -55,7 +62,7 @@ MarineMRAS::MarineMRAS()
   m_desired_speed = 0;
   m_allstop_posted = false;
   m_last_controller = ControllerType::CourseChange;
-  //m_last_heading_time = MOOSTime();
+  m_end_last_turn = MOOSTime();
 }
 
 //---------------------------------------------------------
@@ -100,6 +107,7 @@ bool MarineMRAS::OnNewMail(MOOSMSG_LIST &NewMail)
     } else if (key == "DESIRED_SPEED") {
       m_desired_speed = msg.GetDouble();
     } else if((key == "MOOS_MANUAL_OVERIDE") || (key == "MOOS_MANUAL_OVERRIDE")) {
+      MOOSTrace("pMarineMRAS: Received Manual Override Change\n");
       if(MOOSStrCmp(msg.GetString(), "FALSE")) {
         m_has_control = true;
       } else if(MOOSStrCmp(msg.GetString(), "TRUE")) {
@@ -129,91 +137,112 @@ bool MarineMRAS::OnConnectToServer()
 
 bool MarineMRAS::Iterate()
 {
+  #if DEBUG
+  MOOSTrace("pMarineMRAS: Starting iterate\n");
+  #endif
   AppCastingMOOSApp::Iterate();
 
   if (m_has_control) {
-    // ------ Determine the thrust --------
-    if(m_speed_factor != 0) {
-      m_desired_thrust = m_desired_speed * m_speed_factor;
-    } else {
-      m_desired_thrust = m_speed_control.Run(m_desired_speed, m_current_speed,
-        m_desired_heading, m_current_heading, m_current_speed_time, IsTurning(),
-        m_current_cog);
-    }
-
-    // ------- Determine the rudder -------
-    double desired_rudder = 0;
-    //prevent controller runup when speed is 0
-    ControllerType controller_to_use = DetermineController();
-    if (!m_first_heading && m_desired_thrust > 0 && m_desired_speed > 0) {
-      if (controller_to_use ==  ControllerType::CourseChange) {
-        //MOOSTrace("Using Course Change Controller\n");
-        if (m_last_controller == ControllerType::CourseKeep) {
-          m_CourseControl.ResetModel(m_current_heading, m_current_ROT,
-            m_CourseKeepControl.GetModelRudder());
-          m_CourseControl.SwitchController(m_CourseKeepControl.GetTauStar(),
-            m_CourseKeepControl.GetKStar());
-          m_last_controller = ControllerType::CourseChange;
-        }
-        desired_rudder = m_CourseControl.Run(m_desired_heading, m_current_heading,
-          m_current_ROT, m_desired_speed, m_last_heading_time);
+    try {
+      // ------ Determine the thrust --------
+      #if DEBUG
+      MOOSTrace("pMarineMRAS: Determining Thrust, speed factor: %0.2f\n", m_speed_factor);
+      #endif
+      if(m_speed_factor != 0) {
+        m_desired_thrust = m_desired_speed * m_speed_factor;
       } else {
-        // Use the course keep controller
-        if (m_last_controller == ControllerType::CourseChange) {
-          m_CourseKeepControl.ResetModel(m_current_heading, m_current_ROT,
-            m_CourseControl.GetModelRudder());
-          m_CourseKeepControl.SwitchController();
-          m_last_controller = ControllerType::CourseKeep;
-        }
-        bool do_adapt = true;
-        if (controller_to_use == ControllerType::CourseKeepNoAdapt)
-          do_adapt = false;
-        //using desired speed instead of current to prevent minor fluctuations
-        desired_rudder = m_CourseKeepControl.Run(m_desired_heading, m_current_heading,
-          m_current_ROT, m_current_speed, m_last_heading_time, do_adapt, IsTurning());
+        m_desired_thrust = m_speed_control.Run(m_desired_speed, m_current_speed,
+          m_desired_heading, m_current_heading, m_current_speed_time, IsTurning(),
+          m_current_cog);
       }
-    }
 
-    if (m_output) {
-      Notify("DESIRED_THRUST", m_desired_thrust);
-      Notify("DESIRED_RUDDER", desired_rudder);
-    }
+      // ------- Determine the rudder -------
+      #if DEBUG
+      MOOSTrace("pMarineMRAS: Determining Rudder\n");
+      #endif
+      double desired_rudder = 0;
+      //prevent controller runup when speed is 0
+      ControllerType controller_to_use = DetermineController();
+      if (!m_first_heading && m_desired_thrust > 0 && m_desired_speed > 0) {
+        if (controller_to_use ==  ControllerType::CourseChange) {
+          //MOOSTrace("Using Course Change Controller\n");
+          if (m_last_controller == ControllerType::CourseKeep) {
+            m_CourseControl.ResetModel(m_current_heading, m_current_ROT,
+              m_CourseKeepControl.GetModelRudder());
+            m_CourseControl.SwitchController(m_CourseKeepControl.GetTauStar(),
+              m_CourseKeepControl.GetKStar());
+            m_last_controller = ControllerType::CourseChange;
+          }
+          desired_rudder = m_CourseControl.Run(m_desired_heading, m_current_heading,
+            m_current_ROT, m_desired_speed, m_last_heading_time);
+        } else {
+          // Use the course keep controller
+          if (m_last_controller == ControllerType::CourseChange) {
+            m_CourseKeepControl.ResetModel(m_current_heading, m_current_ROT,
+              m_CourseControl.GetModelRudder());
+            m_CourseKeepControl.SwitchController();
+            m_last_controller = ControllerType::CourseKeep;
+          }
+          bool do_adapt = true;
+          if (controller_to_use == ControllerType::CourseKeepNoAdapt)
+            do_adapt = false;
+          //using desired speed instead of current to prevent minor fluctuations
+          desired_rudder = m_CourseKeepControl.Run(m_desired_heading, m_current_heading,
+            m_current_ROT, m_current_speed, m_last_heading_time, do_adapt, IsTurning());
+        }
+      }
 
-    //Debug variables for logging
-    double vars[11];
-    if (controller_to_use ==  ControllerType::CourseChange) {
-      m_CourseControl.GetDebugVariables(vars);
-    } else {
-      m_CourseKeepControl.GetDebugVariables(vars);
-    }
-    Notify("MRAS_KP", vars[0]);
-    Notify("MRAS_KD", vars[1]);
-    Notify("MRAS_KI", vars[2]);
-    Notify("MRAS_RUDDER_OUT", vars[3]);
-    Notify("MRAS_MODEL_HEADING", vars[4]);
-    Notify("MRAS_MODEL_ROT", vars[5]);
-    if (controller_to_use == ControllerType::CourseChange) {
-      Notify("MRAS_SERIES_MODEL_HEADING", vars[6]);
-      Notify("MRAS_SERIES_MODEL_ROT", vars[7]);
-      Notify("MRAS_PSI_REF_P", vars[8]);
-      Notify("MRAS_PSI_REF_PP", vars[9]);
-    } else {
-      Notify("MRAS_TAU_M_STAR", vars[6]);
-      Notify("MRAS_PSI_PP", vars[7]);
-      Notify("MRAS_TAU_M", vars[8]);
-      Notify("MRAS_K_M", vars[9]);
-    }
-    Notify("MRAS_MODEL_RUDDER", vars[10]);
+      if (m_output) {
+        Notify("DESIRED_THRUST", m_desired_thrust);
+        Notify("DESIRED_RUDDER", desired_rudder);
+      }
 
-    double speed_vars[1];
-    m_speed_control.GetVarInfo(speed_vars);
-    Notify("MRAS_SPEED_STATE", speed_vars[0]);
+      #if DEBUG
+      MOOSTrace("pMarineMRAS: Logging Variables\n");
+      #endif
+      //Debug variables for logging
+      double vars[12];
+      if (controller_to_use ==  ControllerType::CourseChange) {
+        m_CourseControl.GetDebugVariables(vars);
+      } else {
+        m_CourseKeepControl.GetDebugVariables(vars);
+      }
+      Notify("MRAS_KP", vars[0]);
+      Notify("MRAS_KD", vars[1]);
+      Notify("MRAS_KI", vars[2]);
+      Notify("MRAS_RUDDER_OUT", vars[3]);
+      Notify("MRAS_MODEL_HEADING", vars[4]);
+      Notify("MRAS_MODEL_ROT", vars[5]);
+      if (controller_to_use == ControllerType::CourseChange) {
+        Notify("MRAS_SERIES_MODEL_HEADING", vars[6]);
+        Notify("MRAS_SERIES_MODEL_ROT", vars[7]);
+        Notify("MRAS_PSI_REF_P", vars[8]);
+        Notify("MRAS_PSI_REF_PP", vars[9]);
+      } else {
+        Notify("MRAS_TAU_M_STAR", vars[6]);
+        Notify("MRAS_PSI_PP", vars[7]);
+        Notify("MRAS_TAU_M", vars[8]);
+        Notify("MRAS_K_M", vars[9]);
+        Notify("MRAS_K_M_STAR", vars[11]);
+      }
+      Notify("MRAS_MODEL_RUDDER", vars[10]);
+      Notify("MRAS_IS_TURNING", IsTurning());
 
-    Notify("NAV_ROT", m_current_ROT);
-    Notify("NAV_HEADING_180", m_current_heading);
-    Notify("DESIRED_HEADING_180", angle180(m_desired_heading));
-    m_allstop_posted = false;
+      double speed_vars[1];
+      m_speed_control.GetVarInfo(speed_vars);
+      Notify("MRAS_SPEED_STATE", speed_vars[0]);
+
+      Notify("NAV_ROT", m_current_ROT);
+      Notify("NAV_HEADING_180", m_current_heading);
+      Notify("DESIRED_HEADING_180", angle180(m_desired_heading));
+      m_allstop_posted = false;
+    } catch (std::exception& err) {
+      MOOSTrace("pMarineMRAS: Error in Iterate %c\n",err.what());
+    } catch (...) {
+      MOOSTrace("Other exception\n");
+    }
   } else {
+    MOOSTrace("pMarineMRAS: Posting All Stop\n");
     PostAllStop();
   }
 
@@ -223,6 +252,9 @@ bool MarineMRAS::Iterate()
     Notify("NAV_HEADING_180", m_current_heading);
     Notify("DESIRED_HEADING_180", angle180(m_desired_heading));
   }
+  #if DEBUG
+  MOOSTrace("pMarineMRAS: Posting Appcast Report (end iterate)\n");
+  #endif
 
   AppCastingMOOSApp::PostReport();
   return(true);
@@ -425,6 +457,11 @@ bool MarineMRAS::buildReport()
     else if (controller_in_use == ControllerType::CourseKeepNoAdapt) {
       m_msgs << "\nCourse Keep Controller in use, no adaptation.";
     }
+    if (IsTurning()) {
+      m_msgs << "\nIs Turning? yes";
+    } else {
+      m_msgs << "\nIs Turning? no";
+    }
     m_msgs << "\n\n" << m_speed_control.AppCastMessage();
   } else {
     m_msgs << "Control not running.";
@@ -518,7 +555,7 @@ void MarineMRAS::AddHeadingHistory(double heading, double heading_time) {
   m_desired_hist_time.push_front(heading_time);
 
   //Keep last 10 sec of data - this needs to adapt to turn rate of vessel
-  while (heading_time - m_desired_hist_time.back() > 10) {
+  while (heading_time - m_desired_hist_time.back() > HEADING_HIST_SEC) {
     m_desired_hist_time.pop_back();
     m_desired_heading_history.pop_back();
   }
@@ -553,13 +590,22 @@ ControllerType MarineMRAS::DetermineController() {
 
 bool MarineMRAS::IsTurning() {
   if (m_desired_heading_history.size() > 2) {
-    bool recent_change = fabs(angle180(m_desired_heading_history.back()
-                          - angle180(m_desired_heading))) > TURN_THRESHOLD;
-    bool not_near_desired = fabs(m_current_heading - m_desired_heading)
-                            > TURN_THRESHOLD;
-    return not_near_desired || recent_change;
+    // bool recent_change = fabs(angle180(m_desired_heading_history.back()
+    //                       - angle180(m_desired_heading))) > TURN_THRESHOLD;
+      bool not_near_desired = fabs(angle180(angle180(m_current_heading) - 
+                              angle180(m_desired_heading))) > TURN_THRESHOLD;
+      if (not_near_desired) {
+        m_end_last_turn = m_desired_hist_time.front();
+      }
+      bool recent_change = true;
+      // Even in the case of CourseChange, TauM is based on settling time
+      double settle_time = 7 * m_CourseKeepControl.GetTauM();
+      if ((MOOSTime() - m_end_last_turn) > settle_time) {
+        recent_change = false;
+      }
+      return not_near_desired || recent_change;
   } else {
-    //assume we are turning if we don't know
-    return true;
+    //assume we are not turning if we don't know
+    return false;
   }
 }

@@ -1,0 +1,9 @@
+MOOSTimeWarp = $(WARP)
+TERM_REPORTING = true
+
+// This defines where 0,0 is referenced from in the system
+// Change this to be a local origin for the survey area
+// It must be set in both this file and the laptop.moos file
+// for proper operation.
+LatOrigin  = $(LAT_ORIGIN)
+LongOrigin = $(LONG_ORIGIN)

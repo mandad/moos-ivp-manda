@@ -1,0 +1,20 @@
+initialize   DEPLOY = false
+initialize   RETURN = false
+initialize   FAULT = false
+initialize   REACHED_HOME = false
+initialize   SEQ = 1
+
+Set MODE = ACTIVE {
+  DEPLOY = true
+} INACTIVE
+
+Set MODE = RUN {
+  MODE = ACTIVE
+  RETURN != true
+  FAULT != true
+}
+
+SET MODE = INPLACE {
+  MODE = ACTIVE
+  FAULT = true
+} HOME

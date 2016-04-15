@@ -79,6 +79,7 @@ class MarineMRAS : public AppCastingMOOSApp
     double m_current_speed;
     double m_current_speed_time;
     double m_last_heading_time;
+    double m_end_last_turn;
     bool   m_first_heading;
     double m_previous_heading;
     double m_current_ROT;

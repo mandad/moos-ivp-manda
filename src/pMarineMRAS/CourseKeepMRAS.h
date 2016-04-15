@@ -29,6 +29,7 @@ public:
     void SwitchController();
     double GetModelRudder();
     double GetTauStar();
+    double GetTauM();
     double GetKStar();
 
 private:

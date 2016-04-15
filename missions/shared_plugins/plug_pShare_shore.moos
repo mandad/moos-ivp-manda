@@ -1,0 +1,7 @@
+ProcessConfig = pShare
+{
+  AppTick   = 2
+  CommsTick = 2
+
+  Input = route = localhost:$(SHORE_PORT)
+}

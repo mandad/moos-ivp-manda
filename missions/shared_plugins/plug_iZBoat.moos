@@ -1,0 +1,16 @@
+ProcessConfig = iZBoat
+{
+  AppTick   = 10
+  CommsTick = 10
+
+  // Serial port configuration
+  PORT = /dev/ttyUSB0
+  BAUDRATE = 115200 // 38400 for Z1
+  HANDSHAKING = FALSE
+  STREAMING = FALSE
+
+  //iZBoat Configuration
+  MaxInputRate = 20
+  MaxRudder = 45
+  MaxThrottle = 100
+}

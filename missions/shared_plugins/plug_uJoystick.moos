@@ -1,0 +1,20 @@
+ProcessConfig = uJoystick
+{
+  AppTick   = 4
+  CommsTick = 4
+
+  DEVICE_NAME = /dev/input/js0
+
+  INCREMENT = false
+  SCALE = 100
+
+  AXIS = 0
+  SCALE_RATIO = -0.45
+  MOOS_DEST_VAR = DESIRED_RUDDER
+
+  AXIS = 1
+  SCALE_RATIO = 0.5
+  MOOS_DEST_VAR = DESIRED_THRUST
+
+}
+

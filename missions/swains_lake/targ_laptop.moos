@@ -1,0 +1,276 @@
+//-------------------------------------------------
+// NAME: Damian Manda
+// FILE: laptop.moos
+// Intended for connecting to remote RPi2 for
+// monitoring of a MOOS mission
+//-------------------------------------------------
+
+//Local server with pShare
+ServerHost = localhost
+ServerPort = 9000
+Community  = shoreside_manda
+
+MOOSTimeWarp = 1
+TERM_REPORTING = true
+
+// This defines where 0,0 is referenced from in the system
+// Change this to be a local origin for the survey area
+// It must be set in both this file and the laptop.moos file
+// for proper operation.
+LatOrigin  = 43.2001957
+LongOrigin = -71.0466533
+
+//------------------------------------------
+// Antler configuration  block
+ProcessConfig = ANTLER
+{
+  MSBetweenLaunches = 400
+
+  Run = MOOSDB          @ NewConsole = false
+  Run = pLogger         @ NewConsole = false
+  Run = pMarineViewer     @ NewConsole = false
+  Run = uProcessWatch   @ NewConsole = false
+  Run = pShare            @ NewConsole = false
+  Run = pHostInfo       @ NewConsole = false
+  Run = uFldShoreBroker  @ NewConsole = false
+  Run = uJoystick        @ NewConsole = false
+  
+  // For testing the Joystick
+  //Run = uSimNomoto       @ NewConsole = false
+  
+  Run = uFldNodeComms   @ NewConsole = false
+}
+
+//------------------------------------------
+// Vehicle Communication Config
+//------------------------------------------
+
+ProcessConfig = pHostInfo                                       
+{                                                               
+  AppTick   = 1                                                 
+  CommsTick = 1                                                 
+                                                                
+  TEMP_FILE_DIR  = ./                                           
+  
+  //DEFAULT_HOSTIP = 10.42.0.1
+    
+  //External IP Address of Laptop
+  DEFAULT_HOSTIP_FORCE = 10.42.0.115
+
+} 
+ProcessConfig = uFldShoreBroker                                 
+{                                                               
+  AppTick   = 1
+  CommsTick = 1                   
+
+  qbridge  = DEPLOY, RETURN, STATION_KEEP, NODE_REPORT, NODE_MESSAGE, FAULT
+  qbridge  = MOOS_MANUAL_OVERRIDE, MOOS_MANUAL_OVERIDE, APPCAST_REQ, AVOID
+  qbridge = HOME_UPDATE, SONAR_DEPTH_M
+  bridge = src=SET_AUTONOMY_MODE
+  bridge = src=UTM_SURVEYLINE
+  // These are used for iRemoteLite
+  //bridge = src=DESIRED_RUDDER
+  //bridge = src=DESIRED_THRUST
+  bridge = src=RESTART_HELM
+  bridge = src=LOGGER_RESTART
+  bridge = src=MOOS_MANUAL_OVERIDE
+
+                                                                
+  // Note: [qbridge = FOO]  is shorthand for
+  //       [bridge = src=FOO_$V,  alias=FOO] and
+  //       [bridge = src=FOO_ALL, alias=FOO]
+} 
+
+ProcessConfig = pShare
+{
+  AppTick   = 2
+  CommsTick = 2
+
+  Input = route = localhost:9300
+}
+
+ProcessConfig = uFldNodeComms
+{
+  AppTick       = 2
+  CommsTick     = 2
+
+  comms_range      = 1000
+  critical_range   = 50
+
+  min_msg_interval = 15
+  max_msg_length   = 1000
+
+  groups           = true
+
+  view_node_rpt_pulses = false
+}
+
+//==============================================
+// Standard Processes
+//==============================================
+
+ProcessConfig = uProcessWatch
+{
+  AppTick   = 4
+  CommsTick = 4
+
+  summary_wait = 5
+
+  nowatch   = uXMS*
+  nowatch   = uMAC*
+  nowatch   = uPokeDB*
+  nowatch   = uTermCommand*
+  watch_all = true
+}
+ProcessConfig = pLogger
+{
+  AppTick   = 10
+  CommsTick = 10
+
+  AsyncLog = true
+
+  // For variables that are published in a bundle on their first post,
+  // explicitly declare their logging request
+
+  Path = ../logs/
+  UTCLogDirectories = true
+
+  Log = IVPHELM_LIFE_EVENT @ 0 NOSYNC
+
+  DoublePrecision = 7
+
+  LogAuxSrc = true
+  WildCardLogging = true
+  WildCardOmitPattern = *_STATUS
+  WildCardOmitPattern = DB_VARSUMMARY
+  WildCardOmitPattern = DB_RWSUMMARY
+  WildCardExclusionLog = true
+}
+ProcessConfig = pMarineViewer
+{
+  AppTick    = 10
+  CommsTick  = 10
+
+  tiff_file            = Swains_Aerial.tif
+  tiff_file_b          = Swains_Aerial.tif
+
+  set_pan_x            = 300
+  set_pan_y            = -1300
+  zoom                 = 0.65
+  vehicle_shape_scale  = 1.5
+  hash_delta           = 100
+  hash_shade           = 0.4
+  hash_viewable        = false
+
+  trails_point_size   = 2
+  trails_length       = 10000
+  trails_color        = blue
+  vehicles_name_color = darkred
+  vehicles_active_color = red //default
+
+
+  // Appcast configuration
+  appcast_height       = 75
+  appcast_width        = 30
+  appcast_viewable     = true
+  appcast_color_scheme = indigo
+  nodes_font_size      = medium
+  procs_font_size      = medium
+  appcast_font_size    = small
+  
+  //datum_viewable = true
+  //datum_size     = 18
+  //gui_size = small
+
+  left_context[home-point] = RETURN_ASV3=true
+  left_context[home-point] = HOME_UPDATE_$(ASV_NAME)=station_pt=$(XPOS),$(YPOS)
+  left_context[home-point] = LOITER_ASV3=false
+
+  left_context[deploy-all] = DEPLOY_ALL=true
+  left_context[deploy-all] = MOOS_MANUAL_OVERRIDE_ALL=false
+  left_context[deploy-all] = RETURN_ALL=false
+
+  right_context[continue] = DEPLOY_ASV3=true
+  right_context[continue] = MOOS_MANUAL_OVERRIDE_ASV3=false
+  right_context[continue] = RETURN_ASV3=false
+  right_context[continue] = LOITER_ASV3=false
+
+  scope  = ZBOAT_PWM
+  scope  = DESIRED_RUDDER
+  scope  = DESIRED_THRUST
+  scope  = RETURN
+  scope  = WPT_STAT
+  scope  = MODE
+  scope  = SWATH_WIDTH
+  scope  = SONAR_DEPTH_M
+  scope  = SWATH_EDGE
+  scope  = SWATH_WIDTH_RECORD
+  scope  = NEXT_SWATH_SIDE
+  scope  = NEW_PATH
+
+  button_one = DEPLOY # DEPLOY_ASV3=true 
+  button_one = MOOS_MANUAL_OVERRIDE_ASV3=false # RETURN_ASV3=false
+  button_two = RETURN # RETURN_ASV3=true # FAULT_ASV3=false
+  button_three = CONTINUE # FAULT_ASV3=false
+  button_four = FAULT # FAULT_ASV3=true
+
+  action =  MOOS_MANUAL_OVERRIDE_ASV3=false
+  action =  MOOS_MANUAL_OVERRIDE_ASV3=true
+  action  = RETURN=true
+  action  = UPDATES_RETURN=speed=1.6
+  action  = MENU_KEY=SetAutonomy # SET_AUTONOMY_MODE=1
+}
+
+//==============================================
+// Custom Processes
+//==============================================
+
+ProcessConfig = uJoystick
+{
+  AppTick   = 4
+  CommsTick = 4
+
+  DEVICE_NAME = /dev/input/js0
+
+  INCREMENT = false
+  SCALE = 100
+
+  AXIS = 0
+  SCALE_RATIO = -0.45
+  MOOS_DEST_VAR = DESIRED_RUDDER
+
+  AXIS = 1
+  SCALE_RATIO = 0.5
+  MOOS_DEST_VAR = DESIRED_THRUST
+
+}
+
+
+ProcessConfig = uSimNomoto
+{
+  AppTick   = 10
+  CommsTick = 10
+
+  //start_x       = 0
+  //start_y       = -60
+  //start_heading = 180
+  //start_speed   = 0
+  START_POS = x=0,y=0,speed=0,heading=90
+
+  prefix        = NAV
+
+  max_rudder_degs_per_sec = 30
+  turn_rate     = 195 //this is actually 88 at 45 deg, estimated Z-Boat max
+  
+  max_acceleration = 0.5
+  max_deceleration = 0.3
+  
+  thrust_map    = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
+  thrust_reflect = true
+
+  //drift_vector = 90, 0.5
+
+  //term_reporting = false
+}
+
+

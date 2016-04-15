@@ -1,0 +1,10 @@
+ProcessConfig = iGP9
+{
+   AppTick   = 50  
+   CommsTick = 50
+
+   SerialPort = /dev/ttyAMA0
+   //SerialPort = /dev/rfcomm0
+   BaudRate = 115200
+   Covariance = "0 0 0 0 0 0 0 0 0"
+}

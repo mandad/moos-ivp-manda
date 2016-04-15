@@ -1,0 +1,195 @@
+//-------------------------------------------------
+// NAME: Damian Manda
+// FILE: sonar_test_monitoring.moos
+// Launches just the Sonar interface and minimal supporting processes
+//-------------------------------------------------
+
+ServerHost = localhost		
+ServerPort = 9000
+Community  = sonartest
+
+MOOSTimeWarp = 1
+TERM_REPORTING = true
+
+// Swains lake
+LatOrigin  = 43.2001957
+LongOrigin = -71.0466533
+
+
+//------------------------------------------
+// Antler configuration  block
+ProcessConfig = ANTLER
+{
+  MSBetweenLaunches = 400
+
+  Run = MOOSDB          @ NewConsole = false
+  //Run = pLogger         @ NewConsole = false
+  //Run = uProcessWatch	  @ NewConsole = false
+  //Run = pNodeReporter	  @ NewConsole = false
+  Run = iSonar            @ NewConsole = false
+  Run = iGP9              @ NewConsole = false
+  Run = pEchoVar          @ NewConsole = false
+  Run = pShare          @ NewConsole = false
+  Run = pHostInfo       @ NewConsole = false
+  Run = uFldNodeBroker  @ NewConsole = false
+  //Run = uSimNomoto        @ NewConsole = false
+}
+
+
+//------------------------------------------
+// Find the shoreside and share variables
+//------------------------------------------
+
+ProcessConfig = uFldNodeBroker
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  //External IP address of laptop
+  TRY_SHORE_HOST = pshare_route=10.42.0.115:9300
+
+
+  BRIDGE = src=VIEW_POLYGON
+  BRIDGE = src=VIEW_POINT
+  BRIDGE = src=VIEW_CIRCLE
+  BRIDGE = src=VIEW_SEGLIST
+  BRIDGE = src=APPCAST
+  BRIDGE = src=NODE_REPORT_LOCAL,  alias=NODE_REPORT
+  BRIDGE = src=NODE_MESSAGE_LOCAL, alias=NODE_MESSAGE
+  BRIDGE = src=ZBOAT_PWM
+  BRIDGE = src=SONAR_DEPTH_M
+  BRIDGE = src=DESIRED_RUDDER
+
+  term_reporting = false
+}
+
+ProcessConfig = pHostInfo
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  TEMP_FILE_DIR  = ./
+  //DEFAULT_HOSTIP = 192.168.2.71   // default is "localhost"
+
+  //External (4G) IP of boat network
+  //DEFAULT_HOSTIP_FORCE = 10.42.0.11
+
+  term_reporting = false
+}
+
+ProcessConfig = pShare
+{
+  AppTick   = 2
+  CommsTick = 2
+
+  Input = route = localhost:9301
+}
+
+//------------------------------------------
+// pLogger config block
+
+ProcessConfig = pLogger
+{
+  AppTick   = 15
+  CommsTick = 15
+
+  AsyncLog = true
+
+  // For variables that are published in a bundle on their first post,
+  // explicitly declare their logging request
+
+  Log = IVPHELM_LIFE_EVENT @ 0 NOSYNC
+
+  LogAuxSrc = true
+  WildCardLogging = true
+  WildCardOmitPattern = *_STATUS
+  WildCardOmitPattern = DB_VARSUMMARY
+  WildCardOmitPattern = DB_RWSUMMARY
+  WildCardExclusionLog = true
+}
+
+
+//------------------------------------------
+// uProcessWatch config block
+
+ProcessConfig = uProcessWatch
+{
+  AppTick   = 4
+  CommsTick = 4
+
+  summary_wait = 5
+
+  nowatch   = uXMS*
+  nowatch   = uMAC*
+  nowatch   = uPokeDB*
+  nowatch   = uTermCommand*
+  watch_all = true
+}
+
+
+//------------------------------------------
+// pNodeReporter config block
+
+ProcessConfig = pNodeReporter
+{
+  AppTick    = 2
+  CommsTick	 = 2
+
+  platform_type   = SHIP
+  platform_length = 4
+
+  node_report_output = NODE_REPORT_LOCAL
+}
+
+//------------------------------------------------
+// iGP9 config block
+
+ProcessConfig = iGP9
+{
+   AppTick   = 50  
+   CommsTick = 50
+
+   SerialPort = /dev/ttyAMA0
+   //SerialPort = /dev/rfcomm0
+   BaudRate = 115200
+   Covariance = "0 0 0 0 0 0 0 0 0"
+}
+
+ProcessConfig = pEchoVar
+{
+  AppTick   = 30
+  CommsTick = 30
+
+  // Use iGPS_MB1 for the GPS device
+  echo = GP9_LAT      -> NAV_LAT
+  echo = GP9_LONG    -> NAV_LONG
+  echo = GP9_X            -> NAV_X
+  echo = GP9_Y            -> NAV_Y
+  //echo = GP9_GPS_HEADING      -> NAV_HEADING
+  echo = GP9_Yaw_Heading      -> NAV_HEADING
+  //echo = GPS_SPEED        -> NAV_SPEED
+  echo = GP9_GPS_SPEED        -> NAV_SPEED
+}
+
+
+//------------------------------------------------
+// iSonar config block
+
+ProcessConfig = iSonar
+{
+  AppTick   = 20
+  CommsTick = 20
+
+  Mode = Serial //or UDP
+
+  // Serial port settings
+  Port = /dev/ttyUSB_1Port
+  BaudRate = 115200
+  Handshaking = false
+  Streaming = false
+
+  PublishRaw = true
+  LogHypack = true
+  TranducerDepth = 0.5 //m
+}
+

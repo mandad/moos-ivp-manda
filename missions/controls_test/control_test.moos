@@ -1,11 +1,12 @@
 //-------------------------------------------------
 // NAME: Damian Manda, UNH
 // FILE: control_test.moos
+// Runs a test pattern for adaptive control
 //-------------------------------------------------
 
 ServerHost = localhost
 ServerPort = 9000
-Community  = alpha
+Community  = asv
 
 MOOSTimeWarp = 6
 
@@ -49,13 +50,13 @@ ProcessConfig = pMarineMRAS
    // K_Star = 1.3
    // Tau_Star = 0.17
    //Test for adaptation
-   K_Star = 1.66 //1.66
-   Tau_Star = 0.76 //0.76
+   K_Star = 3 //1.66
+   Tau_Star = 0.3 //0.76 but actually more like 0.9 with rudder delay
    DampingRatio = 1
    NaturalFrequency = 1.3 //1.3 for Kp = 1.2
 
    //Adaptation parameters
-   Beta = 0.0001     //Speed of Kp or Km/Tm adaptation
+   Beta =  0.0005     //Speed of Kp or Km/Tm adaptation
    Alpha = 0.0001    //Speed of Kd or 1/Tm adaptation
    Gamma = 0.00001    //Speed of Ki adaptation
    Xi = 1   // <= 1, not used if DecreaseAdaptation = false
@@ -70,7 +71,7 @@ ProcessConfig = pMarineMRAS
    RudderSpeed = 30 // deg/s
    CruisingSpeed = 1.6 // m/s
    Length = 2 //m
-   MaxROT = 60
+   MaxROT = 100
    DiscardLargeROT = false;
 
    //Speed settings (use one or the other)
@@ -78,6 +79,8 @@ ProcessConfig = pMarineMRAS
    //Speed_Factor = 31.25
    MaxThrust = 100
    thrust_map = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
+
+   NoOutput = false  //used to record data
 }
 
 //------------------------------------------
@@ -119,6 +122,8 @@ ProcessConfig = pLogger
   Log = DESIRED_THRUST @ 0
   Log = NAV_SPEED_OVER_GROUND @ 0
   Log = MRAS_SPEED_STATE @ 0
+  Log = MRAS_K_M_STAR @ 0
+  Log = MRAS_IS_TURNING @ 0
 
   Log = NODE_REPORT_LOCAL @ 0 NOSYNC
   Log = NODE_REPORT @ 0 NOSYNC
@@ -159,15 +164,15 @@ ProcessConfig = uProcessWatch
 }
 
 //------------------------------------------
-// uSimMarine config block
+// uSimNomoto config block
 
 ProcessConfig = uSimNomoto
 {
-  AppTick  	= 10
-  CommsTick	= 10
+  AppTick  	= 20
+  CommsTick	= 20
 
   start_x       = 0
-  start_y       = -20
+  start_y       = -60
   start_heading = 180
   start_speed   = 0
 

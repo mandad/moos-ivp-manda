@@ -1,0 +1,422 @@
+//-------------------------------------------------
+// NAME: Damian Manda
+// FILE: meta_test_mras.moos
+// DATE: 12 Apr 2016
+// Intended for running MRAS control system tests on ASV3
+//-------------------------------------------------
+
+ServerHost = localhost
+ServerPort = 9000
+Community  = ASV3
+
+MOOSTimeWarp = 1
+TERM_REPORTING = true
+
+// This defines where 0,0 is referenced from in the system
+// Change this to be a local origin for the survey area
+// It must be set in both this file and the laptop.moos file
+// for proper operation.
+LatOrigin  = 43.2001957
+LongOrigin = -71.0466533
+
+//------------------------------------------
+// Antler configuration  block
+ProcessConfig = ANTLER
+{
+  MSBetweenLaunches = 400
+
+  Run = MOOSDB          @ NewConsole = false
+  Run = pLogger         @ NewConsole = false
+  //Run = pMarinePID      @ NewConsole = false
+  Run = pMarineMRAS     @ NewConsole = false
+  Run = pHelmIvP        @ NewConsole = false
+  //Run = uTimerScript    @ NewConsole = false ~ uTS_StartTimer
+  Run = uTimerScript    @ NewConsole = false ~ uTS_TurnTimer
+  Run = uProcessWatch     @ NewConsole = false
+  Run = pNodeReporter     @ NewConsole = false
+  Run = pShare          @ NewConsole = false
+  Run = pHostInfo       @ NewConsole = false
+  Run = uFldNodeBroker  @ NewConsole = false
+  Run = pLLTrackUpdate  @ NewConsole = false
+  //Run = pBasicContactMgr @ NewConsole = false
+  Run = uSimNomoto      @ NewConsole = false
+  //Run = uSimMarine      @ NewConsole = false
+}
+
+//==============================================
+// Boat Interfaces
+//==============================================
+
+ProcessConfig = iGP9
+{
+   AppTick   = 50  
+   CommsTick = 50
+
+   SerialPort = /dev/ttyAMA0
+   //SerialPort = /dev/rfcomm0
+   BaudRate = 115200
+   Covariance = "0 0 0 0 0 0 0 0 0"
+}
+ProcessConfig = iMOOSArduino
+{
+  AppTick = 4
+  CommsTick = 4
+  
+  CommType = "ARDUINO"
+  SerialPort = "/dev/ttyACM0"
+  BaudRate = 115200
+  debugOutput = true
+} 
+ProcessConfig = iSonar
+{
+  AppTick   = 15
+  CommsTick = 15
+
+  Mode = Serial //or UDP
+
+  // Serial port settings
+  Port = /dev/ttyUSB_1Port
+  //Port = /dev/rfcomm0
+  BaudRate = 115200
+  Handshaking = false
+  Streaming = false
+
+  PublishRaw = true
+  LogHypack = true
+  TranducerDepth = 0.5 //m
+}
+
+//==============================================
+// Custom Background Processes
+//==============================================
+
+ProcessConfig = pLLTrackUpdate
+{
+  AppTick = 1
+  CommsTick = 1
+}
+ProcessConfig = pSonarFilter
+{
+   AppTick   = 5
+   CommsTick = 20
+
+   FilterLen  = 10
+   StDevLimit = 2
+   SimSwathAngle = 70
+}
+ProcessConfig = pEchoVar
+{
+  AppTick   = 30
+  CommsTick = 30
+
+  // Use iGPS for the GPS device
+  echo = GP9_LAT          -> NAV_LAT
+  echo = GP9_LONG         -> NAV_LONG
+  echo = GP9_X            -> NAV_X
+  echo = GP9_Y            -> NAV_Y
+  echo = GP9_Yaw_Heading  -> NAV_HEADING
+  echo = GP9_GPS_SPEED    -> NAV_SPEED
+  echo = GP9_GPS_SPEED    -> NAV_SPEED_OVER_GROUND
+  echo = GP9_GPS_HEADING  -> NAV_HEADING_OVER_GROUND
+
+  echo_latest_only = true
+  term_reporting = false
+
+  //These are used with pMarinePID to maintain compatibility w/ graphing
+  echo = NAV_HEADING       ->  NAV_HEADING_180
+  echo = DESIRED_HEADING   ->  DESIRED_HEADING_180
+}
+ProcessConfig = pMarineMRAS
+{
+   AppTick   = 10
+   CommsTick = 10
+
+   // Initial constant parameters
+   //Test for adaptation
+   K_Star = 1.56 //1.56 for Z-boat, 1.66 for sim
+   Tau_Star = 0.8 //0.76 but actually more like 0.9 with rudder delay
+   DampingRatio = 1
+   NaturalFrequency = 1.3 //1.3 for Kp = 1.2
+
+   //Adaptation parameters
+   Beta =  0.0005     //Speed of Kp or Km/Tm adaptation
+   Alpha = 0.0001    //Speed of Kd or 1/Tm adaptation
+   Gamma = 0.0001    //Speed of Ki adaptation
+   Xi = 1   // <= 1, not used if DecreaseAdaptation = false
+   DecreaseAdaptation = false
+   ROTFilter = 3  // >= 1
+   CourseKeepOnly = true
+   AdaptDuringTurns = true
+
+   // Vessel Characteristics
+   RudderLimit = 45  //should be deg (but Sim uses 100 as limit)
+   RudderDeadband = 0
+   RudderSpeed = 30 // deg/s
+   CruisingSpeed = 1.6 // m/s
+   Length = 2 //m
+   MaxROT = 100
+   DiscardLargeROT = false;
+
+   //Speed settings (use one or the other)
+   //ThrustPercent = 50
+   //Speed_Factor = 31.25
+   MaxThrust = 100
+   Thrust_Map = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
+   UseThrustMapOnly = false
+
+   NoOutput = false  //used to record data
+}
+
+
+//==============================================
+// Behavioral Timer Scripts
+//==============================================
+//#include plug_uTS_StartTimer.moos
+ProcessConfig = uTS_TurnTimer
+{
+  script_name    = TurnTimer
+  //time_zero = db_start
+  delay_start = 0
+  reset_max      = nolimit
+  reset_time  = end
+  upon_awake = restart
+  condition = DEPLOY = true
+
+  event = var=CONST_HDG_UPDATES, val=heading=90, time=30
+  event = var=CONST_HDG_UPDATES, val=heading=270, time=60
+  event = var=CONST_HDG_UPDATES, val=heading=0, time=90
+  event = var=CONST_HDG_UPDATES, val=heading=180, time=120
+}
+
+
+//==============================================
+// Standard Processes
+//==============================================
+
+ProcessConfig = uProcessWatch
+{
+  AppTick   = 4
+  CommsTick = 4
+
+  summary_wait = 5
+
+  nowatch   = uXMS*
+  nowatch   = uMAC*
+  nowatch   = uPokeDB*
+  nowatch   = uTermCommand*
+  watch_all = true
+}
+ProcessConfig = pLogger
+{
+  AppTick   = 20
+  CommsTick = 20
+
+  AsyncLog = true
+  Synclog = true @ 0.1
+
+  Path = ../logs/
+  UTCLogDirectories = true
+
+  Log = NAV_HEADING_180 @ 0
+  Log = NAV_ROT @ 0
+  Log = DESIRED_HEADING_180 @ 0
+  Log = DESIRED_RUDDER @ 0
+
+  Log = MRAS_KP @ 0
+  Log = MRAS_KD @ 0
+  Log = MRAS_KI @ 0
+  Log = MRAS_RUDDER_OUT @ 0
+  Log = MRAS_MODEL_HEADING @ 0
+  Log = MRAS_MODEL_ROT @ 0
+  // -- Items for Course Change --
+  // Log = MRAS_SERIES_MODEL_HEADING @ 0
+  // Log = MRAS_SERIES_MODEL_ROT @ 0
+  // Log = MRAS_PSI_REF_P @ 0
+  // Log = MRAS_PSI_REF_PP @ 0
+  // -- Items for Course Keep --
+  Log = MRAS_TAU_M_STAR @ 0
+  Log = MRAS_PSI_PP @ 0
+  Log = MRAS_TAU_M @ 0
+  Log = MRAS_K_M @ 0
+
+  Log = MRAS_MODEL_RUDDER @ 0
+  Log = NAV_SPEED @ 0
+  Log = DESIRED_SPEED @ 0
+  Log = DESIRED_THRUST @ 0
+  Log = NAV_SPEED_OVER_GROUND @ 0
+  Log = MRAS_SPEED_STATE @ 0
+  Log = MRAS_K_M_STAR @ 0
+  Log = MRAS_IS_TURNING @ 0
+  Log = NAV_HEADING_OVER_GROUND @ 0
+
+  Log = NODE_REPORT_LOCAL @ 0 NOSYNC
+  Log = NODE_REPORT @ 0 NOSYNC
+
+  DoublePrecision = 7   //Default = 5
+  SyncLogIntermediateHeaders = false
+  IncludeStaleVariables = true
+
+  // For variables that are published in a bundle on their first post,
+  // explicitly declare their logging request
+
+  Log = IVPHELM_LIFE_EVENT @ 0 NOSYNC
+  Log = REPORT @ 0 NOSYNC
+
+  LogAuxSrc = true
+  WildCardLogging = true
+  WildCardOmitPattern = *_STATUS
+  WildCardOmitPattern = DB_VARSUMMARY
+  WildCardOmitPattern = DB_RWSUMMARY
+  WildCardExclusionLog = true
+
+  term_reporting = false
+}
+
+ProcessConfig = uSimNomoto
+{
+  AppTick   = 10
+  CommsTick = 10
+
+  //start_x       = 0
+  //start_y       = -60
+  //start_heading = 180
+  //start_speed   = 0
+  START_POS = x=0,y=0,speed=0,heading=90
+
+  prefix        = NAV
+
+  max_rudder_degs_per_sec = 30
+  turn_rate     = 195 //this is actually 88 at 45 deg, estimated Z-Boat max
+  
+  max_acceleration = 0.5
+  max_deceleration = 0.3
+  
+  thrust_map    = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
+  thrust_reflect = true
+
+  //drift_vector = 90, 0.5
+
+  //term_reporting = false
+}
+
+ProcessConfig = uSimMarine
+{
+  AppTick   = 10
+  CommsTick = 10
+
+  START_POS = x=0,y=0,speed=0,heading=90
+
+  prefix        = NAV
+
+  max_rudder_degs_per_sec = 40
+
+  turn_rate     = 40
+  thrust_map    = 0:0, 25:0.9, 37.5:1.3, 50:1.6, 67.5:1.9, 75:2.1,  100:2.25
+}
+
+
+ProcessConfig = pHelmIvP
+{
+  AppTick    = 10
+  CommsTick  = 10
+
+  term_report_interval=0
+
+  bhv_dir_not_found_ok = true
+  //ivp_behavior_dir = /home/ubuntu/Code/moos-ivp-manda
+
+  behaviors  = targ_consthead_pattern.bhv
+  domain     = course:0:359:360
+  domain     = speed:0:4:50
+
+  ok_skew    = any
+}
+
+ProcessConfig = pMarinePID
+{
+  AppTick    = 20
+  CommsTick  = 20
+
+  verbose       = true
+  depth_control = false
+
+  // SIM_INSTABILITY = 20
+
+  // Yaw PID controller
+  yaw_pid_kp     = 1.0
+  yaw_pid_kd     = 0.35
+  yaw_pid_ki     = 0.1
+  yaw_pid_integral_limit = 0.07
+
+  // Speed PID controller
+  speed_pid_kp     = 1.0
+  speed_pid_kd     = 0.2
+  speed_pid_ki     = 0.0
+  speed_pid_integral_limit = 0.07
+
+  //MAXIMUMS
+  maxrudder    = 45
+  maxthrust    = 100
+
+  // A non-zero SPEED_FACTOR overrides use of SPEED_PID
+  // Will set DESIRED_THRUST = DESIRED_SPEED * SPEED_FACTOR
+  speed_factor = 31.25
+}
+
+//------------------------------------------
+// Find the shoreside and share variables
+//------------------------------------------
+
+ProcessConfig = pHostInfo
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  TEMP_FILE_DIR  = ./
+  //DEFAULT_HOSTIP = 192.168.2.71   // default is "localhost"
+
+  //External (4G) IP of boat network
+  DEFAULT_HOSTIP_FORCE = 10.42.0.11
+
+}
+ProcessConfig = uFldNodeBroker
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  //External IP address of laptop
+  TRY_SHORE_HOST = pshare_route=10.42.0.115:9300
+
+
+  BRIDGE = src=VIEW_POLYGON
+  BRIDGE = src=VIEW_POINT
+  BRIDGE = src=VIEW_CIRCLE
+  BRIDGE = src=VIEW_SEGLIST
+  BRIDGE = src=APPCAST
+  BRIDGE = src=NODE_REPORT_LOCAL,  alias=NODE_REPORT
+  BRIDGE = src=NODE_MESSAGE_LOCAL, alias=NODE_MESSAGE
+  BRIDGE = src=ZBOAT_PWM
+  BRIDGE = src=SONAR_DEPTH_M
+  //BRIDGE = src=DESIRED_RUDDER
+}
+ProcessConfig = pShare
+{
+  AppTick   = 2
+  CommsTick = 2
+
+  Input = route = localhost:9301
+}
+
+ProcessConfig = pNodeReporter
+{
+  AppTick    = 2
+  CommsTick  = 2
+
+  platform_type   = SHIP
+  platform_length = 4
+
+  node_report_output = NODE_REPORT_LOCAL
+
+}
+
+

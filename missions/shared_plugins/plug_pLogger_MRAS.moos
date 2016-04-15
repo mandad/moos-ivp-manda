@@ -1,0 +1,65 @@
+ProcessConfig = pLogger
+{
+  AppTick   = 20
+  CommsTick = 20
+
+  AsyncLog = true
+  Synclog = true @ 0.1
+
+  Path = ../logs/
+  UTCLogDirectories = true
+
+  Log = NAV_HEADING_180 @ 0
+  Log = NAV_ROT @ 0
+  Log = DESIRED_HEADING_180 @ 0
+  Log = DESIRED_RUDDER @ 0
+
+  Log = MRAS_KP @ 0
+  Log = MRAS_KD @ 0
+  Log = MRAS_KI @ 0
+  Log = MRAS_RUDDER_OUT @ 0
+  Log = MRAS_MODEL_HEADING @ 0
+  Log = MRAS_MODEL_ROT @ 0
+  // -- Items for Course Change --
+  // Log = MRAS_SERIES_MODEL_HEADING @ 0
+  // Log = MRAS_SERIES_MODEL_ROT @ 0
+  // Log = MRAS_PSI_REF_P @ 0
+  // Log = MRAS_PSI_REF_PP @ 0
+  // -- Items for Course Keep --
+  Log = MRAS_TAU_M_STAR @ 0
+  Log = MRAS_PSI_PP @ 0
+  Log = MRAS_TAU_M @ 0
+  Log = MRAS_K_M @ 0
+
+  Log = MRAS_MODEL_RUDDER @ 0
+  Log = NAV_SPEED @ 0
+  Log = DESIRED_SPEED @ 0
+  Log = DESIRED_THRUST @ 0
+  Log = NAV_SPEED_OVER_GROUND @ 0
+  Log = MRAS_SPEED_STATE @ 0
+  Log = MRAS_K_M_STAR @ 0
+  Log = MRAS_IS_TURNING @ 0
+  Log = NAV_HEADING_OVER_GROUND @ 0
+
+  Log = NODE_REPORT_LOCAL @ 0 NOSYNC
+  Log = NODE_REPORT @ 0 NOSYNC
+
+  DoublePrecision = 7   //Default = 5
+  SyncLogIntermediateHeaders = false
+  IncludeStaleVariables = true
+
+  // For variables that are published in a bundle on their first post,
+  // explicitly declare their logging request
+
+  Log = IVPHELM_LIFE_EVENT @ 0 NOSYNC
+  Log = REPORT @ 0 NOSYNC
+
+  LogAuxSrc = true
+  WildCardLogging = true
+  WildCardOmitPattern = *_STATUS
+  WildCardOmitPattern = DB_VARSUMMARY
+  WildCardOmitPattern = DB_RWSUMMARY
+  WildCardExclusionLog = true
+
+  term_reporting = false
+}

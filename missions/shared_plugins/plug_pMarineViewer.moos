@@ -1,0 +1,74 @@
+ProcessConfig = pMarineViewer
+{
+  AppTick    = 10
+  CommsTick  = 10
+
+  tiff_file            = $(TIFF_FILE)
+  tiff_file_b          = $(TIFF_FILE_B)
+
+  set_pan_x            = $(PAN_X)
+  set_pan_y            = $(PAN_Y)
+  zoom                 = $(ZOOM)
+  vehicle_shape_scale  = 1.5
+  hash_delta           = 100
+  hash_shade           = 0.4
+  hash_viewable        = false
+
+  trails_point_size   = 2
+  trails_length       = 10000
+  trails_color        = blue
+  vehicles_name_color = darkred
+  vehicles_active_color = red //default
+
+
+  // Appcast configuration
+  appcast_height       = 75
+  appcast_width        = 30
+  appcast_viewable     = true
+  appcast_color_scheme = indigo
+  nodes_font_size      = medium
+  procs_font_size      = medium
+  appcast_font_size    = small
+  
+  //datum_viewable = true
+  //datum_size     = 18
+  //gui_size = small
+
+  left_context[home-point] = RETURN_$(ASV_NAME)=true
+  left_context[home-point] = HOME_UPDATE_$(ASV_NAME)=station_pt=$(XPOS),$(YPOS)
+  left_context[home-point] = LOITER_$(ASV_NAME)=false
+
+  left_context[deploy-all] = DEPLOY_ALL=true
+  left_context[deploy-all] = MOOS_MANUAL_OVERRIDE_ALL=false
+  left_context[deploy-all] = RETURN_ALL=false
+
+  right_context[continue] = DEPLOY_$(ASV_NAME)=true
+  right_context[continue] = MOOS_MANUAL_OVERRIDE_$(ASV_NAME)=false
+  right_context[continue] = RETURN_$(ASV_NAME)=false
+  right_context[continue] = LOITER_$(ASV_NAME)=false
+
+  scope  = ZBOAT_PWM
+  scope  = DESIRED_RUDDER
+  scope  = DESIRED_THRUST
+  scope  = RETURN
+  scope  = WPT_STAT
+  scope  = MODE
+  scope  = SWATH_WIDTH
+  scope  = SONAR_DEPTH_M
+  scope  = SWATH_EDGE
+  scope  = SWATH_WIDTH_RECORD
+  scope  = NEXT_SWATH_SIDE
+  scope  = NEW_PATH
+
+  button_one = DEPLOY # DEPLOY_$(ASV_NAME)=true 
+  button_one = MOOS_MANUAL_OVERRIDE_$(ASV_NAME)=false # RETURN_$(ASV_NAME)=false
+  button_two = RETURN # RETURN_$(ASV_NAME)=true # FAULT_$(ASV_NAME)=false
+  button_three = CONTINUE # FAULT_$(ASV_NAME)=false
+  button_four = FAULT # FAULT_$(ASV_NAME)=true
+
+  action =  MOOS_MANUAL_OVERRIDE_$(ASV_NAME)=false
+  action =  MOOS_MANUAL_OVERRIDE_$(ASV_NAME)=true
+  action  = RETURN=true
+  action  = UPDATES_RETURN=speed=1.6
+  action  = MENU_KEY=SetAutonomy # SET_AUTONOMY_MODE=1
+}

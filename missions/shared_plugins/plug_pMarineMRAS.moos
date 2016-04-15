@@ -1,0 +1,40 @@
+ProcessConfig = pMarineMRAS
+{
+   AppTick   = 10
+   CommsTick = 10
+
+   // Initial constant parameters
+   //Test for adaptation
+   K_Star = 1.56 //1.56 for Z-boat, 1.66 for sim
+   Tau_Star = 0.8 //0.76 but actually more like 0.9 with rudder delay
+   DampingRatio = 1
+   NaturalFrequency = 1.3 //1.3 for Kp = 1.2
+
+   //Adaptation parameters
+   Beta =  0.0005     //Speed of Kp or Km/Tm adaptation
+   Alpha = 0.0001    //Speed of Kd or 1/Tm adaptation
+   Gamma = 0.0001    //Speed of Ki adaptation
+   Xi = 1   // <= 1, not used if DecreaseAdaptation = false
+   DecreaseAdaptation = false
+   ROTFilter = 3  // >= 1
+   CourseKeepOnly = true
+   AdaptDuringTurns = true
+
+   // Vessel Characteristics
+   RudderLimit = 45  //should be deg (but Sim uses 100 as limit)
+   RudderDeadband = 0
+   RudderSpeed = 30 // deg/s
+   CruisingSpeed = 1.6 // m/s
+   Length = $(BOAT_LENGTH) //m
+   MaxROT = 100
+   DiscardLargeROT = false;
+
+   //Speed settings (use one or the other)
+   //ThrustPercent = 50
+   //Speed_Factor = 31.25
+   MaxThrust = 100
+   Thrust_Map = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
+   UseThrustMapOnly = false
+
+   NoOutput = false  //used to record data
+}

@@ -1,0 +1,88 @@
+//-------------------------------------------------
+// NAME: Damian Manda
+// FILE: meta_test_mras.moos
+// DATE: 12 Apr 2016
+// Intended for running MRAS control system tests on a ZBoat
+//-------------------------------------------------
+
+ServerHost = localhost
+ServerPort = 9000
+Community  = zboat
+
+#include plug_location_tw.moos
+
+//------------------------------------------
+// Antler configuration  block
+ProcessConfig = ANTLER
+{
+  MSBetweenLaunches = 400
+
+  Run = MOOSDB          @ NewConsole = false
+  //Run = uTimerScript    @ NewConsole = false ~ uTS_StartTimer
+  Run = uTimerScript    @ NewConsole = false ~ uTS_TurnTimer
+  Run = pLogger         @ NewConsole = false
+  //Run = pMarinePID      @ NewConsole = false
+  Run = pMarineMRAS     @ NewConsole = false
+  Run = pHelmIvP        @ NewConsole = false
+  Run = uProcessWatch     @ NewConsole = false
+  Run = pNodeReporter     @ NewConsole = false
+  Run = pShare          @ NewConsole = false
+  Run = pHostInfo       @ NewConsole = false
+  Run = uFldNodeBroker  @ NewConsole = false
+  Run = pLLTrackUpdate  @ NewConsole = false
+  //Run = pBasicContactMgr @ NewConsole = false
+#ifdef SIMULATION TRUE
+  Run = uSimNomoto      @ NewConsole = false
+  //Run = uSimMarine      @ NewConsole = false
+#else
+  Run = pEchoVar        @ NewConsole = false
+  Run = iGPS_MB1        @ NewConsole = false
+  Run = iZBoat          @ NewConsole = false
+#endif
+}
+
+//==============================================
+// ZBoat Interfaces
+//==============================================
+
+#include plug_iZBoat.moos
+#include plug_iGPS_MB1.moos
+
+//==============================================
+// Custom Background Processes
+//==============================================
+
+#include plug_pLLTrackUpdate.moos
+#include plug_pSonarFilter.moos
+#include plug_pEchoVar_iGPS.moos
+#include plug_pMarineMRAS.moos
+
+//==============================================
+// Behavioral Timer Scripts
+//==============================================
+//#include plug_uTS_StartTimer.moos
+#include plug_uTS_TurnTimer.moos
+
+//==============================================
+// Standard Processes
+//==============================================
+
+#include plug_pMarinePID.moos
+#include plug_uProcessWatch.moos
+#include plug_pLogger_MRAS.moos
+
+#ifdef SIMULATION TRUE
+#include plug_uSimNomoto.moos
+#include plug_uSimMarine.moos
+#endif
+
+#include plug_pHelmIvP.moos
+
+//------------------------------------------
+// Find the shoreside and share variables
+//------------------------------------------
+
+#include plug_pHostInfo_asv.moos
+#include plug_uFldNodeBroker.moos
+#include plug_pShare_asv.moos
+#include plug_pNodeReporter.moos

@@ -1,0 +1,18 @@
+ProcessConfig = iSonar
+{
+  AppTick   = 15
+  CommsTick = 15
+
+  Mode = Serial //or UDP
+
+  // Serial port settings
+  Port = /dev/ttyUSB_1Port
+  //Port = /dev/rfcomm0
+  BaudRate = 115200
+  Handshaking = false
+  Streaming = false
+
+  PublishRaw = true
+  LogHypack = true
+  TranducerDepth = 0.5 //m
+}

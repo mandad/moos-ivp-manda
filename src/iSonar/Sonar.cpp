@@ -359,18 +359,51 @@ void Sonar::LogHeader() {
 
 double Sonar::SecondsPastMidnight() {
     // The C++ way
-    auto now = std::chrono::high_resolution_clock::now();
+    // #ifdef __APPLE__
+    //     //High resolution clock = steady clock, whcih does not have from_time_t
+    //     auto clock_to_use = std::chrono::system_clock;
+    // #elif __linux__
+    //     auto clock_to_use = std::chrono::high_resolution_clock;
+    // #endif
+    
+    /*
+    auto now = std::chrono::system_clock::now();
 
-    time_t tnow = std::chrono::high_resolution_clock::to_time_t(now);
+    time_t tnow = std::chrono::system_clock::to_time_t(now);
     tm *date = std::gmtime(&tnow);
     date->tm_hour = 0;
     date->tm_min = 0;
     date->tm_sec = 0;
-    auto midnight = std::chrono::high_resolution_clock::from_time_t(std::mktime(date));
+    auto midnight = std::chrono::system_clock::from_time_t(std::mktime(date));
 
     std::chrono::duration<double> duration_past = std::chrono::duration_cast<std::chrono::duration<double>>(now-midnight);
-    return duration_past.count();
+    return duration_past.count()
+    */
 
+    // Redo for high res where available
+    // Find now on the high res clock
+    auto now_tp = std::chrono::high_resolution_clock::now();
+    auto now_since_epoch = now_tp.time_since_epoch();   //in duration units
+    auto now_sec = now_since_epoch.count() 
+        * std::chrono::high_resolution_clock::period::num
+        / std::chrono::high_resolution_clock::period::den;
+
+    //Find midnight from the system clock
+    auto now_sys = std::chrono::system_clock::now();
+    time_t tnow = std::chrono::system_clock::to_time_t(now_sys);
+    std::tm *date = std::gmtime(&tnow);
+    date->tm_hour = 0;
+    date->tm_min = 0;
+    date->tm_sec = 0;
+    auto midnight = std::chrono::system_clock::from_time_t(std::mktime(date));
+    auto midnight_since_epoch = midnight.time_since_epoch();
+    auto midnight_sec = midnight_since_epoch.count() 
+        * std::chrono::system_clock::period::num
+        / std::chrono::system_clock::period::den;
+
+    return double(now_sec - midnight_sec);
+
+    // C Way, not as accurate
     //time_t t1, t2;
     //struct tm tms;
     //time(&t1);

@@ -1,0 +1,120 @@
+//--------    FILE: meta_consthead_pattern.bhv   -------------
+
+initialize   DEPLOY = false
+initialize   RETURN = false
+initialize   FAULT = false
+initialize   REACHED_HOME = false
+initialize   SEQ = 1
+
+Set MODE = ACTIVE {
+  DEPLOY = true
+} INACTIVE
+
+Set MODE = RUN {
+  MODE = ACTIVE
+  RETURN != true
+  FAULT != true
+}
+
+SET MODE = INPLACE {
+  MODE = ACTIVE
+  FAULT = true
+} HOME
+
+Behavior = BHV_ConstantHeading
+{
+   // General Behavior Parameters
+   // ---------------------------
+   name         = const_hdg1            
+   pwt          = 100                  
+   condition = MODE == RUN
+   condition = SEQ = 1
+   //endflag = SEQ = 2
+   duration_reset = HEADING_BHV_RESET=true
+   updates      = CONST_HDG_UPDATES 
+
+   // Parameters specific to this behavior
+   // ------------------------------------
+                heading = 180
+              basewidth = 10        
+               duration = no-time-limit         
+              peakwidth = 10          
+            summitdelta = 25           
+}
+
+Behavior = BHV_ConstantSpeed
+ {
+   // General Behavior Parameters
+   // ---------------------------
+   name         = const_spd_transit
+   pwt          = 100                
+   condition = DEPLOY = true
+   condition    = SEQ > 0
+   updates      = CONST_SPD_UPDATES  
+
+   // Parameters specific to this behavior
+   // ------------------------------------
+            basewidth = 0.2         
+             duration = no-time-limit
+                speed = 1.6
+            peakwidth = 0            
+          summitdelta = 0            
+ }
+
+
+Behavior = BHV_StationKeep
+{
+   // General Behavior Parameters
+   // ---------------------------
+   name         = sk_home
+   pwt          = 100                   // default
+   condition    = MODE == HOME
+   endflag      = REACHED_HOME = true
+   updates      = HOME_UPDATE
+
+   // Parameters specific to this behavior
+   // ------------------------------------
+      center_activate = false   // default
+   hibernation_radius = -1      // default
+         inner_radius = 2
+         outer_radius = 5
+         outer_speed  = 1     // default
+       transit_speed  = 1.6
+           station_pt = 0,-60     // default
+           swing_time = 0       // default
+
+         visual_hints = vertex_size  = 1           // default
+         visual_hints = edge_color   = light_blue  // default
+         visual_hints = edge_size    = 1           // default
+         visual_hints = label_color  = light_blue       // default
+         visual_hints = vertex_color = red         // default
+}
+
+Behavior = BHV_StationKeep
+{
+   // General Behavior Parameters
+   // ---------------------------
+   name         = loiter_inplace
+   pwt          = 100                   // default
+   condition    = MODE == INPLACE
+   // inactiveflag = STATIONING = false    // example
+   // activeflag   = STATIONING = true     // example
+
+
+   // Parameters specific to this behavior
+   // ------------------------------------
+      center_activate = true 
+   hibernation_radius = -1    
+         inner_radius = 4      
+         outer_radius = 10     
+         outer_speed  = 1    
+       transit_speed  = 2    
+           station_pt = 0,0    
+           swing_time = 4   //in sec - allow the vessel to keep moving this long
+
+         visual_hints = vertex_size  = 1           // default
+         visual_hints = edge_color   = light_blue  // default
+         visual_hints = edge_size    = 1           // default
+         visual_hints = label_color  = light_blue       // default
+         visual_hints = vertex_color = red         // default
+}

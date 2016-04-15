@@ -1,0 +1,20 @@
+ProcessConfig = uFldNodeBroker
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  //External IP address of laptop
+  TRY_SHORE_HOST = pshare_route=$(SHORE_IP):$(SHORE_PORT)
+
+
+  BRIDGE = src=VIEW_POLYGON
+  BRIDGE = src=VIEW_POINT
+  BRIDGE = src=VIEW_CIRCLE
+  BRIDGE = src=VIEW_SEGLIST
+  BRIDGE = src=APPCAST
+  BRIDGE = src=NODE_REPORT_LOCAL,  alias=NODE_REPORT
+  BRIDGE = src=NODE_MESSAGE_LOCAL, alias=NODE_MESSAGE
+  BRIDGE = src=ZBOAT_PWM
+  BRIDGE = src=SONAR_DEPTH_M
+  //BRIDGE = src=DESIRED_RUDDER
+}
