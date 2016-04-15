@@ -5,6 +5,7 @@ ProcessConfig = uFldNodeBroker
 
   //External IP address of laptop
   TRY_SHORE_HOST = pshare_route=$(SHORE_IP):$(SHORE_PORT)
+  TRY_SHORE_HOST = pshare_route=10.42.0.1:9300
 
 
   BRIDGE = src=VIEW_POLYGON
