@@ -26,9 +26,17 @@ ProcessConfig = uTS_DynamicsGather
   event = var=DESIRED_RUDDER, val=30, time=300
   event = var=DESIRED_RUDDER, val=45, time=330
 
+<<<<<<< HEAD
   //event = var=DESIRED_THRUST, val=100, time=360
   //event = var=DESIRED_RUDDER, val=0, time=360
   //event = var=DESIRED_RUDDER, val=15, time=390
   //event = var=DESIRED_RUDDER, val=30, time=420
   //event = var=DESIRED_RUDDER, val=45, time=450
+=======
+  event = var=DESIRED_THRUST, val=100, time=360
+  event = var=DESIRED_RUDDER, val=0, time=360
+  event = var=DESIRED_RUDDER, val=15, time=390
+  event = var=DESIRED_RUDDER, val=30, time=420
+  event = var=DESIRED_RUDDER, val=45, time=450
+>>>>>>> 5c0b67210e548ba92f732afd22ded04c8cb69d05
 }
