@@ -33,8 +33,9 @@ Behavior = BHV_Waypoint
              //points = format=lawnmower, label=zboat_test, x=265, y=238, width=150, height=40, lane_width=20, rows=east-west, degs=-20
              //Norfolk, L shape near TJ
              //points = 80,38 : 80,-34 : 141, -34
-             //Lake Bradford L shape
-             points = 0,-55 : 0,-100 : 40,-100
+             //Swain L shape
+             //points = 0,-55 : 0,-100 : 40,-100
+             points = -21,-61 : 30,-51 : 46,-96 : -16,-96 : -34,-134 : 50,-130 : 55,-164 : -36,-166 : -39,-204 : 65,-196 : -43,-243 : 76,-226
              repeat = 10
 
     visual_hints = nextpt_color=yellow

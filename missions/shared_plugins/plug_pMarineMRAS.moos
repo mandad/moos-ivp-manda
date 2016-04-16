@@ -7,7 +7,7 @@ ProcessConfig = pMarineMRAS
    //Test for adaptation
    K_Star = 1.56 //1.56 for Z-boat, 1.66 for sim
    Tau_Star = 0.8 //0.76 but actually more like 0.9 with rudder delay
-   DampingRatio = 1
+   DampingRatio = 0.8
    NaturalFrequency = 1.3 //1.3 for Kp = 1.2
 
    //Adaptation parameters
@@ -32,9 +32,14 @@ ProcessConfig = pMarineMRAS
    //Speed settings (use one or the other)
    //ThrustPercent = 50
    //Speed_Factor = 31.25
-   MaxThrust = 100
-   Thrust_Map = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
+   MaxThrust = 80
+   //Thrust_Map = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
+   Thrust_Map = 0:0, 25:0.45, 50:0.65, 75:0.8, 100:1.0
    UseThrustMapOnly = false
-
+   
+   #ifdef MANUAL_CONTROL TRUE
+   NoOutput = true  //used to record data
+   #else
    NoOutput = false  //used to record data
+   #endif
 }

@@ -16,15 +16,17 @@ ProcessConfig = pMarinePID
 
   // Speed PID controller
   speed_pid_kp     = 1.0
-  speed_pid_kd     = 0.2
+  //kd = 0.2 for zboat
+  speed_pid_kd     = 0.3
   speed_pid_ki     = 0.0
   speed_pid_integral_limit = 0.07
 
   //MAXIMUMS
   maxrudder    = 45
-  maxthrust    = 100
+  maxthrust    = 80
 
   // A non-zero SPEED_FACTOR overrides use of SPEED_PID
   // Will set DESIRED_THRUST = DESIRED_SPEED * SPEED_FACTOR
-  speed_factor = 31.25
+  //speed_factor = 31.25
+  speed_factor = 76
 }

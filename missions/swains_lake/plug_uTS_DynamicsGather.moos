@@ -1,0 +1,34 @@
+ProcessConfig = uTS_DynamicsGather
+{
+  script_name    = DynamicsGather
+  //time_zero = db_start
+  delay_start = 0
+  reset_max      = nolimit
+  reset_time  = none
+  upon_awake = restart
+  condition = DEPLOY = true
+
+  event = var=DESIRED_THRUST, val=25, time=10
+  event = var=DESIRED_RUDDER, val=0, time=10
+  event = var=DESIRED_RUDDER, val=15, time=30
+  event = var=DESIRED_RUDDER, val=30, time=60
+  event = var=DESIRED_RUDDER, val=45, time=90
+
+  event = var=DESIRED_THRUST, val=50, time=120
+  event = var=DESIRED_RUDDER, val=0, time=120
+  event = var=DESIRED_RUDDER, val=15, time=150
+  event = var=DESIRED_RUDDER, val=30, time=180
+  event = var=DESIRED_RUDDER, val=45, time=210
+
+  event = var=DESIRED_THRUST, val=75, time=240
+  event = var=DESIRED_RUDDER, val=0, time=240
+  event = var=DESIRED_RUDDER, val=15, time=270
+  event = var=DESIRED_RUDDER, val=30, time=300
+  event = var=DESIRED_RUDDER, val=45, time=330
+
+  //event = var=DESIRED_THRUST, val=100, time=360
+  //event = var=DESIRED_RUDDER, val=0, time=360
+  //event = var=DESIRED_RUDDER, val=15, time=390
+  //event = var=DESIRED_RUDDER, val=30, time=420
+  //event = var=DESIRED_RUDDER, val=45, time=450
+}

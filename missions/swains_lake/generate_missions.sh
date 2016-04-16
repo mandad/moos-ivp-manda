@@ -36,22 +36,22 @@ if [ $SCENARIO = 1 ]; then
   PAN_Y=-1300
   ZOOM=0.65
   # Shore Config
-  #SHORE_IP="10.42.0.115"
-  SHORE_IP="192.168.1.85"
+  SHORE_IP="10.42.0.115"
+  #SHORE_IP="192.168.1.85"
   SHORE_PORT=9300
   #In this case, the RPi
-  #BOAT_MODEM_IP="10.42.0.11"
-  BOAT_MODEM_IP="192.168.1.228"
+  BOAT_MODEM_IP="10.42.0.11"
+  #BOAT_MODEM_IP="192.168.1.228"
   BOAT_PORT=9301
   ASV_NAME="ASV3"
   #Behavior
   HOME_POS="0,-60"
   HOME_INNER_RADIUS=2
   HOME_OUTER_RADIUS=5
-  SURVEY_SPEED=1.6
-  TEST_SPEED=1.6
-  BOAT_LENGTH=2
-  SIMULATION=TRUE
+  SURVEY_SPEED=0.2
+  TEST_SPEED=0.2
+  BOAT_LENGTH=3
+  SIMULATION=FALSE
   #BHV_FILE=targ_consthead_pattern.bhv
 fi
 # What is nsplug? Type "nsplug --help" or "nsplug --manual"

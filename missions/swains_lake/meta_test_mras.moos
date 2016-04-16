@@ -20,12 +20,14 @@ ProcessConfig = ANTLER
   Run = MOOSDB          @ NewConsole = false
   Run = pLogger         @ NewConsole = false
 #ifdef MANUAL_CONTROL FALSE
-  //Run = pMarinePID      @ NewConsole = false
-  Run = pMarineMRAS     @ NewConsole = false
+  Run = pMarinePID      @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
-  //Run = uTimerScript    @ NewConsole = false ~ uTS_StartTimer
+  Run = uTimerScript    @ NewConsole = false ~ uTS_StartTimer
   Run = uTimerScript    @ NewConsole = false ~ uTS_TurnTimer
+#else
+  Run = uTimerScript    @ NewConsole = false ~ uTS_DynamicsGather
 #endif
+  Run = pMarineMRAS     @ NewConsole = false
   Run = uProcessWatch     @ NewConsole = false
   Run = pNodeReporter     @ NewConsole = false
   Run = pShare          @ NewConsole = false
@@ -39,6 +41,7 @@ ProcessConfig = ANTLER
 #else
   Run = pEchoVar        @ NewConsole = false
   Run = iGP9            @ NewConsole = false
+  Run = iSonar          @ NewConsole = false
 #endif
   Run = iMOOSArduino    @ NewConsole = false
 }
@@ -65,6 +68,7 @@ ProcessConfig = ANTLER
 //==============================================
 //#include plug_uTS_StartTimer.moos
 #include plug_uTS_TurnTimer.moos
+#include plug_uTS_DynamicsGather.moos
 
 //==============================================
 // Standard Processes

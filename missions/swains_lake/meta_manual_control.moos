@@ -28,6 +28,7 @@ ProcessConfig = ANTLER
   Run = uSimNomoto      @ NewConsole = false
   //Run = uSimMarine      @ NewConsole = false
 #else
+  Run = iSonar          @ NewConsole = false
   Run = pEchoVar        @ NewConsole = false
   Run = iGP9            @ NewConsole = false
   Run = iMOOSArduino    @ NewConsole = false
@@ -40,6 +41,7 @@ ProcessConfig = ANTLER
 
 #include plug_iMOOSArduino.moos
 #include plug_iGP9.moos
+#include plug_iSonar.moos
 
 //==============================================
 // Custom Background Processes
