@@ -48,8 +48,8 @@ if [ $SCENARIO = 1 ]; then
   HOME_POS="0,-60"
   HOME_INNER_RADIUS=2
   HOME_OUTER_RADIUS=5
-  SURVEY_SPEED=0.2
-  TEST_SPEED=0.2
+  SURVEY_SPEED=1.0
+  TEST_SPEED=1.0
   BOAT_LENGTH=3
   SIMULATION=TRUE
   #BHV_FILE=targ_consthead_pattern.bhv
@@ -68,7 +68,7 @@ nsplug meta_test_mras.moos targ_test_mras.moos --path=../shared_plugins \
    START_POS=$START_POS  SHORE_IP=$SHORE_IP   BOAT_MODEM_IP=$BOAT_MODEM_IP \
    SHORE_PORT=$SHORE_PORT BOAT_PORT=$BOAT_PORT  SIMULATION=$SIMULATION  \
    BOAT_LENGTH=$BOAT_LENGTH ASV_NAME=$ASV_NAME MANUAL_CONTROL=FALSE \
-   BHV_FILE=targ_consthead_pattern.bhv
+   BHV_FILE=targ_consthead_pattern.bhv CONST_HDG=TRUE
 
 nsplug meta_test_mras.moos targ_manual_control.moos --path=../shared_plugins \
    -f WARP=$TIME_WARP  LAT_ORIGIN=$LAT_ORIGIN  LONG_ORIGIN=$LONG_ORIGIN  \
