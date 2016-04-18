@@ -35,7 +35,7 @@ ProcessConfig = pMarineViewer
   //gui_size = small
 
   left_context[home-point] = RETURN_$(ASV_NAME)=true
-  left_context[home-point] = HOME_UPDATE_ASV3=station_pt=$(XPOS),$(YPOS)
+  left_context[home-point] = HOME_UPDATE_$(ASV_NAME)=station_pt=$[XPOS],$[YPOS]
   left_context[home-point] = LOITER_$(ASV_NAME)=false
 
   left_context[deploy-all] = DEPLOY_ALL=true

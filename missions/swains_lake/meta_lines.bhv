@@ -1,4 +1,4 @@
-//--------    FILE: zboat_lines.bhv   -------------
+//--------    FILE: meta_lines.bhv   -------------
 
 #include plug_StandardModeblock.bhv
 
@@ -25,16 +25,9 @@ Behavior = BHV_Waypoint
        capture_line = true
      capture_radius = 3.0
         slip_radius = 8.0
-              //Norfolk with transit
-             //points = 147,134 : 119,164 : 165,247 : -5, 546 : 121,736 : 135,727
-             //Norfolk, just test area
-             //points = 165,247 : -5, 546 : 121,736 : 135,727 : -5,546 : 165,247
-             //Norfolk, back and forth near TJ
-             //points = format=lawnmower, label=zboat_test, x=265, y=238, width=150, height=40, lane_width=20, rows=east-west, degs=-20
-             //Norfolk, L shape near TJ
-             //points = 80,38 : 80,-34 : 141, -34
              //Swain L shape
              //points = 0,-55 : 0,-100 : 40,-100
+	     //Survey Pattern at swains
              points = -21,-61 : 30,-51 : 46,-96 : -16,-96 : -34,-134 : 50,-130 : 55,-164 : -36,-166 : -39,-204 : 65,-196 : -43,-243 : 76,-226
              repeat = 10
 

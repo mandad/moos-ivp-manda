@@ -25,9 +25,9 @@ ProcessConfig = ANTLER
   Run = pShare            @ NewConsole = false
   Run = pHostInfo       @ NewConsole = false
   Run = uFldShoreBroker  @ NewConsole = false
-  Run = uJoystick        @ NewConsole = false
   
   // For testing the Joystick
+  //Run = uJoystick        @ NewConsole = false
   //Run = uSimNomoto       @ NewConsole = false
   
   Run = uFldNodeComms   @ NewConsole = false
