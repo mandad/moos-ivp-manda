@@ -20,14 +20,16 @@ ProcessConfig = ANTLER
   Run = MOOSDB          @ NewConsole = false
   Run = pLogger         @ NewConsole = false
 #ifdef MANUAL_CONTROL FALSE
-  Run = pMarinePID      @ NewConsole = false
+  //Run = pMarinePID      @ NewConsole = false
+  Run = pMarineMRAS     @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
-  Run = uTimerScript    @ NewConsole = false ~ uTS_StartTimer
-  Run = uTimerScript    @ NewConsole = false ~ uTS_TurnTimer
 #else
   Run = uTimerScript    @ NewConsole = false ~ uTS_DynamicsGather
 #endif
-  Run = pMarineMRAS     @ NewConsole = false
+#ifdef CONST_HDG TRUE
+  //Run = uTimerScript    @ NewConsole = false ~ uTS_StartTimer
+  Run = uTimerScript    @ NewConsole = false ~ uTS_TurnTimer
+#endif
   Run = uProcessWatch     @ NewConsole = false
   Run = pNodeReporter     @ NewConsole = false
   Run = pShare          @ NewConsole = false

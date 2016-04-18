@@ -2,7 +2,7 @@
 #-------------------------------------------------------
 #  Part 1: Check for and handle command-line arguments
 #-------------------------------------------------------
-TIME_WARP=1
+TIME_WARP=5
 SCENARIO=1
 JUST_MAKE="no"
 for ARGI; do
@@ -27,7 +27,7 @@ done
 # 1 = Testing Controls on Swains
 if [ $SCENARIO = 1 ]; then
   # MOOS Stuff
-  START_POS="x=0,y=0,speed=0,heading=90"
+  START_POS="x=0,y=0,speed=0,heading=180"
   LAT_ORIGIN=43.2001957
   LONG_ORIGIN=-71.0466533
   TIFF_FILE=Swains_Aerial.tif
@@ -48,10 +48,10 @@ if [ $SCENARIO = 1 ]; then
   HOME_POS="0,-60"
   HOME_INNER_RADIUS=2
   HOME_OUTER_RADIUS=5
-  SURVEY_SPEED=0.2
-  TEST_SPEED=0.2
+  SURVEY_SPEED=1.0
+  TEST_SPEED=1.0
   BOAT_LENGTH=3
-  SIMULATION=FALSE
+  SIMULATION=TRUE
   #BHV_FILE=targ_consthead_pattern.bhv
 fi
 # What is nsplug? Type "nsplug --help" or "nsplug --manual"
@@ -68,7 +68,7 @@ nsplug meta_test_mras.moos targ_test_mras.moos --path=../shared_plugins \
    START_POS=$START_POS  SHORE_IP=$SHORE_IP   BOAT_MODEM_IP=$BOAT_MODEM_IP \
    SHORE_PORT=$SHORE_PORT BOAT_PORT=$BOAT_PORT  SIMULATION=$SIMULATION  \
    BOAT_LENGTH=$BOAT_LENGTH ASV_NAME=$ASV_NAME MANUAL_CONTROL=FALSE \
-   BHV_FILE=targ_consthead_pattern.bhv
+   BHV_FILE=targ_consthead_pattern.bhv CONST_HDG=TRUE
 
 nsplug meta_test_mras.moos targ_manual_control.moos --path=../shared_plugins \
    -f WARP=$TIME_WARP  LAT_ORIGIN=$LAT_ORIGIN  LONG_ORIGIN=$LONG_ORIGIN  \
