@@ -2,7 +2,7 @@
 #-------------------------------------------------------
 #  Part 1: Check for and handle command-line arguments
 #-------------------------------------------------------
-TIME_WARP=1
+TIME_WARP=5
 SCENARIO=1
 JUST_MAKE="no"
 for ARGI; do
@@ -27,7 +27,7 @@ done
 # 1 = Testing Controls on Swains
 if [ $SCENARIO = 1 ]; then
   # MOOS Stuff
-  START_POS="x=0,y=0,speed=0,heading=90"
+  START_POS="x=0,y=0,speed=0,heading=180"
   LAT_ORIGIN=43.2001957
   LONG_ORIGIN=-71.0466533
   TIFF_FILE=Swains_Aerial.tif
@@ -51,7 +51,7 @@ if [ $SCENARIO = 1 ]; then
   SURVEY_SPEED=0.2
   TEST_SPEED=0.2
   BOAT_LENGTH=3
-  SIMULATION=FALSE
+  SIMULATION=TRUE
   #BHV_FILE=targ_consthead_pattern.bhv
 fi
 # What is nsplug? Type "nsplug --help" or "nsplug --manual"
