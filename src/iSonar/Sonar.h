@@ -16,6 +16,7 @@
 enum class InputMode {
 	Serial,
 	UDP,
+	Replay,
 };
 
 class Sonar : public CMOOSInstrument
@@ -45,12 +46,14 @@ class Sonar : public CMOOSInstrument
 		bool OpenFile(std::ofstream & of, const std::string & sName, bool bBinary);
 		bool CloseFiles();
 		double SecondsPastMidnight();
+		std::string HypackTND();
 
 		std::string m_sType;
 		unsigned int m_iUDPPort;
 		XPCUdpSocket* m_pListenSocket;
 		//Logging
 		std::ofstream m_hypack_log_file;
+		struct tm *m_log_start;
 
 		//Configuration params
 		InputMode m_mode;

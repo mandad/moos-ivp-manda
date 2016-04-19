@@ -36,7 +36,7 @@ bool Sonar::Iterate()
 {
 	if (GetData()) {
 	    if (m_log_hypack) {
-		LogHypack();
+		  LogHypack();
 	    }
 		PublishData();
 	}
@@ -92,6 +92,8 @@ bool Sonar::OnStartUp()
             m_mode = InputMode::Serial;
         } else if (mode.compare("UDP") == 0) {
             m_mode = InputMode::UDP;
+        } else if (mode.compare("Replay") == 0) {
+            m_mode = InputMode::Replay;
         }
     }
 
@@ -113,7 +115,7 @@ bool Sonar::OnStartUp()
     if (m_MissionReader.GetValue("LogHypack", sVal)) {
         m_log_hypack = MOOSStrCmp(sVal, "TRUE");
         if (m_log_hypack) {
-            string log_name = MakeLogName("SonarData_") + ".RAW";
+            string log_name = MakeLogName("SonarData") + ".RAW";
             MOOSTrace("iSonar Logging sonar data to: " + log_name + "\n");
             if (OpenFile(m_hypack_log_file, log_name, false)) {
                 LogHeader();
@@ -130,13 +132,18 @@ bool Sonar::OnStartUp()
 	double dfUpdatePeriod = 0.05;
 
 	AddMOOSVariable("X", "NAV_X", "", dfUpdatePeriod);
-	AddMOOSVariable("Y", "NAV_X", "", dfUpdatePeriod);
+	AddMOOSVariable("Y", "NAV_Y", "", dfUpdatePeriod);
     AddMOOSVariable("Heading", "NAV_HEADING", "", dfUpdatePeriod);
 
 	AddMOOSVariable("Lat", "NAV_LAT", "", dfUpdatePeriod);
 	AddMOOSVariable("Lon", "NAV_LON", "", dfUpdatePeriod);
 
-    AddMOOSVariable("Depth", "", "SONAR_DEPTH_M", 0);
+    if (m_mode == InputMode::Replay) {
+        // Get the depths through postings in replay
+        AddMOOSVariable("Depth", "SONAR_DEPTH_M", "", 0);
+    } else {
+        AddMOOSVariable("Depth", "", "SONAR_DEPTH_M", 0);
+    }
     AddMOOSVariable("Raw", "", "SONAR_RAW", 0);
 
 	RegisterMOOSVariables();
@@ -255,6 +262,7 @@ bool Sonar::GetData()
     	}
     }
 
+    //if mode == Replay, it falls through to here too
     return true;
 
 }
@@ -330,9 +338,9 @@ bool Sonar::LogHypack() {
     auto curr_y = GetMOOSVar("Y");
     auto sonar_depth = GetMOOSVar("Depth");
     if ((curr_y->IsFresh() || curr_x->IsFresh()) && sonar_depth->IsFresh()) {
-	#if DEBUG
-	MOOSTrace("Hypack Log Write\n");
-	#endif
+    	#if DEBUG
+    	MOOSTrace("Hypack Log Write\n");
+    	#endif
         double UTM_x = curr_x->GetDoubleVal() + m_Geodesy.GetOriginEasting();
         double UTM_y = curr_y->GetDoubleVal() + m_Geodesy.GetOriginNorthing();
         double timestamp = SecondsPastMidnight();
@@ -349,11 +357,19 @@ bool Sonar::LogHypack() {
 void Sonar::LogHeader() {
     m_hypack_log_file << "FTP NEW 2\n";
     m_hypack_log_file << "VER 15.0.9.71\n";
-    m_hypack_log_file << "INF \"Manda\" \"ASV\" \"Project\" 0.000000 0.000000 1500.000000\n";
+    m_hypack_log_file << "INF \"Manda\" \"ASV\" \"Project\" \"\" 0.000000 0.000000 1500.000000\n";
+    m_hypack_log_file << "ELL WGS-1984 6378137.000 298.257223563\n";
+    //m_hypack_log_file << "PRO TME -69.000000 0.999600 0.000000 0.000000 0.000000 500000.0000 0.0000\n";
+    //m_hypack_log_file << "DTM 0.00 0.00 0.00 0.00000 0.00000 0.00000 0.00000\n";
+    //m_hypack_log_file << "GEO  \"\" 0.000\n";
+    //m_hypack_log_file << "HVU 1.0000000000 1.0000000000\n";
+    // HIPS chokes on the file without this line
+    m_hypack_log_file << "TND " << HypackTND() << " 0\n";
+
     m_hypack_log_file << "DEV 0 16 \"CEEPULSE 100\"\n";
     m_hypack_log_file << "OFF 0 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000\n";
     m_hypack_log_file << "DEV 1 100 \"GP9 GPS/IMU\"\n";
-    m_hypack_log_file << "OFF 0 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000\n";
+    m_hypack_log_file << "OFF 1 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000\n";
     m_hypack_log_file << "EOH" << endl;
 }
 
@@ -366,7 +382,7 @@ double Sonar::SecondsPastMidnight() {
     //     auto clock_to_use = std::chrono::high_resolution_clock;
     // #endif
     
-    /*
+    
     auto now = std::chrono::system_clock::now();
 
     time_t tnow = std::chrono::system_clock::to_time_t(now);
@@ -377,9 +393,10 @@ double Sonar::SecondsPastMidnight() {
     auto midnight = std::chrono::system_clock::from_time_t(std::mktime(date));
 
     std::chrono::duration<double> duration_past = std::chrono::duration_cast<std::chrono::duration<double>>(now-midnight);
-    return duration_past.count()
-    */
+    return duration_past.count();
+    
 
+    /*
     // Redo for high res where available
     // Find now on the high res clock
     auto now_tp = std::chrono::high_resolution_clock::now();
@@ -400,8 +417,12 @@ double Sonar::SecondsPastMidnight() {
     auto midnight_sec = midnight_since_epoch.count() 
         * std::chrono::system_clock::period::num
         / std::chrono::system_clock::period::den;
+    
+
+    MOOSTrace("Now: %0.2f, Midnight: %0.2f", now_sec, midnight_sec)
 
     return double(now_sec - midnight_sec);
+    */
 
     // C Way, not as accurate
     //time_t t1, t2;
@@ -418,18 +439,18 @@ double Sonar::SecondsPastMidnight() {
 // =========  From MOOSLogger.cpp (pLogger)  ================
 std::string Sonar::MakeLogName(string sStem)
 {
-    struct tm *Now;
+    //struct tm *Now;
     time_t aclock;
     time( &aclock );
 
     // We should probably always use UTC
     if(m_use_utc_log_names)
     {
-        Now = gmtime(&aclock);
+        m_log_start = gmtime(&aclock);
     }
     else
     {
-        Now = localtime( &aclock );
+        m_log_start = localtime( &aclock );
     }
 
     std::string  sTmp;
@@ -441,12 +462,12 @@ std::string Sonar::MakeLogName(string sStem)
 
         sTmp = MOOSFormat( "%s_%d_%02d_%02d__%.2d_%.2d_%.2d",
             sStem.c_str(),
-            Now->tm_year+1900,
-            Now->tm_mon+1,
-            Now->tm_mday,
-            Now->tm_hour,
-            Now->tm_min,
-            Now->tm_sec);
+            m_log_start->tm_year+1900,
+            m_log_start->tm_mon+1,
+            m_log_start->tm_mday,
+            m_log_start->tm_hour,
+            m_log_start->tm_min,
+            m_log_start->tm_sec);
     }
     else
     {
@@ -455,6 +476,16 @@ std::string Sonar::MakeLogName(string sStem)
 
     return sTmp;
 
+}
+
+std::string Sonar::HypackTND() {
+    return MOOSFormat("%02d:%02d:%02d %02d/%02d/%d", 
+        m_log_start->tm_hour,
+        m_log_start->tm_min,
+        m_log_start->tm_sec,
+        m_log_start->tm_mon+1,
+        m_log_start->tm_mday,
+        m_log_start->tm_year+1900);
 }
 
 bool Sonar::OpenFile(std::ofstream & of, const std::string & sName, bool bBinary)

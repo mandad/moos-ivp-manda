@@ -1,0 +1,48 @@
+//-------------------------------------------------
+// NAME: Damian Manda, UNH
+// FILE: alpha.moos
+//-------------------------------------------------
+
+ServerHost = localhost
+ServerPort = 9000
+Community  = ASV3
+
+MOOSTimeWarp = 1
+
+// Swains lake
+LatOrigin  = 43.2001957
+LongOrigin = -71.0466533
+
+//------------------------------------------
+// Antler configuration  block
+ProcessConfig = ANTLER
+{
+  MSBetweenLaunches = 200
+
+  Run = MOOSDB          @ NewConsole = false, ExtraProcessParams=db
+  Run = iSonar     @ NewConsole = false ~iSonar_Record
+
+  one = --size=1400x800
+  db = --event_log=eventlog
+}
+
+ProcessConfig = iSonar_Record
+{
+  AppTick   = 15
+  CommsTick = 15
+
+  Mode = Replay
+
+  // Serial port settings
+  Port = /dev/ttyUSB_1Port
+  //Port = /dev/rfcomm0
+  BaudRate = 115200
+  Handshaking = false
+  Streaming = false
+
+  PublishRaw = true
+  LogHypack = true
+  TranducerDepth = 0.3 //m
+}
+
+

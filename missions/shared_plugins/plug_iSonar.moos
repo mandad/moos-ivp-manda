@@ -14,5 +14,5 @@ ProcessConfig = iSonar
 
   PublishRaw = true
   LogHypack = true
-  TranducerDepth = 0.5 //m
+  TranducerDepth = 0.3 //m
 }
