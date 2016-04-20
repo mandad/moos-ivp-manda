@@ -82,6 +82,7 @@ bool SurveyPath::OnStartUp()
   AddMOOSVariable("Stop", "", "FAULT", 0);
   AddMOOSVariable("SurveyPath", "", "SURVEY_UPDATE", 0);
   AddMOOSVariable("StartPath", "", "START_UPDATE", 0);
+  AddMOOSVariable("NextSwathSide", "", "NEXT_SWATH_SIDE", 0);
 
   //On Connect to Surver called before this
   registerVariables();
@@ -164,8 +165,10 @@ bool SurveyPath::Iterate()
   if (m_recording) {
     auto swath_msg = GetMOOSVar("Swath");
     if (swath_msg->IsFresh()) {
-      MOOSTrace("pSurveyPath: Recording Swath message\n");
       if(InjestSwathMessage(swath_msg->GetStringVal())) {
+        #if DEBUG
+        MOOSTrace("pSurveyPath: Recording Swath message\n");
+        #endif
         m_swath_record.AddRecord(m_swath_info["stbd"], m_swath_info["port"],
           m_swath_info["x"], m_swath_info["y"], m_swath_info["hdg"],
           m_swath_info["depth"]);
@@ -220,11 +223,17 @@ void SurveyPath::PostSurveyRegion() {
   // Notify("HOME_UPDATE", "station_pt=" + home_pt.get_spec());
   Notify("HOME_UPDATE", "station_pt=" + std::to_string(m_alignment_line.get_vx(0))
     + "," + std::to_string(m_alignment_line.get_vy(0)));
+
+  PostSwathSide();
 }
 
 void SurveyPath::CreateNewPath() {
   #if DEBUG
-  MOOSTrace("End of Line, outputting swath points on ---- side.\n");
+  if (m_swath_record.GetOutputSide() == BoatSide::Stbd) {
+    MOOSTrace("End of Line, outputting swath points on stbd side.\n");
+  } else if (m_swath_record.GetOutputSide() == BoatSide::Port){
+    MOOSTrace("End of Line, outputting swath points on port side.\n");
+  }
   #endif
   m_swath_record.SaveLast();
   if (m_swath_record.ValidRecord()) {
@@ -251,6 +260,7 @@ void SurveyPath::CreateNewPath() {
     }
   }
   m_swath_side = AdvanceSide(m_swath_side);
+  PostSwathSide();
   m_swath_record.SetOutputSide(m_swath_side);
   m_swath_record.ResetLine();
 }
@@ -295,6 +305,14 @@ BoatSide SurveyPath::AdvanceSide(BoatSide side) {
    return BoatSide::Stbd;
   }
   return BoatSide::Unknown;
+}
+
+void SurveyPath::PostSwathSide() {
+  if (m_swath_side == BoatSide::Stbd) {
+    SetMOOSVar("NextSwathSide", "stbd", MOOSTime());
+  } else if (m_swath_side == BoatSide::Port) {
+    SetMOOSVar("NextSwathSide", "port", MOOSTime());
+  }
 }
 
 bool SurveyPath::InjestSwathMessage(std::string msg) {

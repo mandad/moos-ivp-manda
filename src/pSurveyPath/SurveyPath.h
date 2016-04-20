@@ -35,6 +35,7 @@ class SurveyPath : public AppCastingMOOSApp
    void PostSurveyRegion();
    bool DetermineStartAndTurn(XYSegList& next_pts, bool post_turn = false);
    void CreateNewPath();
+   void PostSwathSide();
 
  private: // Configuration variables
   BoatSide m_first_swath_side;
@@ -45,7 +46,7 @@ class SurveyPath : public AppCastingMOOSApp
   double m_swath_overlap;
 
  private: // State variables
-  BoatSide m_next_swath_side;
+  //BoatSide m_next_swath_side;
   BoatSide m_swath_side;
   // double m_swath_width;
   // double m_nav_x;

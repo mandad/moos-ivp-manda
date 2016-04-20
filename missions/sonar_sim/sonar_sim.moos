@@ -168,6 +168,8 @@ ProcessConfig = pMarineViewer
 
   //left_context[polyvert] = POLY_VERT=x=$(XPOS),y=$(YPOS)
 
+  scope = SWATH_WIDTH
+  scope  = SONAR_DEPTH_M
   scope  = WPT_EFFICIENCY_LEG
   scope  = WPT_EFFICIENCY_SUM
   scope  = WPT_EFFICIENCY_VAL

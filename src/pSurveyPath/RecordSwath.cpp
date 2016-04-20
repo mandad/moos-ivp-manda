@@ -136,7 +136,7 @@ XYSegList RecordSwath::SwathOuterPts(BoatSide side) {
   XYSegList points;
   std::list<SwathRecord>::iterator record;
   for (record = m_min_record.begin(); record != m_min_record.end(); record++) {
-    XYPoint outer_pt = OuterPoint(*record, m_output_side);
+    XYPoint outer_pt = OuterPoint(*record, side);
     points.add_vertex(outer_pt);
   }
   return points;

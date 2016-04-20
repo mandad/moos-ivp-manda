@@ -98,7 +98,8 @@ public:
   * @return       An ordered list of the points on the outside of the swath
   */
   XYSegList SwathOuterPts(BoatSide side);
-  //  std::list<XYpt> SwathOuterPts(BoatSide side);
+
+
   bool SwathCoverage(BoatSide side, geos::geom::Polygon &coverage);
 
   /**
@@ -108,6 +109,12 @@ public:
   * @return       The swath width in meters
   */
   double SwathWidth(BoatSide side, unsigned int index);
+
+  /**
+   * Gets all the minimum swath widths on a side (recorded at the set side)
+   * @param side The side from which to get swaths
+   * @return     A vector of swath widths.
+   */
   std::vector<double> AllSwathWidths(BoatSide side);
 
   /**
@@ -122,6 +129,11 @@ public:
   * @param side Side of the boat on which to generate outer swath points
   */
   void SetOutputSide(BoatSide side) { m_output_side = side; }
+
+  /**
+   * Gets the side on which minimum interval points are being processed
+   */
+  BoatSide GetOutputSide() {return m_output_side; }
 
   /**
    * The distance between subsequent analysis intervals for swath minimums.

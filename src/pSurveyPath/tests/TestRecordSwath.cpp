@@ -66,3 +66,34 @@ TEST_CASE("Test Adding Records") {
     REQUIRE(width == Approx(16));
   }
 }
+
+TEST_CASE("Test Getting Outer Points") {
+  RecordSwath swath_rec(10);
+  swath_rec.SetOutputSide(BoatSide::Stbd);
+  swath_rec.AddRecord(15, 10, 0, 0, 90, 5);
+  swath_rec.AddRecord(13, 10, 10, 0, 90, 5);
+  swath_rec.AddRecord(15, 10, 20, 0, 90, 5);
+  swath_rec.AddRecord(15, 10, 30, 0, 90, 5);
+  swath_rec.AddRecord(15, 10, 40, 0, 90, 5);
+  swath_rec.AddRecord(10, 15, 50, 0, 90, 5);
+
+  SECTION("Get outer points on save side") {
+    XYSegList outer_points = swath_rec.SwathOuterPts(BoatSide::Stbd);
+    INFO("Swath Edge: " << outer_points.get_spec());
+    CHECK(outer_points.get_vx(0) == Approx(0));
+    CHECK(outer_points.get_vy(0) == Approx(-15));
+
+    CHECK(outer_points.get_vx(5) == Approx(50));
+    CHECK(outer_points.get_vy(5) == Approx(-10));
+  }
+
+  SECTION("Get outer points on other side") {
+    XYSegList outer_points = swath_rec.SwathOuterPts(BoatSide::Port);
+    INFO("Swath Edge: " << outer_points.get_spec());
+    CHECK(outer_points.get_vx(0) == Approx(0));
+    CHECK(outer_points.get_vy(0) == Approx(10));
+
+    CHECK(outer_points.get_vx(5) == Approx(50));
+    CHECK(outer_points.get_vy(5) == Approx(15));
+  }
+}
