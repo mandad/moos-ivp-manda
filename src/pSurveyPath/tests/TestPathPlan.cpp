@@ -201,9 +201,13 @@ TEST_CASE("Test sharp bend removal") {
     REQUIRE(before_after.second == 72);
   }
 
-  // SECTION("Test Path 7") {
-  //   PathList fail1 = {}
-  // }
+  SECTION("Test Path 7") {
+    PathList fail1 = {EPoint(617.32,-4425.75), EPoint(613.44,-4441.96), EPoint(612.82,-4444.5), EPoint(610.29,-4454.75), EPoint(605.73,-4471.87), EPoint(602.77,-4482.39), EPoint(602.01,-4485.02), EPoint(597.73,-4500.74), EPoint(595.65,-4508.46), EPoint(593.54,-4516.27), EPoint(588.74,-4534.21), EPoint(587.31,-4539.4), EPoint(584.41,-4549.92), EPoint(582.29,-4557.8), EPoint(577.48,-4575.79), EPoint(576.15,-4580.88), EPoint(571.94,-4596.2), EPoint(570.47,-4601.61), EPoint(567.68,-4612.35), EPoint(564.5,-4624.93), EPoint(561.74,-4634.88), EPoint(560.32,-4639.89), EPoint(556.68,-4653.35), EPoint(552.48,-4668.96), EPoint(549.75,-4679.28), EPoint(549.04,-4681.86), EPoint(544.67,-4697.61), EPoint(542.52,-4705.53), EPoint(540.34,-4713.25), EPoint(536.21,-4728.64), EPoint(532.51,-4741.44), EPoint(531.03,-4746.74), EPoint(526.83,-4762.67), EPoint(526.2,-4765.29), EPoint(521.37,-4782.63), EPoint(519.12,-4789.44), EPoint(514.59,-4802.6), EPoint(568.86,-4814.55), EPoint(569.51,-4811.96), EPoint(574.53,-4793.91), EPoint(576.62,-4785.98), EPoint(578.06,-4780.7), EPoint(582.24,-4765.56), EPoint(584.34,-4757.95), EPoint(588.57,-4742.23), EPoint(589.21,-4739.68), EPoint(594.08,-4721.66), EPoint(595.39,-4716.39), EPoint(597.65,-4708.87), EPoint(601.38,-4695.75), EPoint(603.59,-4688.08), EPoint(608.47,-4670.26), EPoint(609.91,-4665.18), EPoint(612.75,-4654.86), EPoint(616.24,-4641.93), EPoint(619.09,-4631.6), EPoint(620.36,-4626.42), EPoint(625.5,-4608.57), EPoint(626.26,-4605.78), EPoint(629.1,-4595.28), EPoint(633.22,-4579.83), EPoint(634.64,-4574.72), EPoint(639.01,-4559.09), EPoint(640.37,-4553.95), EPoint(645.42,-4535.71), EPoint(647.35,-4527.99), EPoint(648.7,-4523.16), EPoint(653.8,-4504.83), EPoint(655.91,-4496.97), EPoint(657.35,-4491.79), EPoint(661.37,-4476.22), EPoint(664.23,-4465.7), EPoint(667.56,-4452.75), EPoint(670.44,-4442.4), EPoint(671.66,-4437.7), EPoint(673.35,-4432.24)}
+
+    auto before_after = ProcessRemoveBend(begin1, planner, 7, false);
+
+    REQUIRE(before_after.second == 72);
+  }
 
   // SECTION("Bend At Beginning") {
   //   PathList begin = {EPoint()}
