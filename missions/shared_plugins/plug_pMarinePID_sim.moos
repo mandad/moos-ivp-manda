@@ -3,7 +3,7 @@ ProcessConfig = pMarinePID
   AppTick    = 20
   CommsTick  = 20
 
-  verbose       = true
+  verbose       = quiet
   depth_control = false
 
   // SIM_INSTABILITY = 20

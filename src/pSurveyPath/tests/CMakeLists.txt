@@ -8,6 +8,7 @@ set(TEST_SRCS
   ../PathPlan.cpp
   ../RecordSwath.cpp
   TestPathPlan.cpp
+  TestRecordSwath.cpp
   TestMain.cpp
   )
 

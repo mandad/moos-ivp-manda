@@ -104,7 +104,7 @@ ProcessConfig = pHelmIvP
   term_report_interval=0
 
   bhv_dir_not_found_ok = true
-  ivp_behavior_dir = /home/ubuntu/moos-ivp-emily
+  ivp_behavior_dir = /home/ubuntu/Code/moos-ivp-manda
 
   behaviors  = sonar.bhv
   domain     = course:0:359:360

@@ -109,6 +109,12 @@ public:
   */
   double SwathWidth(BoatSide side, unsigned int index);
   std::vector<double> AllSwathWidths(BoatSide side);
+
+  /**
+   * Gets the x,y location of where a specific min swath was recorded
+   * @param  index The index along the swath record
+   * @return       XYPoint of recording location
+   */
   XYPoint SwathLocation(unsigned int index);
 
   /**

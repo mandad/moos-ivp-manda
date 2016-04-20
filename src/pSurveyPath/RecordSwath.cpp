@@ -11,6 +11,8 @@
 #include "AngleUtils.h"
 #include "GeomUtils.h"
 
+#define DEBUG true
+
 //---------------------------------------------------------
 // Constructor
 
@@ -50,16 +52,24 @@ bool RecordSwath::AddRecord(double swath_stbd, double swath_port, double loc_x,
 
   if (m_has_records) {
     m_acc_dist += distPointToPoint(m_last_x, m_last_y, loc_x, loc_y);
-    if (m_acc_dist > m_interval) {
+    #if DEBUG
+    std::cout << "Accumulated distance: " + std::to_string(m_acc_dist) + "\n";
+    #endif
+    if (m_acc_dist >= m_interval) {
+      #if DEBUG
+      std::cout << "Running MinInterval()\n";
+      #endif
       m_acc_dist = 0;
       MinInterval();
     }
   }
 
+  m_last_x = loc_x;
+  m_last_y = loc_y;
+  m_has_records = true;
+
   // Add progressively to the coverage model
   return AddToCoverage(record);
-
-  m_has_records = true;
 }
 
 bool RecordSwath::AddToCoverage(SwathRecord record) {
@@ -69,6 +79,10 @@ bool RecordSwath::AddToCoverage(SwathRecord record) {
 
 void RecordSwath::MinInterval() {
   // Get the record from the side we are offsetting
+  if (m_output_side == BoatSide::Unknown) {
+    throw std::runtime_error("Cannot find swath minimum without output side.");
+    return;
+  }
   std::vector<double>* side_record = &m_interval_swath[m_output_side];
 
   std::size_t min_index = 0;
@@ -80,6 +94,9 @@ void RecordSwath::MinInterval() {
   if (m_interval_record.size() > min_index) {
     // Add the first point if this is the first interval in the record
     if (m_min_record.size() == 0 && min_index != 0) {
+      #if DEBUG
+      std::cout << "Saving First record of line\n";
+      #endif
       m_min_record.push_back(m_interval_record[0]);
     }
     m_min_record.push_back(m_interval_record[min_index]);
@@ -93,7 +110,10 @@ bool RecordSwath::SaveLast() {
   if (m_min_record.size() > 0) {
     SwathRecord last_min = m_min_record.back();
     SwathRecord last_rec = m_interval_record.back();
-    if (last_min.loc_x != last_rec.loc_x && last_min.loc_y != last_rec.loc_y) {
+    if (last_min.loc_x != last_rec.loc_x || last_min.loc_y != last_rec.loc_y) {
+      #if DEBUG
+      std::cout << "Saving last record of line\n";
+      #endif
       m_min_record.push_back(last_rec);
     }
     return true;
@@ -105,7 +125,7 @@ void RecordSwath::ResetLine() {
   m_interval_record.clear();
   m_interval_swath[BoatSide::Stbd].clear();
   m_interval_swath[BoatSide::Port].clear();
-  m_coverage = m_geom_factory->createPolygon();
+  //m_coverage = m_geom_factory->createPolygon();
   m_outer_points[BoatSide::Stbd].clear();
   m_outer_points[BoatSide::Port].clear();
   m_acc_dist = 0;
@@ -178,6 +198,16 @@ std::vector<double> RecordSwath::AllSwathWidths(BoatSide side) {
     }
   }
   return widths;
+}
+
+XYPoint RecordSwath::SwathLocation(unsigned int index) {
+  if (m_min_record.size() > index) {
+    std::list<SwathRecord>::iterator list_record = std::next(m_min_record.begin(),
+     index);
+    return XYPoint(list_record->loc_x, list_record->loc_y);
+  }
+  throw std::out_of_range("Swath index out of range.");
+  return XYPoint();
 }
 
 bool RecordSwath::ValidRecord() {

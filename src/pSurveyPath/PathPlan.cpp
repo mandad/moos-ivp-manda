@@ -15,7 +15,7 @@
 
 namespace bg = boost::geometry;
 
-#define DEBUG true
+#define DEBUG false
 
 PathPlan::PathPlan(const RecordSwath &last_swath, BoatSide side, BPolygon op_region,
   double margin, bool restrict_to_region) : m_last_line(last_swath),

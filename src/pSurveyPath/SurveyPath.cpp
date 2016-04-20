@@ -26,7 +26,7 @@ SurveyPath::SurveyPath() : m_first_swath_side{BoatSide::Port},
   m_swath_record(10), m_swath_side{BoatSide::Port}, m_turn_pt_set{false}
 {
   m_swath_side = AdvanceSide(m_first_swath_side);
-  //m_swath_side = m_next_swath_side;
+  m_swath_record.SetOutputSide(m_swath_side);
 }
 
 //---------------------------------------------------------
@@ -59,7 +59,10 @@ bool SurveyPath::OnStartUp()
       boost::geometry::correct(m_op_region);
       handled = true;
     }
-    else if(param == "BAR") {
+    else if(param == "FIRST_SIDE") {
+      if (toupper(value) == "PORT") {
+
+      }
       handled = true;
     }
 
@@ -103,7 +106,6 @@ void SurveyPath::registerVariables()
 {
   AppCastingMOOSApp::RegisterVariables();
   RegisterMOOSVariables();
-  // Register("FOOBAR", 0);
 }
 
 //---------------------------------------------------------
@@ -154,7 +156,7 @@ bool SurveyPath::Iterate()
   auto begin_msg = GetMOOSVar("LineBegin");
   if (begin_msg->IsFresh()) {
     #if DEBUG
-    MOOSTrace("\n**** Line beginning, starting to record swath ****");
+    MOOSTrace("**** Line beginning, starting to record swath ****\n");
     #endif
     m_recording = true;
   }
@@ -162,6 +164,7 @@ bool SurveyPath::Iterate()
   if (m_recording) {
     auto swath_msg = GetMOOSVar("Swath");
     if (swath_msg->IsFresh()) {
+      MOOSTrace("pSurveyPath: Recording Swath message\n");
       if(InjestSwathMessage(swath_msg->GetStringVal())) {
         m_swath_record.AddRecord(m_swath_info["stbd"], m_swath_info["port"],
           m_swath_info["x"], m_swath_info["y"], m_swath_info["hdg"],
@@ -220,9 +223,8 @@ void SurveyPath::PostSurveyRegion() {
 }
 
 void SurveyPath::CreateNewPath() {
-  m_swath_side = AdvanceSide(m_swath_side);
   #if DEBUG
-  MOOSTrace("End of Line, outputting swath points on ---- side.'");
+  MOOSTrace("End of Line, outputting swath points on ---- side.\n");
   #endif
   m_swath_record.SaveLast();
   if (m_swath_record.ValidRecord()) {
@@ -248,6 +250,8 @@ void SurveyPath::CreateNewPath() {
       #endif
     }
   }
+  m_swath_side = AdvanceSide(m_swath_side);
+  m_swath_record.SetOutputSide(m_swath_side);
   m_swath_record.ResetLine();
 }
 

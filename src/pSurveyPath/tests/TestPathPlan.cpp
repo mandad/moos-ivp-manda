@@ -248,10 +248,10 @@ TEST_CASE("Polygon ray intersection") {
   }
 
   SECTION("Intersect vertex") {
-    auto int_pt = planner.FindNearestIntersect(EPoint(1, -1), EPoint(1, 2),
+    auto int_pt = planner.FindNearestIntersect(EPoint(1, -1), EPoint(1, 1),
       poly);
-    REQUIRE(int_pt.first == Approx(2 * std::sqrt(2)));
-    REQUIRE(int_pt.second.x() == 3);
+    REQUIRE(int_pt.first == Approx(std::sqrt(2)));
+    REQUIRE(int_pt.second.x() == 2);
     REQUIRE(int_pt.second.y() == 0);
   }
 
