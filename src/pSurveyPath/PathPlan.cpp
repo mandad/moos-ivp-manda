@@ -15,7 +15,7 @@
 
 namespace bg = boost::geometry;
 
-#define DEBUG false
+#define DEBUG true
 
 PathPlan::PathPlan(const RecordSwath &last_swath, BoatSide side, BPolygon op_region,
   double margin, bool restrict_to_region) : m_last_line(last_swath),
@@ -31,9 +31,14 @@ PathPlan::PathPlan(const RecordSwath &last_swath, BoatSide side, BPolygon op_reg
 XYSegList PathPlan::GenerateNextPath() {
   #if DEBUG
   MOOSTrace("\n======== Generating Next Path ========\n");
-  //MOOSTrace("'Basis Points: {0}'.format(len(edge_pts)))
   #endif
+
   XYSegList edge_pts = m_last_line.SwathOuterPts(m_planning_side);
+
+  #if DEBUG
+  MOOSTrace("Basis Points: %d\n", edge_pts.length());
+  MOOSTrace(edge_pts.get_spec_pts(2) + "\n");
+  #endif
 
   if (edge_pts.size() < 2)
     return XYSegList();
@@ -96,7 +101,10 @@ XYSegList PathPlan::GenerateNextPath() {
   // ---------- Bends -----------
   #if DEBUG
   MOOSTrace("Eliminating sharp bends.\n");
+  XYSegList pts = VectorListToSegList(m_next_path_pts);
+  MOOSTrace(pts.get_spec_pts(2) + "\n");
   #endif
+
 
   std::function<void(std::list<EPoint>&)> remove_func =
     std::bind(&PathPlan::RemoveBends, this, std::placeholders::_1);
@@ -346,6 +354,9 @@ void PathPlan::RemoveBends(std::list<EPoint> &path_pts) {
     // does this work now that the lists are passed by reference?
     path_pts.erase(std::next(path_pts.begin(), this_seg[0]));
     // might want to put this recursion path at the end
+    #if DEBUG
+    std::cout << "Recursing due to skip to end.\n";
+    #endif
     RemoveBends(path_pts);
     return;
   } else {
@@ -376,6 +387,9 @@ void PathPlan::RemoveBends(std::list<EPoint> &path_pts) {
   if (non_bend_idx.size() <= 3 && v_pts.size() > 5) {
     // Try again eliminating the first segment
     path_pts.erase(++path_pts.begin());
+    #if DEBUG
+    std::cout << "Recursing due to bend at beginning.\n";
+    #endif
     RemoveBends(path_pts);
   } else {
     SelectIndicies(path_pts, non_bend_idx);
@@ -386,7 +400,7 @@ void PathPlan::RemoveBends(std::list<EPoint> &path_pts) {
 void PathPlan::RestrictToRegion(std::list<EPoint>& path_points) {
   for(auto point = path_points.begin(); point != path_points.end();) {
     BPoint boost_point(point->x(), point->y());
-    if (boost::geometry::within(boost_point, m_op_region)) {
+    if (!boost::geometry::within(boost_point, m_op_region)) {
       point = path_points.erase(point);
     } else {
       ++point;

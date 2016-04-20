@@ -201,6 +201,10 @@ TEST_CASE("Test sharp bend removal") {
     REQUIRE(before_after.second == 72);
   }
 
+  // SECTION("Test Path 7") {
+  //   PathList fail1 = {}
+  // }
+
   // SECTION("Bend At Beginning") {
   //   PathList begin = {EPoint()}
   // }

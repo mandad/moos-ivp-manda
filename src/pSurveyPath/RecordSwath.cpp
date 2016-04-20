@@ -107,12 +107,13 @@ void RecordSwath::MinInterval() {
 }
 
 bool RecordSwath::SaveLast() {
-  if (m_min_record.size() > 0) {
+  if (m_min_record.size() > 0 && m_interval_record.size() > 0) {
     SwathRecord last_min = m_min_record.back();
     SwathRecord last_rec = m_interval_record.back();
     if (last_min.loc_x != last_rec.loc_x || last_min.loc_y != last_rec.loc_y) {
       #if DEBUG
-      std::cout << "Saving last record of line\n";
+      std::cout << "Saving last record of line, (" << last_rec.loc_x << ", "
+        << last_rec.loc_y << ")\n";
       #endif
       m_min_record.push_back(last_rec);
     }
@@ -136,6 +137,10 @@ XYSegList RecordSwath::SwathOuterPts(BoatSide side) {
   XYSegList points;
   std::list<SwathRecord>::iterator record;
   for (record = m_min_record.begin(); record != m_min_record.end(); record++) {
+    #if DEBUG
+    std::cout << "Getting swath outer point for " << record->loc_x
+      << ", "  << record->loc_y << "\n";
+    #endif
     XYPoint outer_pt = OuterPoint(*record, side);
     points.add_vertex(outer_pt);
   }

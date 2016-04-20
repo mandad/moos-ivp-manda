@@ -250,7 +250,7 @@ void SurveyPath::CreateNewPath() {
     #endif
     if (m_survey_path.size() > 2) {
       m_posted_path_str = m_survey_path.get_spec_pts(2);  //2 decimal precision
-      SetMOOSVar("SurveyPath", m_posted_path_str, MOOSTime());
+      SetMOOSVar("SurveyPath", "points=" + m_posted_path_str, MOOSTime());
       DetermineStartAndTurn(m_survey_path);
     } else {
       SetMOOSVar("Stop", "true", MOOSTime());
