@@ -30,7 +30,7 @@ TEST_CASE("Test Adding Records") {
   SECTION("Different Swath Widths") {
     swath_rec.AddRecord(15, 10, 0, 0, 90, 5); // Should be in final
     swath_rec.AddRecord(15, 10, 0, 6, 90, 5);
-    swath_rec.AddRecord(13, 10, 0, 9, 90, 5); // Should be in final
+    swath_rec.AddRecord(13, 11, 0, 9, 90, 5); // Should be in final
     swath_rec.AddRecord(15, 10, 0, 12, 90, 5);
     swath_rec.AddRecord(15, 10, 0, 16, 90, 5);
     swath_rec.AddRecord(15, 10, 0, 18, 90, 5);
@@ -45,6 +45,13 @@ TEST_CASE("Test Adding Records") {
     width = swath_rec.SwathWidth(BoatSide::Stbd, 2);
     REQUIRE(width == widths[2]);
     REQUIRE(width == Approx(12));
+
+    // Try the port side as well
+    widths = swath_rec.AllSwathWidths(BoatSide::Port);
+    REQUIRE(widths.size() == 3);
+    width = swath_rec.SwathWidth(BoatSide::Port, 1);
+    REQUIRE(width == widths[1]);
+    REQUIRE(width == Approx(11));
   }
 
   SECTION("Last Point Saving") {

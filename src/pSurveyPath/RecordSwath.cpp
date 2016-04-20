@@ -124,6 +124,7 @@ bool RecordSwath::SaveLast() {
 
 void RecordSwath::ResetLine() {
   m_interval_record.clear();
+  m_min_record.clear();
   m_interval_swath[BoatSide::Stbd].clear();
   m_interval_swath[BoatSide::Port].clear();
   //m_coverage = m_geom_factory->createPolygon();
@@ -137,10 +138,10 @@ XYSegList RecordSwath::SwathOuterPts(BoatSide side) {
   XYSegList points;
   std::list<SwathRecord>::iterator record;
   for (record = m_min_record.begin(); record != m_min_record.end(); record++) {
-    #if DEBUG
-    std::cout << "Getting swath outer point for " << record->loc_x
-      << ", "  << record->loc_y << "\n";
-    #endif
+    // #if DEBUG
+    // std::cout << "Getting swath outer point for " << record->loc_x
+    //   << ", "  << record->loc_y << "\n";
+    // #endif
     XYPoint outer_pt = OuterPoint(*record, side);
     points.add_vertex(outer_pt);
   }
@@ -183,7 +184,7 @@ double RecordSwath::SwathWidth(BoatSide side, unsigned int index) {
      index);
     if (side == BoatSide::Stbd) {
       return list_record->swath_stbd;
-    } else if (side == BoatSide::Stbd) {
+    } else if (side == BoatSide::Port) {
       return list_record->swath_port;
     }
   }

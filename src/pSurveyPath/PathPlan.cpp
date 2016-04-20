@@ -36,12 +36,14 @@ XYSegList PathPlan::GenerateNextPath() {
   XYSegList edge_pts = m_last_line.SwathOuterPts(m_planning_side);
 
   #if DEBUG
-  MOOSTrace("Basis Points: %d\n", edge_pts.length());
+  MOOSTrace("Basis Points: %d\n", edge_pts.size());
   MOOSTrace(edge_pts.get_spec_pts(2) + "\n");
   #endif
 
   if (edge_pts.size() < 2)
     return XYSegList();
+
+  bool all_zero = true;
 
   for(unsigned int i = 0; i < edge_pts.size(); i++) {
     Eigen::Vector2d back_vec;
@@ -82,6 +84,19 @@ XYSegList PathPlan::GenerateNextPath() {
     // Get offset location and save
     Eigen::Vector2d swath_loc(edge_pts.get_vx(i), edge_pts.get_vy(i));
     m_next_path_pts.push_back(swath_loc + offset_vec);
+
+    MOOSTrace("Swath Width: %0.2f\n", swath_width);
+    all_zero = all_zero && (swath_width == 0);
+  }
+
+  // Completion of the survey is when all swath widths are zero (depth threshold
+  // reached).  This is done by the simulator or pSonarFilter, should eventually
+  // move into this processing.
+  if (all_zero) {
+    #if DEBUG
+    MOOSTrace("Reached end of path by depth threshold\n");
+    #endif
+    return XYSegList();
   }
 
   // Next line is in opposite direction

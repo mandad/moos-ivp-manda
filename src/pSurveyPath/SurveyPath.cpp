@@ -258,11 +258,11 @@ void SurveyPath::CreateNewPath() {
       MOOSTrace("Path too short, ending survey\n");
       #endif
     }
+    m_swath_side = AdvanceSide(m_swath_side);
+    PostSwathSide();
+    m_swath_record.SetOutputSide(m_swath_side);
+    m_swath_record.ResetLine();
   }
-  m_swath_side = AdvanceSide(m_swath_side);
-  PostSwathSide();
-  m_swath_record.SetOutputSide(m_swath_side);
-  m_swath_record.ResetLine();
 }
 
 bool SurveyPath::DetermineStartAndTurn(XYSegList& next_pts, bool post_turn) {
