@@ -23,20 +23,21 @@ done
 #-------------------------------------------------------
 #  Part 2: Create the .moos and .bhv files. 
 #-------------------------------------------------------
-SCENARIO=2
+SCENARIO=1
 # 1 = Summer Hydro 2015
 # 2 = Strait of Georgia 
 if [ $SCENARIO = 1 ]; then
   #MOOS Stuff
-  START_POS="705,-4379"
+  START_POS="x=705,y=-4379,speed=0,heading=180"
   LAT_ORIGIN=42.97373611
   LONG_ORIGIN=-70.7968875
   TIFF_FILE=SH_2015.tif
-  PAN_X=258
-  PAN_Y=927
-  ZOOM=0.53
+  PAN_X=814 #258
+  PAN_Y=769 #927
+  ZOOM=1.98 #0.53
   # Python Stuff
   OP_POLY="[(655,-4429),(550,-4813),(198,-4725),(300,-4353)]"
+  OP_WKT="POLYGON_((655_-4429,550_-4813,198_-4725,300_-4353))"
   BATHY_GRID="'../path_planning/terrain/SH15_Surface.tif'"
   X_OFFSET=353408.656
   Y_OFFSET=6083.832+4753335.914
@@ -60,22 +61,22 @@ fi
 
 # What is nsplug? Type "nsplug --help" or "nsplug --manual" 
 
-nsplug sonar_sim.moos targ_sonar_sim.moos -f WARP=$TIME_WARP \
+nsplug sonar_sim.moos targ_sonar_sim.moos --path=../shared_plugins -f WARP=$TIME_WARP \
    LAT_ORIGIN=$LAT_ORIGIN   LONG_ORIGIN=$LONG_ORIGIN   START_POS=$START_POS \
-   TIFF_FILE="$TIFF_FILE"  PAN_X=$PAN_X  PAN_Y=$PAN_Y  ZOOM=$ZOOM
+   TIFF_FILE="$TIFF_FILE"  PAN_X=$PAN_X  PAN_Y=$PAN_Y  ZOOM=$ZOOM  OP_WKT="$OP_WKT"
 
-nsplug ~/code/asv-dev/utilities/python_moosapps/path_plan.py \
-  ~/code/asv-dev/utilities/python_moosapps/targ_path_plan.py -f \
-  OP_POLY=$OP_POLY  WARP=$TIME_WARP
+# nsplug ~/code/asv-dev/utilities/python_moosapps/path_plan.py \
+#   ~/code/asv-dev/utilities/python_moosapps/targ_path_plan.py -f \
+#   OP_POLY=$OP_POLY  WARP=$TIME_WARP
 
 nsplug ~/code/asv-dev/utilities/python_moosapps/sonar_simulator.py \
   ~/code/asv-dev/utilities/python_moosapps/targ_sonar_simulator.py -f \
   OP_POLY="$OP_POLY"  BATHY_GRID=$BATHY_GRID  X_OFFSET=$X_OFFSET \
   Y_OFFSET=$Y_OFFSET WARP=$TIME_WARP
 
-nsplug ~/code/asv-dev/utilities/python_moosapps/record_swath.py \
-  ~/code/asv-dev/utilities/python_moosapps/targ_record_swath.py -f \
-  WARP=$TIME_WARP
+# nsplug ~/code/asv-dev/utilities/python_moosapps/record_swath.py \
+#   ~/code/asv-dev/utilities/python_moosapps/targ_record_swath.py -f \
+#   WARP=$TIME_WARP
 
 if [ ${JUST_MAKE} = "yes" ] ; then
     exit 0

@@ -240,7 +240,7 @@ bool MarinePID::Iterate()
   if(m_verbose == "verbose") {
     pid_report = m_pengine.getPIDReport();
     for(unsigned int i=0; i<pid_report.size(); i++)
-      cout << pid_report[i] << endl;
+      MOOSTrace(pid_report[i] + "\n");
   }
   m_pengine.clearReport();
 

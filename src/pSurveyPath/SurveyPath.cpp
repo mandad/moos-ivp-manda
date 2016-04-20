@@ -6,6 +6,7 @@
 /************************************************************/
 
 #include <iterator>
+#include <regex>
 #include "MBUtils.h"
 #include "ACTable.h"
 #include "RecordSwath.h"
@@ -44,14 +45,19 @@ bool SurveyPath::OnStartUp()
   STRING_LIST::iterator p;
   for(p=sParams.begin(); p!=sParams.end(); p++) {
     std::string orig  = *p;
+    MOOSTrace("pSurveyPath Parameter: " + orig + "\n");
     std::string line  = *p;
     std::string param = toupper(biteStringX(line, '='));
     std::string value = line;
 
     bool handled = false;
     if(param == "OP_REGION") {
-      boost::geometry::read_wkt(value, m_op_region);
+      std::regex pattern("_");
+      std::string spaces_added = std::regex_replace(line, pattern, " ");
+      MOOSTrace("pSurveyPath After Spaces: " + spaces_added + "\n");
+      boost::geometry::read_wkt(spaces_added, m_op_region);
       boost::geometry::correct(m_op_region);
+      handled = true;
     }
     else if(param == "BAR") {
       handled = true;
@@ -74,6 +80,10 @@ bool SurveyPath::OnStartUp()
   AddMOOSVariable("SurveyPath", "", "SURVEY_UPDATE", 0);
   AddMOOSVariable("StartPath", "", "START_UPDATE", 0);
 
+  //On Connect to Surver called before this
+  registerVariables();
+  PostSurveyRegion();
+
   return(true);
 }
 
@@ -82,8 +92,6 @@ bool SurveyPath::OnStartUp()
 
 bool SurveyPath::OnConnectToServer()
 {
-  registerVariables();
-  PostSurveyRegion();
   bool published = PublishFreshMOOSVariables();
   return(published);
 }
@@ -183,6 +191,10 @@ bool SurveyPath::Iterate()
 void SurveyPath::PostSurveyRegion() {
   m_survey_path.clear();
 
+  #if DEBUG
+  std::cout << "Posting Survey Area" << std::endl;
+  #endif
+
   // Survey Region limits (currently only the outer ring)
   auto ext_ring = m_op_region.outer();
   XYSegList survey_limits;
@@ -195,14 +207,16 @@ void SurveyPath::PostSurveyRegion() {
   // Set the first path of the survey
   m_survey_path.add_vertex(survey_limits.get_vx(0), survey_limits.get_vy(0));
   m_survey_path.add_vertex(survey_limits.get_vx(1), survey_limits.get_vy(1));
-  SetMOOSVar("SurveyPath", m_survey_path.get_spec_pts(2), MOOSTime());
+  SetMOOSVar("SurveyPath", "points=" + m_survey_path.get_spec_pts(2), MOOSTime());
 
   // Set the alignment lines and turn for the first line
   DetermineStartAndTurn(m_survey_path, true);
 
   // Set home location = beginning of alignment line
   XYPoint home_pt(m_alignment_line.get_vx(0), m_alignment_line.get_vy(0));
-  Notify("HOME_UPDATE", "station_pt=" + home_pt.get_spec());
+  // Notify("HOME_UPDATE", "station_pt=" + home_pt.get_spec());
+  Notify("HOME_UPDATE", "station_pt=" + std::to_string(m_alignment_line.get_vx(0))
+    + "," + std::to_string(m_alignment_line.get_vy(0)));
 }
 
 void SurveyPath::CreateNewPath() {
@@ -241,15 +255,17 @@ bool SurveyPath::DetermineStartAndTurn(XYSegList& next_pts, bool post_turn) {
   std::size_t pts_len = next_pts.size();
 
   // The turn point, extended from the end of the path
-  EPoint end_heading(next_pts.get_vx(pts_len-1) - next_pts.get_vx(pts_len-2),
-    next_pts.get_vy(pts_len-1) - next_pts.get_vy(pts_len-2));
+  auto end_x = next_pts.get_vx(pts_len-1);
+  auto end_y = next_pts.get_vy(pts_len-1);
+  EPoint end_heading(end_x - next_pts.get_vx(pts_len-2),
+    end_y - next_pts.get_vy(pts_len-2));
   end_heading.normalize();
   end_heading *= m_turn_pt_offset;
-  m_turn_pt = XYPoint(end_heading.x(), end_heading.y());
+  m_turn_pt = XYPoint(end_x + end_heading.x(), end_y + end_heading.y());
   m_turn_pt.set_spec_digits(2);
   m_turn_pt_set = true;
   if (post_turn) {
-    SetMOOSVar("TurnPoint", m_turn_pt.get_spec(), MOOSTime());
+    SetMOOSVar("TurnPoint", "point=" + m_turn_pt.get_spec(), MOOSTime());
     m_turn_pt_set = false;
   }
   // This is not posted until the current turn point is reached
@@ -260,9 +276,10 @@ bool SurveyPath::DetermineStartAndTurn(XYSegList& next_pts, bool post_turn) {
   start_heading.normalize();
   start_heading *= m_alignment_line_len;
   m_alignment_line.clear();
-  m_alignment_line.add_vertex(start_heading.x(), start_heading.y());
+  m_alignment_line.add_vertex(next_pts.get_vx(0) + start_heading.x(),
+    next_pts.get_vy(0) + start_heading.y());
   m_alignment_line.add_vertex(next_pts.get_vx(0), next_pts.get_vy(0));
-  SetMOOSVar("StartPath", m_alignment_line.get_spec_pts(2), MOOSTime());
+  SetMOOSVar("StartPath", "points=" + m_alignment_line.get_spec_pts(2), MOOSTime());
 
   return true;
 }

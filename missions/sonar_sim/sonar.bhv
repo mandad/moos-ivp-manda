@@ -40,11 +40,6 @@ SET MODE = INPLACE {
   FAULT = true
 } HOME
 
-// SET MODE = TRANSIT_HOME {
-//   MODE = ACTIVE:HOME
-//   REACHED_HOME != true
-// } HOME_HOLD
-
 //----------------------------------------------
 Behavior = BHV_Waypoint
 { 
