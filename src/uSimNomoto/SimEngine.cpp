@@ -23,6 +23,7 @@
 
 #include <iostream>
 #include <cmath>
+#include <chrono>
 #include "AngleUtils.h"
 #include "SimEngine.h"
 
