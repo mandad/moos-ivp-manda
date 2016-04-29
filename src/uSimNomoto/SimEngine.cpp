@@ -40,7 +40,7 @@ SimEngine::SimEngine() : m_rot{0}, m_iteration_num{0}, m_distribution{0.0,1.0},
   m_rand_gen = std::default_random_engine(seed);
 
   // Should we bother to deal with this here too?
-  double H = 0.3; // H_1/3 of the waves (m)
+  double H = 0.3 * 1/1.4; // H_s of the waves (m)
   double T = 6;   // Average period (s)
   double A = 172.75 * H*H / pow(T, 4);
   double B = 691 / pow(T, 4);
@@ -268,13 +268,13 @@ void SimEngine::propagateHeading(NodeRecord& record,
   delta_deg += (delta_time * rotate_speed);
   */
 
-  //New version
+  //New version (Nomoto)
   double prev_heading = record.getHeading();
   double m_dfModelPhiDotDot = (km * (rudder + kim) - m_rot) / tm;
   m_rot += m_dfModelPhiDotDot * delta_time;
   if (wave_sim && speed > 0) {
     double gamma = angle180(angle180(prev_heading) - angle180(m_wave_dir)) * M_PI/180;
-    m_rot += m_wave_out[0] * 2 * sin(2 * gamma);
+    m_rot += m_wave_out[0] * sin(2 * gamma);
   }
   //this is the limit of ROT in this model
   // if (fabs(m_rot) > fabs(km * rudder)) {
@@ -359,7 +359,7 @@ void SimEngine::propagateHeadingDiffMode(NodeRecord& record,
 
 WaveParameters SimEngine::determineWaveParameters(NodeRecord& record)
 {
-  double H = 0.3; // H_1/3 of the waves (m)
+  double H = 0.3 * 1/1.4; // H_s of the waves (m)
   double T = 6;   // Average period (s)
   double A = 172.75 * H*H / pow(T, 4);
   double B = 691 / pow(T, 4);
