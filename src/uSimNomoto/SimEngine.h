@@ -90,8 +90,10 @@ public:
   std::deque<double> m_filt_noise;
   std::deque<double> m_noise;
   std::default_random_engine m_rand_gen;
+  std::normal_distribution<double> m_distribution;
 
   double m_sample_T;
+  double m_wave_dir;
   // double m_wave_a;
   // vector<double> m_wave_b;
 };

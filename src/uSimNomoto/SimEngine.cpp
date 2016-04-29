@@ -30,14 +30,14 @@ using namespace std;
 
 #define DEBUG true
 
-SimEngine::SimEngine() : m_rot{0}, m_iteration_num{0}, m_sample_T{0}
+SimEngine::SimEngine() : m_rot{0}, m_iteration_num{0}, m_distribution{0.0,1.0}, 
+  m_sample_T{0.05}, m_wave_dir{45}
 {
   #if DEBUG
   std::cout << "SimEngine Constructor" << endl;
   #endif
   unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
   m_rand_gen = std::default_random_engine(seed);
-  std::normal_distribution<double> distribution (0.0,1.0);
 
   // Should we bother to deal with this here too?
   double H = 0.3; // H_1/3 of the waves (m)
@@ -49,9 +49,8 @@ SimEngine::SimEngine() : m_rot{0}, m_iteration_num{0}, m_sample_T{0}
   double Q = w0 / BW;
   double zeta = 1/(2 * Q);
 
-  double sample_T = 0.1;
   double zeta_sqrt = sqrt(1 - zeta*zeta);
-  double we_T = w0 * sample_T;
+  double we_T = w0 * m_sample_T;
   double G = -2 * zeta * w0 * H / zeta_sqrt;
 
   WaveParameters params;
@@ -63,10 +62,10 @@ SimEngine::SimEngine() : m_rot{0}, m_iteration_num{0}, m_sample_T{0}
 
   // Fill the wave array
   #if DEBUG
-  std::cout << "Waves prefilling";
+  std::cout << "Waves prefilling" << endl;
   #endif
   for (int i = 0; i < 2; i++) {
-    m_noise.push_front(distribution(m_rand_gen));
+    m_noise.push_front(m_distribution(m_rand_gen));
     if (i == 0) {
       m_filt_noise.push_front(0.0201 * m_noise[0]);
       m_wave_out.push_front(params.b1*m_filt_noise[0]);
@@ -77,6 +76,9 @@ SimEngine::SimEngine() : m_rot{0}, m_iteration_num{0}, m_sample_T{0}
         - params.a2*m_wave_out[0]);
     }
   }
+  #if DEBUG
+  std::cout << "Wave Amps: " << m_wave_out[0] << "," << m_wave_out[1] << endl;
+  #endif
 
 }
 
@@ -235,6 +237,7 @@ void SimEngine::propagateHeading(NodeRecord& record,
   // actuator, e.g., like the kayaks, or typical UUVs. A rotated
   // thruster contributes nothing to a turn unless the prop is 
   // moving.
+  rudder = rudder + rudder_offset;
   double speed = record.getSpeed();
   if(speed == 0) 
     rudder = 0;
@@ -250,7 +253,7 @@ void SimEngine::propagateHeading(NodeRecord& record,
 
   // Even if speed is zero, need to continue on in case the 
   // torque is non-zero.
-  rudder = rudder + rudder_offset;
+  
   rudder    = vclip(rudder, -100, 100);
   turn_rate = vclip(turn_rate, 0, 100);
   
@@ -269,8 +272,9 @@ void SimEngine::propagateHeading(NodeRecord& record,
   double prev_heading = record.getHeading();
   double m_dfModelPhiDotDot = (km * (rudder + kim) - m_rot) / tm;
   m_rot += m_dfModelPhiDotDot * delta_time;
-  if (wave_sim) {
-    m_rot += m_wave_out[0] * 2;
+  if (wave_sim && speed > 0) {
+    double gamma = angle180(angle180(prev_heading) - angle180(m_wave_dir)) * M_PI/180;
+    m_rot += m_wave_out[0] * 2 * sin(2 * gamma);
   }
   //this is the limit of ROT in this model
   // if (fabs(m_rot) > fabs(km * rudder)) {
@@ -362,8 +366,8 @@ WaveParameters SimEngine::determineWaveParameters(NodeRecord& record)
   double w0 = pow(4 * B / 5, 0.25);
 
   // angle between ship and waves
-  double wave_dir = 90; //direction of waves, deg
-  double gamma = angle180(angle180(record.getHeading()) - angle180(wave_dir)) 
+  //double wave_dir = 90; //direction of waves, deg
+  double gamma = angle180(angle180(record.getHeading()) - angle180(m_wave_dir)) 
                  * M_PI/180;
   double U = record.getSpeed();
   // encouter frequency
@@ -376,9 +380,8 @@ WaveParameters SimEngine::determineWaveParameters(NodeRecord& record)
   double Q = we / BW;
   double zeta = 1/(2 * Q);
 
-  double sample_T = 0.1;
   double zeta_sqrt = sqrt(1 - zeta*zeta);
-  double we_T = we * sample_T;
+  double we_T = we * m_sample_T;
   double G = -2 * zeta * we * H / zeta_sqrt;
 
   WaveParameters params;
@@ -397,13 +400,16 @@ void SimEngine::propagateWaveSim(NodeRecord& record,
   #endif
   WaveParameters p = determineWaveParameters(record);
 
-  std::normal_distribution<double> distribution (0.0,1.0);
+  #if DEBUG
+  cout << "b1: " << p.b1 << " b2: " << p.b2 << " a2: " << p.a2 << " a3 " << p.a3 << endl;
+  #endif
+
   // Generate the noise
-  m_noise.push_front(distribution(m_rand_gen));
+  m_noise.push_front(m_distribution(m_rand_gen));
 
   //Apply low pass filter, wc = 0.5 Hz (2 sec period)
-  m_filt_noise.push_front(0.0201 * m_noise[0] + 0.0402 * m_noise[1] 
-    + 0.0201 * m_noise[2] + 1.5610 * m_filt_noise[0] + 0.6414 * m_filt_noise[1]);
+  m_filt_noise.push_front(0.0055 * m_noise[0] + 0.0111 * m_noise[1] 
+    + 0.0055 * m_noise[2] + 1.7786 * m_filt_noise[0] - 0.8008 * m_filt_noise[1]);
 
   // Turn the noise into waves with a bandpass filter
   m_wave_out.push_front(p.b1*m_filt_noise[0] + p.b2*m_filt_noise[1]

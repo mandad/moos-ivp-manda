@@ -70,7 +70,7 @@ USM_Model::USM_Model()
   m_thrust_rgt   = 0;
 
   m_thrust_mode_reverse = false;
-  m_wave_sim = false;
+  m_wave_sim = true;
   m_rudder_offset = 0;
 }
 

@@ -23,7 +23,7 @@ ProcessConfig = ANTLER
   MSBetweenLaunches = 200
 
   Run = MOOSDB          @ NewConsole = false, ExtraProcessParams=db
-  //Run = pLogger         @ NewConsole = false
+  Run = pLogger         @ NewConsole = false
   Run = uSimNomoto	    @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
   Run = pMarineViewer	  @ NewConsole = false, ExtraProcessParams=one
