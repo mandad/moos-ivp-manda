@@ -31,6 +31,8 @@
 
 using namespace std;
 
+#define DEBUG true
+
 //------------------------------------------------------------------------
 // Constructor
 
@@ -68,6 +70,8 @@ USM_Model::USM_Model()
   m_thrust_rgt   = 0;
 
   m_thrust_mode_reverse = false;
+  m_wave_sim = false;
+  m_rudder_offset = 0;
 }
 
 //------------------------------------------------------------------------
@@ -465,9 +469,12 @@ void USM_Model::propagateNodeRecord(NodeRecord& record,
     m_sim_engine.propagateSpeed(record, m_thrust_map, delta_time,
 				m_thrust, m_rudder, m_max_acceleration,
 				m_max_deceleration);
+    if (m_wave_sim) {
+      m_sim_engine.propagateWaveSim(record, delta_time);
+    }
     m_sim_engine.propagateHeading(record, delta_time, m_rudder, 
 				  m_thrust, m_turn_rate, 
-				  m_rotate_speed);
+				  m_rotate_speed, m_rudder_offset, m_wave_sim);
   }
 
 
@@ -515,6 +522,15 @@ double USM_Model::getDriftAng() const
   return(relAng(0, 0, m_drift_x, m_drift_y));
 }
 
+double USM_Model::getWaveAmplitude() 
+{
+  if (m_wave_sim) {
+    return m_sim_engine.getWaveAmplitude();
+  } else {
+    return 0;
+  }
+
+}
 
 
 

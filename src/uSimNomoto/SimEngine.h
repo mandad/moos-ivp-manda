@@ -26,11 +26,20 @@
 
 #include "NodeRecord.h"
 #include "ThrustMap.h"
+#include <deque>
+#include <random>
+
+struct WaveParameters {
+    double b1;
+    double b2;
+    double a2;
+    double a3;
+};
 
 class SimEngine
 {
 public:
-  SimEngine() : m_rot{0} {}
+  SimEngine();
   ~SimEngine() {}
   
  public:
@@ -49,9 +58,10 @@ public:
 		      double thrust, double rudder,
 		      double max_accel, double max_decel);
 
-  void propagateHeading(NodeRecord&, double delta_time, double rudder,
-			double thrust, double turn_rate, 
-			double rotate_speed);
+ void propagateHeading(NodeRecord& record,
+                 double delta_time, double rudder, double thrust,
+                 double turn_rate, double rotate_speed,
+                 double rudder_offset, bool wave_sim);
 
   // Differential Thrust Modes
   void propagateSpeedDiffMode(NodeRecord&, const ThrustMap&, double delta_time, 
@@ -62,9 +72,28 @@ public:
 				double thrust_left, double thrust_right, 
 				double rotate_speed);
 
+  void propagateWaveSim(NodeRecord& record, 
+              double delta_time);
+
+  double getWaveAmplitude() {return m_wave_out[0]; }
+
  protected:
+
+  WaveParameters determineWaveParameters(NodeRecord& record);
+
   bool m_thrust_mode_reverse;
   double m_rot;
+
+  // For wave simulation
+  int m_iteration_num;
+  std::deque<double> m_wave_out;
+  std::deque<double> m_filt_noise;
+  std::deque<double> m_noise;
+  std::default_random_engine m_rand_gen;
+
+  double m_sample_T;
+  // double m_wave_a;
+  // vector<double> m_wave_b;
 };
 
 #endif

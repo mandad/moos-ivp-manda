@@ -12,12 +12,11 @@
 
 #define RESET_THRESHOLD 5
 #define KP_LIMIT 2.5
-#define DEBUG true
 #define KI_ROT_THRESHOLD 10
 #define MIN_SPEED 0.5
 #define MIN_ADAPT_RUDDER 10
 
-#define DEBUG true
+#define DEBUG false
 
 using namespace std;
 
@@ -76,7 +75,9 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
     if (dfSpeed < MIN_SPEED || (fabs(m_dfRudderOut - m_dfKi) < m_dfDeadband) 
         || (!bTurning && fabs(m_dfModelRudder - m_dfKi) < MIN_ADAPT_RUDDER)) {
         bAdaptLocal = false;
+        #if DEBUG
         MOOSTrace("CourseKeep: No model adaptation\n");
+        #endif
     }
     if (dfSpeed < MIN_SPEED)
         dfSpeed = MIN_SPEED;

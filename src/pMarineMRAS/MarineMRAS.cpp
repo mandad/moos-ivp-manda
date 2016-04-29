@@ -242,7 +242,9 @@ bool MarineMRAS::Iterate()
       MOOSTrace("Other exception\n");
     }
   } else {
+    #if DEBUG
     MOOSTrace("pMarineMRAS: Posting All Stop\n");
+    #endif
     PostAllStop();
   }
 

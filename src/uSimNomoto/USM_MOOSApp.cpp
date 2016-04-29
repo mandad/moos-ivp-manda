@@ -499,6 +499,7 @@ bool USM_MOOSApp::Iterate()
   }
   
   postNodeRecordUpdate(m_sim_prefix, record);
+  Notify("USM_WAVE_AMP", m_model.getWaveAmplitude());
 
   if(m_model.usingDualState()) {
     NodeRecord record_gt = m_model.getNodeRecordGT();

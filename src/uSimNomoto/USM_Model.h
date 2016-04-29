@@ -92,6 +92,7 @@ public:
   std::string getThrustMapNeg() const {return(m_thrust_map.getMapNeg());}
   std::string getDriftSummary();
   std::string getThrustModeDiff() const {return(m_thrust_mode);}
+  double getWaveAmplitude();
 
  protected:
   void   propagateNodeRecord(NodeRecord&, double delta_time, bool);
@@ -128,6 +129,11 @@ public:
   bool       m_drift_fresh;
 
   bool       m_thrust_mode_reverse;
+
+  // For wave simulation
+  bool       m_wave_sim;
+  double     m_rudder_offset;
+
 
   MBTimer    m_pause_timer;
   SimEngine  m_sim_engine;
