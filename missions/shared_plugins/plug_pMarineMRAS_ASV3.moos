@@ -6,7 +6,7 @@ ProcessConfig = pMarineMRAS
    // Initial constant parameters
    //Test for adaptation
    K_Star = 1.4 //1.56 for Z-boat, 1.66 for sim
-   Tau_Star = 0.8 //0.76 but actually more like 0.9 with rudder delay
+   Tau_Star = 2.5 //Tau_m = 9
    DampingRatio = 0.8
    NaturalFrequency = 1.3 //1.3 for Kp = 1.2
 
