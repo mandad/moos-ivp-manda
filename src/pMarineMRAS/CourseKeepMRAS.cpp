@@ -10,17 +10,16 @@
 #include "CourseKeepMRAS.h"
 #include <math.h>
 
-#define RESET_THRESHOLD 5
 #define KP_LIMIT 2.5
-#define KI_ROT_THRESHOLD 10
+#define KI_ROT_THRESHOLD 0.15 //percent
 #define MIN_SPEED 0.5
-#define MIN_ADAPT_RUDDER 10
+#define MIN_ADAPT_RUDDER 0.25  //percent
 
 #define DEBUG false
 
 using namespace std;
 
-CourseKeepMRAS::CourseKeepMRAS() : m_dfKp{1}, m_dfKd{0.3}, m_dfTauM{0.5}, 
+CourseKeepMRAS::CourseKeepMRAS() : m_dfKp{1}, m_dfKd{0.3}, m_dfTauM{0.5},
     m_dfKm{1.2} {
     m_bFirstRun = true;
     m_bControllerSwitch = false;
@@ -72,8 +71,9 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
 {
     bool bAdaptLocal = bDoAdapt;
     // Don't adapt if we are going slow or straight (influence likely due to waves)
-    if (dfSpeed < MIN_SPEED || (fabs(m_dfRudderOut - m_dfKi) < m_dfDeadband) 
-        || (!bTurning && fabs(m_dfModelRudder - m_dfKi) < MIN_ADAPT_RUDDER)) {
+    if (dfSpeed < MIN_SPEED || (fabs(m_dfRudderOut - m_dfKi) < m_dfDeadband)
+        || (!bTurning && fabs(m_dfModelRudder - m_dfKi) <
+            MIN_ADAPT_RUDDER * m_dfRudderLimit)) {
         bAdaptLocal = false;
         #if DEBUG
         MOOSTrace("CourseKeep: No model adaptation\n");
@@ -90,7 +90,6 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
     if (m_bFirstRun && m_bParametersSet) {
         //Otherwise this will nearly always be zero and result in incorrect
         //initial values for Kp, etc
-        // NewHeading(m_dfCruisingSpeed);
         InitModel(dfMeasuredHeading, dfMeasuredROT, m_dfCruisingSpeed);
         m_dfInitTime = dfTime;
         if (DEBUG)
@@ -114,8 +113,8 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
         // Determine the PID constants
         if (!bTurning) {
             m_dfKp = m_dfWn * m_dfWn * m_dfTauM / m_dfKm;
-            if (m_dfKp > 5) {
-                m_dfKp = 5;
+            if (m_dfKp > KP_LIMIT) {
+                m_dfKp = KP_LIMIT;
             }
             m_dfKd = (2 * m_dfZ * sqrt(m_dfKp * m_dfKm *
                 m_dfTauM) - 1) / (m_dfKm);
@@ -159,6 +158,9 @@ void CourseKeepMRAS::InitModel(double dfHeading, double dfROT, double dfSpeed) {
     //m_dfKp = m_dfMu / 2;
     //m_dfKp = 1 / (4 * m_dfZ * m_dfZ * m_dfTauM);
     m_dfKp = m_dfWn * m_dfWn * m_dfTauM / m_dfKm;
+    if (m_dfKp > KP_LIMIT) {
+      m_dfKp = KP_LIMIT;
+    }
     m_dfKd = (m_dfShipLength * 2 * m_dfZ * sqrt(m_dfKp * m_dfKmStar * m_dfTaumStar) - 1) /
         (dfSpeed * m_dfKmStar);
     if (m_dfKd < 0) {
@@ -218,7 +220,7 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
     // Always adapt the Ki, want it modified even during deadband and waves
     // Double check the sign of this
     // Avoid integral windup during turns
-    if (fabs(dfMeasuredROT) < KI_ROT_THRESHOLD)
+    if (fabs(dfMeasuredROT) < KI_ROT_THRESHOLD * m_dfKm * m_dfRudderLimit)
         m_dfKim += m_dfGamma * dfe * dfDeltaT;
     if (bDoAdapt) {
         double dfDeltaKmTm = (-m_dfBeta * dfe * (dfRudder - m_dfKim)) * dfDeltaT;

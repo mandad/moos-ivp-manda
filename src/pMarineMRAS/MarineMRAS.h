@@ -36,6 +36,7 @@ class MarineMRAS : public AppCastingMOOSApp
    void AddHeadingHistory(double heading, double heading_time);
    ControllerType DetermineController();
    bool IsTurning();
+   double GetSettleTime();
 
  protected: // Standard AppCastingMOOSApp function to overload
    bool buildReport();
@@ -88,6 +89,7 @@ class MarineMRAS : public AppCastingMOOSApp
     bool   m_has_control;
     std::list<double> m_desired_heading_history;
     std::list<double> m_desired_hist_time;
+    double m_last_iterate_time;
 
     CourseChangeMRAS m_CourseControl;
     CourseKeepMRAS m_CourseKeepControl;

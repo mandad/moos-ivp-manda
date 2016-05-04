@@ -17,8 +17,7 @@ using namespace std;
 // Found to be ~20 when does not align with desired
 // Could be ~10 with proper KI
 #define TURN_THRESHOLD 20 //degrees
-#define HEADING_HIST_SEC 5
-#define ADAPT_AFTER_TURN 2
+#define HEADING_HIST_SEC 10
 
 #define DEBUG false
 
@@ -63,6 +62,7 @@ MarineMRAS::MarineMRAS()
   m_allstop_posted = false;
   m_last_controller = ControllerType::CourseChange;
   m_end_last_turn = MOOSTime();
+  m_last_iterate_time = MOOSTime();
 }
 
 //---------------------------------------------------------
@@ -173,6 +173,11 @@ bool MarineMRAS::Iterate()
               m_CourseKeepControl.GetKStar());
             m_last_controller = ControllerType::CourseChange;
           }
+          // Still run the course keep control, since it only updates during turns
+          bool turning = IsTurning();
+          m_CourseKeepControl.Run(m_desired_heading, m_current_heading,
+            m_current_ROT, m_current_speed, m_last_heading_time,
+            turning && m_current_speed > 0.5, turning);
           desired_rudder = m_CourseControl.Run(m_desired_heading, m_current_heading,
             m_current_ROT, m_desired_speed, m_last_heading_time);
         } else {
@@ -241,7 +246,7 @@ bool MarineMRAS::Iterate()
     } catch (...) {
       MOOSTrace("Other exception\n");
     }
-  } else {
+  } else if (!m_record_mode) {
     #if DEBUG
     MOOSTrace("pMarineMRAS: Posting All Stop\n");
     #endif
@@ -249,7 +254,9 @@ bool MarineMRAS::Iterate()
   }
 
   if (m_record_mode) {
+    #if DEBUG
     MOOSTrace("Recording Mode Running, time %.1f\n", MOOSTime());
+    #endif
     Notify("NAV_ROT", m_current_ROT);
     Notify("NAV_HEADING_180", m_current_heading);
     Notify("DESIRED_HEADING_180", angle180(m_desired_heading));
@@ -413,7 +420,6 @@ void MarineMRAS::registerVariables()
 {
   AppCastingMOOSApp::RegisterVariables();
   Register("NAV_HEADING", 0);
-  //Register("NAV_SPEED", 0);
   Register(m_speed_var, 0);
   Register(m_cog_var, 0);
   Register("DESIRED_HEADING", 0);
@@ -460,14 +466,19 @@ bool MarineMRAS::buildReport()
       m_msgs << "\nCourse Keep Controller in use, no adaptation.";
     }
     if (IsTurning()) {
-      m_msgs << "\nIs Turning? yes";
+      m_msgs << "\n\nIs Turning? yes";
     } else {
-      m_msgs << "\nIs Turning? no";
+      m_msgs << "\n\nIs Turning? no";
     }
     m_msgs << "\n\n" << m_speed_control.AppCastMessage();
+  } else if (m_record_mode) {
+    m_msgs << "Recording Mode Running.";
   } else {
     m_msgs << "Control not running.";
   }
+
+  m_msgs << "\n\nIterate timing: " << MOOSTime() - m_last_iterate_time;
+  m_last_iterate_time = MOOSTime();
 
   return(true);
 }
@@ -557,14 +568,15 @@ void MarineMRAS::AddHeadingHistory(double heading, double heading_time) {
   m_desired_hist_time.push_front(heading_time);
 
   //Keep last 10 sec of data - this needs to adapt to turn rate of vessel
-  while (heading_time - m_desired_hist_time.back() > HEADING_HIST_SEC) {
+  double heading_hist_sec = GetSettleTime() * 1.5;
+  while (heading_time - m_desired_hist_time.back() > heading_hist_sec) {
     m_desired_hist_time.pop_back();
     m_desired_heading_history.pop_back();
   }
 }
 
 ControllerType MarineMRAS::DetermineController() {
-  if (m_desired_heading_history.size() > 2) {
+  if (MOOSTime() - m_desired_hist_time.back() > GetSettleTime()) {
     //10 degree heading change threshold for CourseChange
     if (!IsTurning()) {
       return ControllerType::CourseKeep;
@@ -583,6 +595,7 @@ ControllerType MarineMRAS::DetermineController() {
   } else {
     //What to do when we don't have much history
     if (m_course_keep_only) {
+      // Don't adapt if we aren't settled
       return ControllerType::CourseKeepNoAdapt;
     } else {
       return ControllerType::CourseChange;
@@ -594,14 +607,14 @@ bool MarineMRAS::IsTurning() {
   if (m_desired_heading_history.size() > 2) {
     // bool recent_change = fabs(angle180(m_desired_heading_history.back()
     //                       - angle180(m_desired_heading))) > TURN_THRESHOLD;
-      bool not_near_desired = fabs(angle180(angle180(m_current_heading) - 
+      bool not_near_desired = fabs(angle180(angle180(m_current_heading) -
                               angle180(m_desired_heading))) > TURN_THRESHOLD;
       if (not_near_desired) {
         m_end_last_turn = m_desired_hist_time.front();
       }
       bool recent_change = true;
       // Even in the case of CourseChange, TauM is based on settling time
-      double settle_time = 7 * m_CourseKeepControl.GetTauM();
+      double settle_time = GetSettleTime();
       if ((MOOSTime() - m_end_last_turn) > settle_time) {
         recent_change = false;
       }
@@ -610,4 +623,8 @@ bool MarineMRAS::IsTurning() {
     //assume we are not turning if we don't know
     return false;
   }
+}
+
+double MarineMRAS::GetSettleTime() {
+  return 7 * m_CourseKeepControl.GetTauM();
 }
