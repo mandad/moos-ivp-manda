@@ -50,36 +50,41 @@ public:
 		 double prior_speed, double drift_x, double drift_y);
   
   void propagateDepth(NodeRecord&, double delta_time, 
-		      double elevator_angle, double buoyancy_rate, 
-		      double max_depth_rate, 
-		      double m_max_depth_rate_speed);
+                double elevator_angle, double buoyancy_rate, 
+                double max_depth_rate, 
+                double m_max_depth_rate_speed);
 
   void propagateSpeed(NodeRecord&, const ThrustMap&, double delta_time, 
-		      double thrust, double rudder,
-		      double max_accel, double max_decel);
+                double thrust, double rudder,
+                double max_accel, double max_decel);
 
  void propagateHeading(NodeRecord& record,
-                 double delta_time, double rudder, double thrust,
-                 double turn_rate, double rotate_speed,
-                 double rudder_offset, bool wave_sim);
+                double delta_time, double rudder, double thrust,
+                double turn_rate, double rotate_speed,
+                double km_star, double tm_star, double vessel_len,
+                double rudder_offset, bool wave_sim);
 
   // Differential Thrust Modes
   void propagateSpeedDiffMode(NodeRecord&, const ThrustMap&, double delta_time, 
-			      double thrust_left, double thrust_right,
-			      double max_accel, double max_decel);
+                double thrust_left, double thrust_right,
+                double max_accel, double max_decel);
   
   void propagateHeadingDiffMode(NodeRecord&, double delta_time, double rudder,
 				double thrust_left, double thrust_right, 
 				double rotate_speed);
 
-  void propagateWaveSim(NodeRecord& record, 
-              double delta_time);
+  void propagateWaveSim(NodeRecord& record, double delta_time, 
+                double wave_height, double wave_period, double wave_dir, 
+                double sample_T);
 
   double getWaveAmplitude() {return m_wave_out[0]; }
 
  protected:
 
-  WaveParameters determineWaveParameters(NodeRecord& record);
+  WaveParameters determineWaveParameters(NodeRecord& record, double wave_height, 
+            double wave_period, double sample_T);
+
+  void PreFillWaves(WaveParameters params);
 
   bool m_thrust_mode_reverse;
   double m_rot;
@@ -92,10 +97,7 @@ public:
   std::default_random_engine m_rand_gen;
   std::normal_distribution<double> m_distribution;
 
-  double m_sample_T;
   double m_wave_dir;
-  // double m_wave_a;
-  // vector<double> m_wave_b;
 };
 
 #endif

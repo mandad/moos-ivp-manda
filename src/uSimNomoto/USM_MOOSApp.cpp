@@ -265,10 +265,27 @@ bool USM_MOOSApp::OnStartUp()
       handled = m_model.setParam("max_depth_rate", dval);
     else if((param == "MAX_DEPTH_RATE_SPEED") && isNumber(value))
       handled = m_model.setParam("max_depth_rate_speed", dval);
-
     else if((param == "MAX_RUDDER_DEGS_PER_SEC") && isNumber(value))
       handled = m_model.setMaxRudderDegreesPerSec(dval);
-
+    else if((param == "WAVE_SIG_HEIGHT") && isNumber(value))
+      handled = m_model.setParam("wave_sig_height", dval);
+    else if((param == "WAVE_PERIOD") && isNumber(value))
+      handled = m_model.setParam("wave_period", dval);
+    else if((param == "WAVE_DIRECTION") && isNumber(value))
+      handled = m_model.setParam("wave_direction", dval);
+    else if((param == "WAVE_SIM") && isBoolean(value)) {
+      MOOSTrace("Setting wave_sim\n");
+      m_model.setWaveSim(tolower(value) == "true");
+      handled = true;
+    }
+    else if((param == "K_STAR") && isNumber(value))
+      handled = m_model.setParam("k_star", dval);
+    else if((param == "TAU_STAR") && isNumber(value))
+      handled = m_model.setParam("tau_star", dval);
+    else if((param == "VESSEL_LENGTH") && isNumber(value))
+      handled = m_model.setParam("vessel_length", dval);
+    else if((param == "RUDDER_OFFSET") && isNumber(value))
+      handled = m_model.setParam("rudder_offset", dval);
     else if((param == "PREFIX") && !strContainsWhite(value)) {      
       m_sim_prefix = value;
       handled = true;
@@ -309,6 +326,8 @@ bool USM_MOOSApp::OnStartUp()
     if(!handled)
       reportUnhandledConfigWarning(orig);
   }
+
+  m_model.setAppPeriod(1/m_dfFreq);
 
   // look for latitude, longitude global variables
   double latOrigin, longOrigin;
@@ -845,6 +864,9 @@ bool USM_MOOSApp::buildReport()
   m_msgs << "           Max Depth Rate: " << max_depth_rate   << endl;
   m_msgs << "     Max Depth Rate Speed: " << max_depth_rate_v << endl;
   m_msgs << "              Water Depth: " << m_model.getWaterDepth() << endl;
+
+  string wave_amp = doubleToStringX(m_model.getWaveAmplitude(), 2);
+  m_msgs << "\nWave Sim Amplitude: " << wave_amp << endl;
 
   return(true);
 }

@@ -70,7 +70,10 @@ USM_Model::USM_Model()
   m_thrust_rgt   = 0;
 
   m_thrust_mode_reverse = false;
-  m_wave_sim = true;
+  m_wave_sim = false;
+  m_wave_height = 0;
+  m_wave_period = 10;
+  m_wave_dir = 45;
   m_rudder_offset = 0;
 }
 
@@ -124,6 +127,50 @@ bool USM_Model::setParam(string param, double value)
     m_drift_y = value;
   else if(param == "rotate_speed")
     m_rotate_speed = value;
+  else if(param == "rudder_offset")
+    m_rudder_offset = value;
+  else if(param == "wave_sig_height") {
+    m_wave_height = value;
+    if (m_wave_height < 0) {
+      m_wave_height = 0;
+      return false;
+    }
+  }
+  else if (param == "wave_period") {
+    m_wave_period = value;
+    if (m_wave_period < 0) {
+      m_wave_period = 0;
+      return false;
+    }
+  }
+  else if (param == "wave_direction") {
+    m_wave_dir = value;
+    if (value > 360) {
+      m_wave_dir = 45;
+      return false;
+    }
+  }
+  else if (param == "k_star") {
+    m_k_star = value;
+    if (m_k_star <= 0.01) {
+      m_k_star = 0.01;
+      return false;
+    }
+  }
+  else if (param == "tau_star") {
+    m_tau_star = value;
+    if (m_tau_star < 0.01) {
+      m_tau_star = 0.01;
+      return false;
+    }
+  }
+  else if (param == "vessel_length") {
+    m_vessel_len = value;
+    if (m_vessel_len < 0.1) {
+      m_vessel_len = 0.1;
+      return false;
+    }
+  }
   else if(param == "max_acceleration") {
     m_max_acceleration = value;
     if(m_max_acceleration < 0) {
@@ -470,11 +517,12 @@ void USM_Model::propagateNodeRecord(NodeRecord& record,
 				m_thrust, m_rudder, m_max_acceleration,
 				m_max_deceleration);
     if (m_wave_sim) {
-      m_sim_engine.propagateWaveSim(record, delta_time);
+      m_sim_engine.propagateWaveSim(record, delta_time, m_wave_height, 
+            m_wave_period, m_wave_dir, m_app_period);
     }
     m_sim_engine.propagateHeading(record, delta_time, m_rudder, 
-				  m_thrust, m_turn_rate, 
-				  m_rotate_speed, m_rudder_offset, m_wave_sim);
+				  m_thrust, m_turn_rate, m_rotate_speed, m_k_star, m_tau_star, 
+          m_vessel_len, m_rudder_offset, m_wave_sim);
   }
 
 

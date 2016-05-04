@@ -64,6 +64,9 @@ public:
   bool   initPosition(const std::string&);
   bool   addThrustMapping(double, double);
 
+  void   setWaveSim(bool enabled) { m_wave_sim = enabled; };
+  void   setAppPeriod(double period) { m_app_period = period; }
+
   // Getters
   double     getThrust() const       {return(m_thrust);}
   double     getThrustLeft() const   {return(m_thrust_lft);}
@@ -132,8 +135,16 @@ public:
 
   // For wave simulation
   bool       m_wave_sim;
-  double     m_rudder_offset;
+  double     m_wave_dir;
+  double     m_wave_height;
+  double     m_wave_period;
+  double     m_app_period;  // This is 1/AppTick
 
+  //Additions for Nomoto simulation
+  double     m_tau_star;
+  double     m_k_star;
+  double     m_vessel_len;
+  double     m_rudder_offset;
 
   MBTimer    m_pause_timer;
   SimEngine  m_sim_engine;
