@@ -17,9 +17,9 @@ public:
     double Run(double dfDesiredHeading, double dfMeasuredHeading, double dfMeasuredROT,
      double dfSpeed, double dfTime, bool bDoAdapt, bool bTurning);
     void SetParameters(double dfKStar, double dfTauStar, double dfZ, double dfWn,
-        double dfBeta, double dfAlpha, double dfGamma, double dfXi, 
-        double dfRudderLimit, double dfCruisingSpeed, double dfShipLength, 
-        double dfMaxROT, bool bDecreaseAdapt, double dfRudderSpeed, 
+        double dfBeta, double dfAlpha, double dfGamma, double dfXi,
+        double dfRudderLimit, double dfCruisingSpeed, double dfShipLength,
+        double dfMaxROT, bool bDecreaseAdapt, double dfRudderSpeed,
         double dfDeadband);
     static double TwoSidedLimit(double dfNumToLimit, double dfLimit);
     std::string GetStatusInfo();
@@ -34,8 +34,8 @@ public:
 
 private:
     void InitModel(double dfHeading, double dfROT, double dfSpeed);
-    void UpdateModel(double dfMeasuredROT, double dfRudder, double dfSpeed, 
-        double dfDeltaT, bool bDoAdapt);
+    void UpdateModel(double dfMeasuredROT, double dfRudder, double dfSpeed,
+        double dfDeltaT, bool bDoAdapt, bool bTurning);
     void UpdateRudderModel(double dfDeltaT);
 
 
@@ -93,7 +93,7 @@ private: // Configuration variables
     double m_dfF;
     double m_dfModelRudder;
     double m_dfModelPhiDotDot;
-    
+
     double m_dfRudderPos;
     double m_dfRudderSpeed;
 };

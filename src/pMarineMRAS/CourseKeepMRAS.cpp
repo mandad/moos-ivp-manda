@@ -223,7 +223,7 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
     // Double check the sign of this
     // Avoid integral windup during turns
     if (!bTurning)
-        m_dfKim -= m_dfGamma * dfe * dfDeltaT;
+        m_dfKim += m_dfGamma * dfe * dfDeltaT;
     if (bDoAdapt) {
         double dfDeltaKmTm = (-m_dfBeta * dfe * (dfRudder - m_dfKim)) * dfDeltaT;
         double dfDeltaTmRecip = (m_dfAlpha * dfe * m_dfModelROT) * dfDeltaT;
