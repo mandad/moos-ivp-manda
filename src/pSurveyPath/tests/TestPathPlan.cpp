@@ -27,6 +27,11 @@ PathPlan GetDefaultPlan() {
   return PathPlan(record_swath, BoatSide::Port, poly);
 }
 
+PathPlan GetPolygonPlan(BPolygon poly) {
+  RecordSwath record_swath;
+  return PathPlan(record_swath, BoatSide::Port, poly);
+}
+
 std::pair<std::size_t, std::size_t> ProcessRemoveBend(std::list<EPoint>& path_bend,
   PathPlan planner, unsigned int plot_num, bool remove_intersects = true) {
   // Plot before
@@ -243,10 +248,10 @@ TEST_CASE("Ray with segment intersection") {
 }
 
 TEST_CASE("Polygon ray intersection") {
-  RecordSwath record_swath;
+  // RecordSwath record_swath;
   BPolygon poly;
   boost::geometry::read_wkt("POLYGON((0 0, 0 2, 2 2, 2 0))", poly);
-  PathPlan planner(record_swath, BoatSide::Port, poly);
+  PathPlan planner = GetPolygonPlan(poly);
 
   SECTION("Intersect nearest to pt") {
     auto int_pt = planner.FindNearestIntersect(EPoint(-1, -1), EPoint(1, 1.5),
@@ -264,4 +269,29 @@ TEST_CASE("Polygon ray intersection") {
     REQUIRE(int_pt.second.y() == 0);
   }
 
+}
+
+TEST_CASE("Line Clipping to polygon") {
+  BPolygon poly;
+  boost::geometry::read_wkt("POLYGON((0 0, 0 4, 4 4, 4 0))", poly);
+  PathPlan planner = GetPolygonPlan(poly);
+
+  SECTION("One outside each side") {
+    std::list<EPoint> path = {EPoint(-1, 1), EPoint(1, 3), EPoint(3, 3),
+      EPoint(5, 3)};
+
+    std::pair<bool, bool> clipped = planner.ClipToRegion(path);
+
+    INFO(PrintPath(path));
+
+    REQUIRE(clipped.first);
+    REQUIRE(path.size() == 4);
+    auto first_pt = path.front();
+    REQUIRE(first_pt.x() == 0);
+    REQUIRE(first_pt.y() == 2);
+
+    auto last_pt = path.back();
+    REQUIRE(last_pt.x() == 4);
+    REQUIRE(last_pt.y() == 3);
+  }
 }

@@ -81,8 +81,28 @@ class PathPlan
      */
     void RemoveBends(std::list<EPoint> &path_pts);
 
+    /**
+     * Restricts a path to the region by simply eliminating points outside the
+     * region specified by m_op_region.
+     * @param path_pts The path to process, passed by reference
+     */
     void RestrictToRegion(std::list<EPoint> &path_pts);
 
+    /**
+     * Clips a path to the region, eliminating points outside
+     * @param path_pts The path to clip, passed by reference
+     * @return         A pair with whether the <beginning, end> was clipped.
+     *                 If false, means the path was already inside the polygon.
+     */
+    std::pair<bool, bool> ClipToRegion(std::list<EPoint> &path_pts);
+
+    /**
+     * Extends a path to meet the edges of a region if it does not already.
+     * Adds to the last segment, extending it as a ray from the end.  Can
+     * extend either the beginning or the end of the path.
+     * @param path_pts The path to process
+     * @param begin    True to process the beginning, false to process the end
+     */
     void ExtendToEdge(std::list<EPoint> &path_pts, bool begin);
 
     /**
@@ -90,7 +110,7 @@ class PathPlan
      *
      * @param ray_vec  EPoint(dx,dy)
      * @param start_pt EPoint(x,y)
-     * @param poly     XYPolygon([(x1,y1), (x2,y2), ...])
+     * @param poly     BPolygon([(x1,y1), (x2,y2), ...])
      */
     std::pair<double, EPoint> FindNearestIntersect(EPoint ray_vec,
       EPoint starting_pt, BPolygon& poly);
