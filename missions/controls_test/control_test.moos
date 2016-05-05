@@ -54,7 +54,7 @@ ProcessConfig = pMarineMRAS
    //Adaptation parameters
    Beta =  0.00005     //Speed of Kp or Km/Tm adaptation
    Alpha = 0.00001    //Speed of Kd or 1/Tm adaptation
-   Gamma = 0.00001    //Speed of Ki adaptation
+   Gamma = 0     //Speed of Ki adaptation
    Xi = 1   // <= 1, not used if DecreaseAdaptation = false
    DecreaseAdaptation = false
    ROTFilter = 1  // >= 1
@@ -63,7 +63,7 @@ ProcessConfig = pMarineMRAS
 
    // Vessel Characteristics
    RudderLimit = 45  //should be deg (but Sim uses 100 as limit)
-   RudderDeadband = 10
+   RudderDeadband = 0
    RudderSpeed = 90 // deg/s
    CruisingSpeed = 1.6 // m/s
    Length = 2 //m

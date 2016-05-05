@@ -103,7 +103,8 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
         double dfDeltaT = dfTime - m_dfPreviousTime;
         //This includes both the series and parallel models
         UpdateRudderModel(dfDeltaT);
-        UpdateModel(dfMeasuredROT, m_dfModelRudder, dfSpeed, dfDeltaT, bAdaptLocal);
+        UpdateModel(dfMeasuredROT, m_dfModelRudder, dfSpeed, dfDeltaT,
+          bAdaptLocal, bTurning);
 
         // double dfTimeReduceFactor = 1;
         // if (m_bDecreaseAdapt) {
@@ -122,10 +123,11 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
                 m_dfKd = 0;
             else if (m_dfKd > (m_dfKp * m_dfShipLength / dfSpeed))
                 m_dfKd = m_dfKp * m_dfShipLength / dfSpeed;
+
+          m_dfKi = m_dfKim;
+          m_dfKi = TwoSidedLimit(m_dfKi, 10 * dfSpeed / m_dfCruisingSpeed);
         }
-        // Always want to update Ki, because it can make the turn complete
-        m_dfKi = m_dfKim;
-        m_dfKi = TwoSidedLimit(m_dfKi, 10 * dfSpeed / m_dfCruisingSpeed);
+
     }
     if (DEBUG)
         MOOSTrace("PID Constants: Kp: %0.2f  Kd: %0.2f  Ki: %0.2f\n", m_dfKp,
@@ -197,9 +199,9 @@ void CourseKeepMRAS::SwitchController() {
 }
 
 void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
-    double dfSpeed, double dfDeltaT, bool bDoAdapt) {
+    double dfSpeed, double dfDeltaT, bool bDoAdapt, bool bTurning) {
     //Propagate model
-    m_dfModelPhiDotDot = (m_dfKm * (dfRudder + m_dfKim) - m_dfModelROT) / m_dfTauM;
+    m_dfModelPhiDotDot = (m_dfKm * (dfRudder - m_dfKim) - m_dfModelROT) / m_dfTauM;
     m_dfModelROT += m_dfModelPhiDotDot * dfDeltaT;
     //this is the limit of ROT in this model
     // if (fabs(m_dfModelROT) > fabs(m_dfKm * dfRudder)) {
@@ -220,8 +222,8 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
     // Always adapt the Ki, want it modified even during deadband and waves
     // Double check the sign of this
     // Avoid integral windup during turns
-    if (fabs(dfMeasuredROT) < KI_ROT_THRESHOLD * m_dfKm * m_dfRudderLimit)
-        m_dfKim += m_dfGamma * dfe * dfDeltaT;
+    if (!bTurning)
+        m_dfKim -= m_dfGamma * dfe * dfDeltaT;
     if (bDoAdapt) {
         double dfDeltaKmTm = (-m_dfBeta * dfe * (dfRudder - m_dfKim)) * dfDeltaT;
         double dfDeltaTmRecip = (m_dfAlpha * dfe * m_dfModelROT) * dfDeltaT;
