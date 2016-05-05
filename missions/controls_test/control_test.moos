@@ -8,7 +8,7 @@ ServerHost = localhost
 ServerPort = 9000
 Community  = asv
 
-MOOSTimeWarp = 6
+MOOSTimeWarp = 10
 
 // Forest Lake
 LatOrigin  = 43.825300 
@@ -41,25 +41,19 @@ ProcessConfig = ANTLER
 
 ProcessConfig = pMarineMRAS
 {
-   AppTick   = 10
-   CommsTick = 10
+   AppTick   = 15
+   CommsTick = 15
 
-   // Initial constant parameters
-   // Correct parameters for USM (theoretical)
-   // K_Star = 1.7   //0.5-2
-   // Tau_Star = 0.76
-   // Correct based on tuning:
-   // K_Star = 1.3
-   // Tau_Star = 0.17
+   // Model parameter initial conditions
    //Test for adaptation
-   K_Star = 1.6 //1.66
-   Tau_Star = 0.8 //0.76 but actually more like 0.9 with rudder delay
+   K_Star = 1.65 
+   Tau_Star = 1.0
    DampingRatio = 0.7
    NaturalFrequency = 1.3 //1.3 for Kp = 1.2
 
    //Adaptation parameters
-   Beta =  0.0005     //Speed of Kp or Km/Tm adaptation
-   Alpha = 0.0001    //Speed of Kd or 1/Tm adaptation
+   Beta =  0.00005     //Speed of Kp or Km/Tm adaptation
+   Alpha = 0.00001    //Speed of Kd or 1/Tm adaptation
    Gamma = 0.00001    //Speed of Ki adaptation
    Xi = 1   // <= 1, not used if DecreaseAdaptation = false
    DecreaseAdaptation = false
@@ -69,7 +63,7 @@ ProcessConfig = pMarineMRAS
 
    // Vessel Characteristics
    RudderLimit = 45  //should be deg (but Sim uses 100 as limit)
-   RudderDeadband = 0
+   RudderDeadband = 10
    RudderSpeed = 90 // deg/s
    CruisingSpeed = 1.6 // m/s
    Length = 2 //m
@@ -85,6 +79,46 @@ ProcessConfig = pMarineMRAS
    NoOutput = false  //used to record data
 
    term_reporting = false
+}
+
+//------------------------------------------
+// uSimNomoto config block
+
+ProcessConfig = uSimNomoto
+{
+  AppTick   = 20
+  CommsTick = 20
+
+  start_x       = 0
+  start_y       = -60
+  start_heading = 180
+  start_speed   = 0
+
+  prefix        = NAV
+
+  max_rudder_degs_per_sec = 90
+  //turn_rate     = 133 //this is actually 60 at 45 deg
+  
+  max_acceleration = 0.5
+  max_deceleration = 0.3
+  
+  thrust_map    = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
+  thrust_reflect = true
+
+  //drift_vector = 90, 0.5
+  term_reporting = true
+
+  //wave settings
+  wave_sim = false
+  wave_sig_height = 0.2 // m
+  wave_period = 3.5       // seconds
+  wave_direction = 45   // degrees
+
+  //Nomoto model settings
+  k_star = 1.6
+  tau_star = 0.8 
+  vessel_length = 2.0   // m
+  rudder_offset = 5
 }
 
 //------------------------------------------
@@ -164,46 +198,6 @@ ProcessConfig = uProcessWatch
 	nowatch   = uPokeDB*
 	nowatch   = uXMS*
 
-}
-
-//------------------------------------------
-// uSimNomoto config block
-
-ProcessConfig = uSimNomoto
-{
-  AppTick  	= 20
-  CommsTick	= 20
-
-  start_x       = 0
-  start_y       = -60
-  start_heading = 180
-  start_speed   = 0
-
-  prefix        = NAV
-
-	max_rudder_degs_per_sec = 90
-  turn_rate     = 133 //this is actually 60 at 45 deg
-  
-  max_acceleration = 0.5
-  max_deceleration = 0.3
-  
-  thrust_map    = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
-  thrust_reflect = true
-
-  //drift_vector = 90, 0.5
-  term_reporting = true
-
-  //wave settings
-  wave_sim = true
-  wave_sig_height = 0.3 // m
-  wave_period = 6       // seconds
-  wave_direction = 45   // degrees
-
-  //Nomoto model settings
-  k_star = 1.6
-  tau_star = 0.8 
-  vessel_length = 2.0   // m
-  rudder_offset = 0
 }
 
 //------------------------------------------
@@ -337,8 +331,8 @@ ProcessConfig = pMarineViewer
   right_context[return] = MOOS_MANUAL_OVERRIDE=false
   right_context[return] = RETURN=false
 
-  scope = NAV_SPEED_OVER_GROUND
   scope  = DESIRED_RUDDER
+  scope = NAV_SPEED_OVER_GROUND
   scope  = NAV_ROT
   scope  = WPT_STAT
   scope  = MVIEWER_LCLICK

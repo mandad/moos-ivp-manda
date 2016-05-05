@@ -90,6 +90,7 @@ class MarineMRAS : public AppCastingMOOSApp
     std::list<double> m_desired_heading_history;
     std::list<double> m_desired_hist_time;
     double m_last_iterate_time;
+    double m_iterate_len;
 
     CourseChangeMRAS m_CourseControl;
     CourseKeepMRAS m_CourseKeepControl;

@@ -261,6 +261,10 @@ bool MarineMRAS::Iterate()
     Notify("NAV_HEADING_180", m_current_heading);
     Notify("DESIRED_HEADING_180", angle180(m_desired_heading));
   }
+  double this_time = MOOSTime();
+  m_iterate_len = this_time - m_last_iterate_time ;
+  m_last_iterate_time = this_time;
+
   #if DEBUG
   MOOSTrace("pMarineMRAS: Posting Appcast Report (end iterate)\n");
   #endif
@@ -477,8 +481,7 @@ bool MarineMRAS::buildReport()
     m_msgs << "Control not running.";
   }
 
-  m_msgs << "\n\nIterate timing: " << MOOSTime() - m_last_iterate_time;
-  m_last_iterate_time = MOOSTime();
+  m_msgs << "\n\nIterate timing: " << m_iterate_len;
 
   return(true);
 }

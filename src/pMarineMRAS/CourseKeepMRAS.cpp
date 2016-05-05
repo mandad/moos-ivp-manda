@@ -133,7 +133,7 @@ double CourseKeepMRAS::Run(double dfDesiredHeading, double dfMeasuredHeading,
     //PID equation
     double heading_error = angle180(dfDesiredHeading - dfMeasuredHeading);
     m_dfRudderOut = m_dfKp * heading_error - m_dfKd * dfMeasuredROT + m_dfKi;
-    if (m_dfDeadband > 0 && (fabs(m_dfRudderOut - m_dfKi) < m_dfDeadband)) {
+    if (!bTurning && m_dfDeadband > 0 && (fabs(m_dfRudderOut - m_dfKi) < m_dfDeadband)) {
         //Ki is the rudder that needs to be carried to go straight, oscillations are about it
         m_dfRudderOut = m_dfKi;
     }
