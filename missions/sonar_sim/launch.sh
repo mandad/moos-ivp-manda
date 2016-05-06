@@ -23,7 +23,7 @@ done
 #-------------------------------------------------------
 #  Part 2: Create the .moos and .bhv files. 
 #-------------------------------------------------------
-SCENARIO=1
+SCENARIO=3
 # 1 = Summer Hydro 2015
 # 2 = Strait of Georgia 
 # 3 = Fairweather H12758 Offshore

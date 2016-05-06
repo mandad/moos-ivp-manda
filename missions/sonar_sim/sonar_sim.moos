@@ -42,10 +42,12 @@ ProcessConfig = pSurveyPath
   CommsTick = 10
 
   Op_Region = $(OP_WKT)
-  first_side = Stbd
-  //first_line = -1663,4653:-4729,-3130
+  first_side = Port
+  first_line = -1663,4653:-4729,-3130
   overlap_percent = 20
-  path_interval = 250
+  path_interval = 10
+  turn_pt_offset = 15
+  alignment_line_len = 20
 
   term_reporting = true
 }

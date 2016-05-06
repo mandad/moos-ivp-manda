@@ -21,7 +21,7 @@
 // Constructor
 
 SurveyPath::SurveyPath() : m_first_swath_side{BoatSide::Stbd},
-  m_swath_interval{10}, m_alignment_line_len{10}, m_turn_pt_offset{150},
+  m_swath_interval{10}, m_alignment_line_len{10}, m_turn_pt_offset{15},
   m_remove_in_coverage{false}, m_swath_overlap{0.2}, m_line_end{false},
   m_line_begin{false}, m_turn_reached{false}, m_recording{false},
   m_swath_record(10), m_swath_side{BoatSide::Stbd}, m_turn_pt_set{false},
@@ -83,6 +83,15 @@ bool SurveyPath::OnStartUp()
     }
     else if (param == "PATH_INTERVAL" && isNumber(value)) {
       m_swath_interval = dval;
+      m_swath_record = RecordSwath(m_swath_interval);
+      handled = true;
+    }
+    else if (param == "TURN_PT_OFFSET" && isNumber(value)) {
+      m_turn_pt_offset = dval;
+      handled = true;
+    }
+    else if (param == "ALIGNMENT_LINE_LEN" && isNumber(value)) {
+      m_alignment_line_len = dval;
       handled = true;
     }
 
