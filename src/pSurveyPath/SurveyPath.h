@@ -8,6 +8,7 @@
 #ifndef SurveyPath_HEADER
 #define SurveyPath_HEADER
 
+#include <thread>
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 #include "XYPoint.h"
 #include "RecordSwath.h"
@@ -59,13 +60,18 @@ class SurveyPath : public AppCastingMOOSApp
   // bool m_path_ready;
   bool m_recording;
   BPolygon m_op_region;
+  //XYSeglist m_first_line;
   RecordSwath m_swath_record;
   std::map<std::string, double> m_swath_info;
   std::string m_posted_path_str;
   XYSegList m_survey_path;
   XYPoint m_turn_pt;
   bool m_turn_pt_set;
+  bool m_post_turn_when_ready;
+  bool m_path_plan_done;
   XYSegList m_alignment_line;
+
+  std::thread m_path_plan_thread;
 };
 
 #endif

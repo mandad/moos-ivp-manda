@@ -42,8 +42,12 @@ ProcessConfig = pSurveyPath
   CommsTick = 10
 
   Op_Region = $(OP_WKT)
+  first_side = Stbd
+  //first_line = -1663,4653:-4729,-3130
+  overlap_percent = 20
+  path_interval = 250
 
-  TERM_REPORTING = true
+  term_reporting = true
 }
 
 
@@ -142,7 +146,7 @@ ProcessConfig = pMarineViewer
   hash_shade           = 0.4
   hash_viewable        = false
 
-  trails_point_size   = 2
+  trails_point_size   = 3
   trails_length = 10000
 
   // Appcast configuration

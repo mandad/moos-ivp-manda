@@ -290,8 +290,186 @@ TEST_CASE("Line Clipping to polygon") {
     REQUIRE(first_pt.x() == 0);
     REQUIRE(first_pt.y() == 2);
 
+    REQUIRE(clipped.second);
     auto last_pt = path.back();
     REQUIRE(last_pt.x() == 4);
     REQUIRE(last_pt.y() == 3);
+  }
+
+  SECTION("Two outside in front") {
+    std::list<EPoint> path = {EPoint(-3, 2), EPoint(-1, 1), EPoint(1, 3),
+      EPoint(3, 3), EPoint(5, 3)};
+
+    std::pair<bool, bool> clipped = planner.ClipToRegion(path);
+
+    INFO(PrintPath(path));
+
+    REQUIRE(clipped.first);
+    REQUIRE(path.size() == 4);
+    auto first_pt = path.front();
+    REQUIRE(first_pt.x() == 0);
+    REQUIRE(first_pt.y() == 2);
+
+    REQUIRE(clipped.second);
+    auto last_pt = path.back();
+    REQUIRE(last_pt.x() == 4);
+    REQUIRE(last_pt.y() == 3);
+  }
+
+  SECTION("Multiple outside in back") {
+    std::list<EPoint> path = {EPoint(-1, 1), EPoint(1, 3),
+      EPoint(3, 3), EPoint(5, 3), EPoint(6, 2), EPoint(7, 2)};
+
+    std::pair<bool, bool> clipped = planner.ClipToRegion(path);
+
+    INFO(PrintPath(path));
+
+    REQUIRE(clipped.first);
+    REQUIRE(path.size() == 4);
+    auto first_pt = path.front();
+    REQUIRE(first_pt.x() == 0);
+    REQUIRE(first_pt.y() == 2);
+
+    REQUIRE(clipped.second);
+    auto last_pt = path.back();
+    REQUIRE(last_pt.x() == 4);
+    REQUIRE(last_pt.y() == 3);
+  }
+
+  SECTION("Multiple crosses from front") {
+    std::list<EPoint> path = {EPoint(-1, 2), EPoint(0, 1), EPoint(1, 2),
+       EPoint(-1, 3), EPoint(1, 3), EPoint(3, 3), EPoint(5, 3)};
+
+    std::pair<bool, bool> clipped = planner.ClipToRegion(path);
+
+    INFO(PrintPath(path));
+
+    REQUIRE(clipped.first);
+    REQUIRE(path.size() == 4);
+    auto first_pt = path.front();
+    REQUIRE(first_pt.x() == 0);
+    REQUIRE(first_pt.y() == 3);
+
+    REQUIRE(clipped.second);
+    auto last_pt = path.back();
+    REQUIRE(last_pt.x() == 4);
+    REQUIRE(last_pt.y() == 3);
+  }
+
+  SECTION("Front Point Inside") {
+    std::list<EPoint> path = {EPoint(1, 3), EPoint(3, 3), EPoint(5, 3)};
+
+    std::pair<bool, bool> clipped = planner.ClipToRegion(path);
+
+    INFO(PrintPath(path));
+
+    REQUIRE(!clipped.first);
+    REQUIRE(path.size() == 3);
+    auto first_pt = path.front();
+    REQUIRE(first_pt.x() == 1);
+    REQUIRE(first_pt.y() == 3);
+
+    REQUIRE(clipped.second);
+    auto last_pt = path.back();
+    REQUIRE(last_pt.x() == 4);
+    REQUIRE(last_pt.y() == 3);
+  }
+
+  SECTION("End Point Inside") {
+    std::list<EPoint> path = {EPoint(-1, 3), EPoint(1, 3), EPoint(3, 3)};
+
+    std::pair<bool, bool> clipped = planner.ClipToRegion(path);
+
+    INFO(PrintPath(path));
+
+    REQUIRE(clipped.first);
+    REQUIRE(path.size() == 3);
+    auto first_pt = path.front();
+    REQUIRE(first_pt.x() == 0);
+    REQUIRE(first_pt.y() == 3);
+
+    REQUIRE(!clipped.second);
+    auto last_pt = path.back();
+    REQUIRE(last_pt.x() == 3);
+    REQUIRE(last_pt.y() == 3);
+  }
+
+  SECTION("First Point On Edge") {
+    std::list<EPoint> path = {EPoint(0, 3), EPoint(1, 3), EPoint(3, 3)};
+
+    std::pair<bool, bool> clipped = planner.ClipToRegion(path);
+
+    INFO(PrintPath(path));
+
+    REQUIRE(clipped.first);
+    REQUIRE(path.size() == 3);
+    auto first_pt = path.front();
+    REQUIRE(first_pt.x() == 0);
+    REQUIRE(first_pt.y() == 3);
+
+    REQUIRE(!clipped.second);
+    auto last_pt = path.back();
+    REQUIRE(last_pt.x() == 3);
+    REQUIRE(last_pt.y() == 3);
+  }
+
+  SECTION("Last Point On Edge") {
+    std::list<EPoint> path = {EPoint(-1, 2), EPoint(1, 3), EPoint(3, 3),
+      EPoint(4, 3)};
+
+    std::pair<bool, bool> clipped = planner.ClipToRegion(path);
+
+    INFO(PrintPath(path));
+
+    REQUIRE(clipped.first);
+    REQUIRE(path.size() == 4);
+    auto first_pt = path.front();
+    REQUIRE(first_pt.x() == 0);
+    REQUIRE(first_pt.y() == Approx(2.5));
+
+    REQUIRE(clipped.second);
+    auto last_pt = path.back();
+    REQUIRE(last_pt.x() == 4);
+    REQUIRE(last_pt.y() == 3);
+  }
+
+  SECTION("All Outside") {
+    std::list<EPoint> path = {EPoint(-1, 2), EPoint(-1, 5), EPoint(3, 5)};
+
+    std::pair<bool, bool> clipped = planner.ClipToRegion(path);
+
+    INFO(PrintPath(path));
+
+    REQUIRE(path.size() == 0);
+    REQUIRE(!clipped.first);
+    REQUIRE(!clipped.second);
+  }
+
+  SECTION("One Point Inside") {
+    std::list<EPoint> path = {EPoint(1, 3)};
+
+    std::pair<bool, bool> clipped = planner.ClipToRegion(path);
+
+    INFO(PrintPath(path));
+
+    REQUIRE(!clipped.first);
+    REQUIRE(path.size() == 1);
+    auto first_pt = path.front();
+    REQUIRE(first_pt.x() == 1);
+    REQUIRE(first_pt.y() == 3);
+
+    REQUIRE(!clipped.second);
+  }
+
+  SECTION("One Point Outside") {
+    std::list<EPoint> path = {EPoint(-1, 3)};
+
+    std::pair<bool, bool> clipped = planner.ClipToRegion(path);
+
+    INFO(PrintPath(path));
+
+    REQUIRE(!clipped.first);
+    REQUIRE(path.size() == 0);
+    REQUIRE(!clipped.second);
   }
 }

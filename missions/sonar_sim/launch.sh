@@ -26,6 +26,7 @@ done
 SCENARIO=1
 # 1 = Summer Hydro 2015
 # 2 = Strait of Georgia 
+# 3 = Fairweather H12758 Offshore
 if [ $SCENARIO = 1 ]; then
   #MOOS Stuff
   START_POS="x=705,y=-4379,speed=0,heading=180"
@@ -57,8 +58,23 @@ elif [ $SCENARIO = 2 ]; then
   BATHY_GRID="'../path_planning/terrain/H12322_8m_Depths.tiff'"
   X_OFFSET=512684.0
   Y_OFFSET=5396228.0
+elif [ $SCENARIO = 3 ]; then
+  #MOOS Stuff
+  # START_POS="4082,9023"
+  START_POS="x=-1625,y=4896,speed=0,heading=225"
+  LAT_ORIGIN=55.1622067
+  LONG_ORIGIN=-159.2832076
+  TIFF_FILE=FA_Polygon1_Color.tif
+  PAN_X=324
+  PAN_Y=125
+  ZOOM=0.13
+  OP_WKT="POLYGON_((-1663_4653,-4729_-3130,-2758_-3624,-1090_-4660,396_421,964_3757))"
+  # Python Stuff
+  #OP_POLY="[(4948,14031),(3916,14613),(5226,16027),(5579,15694),(5954,15515)]"
+  BATHY_GRID="'../path_planning/terrain/FA_Polygon1_Depths.tif'"
+  X_OFFSET=-1029929.473
+  Y_OFFSET=6385706.239
 fi
-
 # What is nsplug? Type "nsplug --help" or "nsplug --manual" 
 
 nsplug sonar_sim.moos targ_sonar_sim.moos --path=../shared_plugins -f WARP=$TIME_WARP \
@@ -71,7 +87,7 @@ nsplug sonar_sim.moos targ_sonar_sim.moos --path=../shared_plugins -f WARP=$TIME
 
 nsplug ~/code/asv-dev/utilities/python_moosapps/sonar_simulator.py \
   ~/code/asv-dev/utilities/python_moosapps/targ_sonar_simulator.py -f \
-  OP_POLY="$OP_POLY"  BATHY_GRID=$BATHY_GRID  X_OFFSET=$X_OFFSET \
+  BATHY_GRID=$BATHY_GRID  X_OFFSET=$X_OFFSET \
   Y_OFFSET=$Y_OFFSET WARP=$TIME_WARP
 
 # nsplug ~/code/asv-dev/utilities/python_moosapps/record_swath.py \

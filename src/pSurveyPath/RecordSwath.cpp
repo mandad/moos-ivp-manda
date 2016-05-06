@@ -11,8 +11,7 @@
 #include "AngleUtils.h"
 #include "GeomUtils.h"
 
-#define DEBUG true
-
+#define DEBUG false
 //---------------------------------------------------------
 // Constructor
 

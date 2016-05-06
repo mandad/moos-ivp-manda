@@ -133,13 +133,14 @@ XYSegList PathPlan::GenerateNextPath() {
   // ---------- Restrict to Region -----------
   // Would be good to check for segment intersecting with the border and use
   // these points instead
+  std::pair<bool, bool> clipped = std::make_pair(false, false);
   if (m_restrict_asv_to_region) {
     #if DEBUG
     MOOSTrace("Eliminating points outside op region.\n");
     #endif
 
     //RestrictToRegion(m_next_path_pts);
-    ClipToRegion(m_next_path_pts);
+    clipped = ClipToRegion(m_next_path_pts);
 
     #if DEBUG
     MOOSTrace("Removed %d points.\n", pre_len - m_next_path_pts.size());
@@ -153,13 +154,15 @@ XYSegList PathPlan::GenerateNextPath() {
 
   // ---------- Extend -----------
   // Idea: Maybe extend from the point to the nearest edge, not along the
-  // vector of the last segment
+  // vector of the last segment, or add swath width along the edge from last
   #if DEBUG
   MOOSTrace("Extending ends of path to edge of region.\n");
   #endif
 
-  ExtendToEdge(m_next_path_pts, true);
-  ExtendToEdge(m_next_path_pts, false);
+  if (!clipped.first)
+    ExtendToEdge(m_next_path_pts, true);
+  if (!clipped.second)
+    ExtendToEdge(m_next_path_pts, false);
 
   #if DEBUG
   MOOSTrace("Removed %d points.\n", pre_len - m_next_path_pts.size());
@@ -425,48 +428,78 @@ void PathPlan::RestrictToRegion(std::list<EPoint>& path_points) {
 }
 
 std::pair<bool, bool> PathPlan::ClipToRegion(std::list<EPoint> &path_pts) {
+  if (path_pts.size() < 1) {
+    return std::make_pair(false, false);
+  }
+
   bool begin_clipped{false}, end_clipped{false};
   auto outer_ring = m_op_region.outer();
+  bool any_within = false;
 
   // Test if beginning outside the region
   auto first_point = path_pts.begin();
   BPoint last_pt(first_point->x(), first_point->y());
+
+  if (path_pts.size() == 1) {
+    if (!boost::geometry::within(last_pt, outer_ring)) {
+      path_pts.clear();
+    }
+    return std::make_pair(false, false);
+  }
+
   BPoint last_outside, last_inside;
   std::list<EPoint>::iterator begin_inside;
+  bool found_crossing = false;
 
-  if (!boost::geometry::within(last_pt, outer_ring)) {
-    // find last point outside
-    for(auto point = std::next(first_point);
-          point != path_pts.end(); point++) {
-      BPoint this_pt(point->x(), point->y());
-      // If transistion from out to inside
-      if (!boost::geometry::within(last_pt, outer_ring)
-            && boost::geometry::within(this_pt, outer_ring)) {
-        last_outside = last_pt;
-        begin_inside = point;
-        last_inside = this_pt;
-      }
-      last_pt = this_pt;
+  // find last point outside
+  for(auto point = std::next(first_point);
+        point != path_pts.end(); point++) {
+    BPoint this_pt(point->x(), point->y());
+    // So there doesn't have to be an extra loop just to check if any are
+    // within the geometry, since this only happens once (end of survey).
+    bool point_inside = boost::geometry::within(this_pt, outer_ring);
+    if (!any_within && point_inside)
+      any_within = true;
+    // If transistion from out to inside
+    if (!boost::geometry::within(last_pt, outer_ring)
+          && point_inside) {
+      last_outside = last_pt;
+      begin_inside = point;
+      last_inside = this_pt;
+      found_crossing = true;
     }
+    last_pt = this_pt;
+  }
+
+  if (found_crossing) {
     // Find the intersection point
     BLinestring segment({last_outside, last_inside});
     std::vector<BPoint> intersect_pts;
-    if (boost::geometry::intersection(segment, outer_ring, intersect_pts)) {
+
+    boost::geometry::intersection(segment, outer_ring, intersect_pts);
+    if (intersect_pts.size() > 0) {
       // Remove the points before the first inside one
       path_pts.erase(first_point, begin_inside);
       // Right now assume there is only one intersect, would have to find
       // furthest along the segment otherwise
       path_pts.push_front(EPointFromBPoint(intersect_pts[0]));
-      begin_clipped = true;
     }
+    // it is "clipped" even when on the border, don't want to extend
+    begin_clipped = true;
+  }
+
+
+  // All points are outside the region
+  if (!any_within) {
+    path_pts.clear();
+    return std::make_pair(false, false);
   }
 
   // Run the same thing from the end
   // This can probably be streamlined
   auto end_point = std::prev(path_pts.end());
   last_pt = BPoint(end_point->x(), end_point->y());
-  //BPoint last_outside, last_inside;
-  //std::list<EPoint>::iterator begin_inside;
+  found_crossing = false;
 
   if (!boost::geometry::within(last_pt, outer_ring)) {
     // find last point outside
@@ -479,18 +512,20 @@ std::pair<bool, bool> PathPlan::ClipToRegion(std::list<EPoint> &path_pts) {
         last_outside = last_pt;
         begin_inside = point;
         last_inside = this_pt;
+        found_crossing = true;
       }
       last_pt = this_pt;
     }
     // Find the intersection point
-    BLinestring segment({last_outside, last_inside});
-    std::vector<BPoint> intersect_pts;
-    if (boost::geometry::intersection(segment, outer_ring, intersect_pts)) {
-      // Remove the points before the first inside one
-      path_pts.erase(std::next(begin_inside), path_pts.end());
-      //path_pts.pop_back();
-
-      path_pts.push_back(EPointFromBPoint(intersect_pts[0]));
+    if (found_crossing) {
+      BLinestring segment({last_outside, last_inside});
+      std::vector<BPoint> intersect_pts;
+      boost::geometry::intersection(segment, outer_ring, intersect_pts);
+      if (intersect_pts.size() > 0) {
+        // Remove the points before the first inside one
+        path_pts.erase(std::next(begin_inside), path_pts.end());
+        path_pts.push_back(EPointFromBPoint(intersect_pts[0]));
+      }
       end_clipped = true;
     }
   }
