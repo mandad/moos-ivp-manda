@@ -120,7 +120,7 @@ ProcessConfig = uSimNomoto
   vessel_length = 2.0   // m
   rudder_offset = 0
 
-  noise_sim = false
+  noise_sim = true
   noise_magnitude = 1
 }
 
@@ -166,6 +166,7 @@ ProcessConfig = pLogger
   Log = MRAS_K_M_STAR @ 0
   Log = MRAS_IS_TURNING @ 0
   Log = NAV_HEADING_OVER_GROUND @ 0
+  Log = MRAS_MODEL_ROT_FILTERED @ 0
 
   Log = NODE_REPORT_LOCAL @ 0 NOSYNC
   Log = NODE_REPORT @ 0 NOSYNC

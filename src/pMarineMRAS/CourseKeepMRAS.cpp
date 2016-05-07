@@ -41,7 +41,8 @@ CourseKeepMRAS::CourseKeepMRAS() : m_dfKp{1}, m_dfKd{0.3}, m_dfTauM{0.5},
 void CourseKeepMRAS::SetParameters(double dfKStar, double dfTauStar, double dfZ,
     double dfWn, double dfBeta, double dfAlpha, double dfGamma, double dfXi,
     double dfRudderLimit, double dfCruisingSpeed, double dfShipLength,
-    double dfMaxROT, bool bDecreaseAdapt, double dfRudderSpeed, double dfDeadband)
+    double dfMaxROT, bool bDecreaseAdapt, double dfRudderSpeed, double dfDeadband,
+    double sample_T)
 {
     m_dfKmStar = dfKStar;
     m_dfTaumStar = dfTauStar;
@@ -60,6 +61,7 @@ void CourseKeepMRAS::SetParameters(double dfKStar, double dfTauStar, double dfZ,
     m_bDecreaseAdapt = bDecreaseAdapt;
     m_dfRudderSpeed = dfRudderSpeed;
     m_dfDeadband = dfDeadband;
+    m_RotFilter = SignalFilter(0.25, sample_T);
 
     m_lIterations = 0;
     m_bParametersSet = true;
@@ -217,10 +219,12 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
             m_dfModelPhiDotDot, m_dfModelROT, m_dfModelHeading, dfRudder);
     }
 
-    //Do adaptation
-    double dfe = m_dfModelROT - dfMeasuredROT;
+    m_dfFilteredROT = m_RotFilter.IngestValue(m_dfModelROT);
+
+    // Do adaptation, using filtered, since the measured is filtered.  Want the
+    // same time delay.  For FIR filter this could be a index offset
+    double dfe = m_dfFilteredROT - dfMeasuredROT;
     // Always adapt the Ki, want it modified even during deadband and waves
-    // Double check the sign of this
     // Avoid integral windup during turns
     if (!bTurning)
         m_dfKim += m_dfGamma * dfe * dfDeltaT;
@@ -320,4 +324,5 @@ void CourseKeepMRAS::GetDebugVariables(double * vars) {
     vars[9] = m_dfKm;   //m_dfPsiRefPP
     vars[10] = m_dfModelRudder;
     vars[11] = m_dfKmStar;
+    vars[12] = m_dfFilteredROT;
 }

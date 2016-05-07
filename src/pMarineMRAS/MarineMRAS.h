@@ -12,6 +12,7 @@
 #include "CourseChangeMRAS.h"
 #include "CourseKeepMRAS.h"
 #include "SpeedControl.h"
+#include "SignalFilter.h"
 
 enum class ControllerType {
   CourseChange,
@@ -98,6 +99,7 @@ class MarineMRAS : public AppCastingMOOSApp
     CourseKeepMRAS m_CourseKeepControl;
     SpeedControl m_speed_control;
     ControllerType m_last_controller;
+    SignalFilter m_rot_filter;
 
 };
 

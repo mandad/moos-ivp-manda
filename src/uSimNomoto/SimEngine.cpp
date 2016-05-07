@@ -29,10 +29,10 @@
 
 using namespace std;
 
-#define DEBUG true
+#define DEBUG false
 
 SimEngine::SimEngine() : m_rot{0}, m_iteration_num{0}, m_distribution{0.0,1.0}, 
-      m_wave_dir{45}, m_sensor_noise{0,0,0}, m_noise{0,0,0}
+      m_wave_dir{45}, m_sensor_noise{0,0,0}
 {
   #if DEBUG
   std::cout << "SimEngine Constructor" << endl;
@@ -405,6 +405,7 @@ void SimEngine::propagateWaveSim(NodeRecord& record, double delta_time,
 
 void SimEngine::PreFillWaves(WaveParameters params) {
   // Fill the wave array
+  m_noise.clear();
   #if DEBUG
   std::cout << "Waves prefilling" << endl;
   #endif
@@ -426,6 +427,9 @@ void SimEngine::PreFillWaves(WaveParameters params) {
 }
 
 void SimEngine::propagateNoiseSim(double sample_T, bool wave_sim, double fc) {
+   if (m_noise.size() == 0)
+      m_noise = {0,0,0};
+
   // High pass filter the same noise as the waves
   double wc = 2 * M_PI * fc;
   double c = cos(wc * sample_T * 0.5)/sin(wc * sample_T * 0.5);

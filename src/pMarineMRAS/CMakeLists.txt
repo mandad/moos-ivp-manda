@@ -1,8 +1,8 @@
 #--------------------------------------------------------
-# The CMakeLists.txt for:                       pMarineMRAS
+# The CMakeLists.txt for:                 pMarineMRAS
 # Author(s):                              Damian Manda
 #--------------------------------------------------------
-SET(CMAKE_CXX_STANDARD 11) 
+SET(CMAKE_CXX_STANDARD 11)
 
 SET(SRC
   MarineMRAS.cpp
@@ -13,6 +13,7 @@ SET(SRC
   ThrustMap.cpp
   CurrentEstimate.cpp
   CurrentRecord.cpp
+  SignalFilter.cpp
   main.cpp
 )
 
@@ -25,4 +26,3 @@ TARGET_LINK_LIBRARIES(pMarineMRAS
    mbutil
    m
    pthread)
-

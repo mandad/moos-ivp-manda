@@ -183,8 +183,9 @@ bool MarineMRAS::Iterate()
         } else {
           // Use the course keep controller
           if (m_last_controller == ControllerType::CourseChange) {
-            m_CourseKeepControl.ResetModel(m_current_heading, m_current_ROT,
-              m_CourseControl.GetModelRudder());
+            // It is always running now
+            // m_CourseKeepControl.ResetModel(m_current_heading, m_current_ROT,
+            //   m_CourseControl.GetModelRudder());
             m_CourseKeepControl.SwitchController();
             m_last_controller = ControllerType::CourseKeep;
           }
@@ -206,7 +207,7 @@ bool MarineMRAS::Iterate()
       MOOSTrace("pMarineMRAS: Logging Variables\n");
       #endif
       //Debug variables for logging
-      double vars[12];
+      double vars[13];
       if (controller_to_use ==  ControllerType::CourseChange) {
         m_CourseControl.GetDebugVariables(vars);
       } else {
@@ -229,6 +230,7 @@ bool MarineMRAS::Iterate()
         Notify("MRAS_TAU_M", vars[8]);
         Notify("MRAS_K_M", vars[9]);
         Notify("MRAS_K_M_STAR", vars[11]);
+        Notify("MRAS_MODEL_ROT_FILTERED", vars[12]);
       }
       Notify("MRAS_MODEL_RUDDER", vars[10]);
       Notify("MRAS_IS_TURNING", IsTurning());
@@ -414,8 +416,10 @@ bool MarineMRAS::OnStartUp()
         m_max_ROT, m_decrease_adapt, m_rudder_speed);
   m_CourseKeepControl.SetParameters(m_k_star, m_tau_star, m_z, m_wn, m_beta,
         m_alpha, m_gamma, m_xi, m_rudder_limit, m_cruising_speed, m_length,
-        m_max_ROT, m_decrease_adapt, m_rudder_speed, m_rudder_deadband);
+        m_max_ROT, m_decrease_adapt, m_rudder_speed, m_rudder_deadband,
+        1/m_dfFreq);
   m_speed_control.SetParameters(thrust_map, m_max_thrust, use_thrust_map_only);
+  m_rot_filter = SignalFilter(0.25, 1/m_dfFreq);
 
   registerVariables();
   return(true);
@@ -491,9 +495,12 @@ bool MarineMRAS::buildReport()
 }
 
 void MarineMRAS::UpdateROT(double curr_time) {
+  bool moving_avg_filter = false;
+
   if (m_first_heading) {
     m_first_heading = false;
-  } else if (m_ROT_filter_len > 1) {
+  } else if (moving_avg_filter) {
+    if (m_ROT_filter_len > 1) {
     // double diff = angle180(m_current_heading - m_previous_heading);
     // double curr_ROT = diff / (curr_time - m_last_heading_time);
     // //this is an arbitary threshold to eliminate noise from sim
@@ -544,16 +551,21 @@ void MarineMRAS::UpdateROT(double curr_time) {
         m_current_ROT = CourseChangeMRAS::TwoSidedLimit(curr_ROT, m_max_ROT);
       }
     }
+    } else if (false) {
+      double diff = angle180(m_current_heading - m_previous_heading);
+      double curr_ROT = diff / (curr_time - m_last_heading_time);
+      //this is an arbitary threshold to eliminate noise from sim
+      if (fabs(curr_ROT - m_current_ROT) < 10 || !m_discard_large_ROT) {
+        m_current_ROT = curr_ROT;
+      }
+
+      //Try limiting it for sim
+      m_current_ROT = CourseChangeMRAS::TwoSidedLimit(m_current_ROT, m_max_ROT);
+    }
   } else {
     double diff = angle180(m_current_heading - m_previous_heading);
     double curr_ROT = diff / (curr_time - m_last_heading_time);
-    //this is an arbitary threshold to eliminate noise from sim
-    if (fabs(curr_ROT - m_current_ROT) < 10 || !m_discard_large_ROT) {
-      m_current_ROT = curr_ROT;
-    }
-
-    //Try limiting it for sim
-    m_current_ROT = CourseChangeMRAS::TwoSidedLimit(m_current_ROT, m_max_ROT);
+    m_current_ROT = m_rot_filter.IngestValue(curr_ROT);
   }
 }
 

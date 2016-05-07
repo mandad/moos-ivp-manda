@@ -8,6 +8,8 @@
 #ifndef CourseKeepMRAS_HEADER
 #define CourseKeepMRAS_HEADER
 
+#include "SignalFilter.h"
+
 class CourseKeepMRAS
 {
 public:
@@ -20,7 +22,7 @@ public:
         double dfBeta, double dfAlpha, double dfGamma, double dfXi,
         double dfRudderLimit, double dfCruisingSpeed, double dfShipLength,
         double dfMaxROT, bool bDecreaseAdapt, double dfRudderSpeed,
-        double dfDeadband);
+        double dfDeadband, double sample_T);
     static double TwoSidedLimit(double dfNumToLimit, double dfLimit);
     std::string GetStatusInfo();
     std::string GetDebugInfo();
@@ -96,6 +98,9 @@ private: // Configuration variables
 
     double m_dfRudderPos;
     double m_dfRudderSpeed;
+
+    SignalFilter m_RotFilter;
+    double m_dfFilteredROT;
 };
 
 #endif
