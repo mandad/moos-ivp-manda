@@ -397,6 +397,10 @@ bool MarineMRAS::OnStartUp()
       if (toupper(value) == "TRUE")
         use_thrust_map_only = true;
       handled = true;
+    } else if (param == "LOW_PASS_FREQ") {
+      m_low_pass = true;
+      m_low_pass_freq = dval;
+      handled = true;
     }
 
     if(!handled)

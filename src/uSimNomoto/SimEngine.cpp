@@ -29,10 +29,10 @@
 
 using namespace std;
 
-#define DEBUG false
+#define DEBUG true
 
 SimEngine::SimEngine() : m_rot{0}, m_iteration_num{0}, m_distribution{0.0,1.0}, 
-      m_wave_dir{45}
+      m_wave_dir{45}, m_sensor_noise{0,0,0}, m_noise{0,0,0}
 {
   #if DEBUG
   std::cout << "SimEngine Constructor" << endl;
@@ -143,7 +143,7 @@ void SimEngine::propagateDepth(NodeRecord& record,
 void SimEngine::propagateSpeed(NodeRecord& record, const ThrustMap& tmap,
 			       double delta_time, double thrust,
 			       double rudder, double max_accel, 
-			       double max_decel)
+			       double max_decel, bool wave_sim)
 {
   if(delta_time <= 0)
     return;
@@ -161,6 +161,11 @@ void SimEngine::propagateSpeed(NodeRecord& record, const ThrustMap& tmap,
   double rudder_magnitude = fabs(rudder);
   double vpct = (rudder_magnitude / 100) * 0.85;
   next_speed *= (1.0 - vpct);
+  if (wave_sim && next_speed != 0) {
+    double gamma = angle180(angle180(record.getHeading()) - angle180(m_wave_dir)) * M_PI/180;
+    // Waves effect speed the most head on, just a guess on the scaling factor
+    next_speed += m_wave_out[0] * cos(gamma) * 0.2;
+  }
 
   if(next_speed > prev_speed) {
     double acceleration = (next_speed - prev_speed) / delta_time;
@@ -190,7 +195,9 @@ void SimEngine::propagateHeading(NodeRecord& record,
          double tm_star,
          double vessel_len,
          double rudder_offset,
-         bool wave_sim)
+         bool wave_sim,
+         bool noise_sim,
+         double noise_magnitude)
 {
 
   // double vessel_len = 2;
@@ -236,14 +243,16 @@ void SimEngine::propagateHeading(NodeRecord& record,
   double prev_heading = record.getHeading();
   double m_dfModelPhiDotDot = (km * (rudder + kim) - m_rot) / tm;
   m_rot += m_dfModelPhiDotDot * delta_time;
-  if (wave_sim && speed > 0) {
+  if (wave_sim && speed != 0) {
     double gamma = angle180(angle180(prev_heading) - angle180(m_wave_dir)) * M_PI/180;
     m_rot += m_wave_out[0] * sin(2 * gamma);
   }
-  //this is the limit of ROT in this model
-  // if (fabs(m_rot) > fabs(km * rudder)) {
-  //     m_rot = km * rudder;
-  // }
+  if (noise_sim && speed != 0) {
+    m_rot += m_sensor_noise[0] * noise_magnitude;
+    #if DEBUG
+    std::cout << "uSimNomoto: Adding Sensor Noise: " << m_sensor_noise[0] * noise_magnitude << endl;
+    #endif
+  }
   double new_heading = prev_heading + m_rot * delta_time;
 
   // Step 4: Calculate final new heading in the range [0,359]
@@ -272,7 +281,8 @@ void SimEngine::propagateSpeedDiffMode(NodeRecord& record, const ThrustMap& tmap
   // Since the rudder_diff is in the range [-200, 200], just divide by 2.
   double rudder = (thrust_lft - thrust_rgt) / 2;
 
-  propagateSpeed(record, tmap, delta_time, thrust, rudder, max_accel, max_decel);  
+  propagateSpeed(record, tmap, delta_time, thrust, rudder, max_accel, max_decel, 
+    false);  
 }
 
 
@@ -415,4 +425,34 @@ void SimEngine::PreFillWaves(WaveParameters params) {
   #endif
 }
 
+void SimEngine::propagateNoiseSim(double sample_T, bool wave_sim, double fc) {
+  // High pass filter the same noise as the waves
+  double wc = 2 * M_PI * fc;
+  double c = cos(wc * sample_T * 0.5)/sin(wc * sample_T * 0.5);
+  
+  //filter coefficients
+  // Second order butterworth
+  double c_sq = c * c;
+  double sq_2c = sqrt(2)*c;
+  vector<double> n{c_sq, -2 * c_sq, c_sq};
+  vector<double> d{c_sq + sq_2c + 1, -2 * (c_sq - 1), c_sq - sq_2c + 1};
+  double factor = 1/d[0];
+  for (int i = 0; i < 3; i++) {
+    n[i] *= factor;
+    d[i] *= factor;
+  }
 
+  #if DEBUG
+  //std::cout << "n0: " << n[0] << " n1: " << n[1] << " n2: " << n[2] << " d0 " << d[0] << " d1 " << d[1] << " d2 " << d[2] << endl;
+  #endif
+
+  if (!wave_sim) {
+    m_noise.push_front(m_distribution(m_rand_gen));
+    m_noise.pop_back();
+  }
+
+  m_sensor_noise.push_front(n[0] * m_noise[0] + n[1] * m_noise[1] 
+    + n[2] * m_noise[2] - d[1] * m_sensor_noise[0] - d[2] * m_sensor_noise[1]);
+  m_sensor_noise.pop_back();
+
+}

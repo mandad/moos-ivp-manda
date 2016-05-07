@@ -21,11 +21,9 @@ bool CurrentRecord::SaveRecord(SpeedInfoRecord record) {
         std::complex<double> record_diff = VectorDiff(record);
         m_vector_hist.push_front(record_diff);
     }
-    // m_average_diff.imag(m_average_diff.imag() +
 
     while (m_record_hist.size() > m_max_records ||
            record.time - m_record_hist.back().time > m_save_time) {
-        //SpeedInfoRecord removed_rec = m_record_hist.back();
         if (m_record_hist.back().valid_cog) {
             m_vector_hist.pop_back();
         }
@@ -42,6 +40,7 @@ bool CurrentRecord::GetAverageCurrent(double &mag, double &heading) {
     std::list<std::complex<double>>::iterator record;
     double sum_y = 0;
     double sum_x = 0;
+    // This has a potential for overflow
     for (record = m_vector_hist.begin(); record != m_vector_hist.end(); record++) {
         sum_x += record->imag();
         sum_y += record->real();
@@ -72,7 +71,11 @@ int CurrentRecord::NumRecords() {
 }
 
 std::complex<double> CurrentRecord::VectorDiff(SpeedInfoRecord record) {
-    std::complex<double> expected_vector(std::polar(record.speed_estimate,
+    double speed_through_water =  record.speed_estimate;
+    if (record.valid_stw) {
+      speed_through_water = record.speed_through_water;
+    }
+    std::complex<double> expected_vector(std::polar(speed_through_water,
         headingToRadians(record.heading)));
     if (record.valid_cog) {
         double cog_rad = headingToRadians(record.course_over_ground);

@@ -274,10 +274,16 @@ bool USM_MOOSApp::OnStartUp()
     else if((param == "WAVE_DIRECTION") && isNumber(value))
       handled = m_model.setParam("wave_direction", dval);
     else if((param == "WAVE_SIM") && isBoolean(value)) {
-      MOOSTrace("Setting wave_sim\n");
+      //MOOSTrace("Setting wave_sim\n");
       m_model.setWaveSim(tolower(value) == "true");
       handled = true;
     }
+    else if((param == "NOISE_SIM") && isBoolean(value)) {
+      m_model.setNoiseSim(tolower(value) == "true");
+      handled = true;
+    }
+    else if((param == "NOISE_MAGNITUDE") && isNumber(value))
+      handled = m_model.setParam("noise_magnitude", dval);
     else if((param == "K_STAR") && isNumber(value))
       handled = m_model.setParam("k_star", dval);
     else if((param == "TAU_STAR") && isNumber(value))

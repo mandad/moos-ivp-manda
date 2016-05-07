@@ -13,12 +13,14 @@
 #define ANGLE_BINS 20
 #define HISTORY_TIME 60
 #define AVERAGING_LEN 3
+#define LONG_ADJUST_PERIOD 5 * AVERAGING_LEN
 //Largest from calm day straight = 0.04
 //Largest from rough day straight = 0.10
 //From lake bradford 0.05 looks good for 3 sec AVG
 #define MAX_FLAT_SLOPE 0.05 //m/s^2
 #define SPEED_TOLERANCE 0.1
 #define HEADING_TOLERANCE 10 // 7 for sim
+
 #define DEBUG false
 
 SpeedControl::SpeedControl() : m_thrust_output(0),  m_first_run(true),
@@ -80,7 +82,8 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
 
   // If we have more than a 1 sec diff in time at the heading (i.e. turning)
   // Maybe use 2x avg len for time?
-  // TODO: account for desired_heading = 0 when stopped
+  // TODO: account for desired_heading = 0 when stopped (maybe not steady when
+  // fabs(speed) < 0.1)
   if (time_at_heading > AVERAGING_LEN
       && HeadingAbsDiff(desired_heading, heading) < HEADING_TOLERANCE) {
     heading_is_steady = true;
@@ -97,7 +100,9 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
       || HeadingAbsDiff(desired_heading, m_previous_desired_heading)
       > HEADING_TOLERANCE) {
     m_adjustment_state = 0;
-  } else if (heading_is_steady && speed_is_level && m_adjustment_state == 1) {
+  } else if (m_adjustment_state == 1 && heading_is_steady && speed_is_level
+            && time_at_heading > (2 * AVERAGING_LEN)
+            && time_since_thrust_change > (2 * AVERAGING_LEN)) {
     m_adjustment_state = 2;
   }
   if (DEBUG)
@@ -126,8 +131,7 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
       MOOSTrace("Speed Control: New Setting, Inital Speed = %.2f Thrust = %.2f Speed Diff Avg = %.2f\n",
         m_initial_speed, thrust, speed_diff_avg);
     m_adjustment_state = 1;
-  } else if (m_adjustment_state == 2 && time_at_heading > (2 * AVERAGING_LEN)
-      && time_since_thrust_change > (2 * AVERAGING_LEN)) {
+  } else if (m_adjustment_state == 2) {
 
     history_valid = SpeedHistInfo(AVERAGING_LEN, speed_slope, speed_avg);
     double des_speed_diff = desired_speed - speed_avg;
@@ -143,12 +147,13 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
     m_thrust_change_time = current_time;
     m_adjustment_state = 3;
   } else if (m_adjustment_state == 3 && heading_is_steady && speed_is_level
-            && time_since_thrust_change > (3 * AVERAGING_LEN)) {
+            && time_since_thrust_change > LONG_ADJUST_PERIOD) {
     // Do minor adjustments after the first big one
     // Assume the change doesn't take more than AVERAGING_LEN to manifest since
     // it is small
     //Rewrite the speed_slope & avg here, maybe should be new vars?
-    //history_valid = SpeedHistInfo(AVERAGING_LEN * 2, speed_slope, speed_avg);
+    history_valid = SpeedHistInfo(LONG_ADJUST_PERIOD - AVERAGING_LEN,
+        speed_slope, speed_avg);
     if (history_valid) {
       //Note that this has a longer averaging period then the first adjust
       double des_speed_diff_long = desired_speed - speed_avg;

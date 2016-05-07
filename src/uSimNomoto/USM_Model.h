@@ -65,6 +65,7 @@ public:
   bool   addThrustMapping(double, double);
 
   void   setWaveSim(bool enabled) { m_wave_sim = enabled; };
+  void   setNoiseSim(bool enabled) { m_noise_sim = enabled; };
   void   setAppPeriod(double period) { m_app_period = period; }
 
   // Getters
@@ -139,6 +140,9 @@ public:
   double     m_wave_height;
   double     m_wave_period;
   double     m_app_period;  // This is 1/AppTick
+
+  bool       m_noise_sim;
+  double     m_noise_magnitude;
 
   //Additions for Nomoto simulation
   double     m_tau_star;

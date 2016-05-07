@@ -109,7 +109,7 @@ ProcessConfig = uSimNomoto
   term_reporting = true
 
   //wave settings
-  wave_sim = false
+  wave_sim = true
   wave_sig_height = 0.2 // m
   wave_period = 3.5       // seconds
   wave_direction = 45   // degrees
@@ -118,7 +118,10 @@ ProcessConfig = uSimNomoto
   k_star = 1.6
   tau_star = 0.8 
   vessel_length = 2.0   // m
-  rudder_offset = 5
+  rudder_offset = 0
+
+  noise_sim = false
+  noise_magnitude = 1
 }
 
 //------------------------------------------

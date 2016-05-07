@@ -23,7 +23,7 @@ done
 #-------------------------------------------------------
 #  Part 2: Create the .moos and .bhv files. 
 #-------------------------------------------------------
-SCENARIO=3
+SCENARIO=2
 # 1 = Summer Hydro 2015
 # 2 = Strait of Georgia 
 # 3 = Fairweather H12758 Offshore
@@ -49,12 +49,13 @@ elif [ $SCENARIO = 2 ]; then
   LAT_ORIGIN=48.7188051
   LONG_ORIGIN=-122.8272363
   TIFF_FILE=H12322_8m_Color.tif
-  PAN_X=72
-  PAN_Y=-115
-  ZOOM=0.86
+  PAN_X=30
+  PAN_Y=-593
+  ZOOM=2.22
   # Python Stuff
   # OP_POLY="[(4032,9073),(2838,12080),(5720,13208),(7249,10238)]"
   OP_POLY="[(4948,14031),(3916,14613),(5226,16027),(5579,15694),(5954,15515)]"
+  OP_WKT="POLYGON_((4948_14031,3916_14613,5226_16027,5579_15694,5954_15515))"
   BATHY_GRID="'../path_planning/terrain/H12322_8m_Depths.tiff'"
   X_OFFSET=512684.0
   Y_OFFSET=5396228.0

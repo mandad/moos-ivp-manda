@@ -56,13 +56,14 @@ public:
 
   void propagateSpeed(NodeRecord&, const ThrustMap&, double delta_time, 
                 double thrust, double rudder,
-                double max_accel, double max_decel);
+                double max_accel, double max_decel, bool wave_sim);
 
  void propagateHeading(NodeRecord& record,
                 double delta_time, double rudder, double thrust,
                 double turn_rate, double rotate_speed,
                 double km_star, double tm_star, double vessel_len,
-                double rudder_offset, bool wave_sim);
+                double rudder_offset, bool wave_sim, bool noise_sim, 
+                double noise_magnitude);
 
   // Differential Thrust Modes
   void propagateSpeedDiffMode(NodeRecord&, const ThrustMap&, double delta_time, 
@@ -79,6 +80,8 @@ public:
 
   double getWaveAmplitude() {return m_wave_out[0]; }
 
+  void propagateNoiseSim(double sample_T, bool wave_sim, double fc = 1.2);
+
  protected:
 
   WaveParameters determineWaveParameters(NodeRecord& record, double wave_height, 
@@ -94,6 +97,7 @@ public:
   std::deque<double> m_wave_out;
   std::deque<double> m_filt_noise;
   std::deque<double> m_noise;
+  std::deque<double> m_sensor_noise;
   std::default_random_engine m_rand_gen;
   std::normal_distribution<double> m_distribution;
 

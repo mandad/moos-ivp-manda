@@ -75,6 +75,9 @@ USM_Model::USM_Model()
   m_wave_period = 10;
   m_wave_dir = 45;
   m_rudder_offset = 0;
+
+  m_noise_sim = false;
+  m_noise_magnitude = 0.2;
 }
 
 //------------------------------------------------------------------------
@@ -185,6 +188,8 @@ bool USM_Model::setParam(string param, double value)
       return(false);
     }
   }
+  else if(param == "noise_magnitude")
+    m_noise_magnitude = value;
   else if(param == "max_depth_rate")
     m_max_depth_rate = value;
   else if(param == "max_depth_rate_speed")
@@ -513,16 +518,20 @@ void USM_Model::propagateNodeRecord(NodeRecord& record,
 					  m_rotate_speed);
   }
   else {
-    m_sim_engine.propagateSpeed(record, m_thrust_map, delta_time,
-				m_thrust, m_rudder, m_max_acceleration,
-				m_max_deceleration);
     if (m_wave_sim) {
       m_sim_engine.propagateWaveSim(record, delta_time, m_wave_height, 
             m_wave_period, m_wave_dir, m_app_period);
     }
+    if (m_noise_sim) {
+      m_sim_engine.propagateNoiseSim(m_app_period, m_wave_sim);
+    }
+    m_sim_engine.propagateSpeed(record, m_thrust_map, delta_time,
+				m_thrust, m_rudder, m_max_acceleration,
+				m_max_deceleration, m_wave_sim);
     m_sim_engine.propagateHeading(record, delta_time, m_rudder, 
 				  m_thrust, m_turn_rate, m_rotate_speed, m_k_star, m_tau_star, 
-          m_vessel_len, m_rudder_offset, m_wave_sim);
+          m_vessel_len, m_rudder_offset, m_wave_sim, m_noise_sim, 
+          m_noise_magnitude);
   }
 
 
