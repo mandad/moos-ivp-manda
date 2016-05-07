@@ -56,6 +56,7 @@ MarineMRAS::MarineMRAS()
 
   m_first_heading = true;
   m_current_ROT = 0;
+  m_raw_ROT = 0;
   m_has_control = false;
   m_desired_thrust = 50;
   m_desired_speed = 0;
@@ -240,6 +241,7 @@ bool MarineMRAS::Iterate()
       Notify("MRAS_SPEED_STATE", speed_vars[0]);
 
       Notify("NAV_ROT", m_current_ROT);
+      Notify("MRAS_RAW_ROT", m_raw_ROT);
       Notify("NAV_HEADING_180", m_current_heading);
       Notify("DESIRED_HEADING_180", angle180(m_desired_heading));
       m_allstop_posted = false;
@@ -417,7 +419,7 @@ bool MarineMRAS::OnStartUp()
   m_CourseKeepControl.SetParameters(m_k_star, m_tau_star, m_z, m_wn, m_beta,
         m_alpha, m_gamma, m_xi, m_rudder_limit, m_cruising_speed, m_length,
         m_max_ROT, m_decrease_adapt, m_rudder_speed, m_rudder_deadband,
-        1/m_dfFreq);
+        1/m_dfFreq, m_ROT_filter_len > 1);
   m_speed_control.SetParameters(thrust_map, m_max_thrust, use_thrust_map_only);
   m_rot_filter = SignalFilter(0.25, 1/m_dfFreq);
 
@@ -495,65 +497,57 @@ bool MarineMRAS::buildReport()
 }
 
 void MarineMRAS::UpdateROT(double curr_time) {
-  bool moving_avg_filter = false;
+  bool moving_avg_filter = m_ROT_filter_len == 1;
 
   if (m_first_heading) {
     m_first_heading = false;
   } else if (moving_avg_filter) {
     if (m_ROT_filter_len > 1) {
-    // double diff = angle180(m_current_heading - m_previous_heading);
-    // double curr_ROT = diff / (curr_time - m_last_heading_time);
-    // //this is an arbitary threshold to eliminate noise from sim
-    // if (fabs(curr_ROT - m_current_ROT) < 5) {
-    //   m_current_ROT = curr_ROT;
-    // }
-
-    // //Try limiting it for sim
-    // m_current_ROT = CourseChangeMRAS::TwoSidedLimit(m_current_ROT, 40);
-
-    //figure out differential (adapted from IvP PID)
-    double diff = angle180(m_current_heading - m_previous_heading);
-    double curr_ROT = diff / (curr_time - m_last_heading_time);
-    //MOOSTrace("Curr ROT: %f\n", curr_ROT);
-
-    //Find the mean and stdev
-    if (m_DiffHistory.size() >= 2) {
-      double sum = 0;
-      double sq_sum = 0;
-      list<double>::iterator p;
-      for(p = m_DiffHistory.begin();p!=m_DiffHistory.end();p++) {
-        sum   += *p;
-        sq_sum += *p * (*p);
-        //MOOSTrace("List element: %f\n", *p);
-      }
-      double mean = sum / m_DiffHistory.size();
-      double ROT_stdev = sqrt(sq_sum / m_DiffHistory.size() - mean * mean);
-
-      //MOOSTrace("Calculated Mean %f\n", mean);
-      //Added the +5 to account for small stdev
-      if (fabs(curr_ROT - m_DiffHistory.front()) <= (2 * ROT_stdev + 10) ||
-        !m_discard_large_ROT)  {
-        m_DiffHistory.push_front(curr_ROT);
-        while(m_DiffHistory.size() > m_ROT_filter_len) {
-          m_DiffHistory.pop_back();
-        }
-        //Add the new value
-        m_current_ROT = (sum + curr_ROT) / m_DiffHistory.size();
-      } else {
-        m_current_ROT = mean;
-      }
-    } else {  // too small diff history
-      //MOOSTrace("Diff Hist Too Small\n");
-      if (fabs(curr_ROT) < m_max_ROT || m_record_mode) {
-        m_DiffHistory.push_front(curr_ROT);
-        m_current_ROT = curr_ROT;
-      } else {
-        m_current_ROT = CourseChangeMRAS::TwoSidedLimit(curr_ROT, m_max_ROT);
-      }
-    }
-    } else if (false) {
+      //figure out differential (adapted from IvP PID)
       double diff = angle180(m_current_heading - m_previous_heading);
       double curr_ROT = diff / (curr_time - m_last_heading_time);
+      m_raw_ROT = curr_ROT;
+      //MOOSTrace("Curr ROT: %f\n", curr_ROT);
+
+      //Find the mean and stdev
+      if (m_DiffHistory.size() >= 2) {
+        double sum = 0;
+        double sq_sum = 0;
+        list<double>::iterator p;
+        for(p = m_DiffHistory.begin();p!=m_DiffHistory.end();p++) {
+          sum   += *p;
+          sq_sum += *p * (*p);
+          //MOOSTrace("List element: %f\n", *p);
+        }
+        double mean = sum / m_DiffHistory.size();
+        double ROT_stdev = sqrt(sq_sum / m_DiffHistory.size() - mean * mean);
+
+        //MOOSTrace("Calculated Mean %f\n", mean);
+        //Added the +5 to account for small stdev
+        if (fabs(curr_ROT - m_DiffHistory.front()) <= (2 * ROT_stdev + 10) ||
+          !m_discard_large_ROT)  {
+          m_DiffHistory.push_front(curr_ROT);
+          while(m_DiffHistory.size() > m_ROT_filter_len) {
+            m_DiffHistory.pop_back();
+          }
+          //Add the new value
+          m_current_ROT = (sum + curr_ROT) / m_DiffHistory.size();
+        } else {
+          m_current_ROT = mean;
+        }
+      } else {  // too small diff history
+        //MOOSTrace("Diff Hist Too Small\n");
+        if (fabs(curr_ROT) < m_max_ROT || m_record_mode) {
+          m_DiffHistory.push_front(curr_ROT);
+          m_current_ROT = curr_ROT;
+        } else {
+          m_current_ROT = CourseChangeMRAS::TwoSidedLimit(curr_ROT, m_max_ROT);
+        }
+      }
+    } else {
+      double diff = angle180(m_current_heading - m_previous_heading);
+      double curr_ROT = diff / (curr_time - m_last_heading_time);
+      m_raw_ROT = curr_ROT;
       //this is an arbitary threshold to eliminate noise from sim
       if (fabs(curr_ROT - m_current_ROT) < 10 || !m_discard_large_ROT) {
         m_current_ROT = curr_ROT;
@@ -564,8 +558,8 @@ void MarineMRAS::UpdateROT(double curr_time) {
     }
   } else {
     double diff = angle180(m_current_heading - m_previous_heading);
-    double curr_ROT = diff / (curr_time - m_last_heading_time);
-    m_current_ROT = m_rot_filter.IngestValue(curr_ROT);
+    m_raw_ROT = diff / (curr_time - m_last_heading_time);
+    m_current_ROT = m_rot_filter.IngestValue(m_raw_ROT);
   }
 }
 

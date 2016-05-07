@@ -57,7 +57,7 @@ ProcessConfig = pMarineMRAS
    Gamma = 0.01     //Speed of Ki adaptation
    Xi = 1   // <= 1, not used if DecreaseAdaptation = false
    DecreaseAdaptation = false
-   ROTFilter = 1  // >= 1
+   ROTFilter = 2  // >= 1, 1 = Don't filter, > 1 = Low Pass Filter
    CourseKeepOnly = true
    AdaptDuringTurns = true
 
@@ -167,6 +167,7 @@ ProcessConfig = pLogger
   Log = MRAS_IS_TURNING @ 0
   Log = NAV_HEADING_OVER_GROUND @ 0
   Log = MRAS_MODEL_ROT_FILTERED @ 0
+  Log = MRAS_RAW_ROT @ 0 
 
   Log = NODE_REPORT_LOCAL @ 0 NOSYNC
   Log = NODE_REPORT @ 0 NOSYNC

@@ -100,6 +100,7 @@ class MarineMRAS : public AppCastingMOOSApp
     SpeedControl m_speed_control;
     ControllerType m_last_controller;
     SignalFilter m_rot_filter;
+    double m_raw_ROT;
 
 };
 

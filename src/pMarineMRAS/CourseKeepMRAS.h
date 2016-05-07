@@ -22,7 +22,7 @@ public:
         double dfBeta, double dfAlpha, double dfGamma, double dfXi,
         double dfRudderLimit, double dfCruisingSpeed, double dfShipLength,
         double dfMaxROT, bool bDecreaseAdapt, double dfRudderSpeed,
-        double dfDeadband, double sample_T);
+        double dfDeadband, double sample_T, bool filter_ROT);
     static double TwoSidedLimit(double dfNumToLimit, double dfLimit);
     std::string GetStatusInfo();
     std::string GetDebugInfo();
@@ -101,6 +101,7 @@ private: // Configuration variables
 
     SignalFilter m_RotFilter;
     double m_dfFilteredROT;
+    bool   m_bFilterROT;
 };
 
 #endif

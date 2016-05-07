@@ -20,7 +20,7 @@
 using namespace std;
 
 CourseKeepMRAS::CourseKeepMRAS() : m_dfKp{1}, m_dfKd{0.3}, m_dfTauM{0.5},
-    m_dfKm{1.2} {
+    m_dfKm{1.2}, m_bFilterROT{false} {
     m_bFirstRun = true;
     m_bControllerSwitch = false;
     m_bParametersSet = false;
@@ -42,7 +42,7 @@ void CourseKeepMRAS::SetParameters(double dfKStar, double dfTauStar, double dfZ,
     double dfWn, double dfBeta, double dfAlpha, double dfGamma, double dfXi,
     double dfRudderLimit, double dfCruisingSpeed, double dfShipLength,
     double dfMaxROT, bool bDecreaseAdapt, double dfRudderSpeed, double dfDeadband,
-    double sample_T)
+    double sample_T, bool filter_ROT)
 {
     m_dfKmStar = dfKStar;
     m_dfTaumStar = dfTauStar;
@@ -62,6 +62,7 @@ void CourseKeepMRAS::SetParameters(double dfKStar, double dfTauStar, double dfZ,
     m_dfRudderSpeed = dfRudderSpeed;
     m_dfDeadband = dfDeadband;
     m_RotFilter = SignalFilter(0.25, sample_T);
+    m_bFilterROT = filter_ROT;
 
     m_lIterations = 0;
     m_bParametersSet = true;
@@ -219,7 +220,11 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
             m_dfModelPhiDotDot, m_dfModelROT, m_dfModelHeading, dfRudder);
     }
 
-    m_dfFilteredROT = m_RotFilter.IngestValue(m_dfModelROT);
+    if (m_bFilterROT) {
+      m_dfFilteredROT = m_RotFilter.IngestValue(m_dfModelROT);
+    } else {
+      m_dfFilteredROT = m_dfModelROT;
+    }
 
     // Do adaptation, using filtered, since the measured is filtered.  Want the
     // same time delay.  For FIR filter this could be a index offset
