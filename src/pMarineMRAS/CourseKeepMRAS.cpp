@@ -220,8 +220,14 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
             m_dfModelPhiDotDot, m_dfModelROT, m_dfModelHeading, dfRudder);
     }
 
+    double rudder_for_adapt = dfRudder;
     if (m_bFilterROT) {
       m_dfFilteredROT = m_RotFilter.IngestValue(m_dfModelROT);
+      m_rudder_hist.push_front(dfRudder);
+      // Ten samples is the approximate filter time offset
+      if (m_rudder_hist.size() > 10)
+        m_rudder_hist.pop_back();
+      rudder_for_adapt = m_rudder_hist.back();
     } else {
       m_dfFilteredROT = m_dfModelROT;
     }
@@ -234,8 +240,8 @@ void CourseKeepMRAS::UpdateModel(double dfMeasuredROT, double dfRudder,
     if (!bTurning)
         m_dfKim += m_dfGamma * dfe * dfDeltaT;
     if (bDoAdapt) {
-        double dfDeltaKmTm = (-m_dfBeta * dfe * (dfRudder - m_dfKim)) * dfDeltaT;
-        double dfDeltaTmRecip = (m_dfAlpha * dfe * m_dfModelROT) * dfDeltaT;
+        double dfDeltaKmTm = (-m_dfBeta * dfe * (rudder_for_adapt - m_dfKim)) * dfDeltaT;
+        double dfDeltaTmRecip = (m_dfAlpha * dfe * m_dfFilteredROT) * dfDeltaT;
         m_dfTaumStar = 1 / (1 / m_dfTaumStar + dfDeltaTmRecip);
         if (m_dfTaumStar < 0.1) {
             m_dfTaumStar = 0.1;

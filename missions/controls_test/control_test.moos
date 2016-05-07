@@ -41,13 +41,13 @@ ProcessConfig = ANTLER
 
 ProcessConfig = pMarineMRAS
 {
-   AppTick   = 15
-   CommsTick = 15
+   AppTick   = 10
+   CommsTick = 10
 
    // Model parameter initial conditions
    //Test for adaptation
-   K_Star = 1.65 
-   Tau_Star = 1.0
+   K_Star = 2.5 //1.65 
+   Tau_Star = 1.5 //1.0
    DampingRatio = 0.7
    NaturalFrequency = 1.3 //1.3 for Kp = 1.2
 
@@ -59,6 +59,7 @@ ProcessConfig = pMarineMRAS
    DecreaseAdaptation = false
    ROTFilter = 2  // >= 1, 1 = Don't filter, > 1 = Low Pass Filter
    CourseKeepOnly = true
+   CourseChangeOnly = false
    AdaptDuringTurns = true
 
    // Vessel Characteristics
@@ -118,10 +119,10 @@ ProcessConfig = uSimNomoto
   k_star = 1.6
   tau_star = 0.8 
   vessel_length = 2.0   // m
-  rudder_offset = 0
+  rudder_offset = 5
 
   noise_sim = true
-  noise_magnitude = 1
+  noise_magnitude = 0.8
 }
 
 //------------------------------------------
@@ -216,7 +217,7 @@ ProcessConfig = pHelmIvP
   bhv_dir_not_found_ok = true
 
   behaviors  = consthead_pattern.bhv
-  // behaviors = alpha_circle.bhv
+  //behaviors = alpha_circle.bhv
   //behaviors = survey_pattern.bhv
   domain     = course:0:359:360
   domain     = speed:0:4:50

@@ -9,6 +9,7 @@
 #define CourseKeepMRAS_HEADER
 
 #include "SignalFilter.h"
+#include <deque>
 
 class CourseKeepMRAS
 {
@@ -102,6 +103,7 @@ private: // Configuration variables
     SignalFilter m_RotFilter;
     double m_dfFilteredROT;
     bool   m_bFilterROT;
+    std::deque<double> m_rudder_hist;
 };
 
 #endif

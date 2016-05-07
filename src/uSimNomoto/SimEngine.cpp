@@ -164,7 +164,7 @@ void SimEngine::propagateSpeed(NodeRecord& record, const ThrustMap& tmap,
   if (wave_sim && next_speed != 0) {
     double gamma = angle180(angle180(record.getHeading()) - angle180(m_wave_dir)) * M_PI/180;
     // Waves effect speed the most head on, just a guess on the scaling factor
-    next_speed += m_wave_out[0] * cos(gamma) * 0.2;
+    next_speed += m_wave_out[0] * cos(gamma) * 0.15;
   }
 
   if(next_speed > prev_speed) {

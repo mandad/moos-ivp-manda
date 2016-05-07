@@ -69,6 +69,7 @@ class MarineMRAS : public AppCastingMOOSApp
     bool   m_output;
     bool   m_record_mode;
     bool   m_course_keep_only;
+    bool   m_course_change_only;
     bool   m_adapt_turns;
     bool   m_low_pass;
     double m_low_pass_freq;

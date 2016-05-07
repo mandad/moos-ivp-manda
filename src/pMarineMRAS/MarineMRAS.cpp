@@ -49,7 +49,8 @@ MarineMRAS::MarineMRAS()
   m_rudder_deadband = 0;
   m_output = true;
   m_record_mode = false;
-  m_course_keep_only = false;
+  m_course_keep_only = true;
+  m_course_change_only = false;
   m_adapt_turns = false;
   m_speed_var = "NAV_SPEED_OVER_GROUND";
   m_cog_var = "NAV_HEADING_OVER_GROUND";
@@ -387,8 +388,16 @@ bool MarineMRAS::OnStartUp()
         m_record_mode = true;
       handled = true;
     } else if (param == "COURSEKEEPONLY") {
-      if (toupper(value) == "TRUE")
+      if (toupper(value) == "TRUE") {
         m_course_keep_only = true;
+        m_course_change_only = false;
+      }
+      handled = true;
+    } else if (param == "COURSECHANGEONLY") {
+      if (toupper(value) == "TRUE") {
+        m_course_change_only = true;
+        m_course_keep_only = false;
+      }
       handled = true;
     } else if (param == "ADAPTDURINGTURNS") {
       if (toupper(value) == "TRUE")
@@ -590,6 +599,8 @@ void MarineMRAS::AddHeadingHistory(double heading, double heading_time) {
 
 ControllerType MarineMRAS::DetermineController() {
   if (MOOSTime() - m_desired_hist_time.back() > GetSettleTime()) {
+    if (m_course_change_only)
+      return ControllerType::CourseChange;
     //10 degree heading change threshold for CourseChange
     if (!IsTurning()) {
       return ControllerType::CourseKeep;
