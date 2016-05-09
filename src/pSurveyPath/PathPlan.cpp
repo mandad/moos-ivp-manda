@@ -473,7 +473,15 @@ std::pair<bool, bool> PathPlan::ClipToRegion(std::list<EPoint> &path_pts) {
 
   if (found_crossing) {
     // Find the intersection point
+    #if ((BOOST_VERSION / 100000) >= 1 && ((BOOST_VERSION / 100) % 1000) >= 59)
+    //#if !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX) \
+    //  && !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
     BLinestring segment({last_outside, last_inside});
+    #else
+    BLinestring segment;
+    boost::geometry::append(segment, last_outside);
+    boost::geometry::append(segment, last_inside);
+    #endif
     std::vector<BPoint> intersect_pts;
 
     boost::geometry::intersection(segment, outer_ring, intersect_pts);
@@ -518,7 +526,13 @@ std::pair<bool, bool> PathPlan::ClipToRegion(std::list<EPoint> &path_pts) {
     }
     // Find the intersection point
     if (found_crossing) {
+      #if ((BOOST_VERSION / 100000) >= 1 && ((BOOST_VERSION / 100) % 1000) >= 59)
       BLinestring segment({last_outside, last_inside});
+      #else
+      BLinestring segment;
+      boost::geometry::append(segment, last_outside);
+      boost::geometry::append(segment, last_inside);
+      #endif
       std::vector<BPoint> intersect_pts;
       boost::geometry::intersection(segment, outer_ring, intersect_pts);
       if (intersect_pts.size() > 0) {
