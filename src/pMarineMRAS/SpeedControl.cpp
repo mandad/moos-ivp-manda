@@ -85,7 +85,8 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
   // TODO: account for desired_heading = 0 when stopped (maybe not steady when
   // fabs(speed) < 0.1)
   if (time_at_heading > AVERAGING_LEN
-      && HeadingAbsDiff(desired_heading, heading) < HEADING_TOLERANCE) {
+      && HeadingAbsDiff(desired_heading, heading) < HEADING_TOLERANCE
+      && !turning) {
     heading_is_steady = true;
     if (DEBUG)
       MOOSTrace("Heading Steady\n");
@@ -109,8 +110,8 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
     MOOSTrace("Speed Control: Time At Heading = %.2f State: %i\n",
       time_at_heading, m_adjustment_state);
 
-  if (m_adjustment_state > 1 && speed_is_level &&
-      time_since_thrust_change > 2 * AVERAGING_LEN) {
+  if (m_adjustment_state > 1 && speed_is_level && heading_is_steady
+      && time_since_thrust_change > 2 * AVERAGING_LEN) {
     // Add this value to history for current estimation
     double speed_est = m_thrust_map.getSpeedValue(m_thrust_output);
     SpeedInfoRecord hist_record(current_time, speed, speed_est, heading,
@@ -147,7 +148,8 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
     m_thrust_change_time = current_time;
     m_adjustment_state = 3;
   } else if (m_adjustment_state == 3 && heading_is_steady && speed_is_level
-            && time_since_thrust_change > LONG_ADJUST_PERIOD) {
+            && time_since_thrust_change > LONG_ADJUST_PERIOD
+            && time_at_heading > LONG_ADJUST_PERIOD) {
     // Do minor adjustments after the first big one
     // Assume the change doesn't take more than AVERAGING_LEN to manifest since
     // it is small
