@@ -19,6 +19,7 @@
 using namespace std;
 // Used to reject noise, expecially in single beam systems
 #define MIN_DEPTH_LIMIT 0.5
+#define DEBUG false
 // using namespace boost::accumulators;
 
 //---------------------------------------------------------
@@ -49,6 +50,7 @@ bool SonarFilter::OnNewMail(MOOSMSG_LIST &NewMail)
   double dfDepth = -1;
   if (pDepth->IsFresh()) {
     dfDepth = pDepth->GetDoubleVal();
+    pDepth->SetFresh(false);
     // This sets a static 0.5m min depth at this time
     if (dfDepth > MIN_DEPTH_LIMIT) {
       m_last_depth = dfDepth;
@@ -59,6 +61,7 @@ bool SonarFilter::OnNewMail(MOOSMSG_LIST &NewMail)
   dfDepth = -1;
   if (pDepth->IsFresh()) {
     dfDepth = pDepth->GetDoubleVal();
+    pDepth->SetFresh(false);
     if (dfDepth > MIN_DEPTH_LIMIT) {
       m_fresh_depth = m_port_filter.IngestValue(dfDepth);
     }
@@ -67,8 +70,8 @@ bool SonarFilter::OnNewMail(MOOSMSG_LIST &NewMail)
   dfDepth = -1;
   if (pDepth->IsFresh()) {
     dfDepth = pDepth->GetDoubleVal();
+    pDepth->SetFresh(false);
     if (dfDepth > MIN_DEPTH_LIMIT) {
-      MOOSTrace("Ingesting Stbd Value: %0.2f\n", dfDepth);
       m_fresh_depth = m_stbd_filter.IngestValue(dfDepth) || m_fresh_depth;
     }
   }
@@ -116,8 +119,7 @@ bool SonarFilter::Iterate()
 
   if (m_fresh_depth) {
     string swath_message = GenerateSwathMessage();
-    if (!SetMOOSVar("Swath", swath_message, MOOSTime()))
-      MOOSTrace("You are Fucked.");
+    SetMOOSVar("Swath", swath_message, MOOSTime());
     m_fresh_depth = false;
   }
 
@@ -311,11 +313,13 @@ string SonarFilter::GenerateSwathMessage() {
 
   snprintf (message, 200, "x=%0.2f;y=%0.2f;hdg=%0.2f;port=%0.1f;stbd=%0.1f;depth=%0.2f",
     x_var->GetDoubleVal(), y_var->GetDoubleVal(), heading_var->GetDoubleVal(),
-    swath_width_port, swath_width_stbd, m_nadir_filter.FilteredValue());
+    swath_width_port, swath_width_stbd, post_depth);
 
   strncpy(m_last_msg, message, sizeof(message));
   string msg_string(message);
+  #if DEBUG
   MOOSTrace("SonarFilt - GeneratedMessage:\n");
   MOOSTrace(msg_string + "\n");
+  #endif
   return msg_string;
 }

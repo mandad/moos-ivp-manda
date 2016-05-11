@@ -9,7 +9,7 @@
 #include <cmath>
 #include <iostream>
 
-#define DEBUG true
+#define DEBUG false
 
 StDevFilter::StDevFilter(double length, double stdevs, double sample_T) :
       m_first_value{true}, m_stdev{0}, m_filtered_depth{-1} {

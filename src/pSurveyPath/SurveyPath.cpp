@@ -190,6 +190,7 @@ bool SurveyPath::Iterate()
   // Process received data
   auto begin_msg = GetMOOSVar("LineBegin");
   if (begin_msg->IsFresh()) {
+    begin_msg->SetFresh(false);
     #if DEBUG
     MOOSTrace("**** Line beginning, starting to record swath ****\n");
     #endif
@@ -199,6 +200,7 @@ bool SurveyPath::Iterate()
   if (m_recording) {
     auto swath_msg = GetMOOSVar("Swath");
     if (swath_msg->IsFresh()) {
+      swath_msg->SetFresh(false);
       if(InjestSwathMessage(swath_msg->GetStringVal())) {
         #if DEBUG
         //MOOSTrace("pSurveyPath: Recording Swath message\n");
@@ -211,6 +213,7 @@ bool SurveyPath::Iterate()
   } else {
     auto turn_msg = GetMOOSVar("TurnReached");
     if (turn_msg->IsFresh()) {
+      turn_msg->SetFresh(false);
       if (m_path_plan_done) {
         #if DEBUG
         MOOSTrace("pSurveyPath: Posting Turn Point\n");
@@ -236,6 +239,7 @@ bool SurveyPath::Iterate()
 
   auto end_msg = GetMOOSVar("LineEnd");
   if (end_msg->IsFresh()) {
+    end_msg->SetFresh(false);
     m_recording = false;
     m_path_plan_done = false;
     #if DEBUG

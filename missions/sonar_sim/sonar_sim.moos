@@ -24,7 +24,7 @@ ProcessConfig = ANTLER
 
   Run = MOOSDB          @ NewConsole = false
   Run = pMarineViewer   @ NewConsole = false
-  //Run = pLogger         @ NewConsole = false
+  Run = pLogger         @ NewConsole = false
   Run = uSimMarine	    @ NewConsole = false
   Run = pMarinePID      @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
@@ -45,9 +45,9 @@ ProcessConfig = pSurveyPath
   Op_Region = $(OP_WKT)
   first_side = $(FIRST_SIDE)
   first_line = $(FIRST_LINE)
-  overlap_percent = 20
-  path_interval = 20
-  turn_pt_offset = 25
+  overlap_percent = 10
+  path_interval = 30
+  turn_pt_offset = 40
   alignment_line_len = 30
   max_bend_angle = 90
 
