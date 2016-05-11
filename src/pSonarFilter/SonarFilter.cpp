@@ -45,37 +45,6 @@ bool SonarFilter::OnNewMail(MOOSMSG_LIST &NewMail)
 
   UpdateMOOSVariables(NewMail);
 
-  //Check if we need to set autonomy mode again
-  CMOOSVariable * pDepth = GetMOOSVar("Depth");
-  double dfDepth = -1;
-  if (pDepth->IsFresh()) {
-    dfDepth = pDepth->GetDoubleVal();
-    pDepth->SetFresh(false);
-    // This sets a static 0.5m min depth at this time
-    if (dfDepth > MIN_DEPTH_LIMIT) {
-      m_last_depth = dfDepth;
-      m_fresh_depth = m_nadir_filter.IngestValue(dfDepth);
-    }
-  }
-  pDepth = GetMOOSVar("Depth_Port");
-  dfDepth = -1;
-  if (pDepth->IsFresh()) {
-    dfDepth = pDepth->GetDoubleVal();
-    pDepth->SetFresh(false);
-    if (dfDepth > MIN_DEPTH_LIMIT) {
-      m_fresh_depth = m_port_filter.IngestValue(dfDepth);
-    }
-  }
-  pDepth = GetMOOSVar("Depth_Stbd");
-  dfDepth = -1;
-  if (pDepth->IsFresh()) {
-    dfDepth = pDepth->GetDoubleVal();
-    pDepth->SetFresh(false);
-    if (dfDepth > MIN_DEPTH_LIMIT) {
-      m_fresh_depth = m_stbd_filter.IngestValue(dfDepth) || m_fresh_depth;
-    }
-  }
-
   /*
   MOOSMSG_LIST::iterator p;
   for(p=NewMail.begin(); p!=NewMail.end(); p++) {
@@ -116,6 +85,36 @@ bool SonarFilter::OnConnectToServer()
 bool SonarFilter::Iterate()
 {
   AppCastingMOOSApp::Iterate();
+
+  CMOOSVariable * pDepth = GetMOOSVar("Depth");
+  double dfDepth = -1;
+  if (pDepth->IsFresh()) {
+    dfDepth = pDepth->GetDoubleVal();
+    pDepth->SetFresh(false);
+    // This sets a static 0.5m min depth at this time
+    if (dfDepth > MIN_DEPTH_LIMIT) {
+      m_last_depth = dfDepth;
+      m_fresh_depth = m_nadir_filter.IngestValue(dfDepth);
+    }
+  }
+  pDepth = GetMOOSVar("Depth_Port");
+  dfDepth = -1;
+  if (pDepth->IsFresh()) {
+    dfDepth = pDepth->GetDoubleVal();
+    pDepth->SetFresh(false);
+    if (dfDepth > MIN_DEPTH_LIMIT) {
+      m_fresh_depth = m_port_filter.IngestValue(dfDepth);
+    }
+  }
+  pDepth = GetMOOSVar("Depth_Stbd");
+  dfDepth = -1;
+  if (pDepth->IsFresh()) {
+    dfDepth = pDepth->GetDoubleVal();
+    pDepth->SetFresh(false);
+    if (dfDepth > MIN_DEPTH_LIMIT) {
+      m_fresh_depth = m_stbd_filter.IngestValue(dfDepth) || m_fresh_depth;
+    }
+  }
 
   if (m_fresh_depth) {
     string swath_message = GenerateSwathMessage();
@@ -179,9 +178,9 @@ bool SonarFilter::OnStartUp()
   AddMOOSVariable("SonarWidth", "SONAR_WIDTH", "", 0);
   AddMOOSVariable("Swath", "", "SWATH_WIDTH", 0);
 
-  m_nadir_filter = StDevFilter(m_filter_len, m_std_limit, 1/m_dfFreq);
-  m_port_filter = StDevFilter(m_filter_len, m_std_limit, 1/m_dfFreq);
-  m_stbd_filter = StDevFilter(m_filter_len, m_std_limit, 1/m_dfFreq);
+  m_nadir_filter = StDevFilter(m_filter_len, m_std_limit, 1/GetAppFreq());
+  m_port_filter = StDevFilter(m_filter_len, m_std_limit, 1/GetAppFreq());
+  m_stbd_filter = StDevFilter(m_filter_len, m_std_limit, 1/GetAppFreq());
 
   registerVariables();
   return(true);

@@ -37,6 +37,7 @@ class SurveyPath : public AppCastingMOOSApp
    bool DetermineStartAndTurn(XYSegList& next_pts, bool post_turn = false);
    void CreateNewPath();
    void PostSwathSide();
+   bool SwathOutsideRegion();
 
  private: // Configuration variables
   BoatSide m_first_swath_side;
@@ -70,6 +71,7 @@ class SurveyPath : public AppCastingMOOSApp
   bool m_turn_pt_set;
   bool m_post_turn_when_ready;
   bool m_path_plan_done;
+  bool m_execute_path_plan;
   XYSegList m_alignment_line;
 
   std::thread m_path_plan_thread;

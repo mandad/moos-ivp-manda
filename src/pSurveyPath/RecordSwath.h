@@ -99,6 +99,7 @@ public:
   */
   XYSegList SwathOuterPts(BoatSide side);
 
+  std::pair<XYPoint, XYPoint> LastOuterPoints();
 
   bool SwathCoverage(BoatSide side, geos::geom::Polygon &coverage);
 

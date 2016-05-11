@@ -101,6 +101,7 @@ XYSegList PathPlan::GenerateNextPath() {
 
   // Next line is in opposite direction
   m_next_path_pts.reverse();
+  m_raw_path = VectorListToSegList(m_next_path_pts);
 
   // ---------- Intersections -----------
   unsigned int pre_len = m_next_path_pts.size();

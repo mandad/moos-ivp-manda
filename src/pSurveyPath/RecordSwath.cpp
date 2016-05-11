@@ -66,6 +66,7 @@ bool RecordSwath::AddRecord(double swath_stbd, double swath_port, double loc_x,
   m_last_x = loc_x;
   m_last_y = loc_y;
   m_has_records = true;
+  m_previous_record = record;
 
   // Add progressively to the coverage model
   return AddToCoverage(record);
@@ -175,6 +176,15 @@ XYPoint RecordSwath::OuterPoint(const SwathRecord &record, BoatSide side) {
   swath_vector.augAngle(rotate_degs);
   return XYPoint(swath_vector.xpos() + swath_vector.xdot(),
     swath_vector.ypos() + swath_vector.ydot());
+}
+
+std::pair<XYPoint, XYPoint> RecordSwath::LastOuterPoints() {
+  if (m_has_records) {
+    XYPoint port_point = OuterPoint(m_previous_record, BoatSide::Port);
+    XYPoint stbd_point = OuterPoint(m_previous_record, BoatSide::Stbd);
+    return std::make_pair(port_point, stbd_point);
+  }
+  return std::make_pair(XYPoint(), XYPoint());
 }
 
 double RecordSwath::SwathWidth(BoatSide side, unsigned int index) {

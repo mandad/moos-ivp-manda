@@ -195,6 +195,8 @@ class PathPlan
 
     BPolygon XYPolygonToBoostPolygon(XYPolygon& poly);
 
+    XYSegList GetRawPath() { return m_raw_path; }
+
     /**
      * @brief Selects specific elements from a list by index.
      * @details Replicates the select by index functionality of numpy or
@@ -243,6 +245,7 @@ class PathPlan
     BoatSide m_planning_side;
     // PointList m_next_path_pts;
     std::list<Eigen::Vector2d> m_next_path_pts;
+    XYSegList m_raw_path;
 };
 
 #endif
