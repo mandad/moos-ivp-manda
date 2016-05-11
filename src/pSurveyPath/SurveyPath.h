@@ -45,6 +45,7 @@ class SurveyPath : public AppCastingMOOSApp
   double m_turn_pt_offset;
   bool m_remove_in_coverage;
   double m_swath_overlap;
+  double m_max_bend_angle;
 
  private: // State variables
   //BoatSide m_next_swath_side;

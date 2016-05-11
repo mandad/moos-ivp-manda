@@ -5,6 +5,7 @@
 
 SET(SRC
   SonarFilter.cpp
+  StDevFilter.cpp
   SonarFilter_Info.cpp
   main.cpp
 )
@@ -17,4 +18,3 @@ TARGET_LINK_LIBRARIES(pSonarFilter
    mbutil
    m
    pthread)
-

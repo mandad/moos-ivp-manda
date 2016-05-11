@@ -18,8 +18,8 @@ namespace bg = boost::geometry;
 #define DEBUG true
 
 PathPlan::PathPlan(const RecordSwath &last_swath, BoatSide side, BPolygon op_region,
-  double margin, bool restrict_to_region) : m_last_line(last_swath),
-  m_max_bend_angle(60), m_restrict_asv_to_region(restrict_to_region),
+  double margin, double max_bend_angle, bool restrict_to_region) : m_last_line(last_swath),
+  m_max_bend_angle(max_bend_angle), m_restrict_asv_to_region(restrict_to_region),
   m_planning_side(side), m_margin(margin), m_op_region{op_region} {
 
   //m_op_region = XYPolygonToBoostPolygon(op_region);
@@ -545,6 +545,10 @@ std::pair<bool, bool> PathPlan::ClipToRegion(std::list<EPoint> &path_pts) {
   }
 
   return std::make_pair(begin_clipped, end_clipped);
+}
+
+std::pair<bool, bool> PathPlan::ClipToRegion2(std::list<EPoint> &path_pts) {
+  return std::make_pair(true, true);
 }
 
 void PathPlan::ExtendToEdge(std::list<EPoint> &path_points, bool begin) {

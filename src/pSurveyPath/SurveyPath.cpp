@@ -25,7 +25,7 @@ SurveyPath::SurveyPath() : m_first_swath_side{BoatSide::Stbd},
   m_remove_in_coverage{false}, m_swath_overlap{0.2}, m_line_end{false},
   m_line_begin{false}, m_turn_reached{false}, m_recording{false},
   m_swath_record(10), m_swath_side{BoatSide::Stbd}, m_turn_pt_set{false},
-  m_post_turn_when_ready{false}, m_path_plan_done{false}
+  m_post_turn_when_ready{false}, m_path_plan_done{false}, m_max_bend_angle{60}
 {
   //m_swath_side = AdvanceSide(m_first_swath_side);
   m_swath_record.SetOutputSide(m_swath_side);
@@ -73,8 +73,10 @@ bool SurveyPath::OnStartUp()
       handled = true;
     }
     else if (param == "FIRST_LINE") {
-      m_survey_path = string2SegList(value);
-      MOOSTrace("First Line Set: " + m_survey_path.get_spec_pts(2) + "\n");
+      if (toupper(value).compare("AUTO") != 0) {
+        m_survey_path = string2SegList(value);
+        MOOSTrace("First Line Set: " + m_survey_path.get_spec_pts(2) + "\n");
+      }
       handled = true;
     }
     else if (param == "OVERLAP_PERCENT" && isNumber(value)) {
@@ -92,6 +94,10 @@ bool SurveyPath::OnStartUp()
     }
     else if (param == "ALIGNMENT_LINE_LEN" && isNumber(value)) {
       m_alignment_line_len = dval;
+      handled = true;
+    }
+    else if (param == "MAX_BEND_ANGLE" && isNumber(value)) {
+      m_max_bend_angle = dval;
       handled = true;
     }
 
@@ -301,7 +307,7 @@ void SurveyPath::CreateNewPath() {
     MOOSTrace("Planning next path.\n");
     #endif
     PathPlan planner = PathPlan(m_swath_record, m_swath_side, m_op_region,
-      m_swath_overlap, true);
+      m_swath_overlap, m_max_bend_angle, true);
     m_survey_path = planner.GenerateNextPath();
     #if DEBUG
     MOOSTrace("Number of pts in new_path: %d\n",m_survey_path.size());

@@ -47,7 +47,7 @@ class PathPlan
 {
   public:
     PathPlan(const RecordSwath &last_swath, BoatSide side, BPolygon op_region,
-      double margin=0.2, bool restrict_to_region = true);
+      double margin=0.2, double max_bend_angle=60, bool restrict_to_region = true);
     ~PathPlan() {};
     /**
      * Generates an offset path
@@ -95,6 +95,8 @@ class PathPlan
      *                 If false, means the path was already inside the polygon.
      */
     std::pair<bool, bool> ClipToRegion(std::list<EPoint> &path_pts);
+
+    std::pair<bool, bool> ClipToRegion2(std::list<EPoint> &path_pts);
 
     /**
      * Extends a path to meet the edges of a region if it does not already.
