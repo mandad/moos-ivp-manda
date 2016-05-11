@@ -11,13 +11,15 @@
 #include "AngleUtils.h"
 #include "GeomUtils.h"
 
-#define DEBUG false
+#define DEBUG true
+#define TURN_THRESHOLD 20
 //---------------------------------------------------------
 // Constructor
 
 RecordSwath::RecordSwath(double interval) : m_min_allowable_swath(0),
                          m_has_records(false), m_acc_dist(0),
-                         m_interval(interval), m_output_side(BoatSide::Unknown)
+                         m_interval(interval), m_output_side(BoatSide::Unknown),
+                         m_previous_record{0, 0, 0, 0, 0, 0}
 {
   /*
   // Define a precision model using 0,0 as the reference origin
@@ -44,6 +46,11 @@ RecordSwath::RecordSwath(double interval) : m_min_allowable_swath(0),
 
 bool RecordSwath::AddRecord(double swath_stbd, double swath_port, double loc_x,
                             double loc_y, double heading, double depth) {
+  // Dont add records at duplicate location
+  if (loc_x == m_previous_record.loc_x && loc_y == m_previous_record.loc_y
+        && heading == m_previous_record.heading)
+    return false;
+
   SwathRecord record = {loc_x, loc_y, heading, swath_stbd, swath_port, depth};
   m_interval_record.push_back(record);
   m_interval_swath[BoatSide::Stbd].push_back(swath_stbd);
@@ -54,12 +61,25 @@ bool RecordSwath::AddRecord(double swath_stbd, double swath_port, double loc_x,
     #if DEBUG
     std::cout << "Accumulated distance: " + std::to_string(m_acc_dist) + "\n";
     #endif
+
     if (m_acc_dist >= m_interval) {
       #if DEBUG
       std::cout << "Running MinInterval()\n";
       #endif
       m_acc_dist = 0;
       MinInterval();
+    } else {
+      //Override the min interval on turns to the outside
+      double turn = angle180(angle180(heading) - angle180(m_min_record.back().heading));
+      if ((turn > TURN_THRESHOLD && m_output_side == BoatSide::Port)
+          || (turn < -TURN_THRESHOLD && m_output_side == BoatSide::Stbd)) {
+        #if DEBUG
+        std::cout << "Adding Turn Based Point\n";
+        #endif
+        m_min_record.push_back(record);
+        m_interval_record.clear();
+        m_interval_swath.clear();
+      }
     }
   }
 

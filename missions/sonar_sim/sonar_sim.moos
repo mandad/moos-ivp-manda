@@ -47,9 +47,9 @@ ProcessConfig = pSurveyPath
   first_line = $(FIRST_LINE)
   overlap_percent = 10
   path_interval = 30
-  turn_pt_offset = 40
-  alignment_line_len = 30
-  max_bend_angle = 90
+  turn_pt_offset = 200
+  alignment_line_len = 100
+  max_bend_angle = 70
 
   term_reporting = true
 }
@@ -61,7 +61,7 @@ ProcessConfig = pSonarFilter
 
    FilterLen  = 4  //seconds approx
    StDevLimit = 2
-   SimSwathAngle = 70
+   SimSwathAngle = 64 //RESON 7125
 }
 
 //------------------------------------------

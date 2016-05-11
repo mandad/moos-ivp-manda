@@ -213,12 +213,15 @@ bool SurveyPath::Iterate()
       swath_msg->SetFresh(false);
       if(InjestSwathMessage(swath_msg->GetStringVal())) {
         #if DEBUG
-        //MOOSTrace("pSurveyPath: Recording Swath message\n");
+        MOOSTrace("pSurveyPath: Recording Swath message\n");
         #endif
         m_swath_record.AddRecord(m_swath_info["stbd"], m_swath_info["port"],
           m_swath_info["x"], m_swath_info["y"], m_swath_info["hdg"],
           m_swath_info["depth"]);
         if (m_line_end && SwathOutsideRegion()) {
+          #if DEBUG
+          MOOSTrace("**** Ending Recording ****\n");
+          #endif
           m_recording = false;
           m_execute_path_plan = true;
         }
@@ -230,11 +233,7 @@ bool SurveyPath::Iterate()
     if (turn_msg->IsFresh()) {
       turn_msg->SetFresh(false);
       if (m_path_plan_done) {
-        #if DEBUG
-        MOOSTrace("pSurveyPath: Posting Turn Point\n");
-        #endif
-        SetMOOSVar("TurnPoint", "point=" + m_turn_pt.get_spec(), MOOSTime());
-        m_path_plan_done = false;
+        PostTurnPoint();
       } else {
         //Hold until processing is done
         MOOSTrace("pSurveyPath: Holding until processing complete\n");
@@ -242,17 +241,14 @@ bool SurveyPath::Iterate()
         m_post_turn_when_ready = true;
 
         // If we still don't have the swath outside the region, plan anyway
+        #if DEBUG
+        MOOSTrace("**** Ending Recording ****\n");
+        #endif
         m_recording = false;
         m_execute_path_plan = true;
       }
     } else if (m_post_turn_when_ready && m_path_plan_done) {
-      #if DEBUG
-      MOOSTrace("pSurveyPath: Posting Turn Point\n");
-      #endif
-      SetMOOSVar("TurnPoint", "point=" + m_turn_pt.get_spec(), MOOSTime());
-      SetMOOSVar("Stop", "false", MOOSTime());
-      m_post_turn_when_ready = false;
-      m_path_plan_done = false;
+      PostTurnPoint();
     }
   }
 
@@ -265,6 +261,11 @@ bool SurveyPath::Iterate()
 
   if (m_execute_path_plan) {
     m_execute_path_plan = false;
+    //clear the last raw path
+    if (m_raw_survey_path.size() > 0) {
+      Notify("VIEW_SEGLIST", m_raw_survey_path.get_spec_pts(2)
+          + "active=false,label=raw_path,", MOOSTime());
+    }
     #if DEBUG
     MOOSTrace("pSurveyPath: Launching Path Processing Thread\n");
     #endif
@@ -329,6 +330,21 @@ void SurveyPath::PostSurveyRegion() {
   PostSwathSide();
 }
 
+void SurveyPath::PostTurnPoint() {
+  #if DEBUG
+  MOOSTrace("pSurveyPath: Posting Turn Point\n");
+  #endif
+  SetMOOSVar("TurnPoint", "point=" + m_turn_pt.get_spec(), MOOSTime());
+  SetMOOSVar("Stop", "false", MOOSTime());
+  if (m_raw_survey_path.size() > 0) {
+    Notify("VIEW_SEGLIST", m_raw_survey_path.get_spec_pts(2) + ",label=raw_path," +
+      "label_color=darkgoldenrod,edge_color=darkgoldenrod,vertex_color=yellow,edge_size=2," +
+      "vertex_size=3", MOOSTime());
+  }
+  m_post_turn_when_ready = false;
+  m_path_plan_done = false;
+}
+
 void SurveyPath::CreateNewPath() {
   #if DEBUG
   if (m_swath_record.GetOutputSide() == BoatSide::Stbd) {
@@ -364,6 +380,7 @@ void SurveyPath::CreateNewPath() {
     PostSwathSide();
     m_swath_record.SetOutputSide(m_swath_side);
     m_swath_record.ResetLine();
+    m_raw_survey_path = planner.GetRawPath();
   }
   m_path_plan_done = true;
 }

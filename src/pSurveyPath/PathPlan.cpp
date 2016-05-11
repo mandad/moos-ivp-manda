@@ -44,19 +44,28 @@ XYSegList PathPlan::GenerateNextPath() {
     return XYSegList();
 
   bool all_zero = true;
+  double swath_width = 0;
+
+  double rot_angle = 0;
+  if (m_planning_side == BoatSide::Stbd) {
+    rot_angle = -PI/2;
+  } else if (m_planning_side == BoatSide::Port) {
+    rot_angle = PI/2;
+  }
+  Eigen::Rotation2D<double> rot_matrix(rot_angle);
 
   for(unsigned int i = 0; i < edge_pts.size(); i++) {
     Eigen::Vector2d back_vec;
     Eigen::Vector2d forward_vec;
     bool back_vec_set = false;
     if (i > 0) {
-      back_vec.x() = edge_pts.get_vx(i) - edge_pts.get_vx(i-1);
-      back_vec.y() = edge_pts.get_vy(i) - edge_pts.get_vy(i-1);
+      back_vec =  Eigen::Vector2d(edge_pts.get_vx(i) - edge_pts.get_vx(i-1),
+          edge_pts.get_vy(i) - edge_pts.get_vy(i-1));
       back_vec_set = true;
     }
     if (i < edge_pts.size() - 1) {
-      forward_vec.x() = edge_pts.get_vx(i + 1) - edge_pts.get_vx(i);
-      forward_vec.y() = edge_pts.get_vy(i + 1) - edge_pts.get_vy(i);
+      forward_vec = Eigen::Vector2d(edge_pts.get_vx(i + 1) - edge_pts.get_vx(i),
+          edge_pts.get_vy(i + 1) - edge_pts.get_vy(i));
     } else {
       forward_vec = back_vec;
     }
@@ -64,28 +73,30 @@ XYSegList PathPlan::GenerateNextPath() {
       back_vec = forward_vec;
     }
 
-    // Average the headings
-    back_vec.normalize();
-    forward_vec.normalize();
-    Eigen::Vector2d avg_vec = (back_vec + forward_vec) / 2;
+    // Make sure this point is unique, could also test point locations
+    if (back_vec.squaredNorm() != 0 && forward_vec.squaredNorm() != 0) {
+      // Average the headings
+      back_vec.normalize();
+      forward_vec.normalize();
+      Eigen::Vector2d avg_vec = (back_vec + forward_vec) / 2;
 
-    // Get the offset vector
-    double rot_angle = 0;
-    if (m_planning_side == BoatSide::Stbd) {
-      rot_angle = PI;
-    } else if (m_planning_side == BoatSide::Port) {
-      rot_angle = -PI;
+      // Get the offset vector
+      Eigen::Vector2d offset_vec = rot_matrix * avg_vec;
+      offset_vec.normalize();
+      swath_width = m_last_line.SwathWidth(m_planning_side, i);
+      offset_vec *= swath_width * (1 - m_margin);
+
+      // Get offset location and save
+      Eigen::Vector2d swath_loc(edge_pts.get_vx(i), edge_pts.get_vy(i));
+      m_next_path_pts.push_back(swath_loc + offset_vec);
+
+      #if DEBUG
+      MOOSTrace("Swath Width: %0.2f  Offset X: %0.2f Offset Y: %0.2f Avg Vec: <%0.2f, %0.2f>\n",
+        swath_width, offset_vec.x(), offset_vec.y(), avg_vec.x(), avg_vec.y());
+      MOOSTrace("Back Vec: <%0.2f, %0.2f>, Forward Vec: <%0.2f, %0.2f>\n",
+        back_vec.x(), back_vec.y(), forward_vec.x(), forward_vec.y());
+      #endif
     }
-    Eigen::Rotation2D<double> rot_matrix(rot_angle);
-    Eigen::Vector2d offset_vec = rot_matrix * avg_vec;
-    double swath_width = m_last_line.SwathWidth(m_planning_side, i);
-    offset_vec *= swath_width * (1 - m_margin);
-
-    // Get offset location and save
-    Eigen::Vector2d swath_loc(edge_pts.get_vx(i), edge_pts.get_vy(i));
-    m_next_path_pts.push_back(swath_loc + offset_vec);
-
-    MOOSTrace("Swath Width: %0.2f\n", swath_width);
     all_zero = all_zero && (swath_width == 0);
   }
 
