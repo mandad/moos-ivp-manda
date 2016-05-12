@@ -29,6 +29,7 @@ typedef std::list<EPoint> PathList;
 typedef boost::geometry::model::d2::point_xy<double> BPoint;
 typedef boost::geometry::model::polygon<BPoint> BPolygon;
 typedef boost::geometry::model::linestring<BPoint> BLinestring;
+typedef boost::geometry::model::ring<BPoint> BRing;
 
 /**
  * @struct XYPt
@@ -137,6 +138,8 @@ class PathPlan
     double Cross2d(EPoint vec1, EPoint vec2);
 
     EPoint EPointFromBPoint(BPoint boost_point);
+
+    std::vector<BPoint> SegmentRingIntersect(BPoint seg_pt1, BPoint seg_pt2, BRing ring);
 
     /**
      * Determines whether segments are counter clockwise in smalles angle with

@@ -296,6 +296,19 @@ TEST_CASE("Line Clipping to polygon") {
     REQUIRE(last_pt.y() == 3);
   }
 
+  SECTION("Only One Inside") {
+    std::list<EPoint> path = {EPoint(-1, 1), EPoint(1, 3), EPoint(5, 3)};
+
+    std::pair<bool, bool> clipped = planner.ClipToRegion(path);
+
+    INFO(PrintPath(path));
+
+    REQUIRE(!clipped.first);
+    REQUIRE(path.size() == 0);
+
+    REQUIRE(!clipped.second);
+  }
+
   SECTION("Two outside in front") {
     std::list<EPoint> path = {EPoint(-3, 2), EPoint(-1, 1), EPoint(1, 3),
       EPoint(3, 3), EPoint(5, 3)};
@@ -357,14 +370,14 @@ TEST_CASE("Line Clipping to polygon") {
   }
 
   SECTION("Front Point Inside") {
-    std::list<EPoint> path = {EPoint(1, 3), EPoint(3, 3), EPoint(5, 3)};
+    std::list<EPoint> path = {EPoint(1, 3), EPoint(3, 3), EPoint(3.5, 3), EPoint(5, 3)};
 
     std::pair<bool, bool> clipped = planner.ClipToRegion(path);
 
     INFO(PrintPath(path));
 
     REQUIRE(!clipped.first);
-    REQUIRE(path.size() == 3);
+    REQUIRE(path.size() == 4);
     auto first_pt = path.front();
     REQUIRE(first_pt.x() == 1);
     REQUIRE(first_pt.y() == 3);

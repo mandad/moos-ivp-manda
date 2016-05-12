@@ -2,7 +2,7 @@
 #-------------------------------------------------------
 #  Part 1: Check for and handle command-line arguments
 #-------------------------------------------------------
-TIME_WARP=10
+TIME_WARP=15
 SCENARIO=3
 JUST_MAKE="no"
 for ARGI; do

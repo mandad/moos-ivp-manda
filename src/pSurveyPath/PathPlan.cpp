@@ -439,7 +439,7 @@ void PathPlan::RestrictToRegion(std::list<EPoint>& path_points) {
   }
 }
 
-std::pair<bool, bool> PathPlan::ClipToRegion(std::list<EPoint> &path_pts) {
+std::pair<bool, bool> PathPlan::ClipToRegion2(std::list<EPoint> &path_pts) {
   if (path_pts.size() < 1) {
     return std::make_pair(false, false);
   }
@@ -559,8 +559,123 @@ std::pair<bool, bool> PathPlan::ClipToRegion(std::list<EPoint> &path_pts) {
   return std::make_pair(begin_clipped, end_clipped);
 }
 
-std::pair<bool, bool> PathPlan::ClipToRegion2(std::list<EPoint> &path_pts) {
-  return std::make_pair(true, true);
+std::pair<bool, bool> PathPlan::ClipToRegion(std::list<EPoint> &path_pts) {
+  if (path_pts.size() < 1) {
+    return std::make_pair(false, false);
+  }
+
+  bool begin_clipped{false}, end_clipped{false};
+  auto outer_ring = m_op_region.outer();
+  bool any_within = false;
+
+  // Test if beginning outside the region
+  auto first_point = path_pts.begin();
+  BPoint last_pt(first_point->x(), first_point->y());
+
+  if (path_pts.size() == 1) {
+    if (!boost::geometry::within(last_pt, outer_ring)) {
+      path_pts.clear();
+    }
+    return std::make_pair(false, false);
+  }
+
+  BPoint last_outside, last_inside;
+  std::list<EPoint>::iterator start_erase, end_erase, insert_loc;
+  bool found_crossing = false;
+  int clip_mode = 0;    // 1 = out to in, 2 = in to out
+  int count_in = 0;
+
+  bool first_intersects = boost::geometry::intersects(last_pt, outer_ring);
+  bool first_within = boost::geometry::within(last_pt, outer_ring);
+  if (first_intersects && !first_within)
+    begin_clipped = true;
+  bool point_inside = first_within || first_intersects;
+  if (point_inside) {
+    insert_loc = first_point;
+    clip_mode = 2;
+    any_within = true;
+    count_in = 1;
+  } else {
+    clip_mode = 1;
+    start_erase = first_point;
+  }
+  auto point = std::next(first_point);
+
+  // Loop through the points
+  while (point != path_pts.end()) {
+    BPoint this_pt(point->x(), point->y());
+    point_inside = boost::geometry::within(this_pt, outer_ring);
+    if (!any_within && point_inside)
+      any_within = true;
+
+    if (clip_mode == 1 && point_inside) {
+      end_erase = point;
+      insert_loc = path_pts.erase(start_erase, end_erase);
+      auto intersect_pts = SegmentRingIntersect(last_pt, this_pt, outer_ring);
+      if (intersect_pts.size() > 0) {
+        insert_loc = path_pts.insert(insert_loc, EPointFromBPoint(intersect_pts[0]));
+      }
+      any_within = true;
+      begin_clipped = true;
+      count_in = 1;
+      clip_mode = 2;
+      // Insert loc is the intersection, next pt is inside (but may not have
+      // inserted).  So this will duplicate a point in tests
+      point = std::next(insert_loc);
+    } else if (clip_mode == 2 && !point_inside) {
+      auto insert_out = point;
+      if (count_in > 2) {
+        start_erase = point;
+        auto intersect_pts = SegmentRingIntersect(last_pt, this_pt, outer_ring);
+        if (intersect_pts.size() > 0) {
+          insert_out = path_pts.insert(point,
+              EPointFromBPoint(intersect_pts[intersect_pts.size()-1]));
+          start_erase = std::next(insert_out);
+        }
+      } else {
+        start_erase = insert_loc;
+      }
+      clip_mode = 1;
+      end_clipped = true;
+      point = std::next(insert_out);
+    } else if (clip_mode == 2) {
+      count_in++;
+      point = std::next(point);
+    } else {
+      point = std::next(point);
+    }
+
+    //prev_point_inside = point_inside;
+    last_pt = this_pt;
+  }
+
+  //reached the end without clipping
+  if (clip_mode == 1 && !point_inside) {
+    path_pts.erase(start_erase, path_pts.end());
+    end_clipped = true;
+  }
+
+  // All points are outside the region
+  if (!any_within || path_pts.size() == 0) {
+    path_pts.clear();
+    return std::make_pair(false, false);
+  }
+
+  return std::make_pair(begin_clipped, end_clipped);
+}
+
+std::vector<BPoint> PathPlan::SegmentRingIntersect(BPoint seg_pt1, BPoint seg_pt2, BRing ring) {
+  #if ((BOOST_VERSION / 100000) >= 1 && ((BOOST_VERSION / 100) % 1000) >= 59)
+  BLinestring segment({seg_pt1, seg_pt2});
+  #else
+  BLinestring segment;
+  boost::geometry::append(segment, seg_pt1);
+  boost::geometry::append(segment, seg_pt2);
+  #endif
+  std::vector<BPoint> intersect_pts;
+
+  boost::geometry::intersection(segment, ring, intersect_pts);
+  return intersect_pts;
 }
 
 void PathPlan::ExtendToEdge(std::list<EPoint> &path_points, bool begin) {
