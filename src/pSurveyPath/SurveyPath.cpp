@@ -26,7 +26,7 @@ SurveyPath::SurveyPath() : m_first_swath_side{BoatSide::Stbd},
   m_line_begin{false}, m_turn_reached{false}, m_recording{false},
   m_swath_record(10), m_swath_side{BoatSide::Stbd}, m_turn_pt_set{false},
   m_post_turn_when_ready{false}, m_path_plan_done{false}, m_max_bend_angle{60},
-  m_execute_path_plan{false}
+  m_execute_path_plan{false}, m_plan_thread_running{false}
 {
   //m_swath_side = AdvanceSide(m_first_swath_side);
   m_swath_record.SetOutputSide(m_swath_side);
@@ -213,7 +213,7 @@ bool SurveyPath::Iterate()
       swath_msg->SetFresh(false);
       if(InjestSwathMessage(swath_msg->GetStringVal())) {
         #if DEBUG
-        MOOSTrace("pSurveyPath: Recording Swath message\n");
+        //MOOSTrace("pSurveyPath: Recording Swath message\n");
         #endif
         m_swath_record.AddRecord(m_swath_info["stbd"], m_swath_info["port"],
           m_swath_info["x"], m_swath_info["y"], m_swath_info["hdg"],
@@ -271,6 +271,7 @@ bool SurveyPath::Iterate()
     #endif
     //I 'm sure there must be something non threadsafe about this, I haven't
     // thought it through much
+    m_plan_thread_running = true;
     /*m_path_plan_thread = */std::thread(&SurveyPath::CreateNewPath, this).detach();
     #if DEBUG
     MOOSTrace("pSurveyPath: Thread Launched\n");
@@ -382,6 +383,7 @@ void SurveyPath::CreateNewPath() {
     m_swath_record.ResetLine();
     m_raw_survey_path = planner.GetRawPath();
   }
+  m_plan_thread_running = false;
   m_path_plan_done = true;
 }
 
@@ -461,7 +463,13 @@ bool SurveyPath::buildReport()
   m_msgs << "File: pSurveyPath                            \n";
   m_msgs << "============================================ \n";
 
-  m_msgs << m_posted_path_str;
+  if (!m_plan_thread_running) {
+    m_msgs << "Last Path Length: " << m_survey_path.size() << "\n\n";
+  }
+
+  if (m_recording) {
+    m_msgs << "Recording Swath Info\n";
+  }
 
   // ACTable actab(4);
   // actab << "Alpha | Bravo | Charlie | Delta";

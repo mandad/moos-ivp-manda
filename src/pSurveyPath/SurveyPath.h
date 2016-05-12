@@ -77,6 +77,7 @@ class SurveyPath : public AppCastingMOOSApp
   XYSegList m_alignment_line;
 
   std::thread m_path_plan_thread;
+  bool m_plan_thread_running;
 };
 
 #endif

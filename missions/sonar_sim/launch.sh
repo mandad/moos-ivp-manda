@@ -25,10 +25,11 @@ done
 #  Part 2: Create the .moos and .bhv files. 
 #-------------------------------------------------------
 
-# 1 = Summer Hydro 2015
+# 1 = Summer Hydro 2015 half step test
 # 2 = Strait of Georgia 
 # 3 = Fairweather H12758 Offshore
 # 4 = H12472 Shumagins
+# 5 = Summer Hydro 2015 North Region
 if [ $SCENARIO = 1 ]; then
   #MOOS Stuff
   START_POS="x=705,y=-4379,speed=0,heading=180"
@@ -48,13 +49,15 @@ if [ $SCENARIO = 1 ]; then
 elif [ $SCENARIO = 2 ]; then
   #MOOS Stuff
   # START_POS="4082,9023"
-  START_POS="4998,13971"
+  START_POS="x=4998,y=13971,speed=0,heading=90"
   LAT_ORIGIN=48.7188051
   LONG_ORIGIN=-122.8272363
   TIFF_FILE=H12322_8m_Color.tif
   PAN_X=30
   PAN_Y=-593
   ZOOM=2.22
+  FIRST_SIDE=Stbd
+  FIRST_LINE=Auto #"4948,14031:3916,14613"
   # Python Stuff
   # OP_POLY="[(4032,9073),(2838,12080),(5720,13208),(7249,10238)]"
   OP_POLY="[(4948,14031),(3916,14613),(5226,16027),(5579,15694),(5954,15515)]"
@@ -94,6 +97,22 @@ elif [ $SCENARIO = 4 ]; then
   BATHY_GRID="'../path_planning/terrain/H12472_4m_Depths.tiff'"
   X_OFFSET=466802.000
   Y_OFFSET=6084894.000
+elif [ $SCENARIO = 5 ]; then
+  #MOOS Stuff
+  START_POS="x=4107,y=-589,speed=0,heading=225"
+  LAT_ORIGIN=42.97373611
+  LONG_ORIGIN=-70.7968875
+  TIFF_FILE=SH_2015.tif
+  PAN_X=-535
+  PAN_Y=-788
+  ZOOM=0.60
+  FIRST_SIDE=Stbd
+  FIRST_LINE=Auto
+  OP_WKT="POLYGON_((4075_-650,3293_-2464,2405_-2259,3180_-387))"
+  # Python Stuff
+  BATHY_GRID="'../path_planning/terrain/SH15_Surface.tif'"
+  X_OFFSET=353408.656
+  Y_OFFSET=6083.832+4753335.914
 fi
 # What is nsplug? Type "nsplug --help" or "nsplug --manual" 
 
