@@ -18,7 +18,7 @@ endif()
 # COMPONENTS geometry
 FIND_PACKAGE(Boost REQUIRED )
 INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIRS}  )
-# This is needed for Boost 1.58 on Ubuntu 16.04
+# This is needed for Boost 1.58 on Ubuntu 16.04git 
 add_definitions(-DBOOST_MATH_DISABLE_FLOAT128)
 
 SET(SRC
