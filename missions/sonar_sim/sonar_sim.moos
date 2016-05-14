@@ -61,7 +61,8 @@ ProcessConfig = pSonarFilter
 
    FilterLen  = 4  //seconds approx
    StDevLimit = 2
-   SimSwathAngle = 64 //RESON 7125
+   //SimSwathAngle = 64 //RESON 7125
+   SimSwathAngle = 73 //EM2040 (75 max)
 }
 
 //------------------------------------------
@@ -82,18 +83,6 @@ ProcessConfig = uSimMarine
 {
   AppTick	= 10
   CommsTick	= 10
-
-  // SH 15 Northern Region
-  // start_x       = 4107
-  // start_y       = -589
-
-  // SH 15 Southern Region
-  //start_x       = 2509
-  //start_y       = -4328
-
-  //Half Step Test
-  // start_x = 705
-  // start_y = -4379
 
   START_POS = $(START_POS)
 
@@ -141,11 +130,6 @@ ProcessConfig = pMarineViewer
   CommsTick  = 4
 
   tiff_file            = $(TIFF_FILE)
-
-  // SH15 Northern Region
-  // set_pan_x            = -535
-  // set_pan_y            = -788
-  // zoom                 = 0.60
 
   // SH15 Southern Region
   set_pan_x            = $(PAN_X)

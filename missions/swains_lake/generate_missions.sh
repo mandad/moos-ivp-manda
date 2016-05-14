@@ -40,7 +40,7 @@ if [ $SCENARIO = 1 ]; then
   #SHORE_IP="192.168.1.26"
   SHORE_PORT=9300
   #In this case, the RPi
-  BOAT_MODEM_IP="10.42.0.23"
+  BOAT_MODEM_IP="10.42.0.105"
   #BOAT_MODEM_IP="192.168.1.243"
   BOAT_PORT=9301
   ASV_NAME="ASV3"
@@ -51,7 +51,7 @@ if [ $SCENARIO = 1 ]; then
   SURVEY_SPEED=0.7
   TEST_SPEED=0.7
   BOAT_LENGTH=2.5
-  SIMULATION=FALSE
+  SIMULATION=TRUE
   #BHV_FILE=targ_consthead_pattern.bhv
 fi
 # What is nsplug? Type "nsplug --help" or "nsplug --manual"

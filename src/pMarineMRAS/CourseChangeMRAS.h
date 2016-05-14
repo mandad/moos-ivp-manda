@@ -12,18 +12,19 @@ class CourseChangeMRAS
 {
 public:
     CourseChangeMRAS();
-    CourseChangeMRAS(double dfKStar, double dfTauStar, double dfZ,  
-        double dfBeta, double dfAlpha, double dfGamma, double dfXi, 
-        double dfRudderLimit, double dfCruisingSpeed, double dfShipLength, 
+    CourseChangeMRAS(double dfKStar, double dfTauStar, double dfZ,
+        double dfBeta, double dfAlpha, double dfGamma, double dfXi,
+        double dfRudderLimit, double dfCruisingSpeed, double dfShipLength,
         double dfMaxROT, bool bDecreaseAdapt);
     ~CourseChangeMRAS() {}
 
     double Run(double dfDesiredHeading, double dfMeasuredHeading, double dfMeasuredROT,
      double dfSpeed, double dfTime);
     void SetParameters(double dfKStar, double dfTauStar, double dfZ,
-        double dfBeta, double dfAlpha, double dfGamma, double dfXi, 
-        double dfRudderLimit, double dfCruisingSpeed, double dfShipLength, 
+        double dfBeta, double dfAlpha, double dfGamma, double dfXi,
+        double dfRudderLimit, double dfCruisingSpeed, double dfShipLength,
         double dfMaxROT, bool bDecreaseAdapt, double dfRudderSpeed);
+    void ComputeModelParameters();
     void ResetModel(double dfHeading, double dfROT, double dfRudder);
     static double TwoSidedLimit(double dfNumToLimit, double dfLimit);
     void SwitchController(double dfTauStar, double dfKStar);
@@ -87,7 +88,7 @@ public:
     double m_dfF;
     double m_dfModelRudder;
     double m_dfx2;
-    
+
     double m_dfRudderPos;
     double m_dfRudderSpeed;
 };

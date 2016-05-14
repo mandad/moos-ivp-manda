@@ -30,6 +30,7 @@ done
 # 3 = Fairweather H12758 Offshore
 # 4 = H12472 Shumagins
 # 5 = Summer Hydro 2015 North Region
+# 6 = SH 15 South Region
 if [ $SCENARIO = 1 ]; then
   #MOOS Stuff
   START_POS="x=705,y=-4379,speed=0,heading=180"
@@ -109,6 +110,22 @@ elif [ $SCENARIO = 5 ]; then
   FIRST_SIDE=Stbd
   FIRST_LINE=Auto
   OP_WKT="POLYGON_((4075_-650,3293_-2464,2405_-2259,3180_-387))"
+  # Python Stuff
+  BATHY_GRID="'../path_planning/terrain/SH15_Surface.tif'"
+  X_OFFSET=353408.656
+  Y_OFFSET=6083.832+4753335.914
+elif [ $SCENARIO = 6 ]; then
+  #MOOS Stuff
+  START_POS="x=2509,y=-4328,speed=0,heading=225"
+  LAT_ORIGIN=42.97373611
+  LONG_ORIGIN=-70.7968875
+  TIFF_FILE=SH_2015.tif
+  PAN_X=258
+  PAN_Y=927
+  ZOOM=0.53
+  FIRST_SIDE=Stbd
+  FIRST_LINE=Auto
+  OP_WKT="POLYGON_((2497.0_-4374.0,1727_-6077,588_-5468,1272_-3864))"
   # Python Stuff
   BATHY_GRID="'../path_planning/terrain/SH15_Surface.tif'"
   X_OFFSET=353408.656

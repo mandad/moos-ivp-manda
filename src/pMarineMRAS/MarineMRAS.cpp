@@ -41,7 +41,7 @@ MarineMRAS::MarineMRAS()
   m_ROT_filter_len = 4;
   m_cruising_speed = 2;
   m_length = 2;
-  m_decrease_adapt = true;
+  m_decrease_adapt = false;
   m_speed_factor   = 0;
   m_max_thrust = 100;
   m_rudder_speed = 15;
