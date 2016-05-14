@@ -2,7 +2,8 @@
 #-------------------------------------------------------
 #  Part 1: Check for and handle command-line arguments
 #-------------------------------------------------------
-TIME_WARP=10
+TIME_WARP=15
+SCENARIO=3
 JUST_MAKE="no"
 for ARGI; do
     if [ "${ARGI}" = "--help" -o "${ARGI}" = "-h" ] ; then
@@ -10,10 +11,10 @@ for ARGI; do
 	printf "  --just_build, -j    \n" 
 	printf "  --help, -h         \n" 
 	exit 0;
-    elif [ "${ARGI//[^0-9]/}" = "$ARGI" -a "$TIME_WARP" = 1 ]; then 
-        TIME_WARP=$ARGI
+    elif [ "${ARGI//[^0-9]/}" = "$ARGI" ]; then 
+        SCENARIO=$ARGI
     elif [ "${ARGI}" = "--just_build" -o "${ARGI}" = "-j" ] ; then
-	JUST_MAKE="yes"
+	     JUST_MAKE="yes"
     else 
 	printf "Bad Argument: %s \n" $ARGI
 	exit 0
@@ -23,10 +24,12 @@ done
 #-------------------------------------------------------
 #  Part 2: Create the .moos and .bhv files. 
 #-------------------------------------------------------
-SCENARIO=2
-# 1 = Summer Hydro 2015
+
+# 1 = Summer Hydro 2015 half step test
 # 2 = Strait of Georgia 
 # 3 = Fairweather H12758 Offshore
+# 4 = H12472 Shumagins
+# 5 = Summer Hydro 2015 North Region
 if [ $SCENARIO = 1 ]; then
   #MOOS Stuff
   START_POS="x=705,y=-4379,speed=0,heading=180"
@@ -36,22 +39,25 @@ if [ $SCENARIO = 1 ]; then
   PAN_X=814 #258
   PAN_Y=769 #927
   ZOOM=1.98 #0.53
-  # Python Stuff
-  OP_POLY="[(655,-4429),(550,-4813),(198,-4725),(300,-4353)]"
+  FIRST_SIDE=Stbd
+  FIRST_LINE=Auto
   OP_WKT="POLYGON_((655_-4429,550_-4813,198_-4725,300_-4353))"
+  # Python Stuff
   BATHY_GRID="'../path_planning/terrain/SH15_Surface.tif'"
   X_OFFSET=353408.656
   Y_OFFSET=6083.832+4753335.914
 elif [ $SCENARIO = 2 ]; then
   #MOOS Stuff
   # START_POS="4082,9023"
-  START_POS="4998,13971"
+  START_POS="x=4998,y=13971,speed=0,heading=90"
   LAT_ORIGIN=48.7188051
   LONG_ORIGIN=-122.8272363
   TIFF_FILE=H12322_8m_Color.tif
   PAN_X=30
   PAN_Y=-593
   ZOOM=2.22
+  FIRST_SIDE=Stbd
+  FIRST_LINE=Auto #"4948,14031:3916,14613"
   # Python Stuff
   # OP_POLY="[(4032,9073),(2838,12080),(5720,13208),(7249,10238)]"
   OP_POLY="[(4948,14031),(3916,14613),(5226,16027),(5579,15694),(5954,15515)]"
@@ -61,26 +67,59 @@ elif [ $SCENARIO = 2 ]; then
   Y_OFFSET=5396228.0
 elif [ $SCENARIO = 3 ]; then
   #MOOS Stuff
-  # START_POS="4082,9023"
-  START_POS="x=-1625,y=4896,speed=0,heading=225"
-  LAT_ORIGIN=55.1622067
-  LONG_ORIGIN=-159.2832076
-  TIFF_FILE=FA_Polygon1_Color.tif
-  PAN_X=324
-  PAN_Y=125
-  ZOOM=0.13
-  OP_WKT="POLYGON_((-1663_4653,-4729_-3130,-2758_-3624,-1090_-4660,396_421,964_3757))"
+  START_POS="x=1313,y=10426,speed=0,heading=180"
+  LAT_ORIGIN=55.1066916
+  LONG_ORIGIN=-159.3599676
+  TIFF_FILE=FA_Polygon1_Color_Tracklines.tif
+  PAN_X=243
+  PAN_Y=-7
+  ZOOM=0.14
+  FIRST_SIDE=Port
+  FIRST_LINE="1339,10190:1422,4698:1072,1377"
+  OP_WKT="POLYGON_((1339_10190,1422_4698,1072_1377,5245_1246,5049_6155,4361_10249))"
   # Python Stuff
-  #OP_POLY="[(4948,14031),(3916,14613),(5226,16027),(5579,15694),(5954,15515)]"
   BATHY_GRID="'../path_planning/terrain/FA_Polygon1_Depths.tif'"
-  X_OFFSET=-1029929.473
-  Y_OFFSET=6385706.239
+  X_OFFSET=477063.099
+  Y_OFFSET=6106708.425
+elif [ $SCENARIO = 4 ]; then
+  #MOOS Stuff
+  START_POS="x=570,y=8535,speed=0,heading=90"
+  LAT_ORIGIN=54.9103441
+  LONG_ORIGIN=-159.5186646
+  TIFF_FILE=H12472_4m_Color.tif
+  PAN_X=1344
+  PAN_Y=-732
+  ZOOM=1.25
+  FIRST_SIDE=Port
+  FIRST_LINE="643,8535:2245,8535"
+  OP_WKT="POLYGON_((643_8535,2245_8535,3898_10920,1994_10920,1777_12134,643_11609))"
+  # Python Stuff
+  BATHY_GRID="'../path_planning/terrain/H12472_4m_Depths.tiff'"
+  X_OFFSET=466802.000
+  Y_OFFSET=6084894.000
+elif [ $SCENARIO = 5 ]; then
+  #MOOS Stuff
+  START_POS="x=4107,y=-589,speed=0,heading=225"
+  LAT_ORIGIN=42.97373611
+  LONG_ORIGIN=-70.7968875
+  TIFF_FILE=SH_2015.tif
+  PAN_X=-535
+  PAN_Y=-788
+  ZOOM=0.60
+  FIRST_SIDE=Stbd
+  FIRST_LINE=Auto
+  OP_WKT="POLYGON_((4075_-650,3293_-2464,2405_-2259,3180_-387))"
+  # Python Stuff
+  BATHY_GRID="'../path_planning/terrain/SH15_Surface.tif'"
+  X_OFFSET=353408.656
+  Y_OFFSET=6083.832+4753335.914
 fi
 # What is nsplug? Type "nsplug --help" or "nsplug --manual" 
 
 nsplug sonar_sim.moos targ_sonar_sim.moos --path=../shared_plugins -f WARP=$TIME_WARP \
    LAT_ORIGIN=$LAT_ORIGIN   LONG_ORIGIN=$LONG_ORIGIN   START_POS=$START_POS \
-   TIFF_FILE="$TIFF_FILE"  PAN_X=$PAN_X  PAN_Y=$PAN_Y  ZOOM=$ZOOM  OP_WKT="$OP_WKT"
+   TIFF_FILE="$TIFF_FILE"  PAN_X=$PAN_X  PAN_Y=$PAN_Y  ZOOM=$ZOOM  \
+   OP_WKT="$OP_WKT" FIRST_SIDE=$FIRST_SIDE  FIRST_LINE=$FIRST_LINE
 
 # nsplug ~/code/asv-dev/utilities/python_moosapps/path_plan.py \
 #   ~/code/asv-dev/utilities/python_moosapps/targ_path_plan.py -f \

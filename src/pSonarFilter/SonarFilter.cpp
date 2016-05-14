@@ -17,6 +17,9 @@
 // #include <boost/accumulators/statistics/variance.hpp>
 
 using namespace std;
+// Used to reject noise, expecially in single beam systems
+#define MIN_DEPTH_LIMIT 0.5
+#define DEBUG false
 // using namespace boost::accumulators;
 
 //---------------------------------------------------------
@@ -30,6 +33,7 @@ SonarFilter::SonarFilter()
   m_filter_len = 10;
   m_sim_swath_angle = 70 * M_PI / 180;
   m_last_msg[0] = '\0';
+  m_last_depth = -1;
 }
 
 //---------------------------------------------------------
@@ -40,17 +44,6 @@ bool SonarFilter::OnNewMail(MOOSMSG_LIST &NewMail)
   AppCastingMOOSApp::OnNewMail(NewMail);
 
   UpdateMOOSVariables(NewMail);
-
-  //Check if we need to set autonomy mode again
-  CMOOSVariable * pDepth = GetMOOSVar("Depth");
-  double dfDepth = -1;
-  if (pDepth->IsFresh()) {
-    dfDepth = pDepth->GetDoubleVal();
-    // This sets a static 0.5m min depth at this time
-    if (dfDepth > 0.5) {
-      InjestDepthVal(dfDepth);
-    }
-  }
 
   /*
   MOOSMSG_LIST::iterator p;
@@ -92,6 +85,36 @@ bool SonarFilter::OnConnectToServer()
 bool SonarFilter::Iterate()
 {
   AppCastingMOOSApp::Iterate();
+
+  CMOOSVariable * pDepth = GetMOOSVar("Depth");
+  double dfDepth = -1;
+  if (pDepth->IsFresh()) {
+    dfDepth = pDepth->GetDoubleVal();
+    pDepth->SetFresh(false);
+    // This sets a static 0.5m min depth at this time
+    if (dfDepth > MIN_DEPTH_LIMIT) {
+      m_last_depth = dfDepth;
+      m_fresh_depth = m_nadir_filter.IngestValue(dfDepth);
+    }
+  }
+  pDepth = GetMOOSVar("Depth_Port");
+  dfDepth = -1;
+  if (pDepth->IsFresh()) {
+    dfDepth = pDepth->GetDoubleVal();
+    pDepth->SetFresh(false);
+    if (dfDepth > MIN_DEPTH_LIMIT) {
+      m_fresh_depth = m_port_filter.IngestValue(dfDepth);
+    }
+  }
+  pDepth = GetMOOSVar("Depth_Stbd");
+  dfDepth = -1;
+  if (pDepth->IsFresh()) {
+    dfDepth = pDepth->GetDoubleVal();
+    pDepth->SetFresh(false);
+    if (dfDepth > MIN_DEPTH_LIMIT) {
+      m_fresh_depth = m_stbd_filter.IngestValue(dfDepth) || m_fresh_depth;
+    }
+  }
 
   if (m_fresh_depth) {
     string swath_message = GenerateSwathMessage();
@@ -150,8 +173,14 @@ bool SonarFilter::OnStartUp()
   AddMOOSVariable("Y", "NAV_Y", "", 0);
   AddMOOSVariable("Heading", "NAV_HEADING", "", 0);
   AddMOOSVariable("Depth", "SONAR_DEPTH_M", "", 0);
+  AddMOOSVariable("Depth_Stbd", "SONAR_DEPTH_STBD_M", "", 0);
+  AddMOOSVariable("Depth_Port", "SONAR_DEPTH_PORT_M", "", 0);
   AddMOOSVariable("SonarWidth", "SONAR_WIDTH", "", 0);
   AddMOOSVariable("Swath", "", "SWATH_WIDTH", 0);
+
+  m_nadir_filter = StDevFilter(m_filter_len, m_std_limit, 1/GetAppFreq());
+  m_port_filter = StDevFilter(m_filter_len, m_std_limit, 1/GetAppFreq());
+  m_stbd_filter = StDevFilter(m_filter_len, m_std_limit, 1/GetAppFreq());
 
   registerVariables();
   return(true);
@@ -183,8 +212,11 @@ bool SonarFilter::buildReport()
   // actab << "one" << "two" << "three" << "four";
   // m_msgs << actab.getFormattedString();
 
-  m_msgs << "Last Depth:" << m_all_depths.front() << "\n";
-  m_msgs << "Output String:" << m_last_msg << "\n";
+  m_msgs << "Last Nadir Depth: " << m_last_depth << "\n";
+  m_msgs << "Nadir Filtered: " << m_nadir_filter.FilteredValue() << "\n";
+  m_msgs << "Port Filtered: " << m_port_filter.FilteredValue() << "\n";
+  m_msgs << "Stbd Filtered: " << m_stbd_filter.FilteredValue() << "\n";
+  m_msgs << "\nOutput String: \n" << m_last_msg << "\n";
 
   return(true);
 }
@@ -262,16 +294,31 @@ string SonarFilter::GenerateSwathMessage() {
   //CMOOSVariable * depth_var = GetMOOSVar("Depth");
 
   // There is a danger that the variables could not be set yet
-  double swath_width = 0;
-  swath_width = tan(m_sim_swath_angle) * m_last_valid_depth;
+  double swath_width_port = 0;
+  double swath_width_stbd = 0;
+  // Assume if one side is set, then both are
+  if (m_port_filter.FilteredValue() < 0) {
+    swath_width_port = tan(m_sim_swath_angle) * m_nadir_filter.FilteredValue();
+    swath_width_stbd = swath_width_port;
+  } else {
+    swath_width_port = tan(m_sim_swath_angle) * m_port_filter.FilteredValue();
+    swath_width_stbd = tan(m_sim_swath_angle) * m_stbd_filter.FilteredValue();
+  }
+
+  double post_depth = m_nadir_filter.FilteredValue();
+  if (post_depth < 0) {
+    post_depth = (m_port_filter.FilteredValue() + m_stbd_filter.FilteredValue()) * 0.5;
+  }
 
   snprintf (message, 200, "x=%0.2f;y=%0.2f;hdg=%0.2f;port=%0.1f;stbd=%0.1f;depth=%0.2f",
     x_var->GetDoubleVal(), y_var->GetDoubleVal(), heading_var->GetDoubleVal(),
-    swath_width, swath_width, m_last_valid_depth);
+    swath_width_port, swath_width_stbd, post_depth);
 
   strncpy(m_last_msg, message, sizeof(message));
   string msg_string(message);
+  #if DEBUG
   MOOSTrace("SonarFilt - GeneratedMessage:\n");
   MOOSTrace(msg_string + "\n");
+  #endif
   return msg_string;
 }

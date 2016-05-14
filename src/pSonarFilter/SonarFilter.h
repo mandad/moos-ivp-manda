@@ -9,6 +9,7 @@
 #define SonarFilter_HEADER
 
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
+#include "StDevFilter.h"
 
 class SonarFilter : public AppCastingMOOSApp
 {
@@ -16,13 +17,13 @@ class SonarFilter : public AppCastingMOOSApp
    SonarFilter();
    ~SonarFilter() {};
 
- protected: // Standard MOOSApp functions to overload  
+ protected: // Standard MOOSApp functions to overload
    bool OnNewMail(MOOSMSG_LIST &NewMail);
    bool Iterate();
    bool OnConnectToServer();
    bool OnStartUp();
 
- protected: // Standard AppCastingMOOSApp function to overload 
+ protected: // Standard AppCastingMOOSApp function to overload
    bool buildReport();
 
  protected:
@@ -36,7 +37,7 @@ class SonarFilter : public AppCastingMOOSApp
     enum sonar_type
     {
       SBES,
-      MBES 
+      MBES
     };
     int                 m_filter_len;
     double              m_std_limit;
@@ -47,9 +48,14 @@ class SonarFilter : public AppCastingMOOSApp
  private: // State variables
     std::list<double>   m_all_depths;
     double              m_last_valid_depth;
+    double              m_last_depth;
     bool                m_fresh_depth;
     char                m_last_msg[200];
     int                 m_cycles_since_last;
+    //Implement this with a map
+    StDevFilter         m_nadir_filter;
+    StDevFilter         m_port_filter;
+    StDevFilter         m_stbd_filter;
 };
 
-#endif 
+#endif

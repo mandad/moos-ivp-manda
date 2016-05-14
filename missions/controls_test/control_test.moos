@@ -119,7 +119,7 @@ ProcessConfig = uSimNomoto
   k_star = 1.6
   tau_star = 0.8 
   vessel_length = 2.0   // m
-  rudder_offset = 5
+  rudder_offset = -5
 
   noise_sim = true
   noise_magnitude = 0.8

@@ -1,4 +1,4 @@
-vim //-------------------------------------------------
+//-------------------------------------------------
 // NAME: Damian Manda
 // FILE: sonar_sim.moos
 // DATE: 1 Aug 2015
@@ -31,6 +31,7 @@ ProcessConfig = ANTLER
   Run = uProcessWatch	  @ NewConsole = false
   Run = pNodeReporter	  @ NewConsole = false
   Run = pSurveyPath     @ NewConsole = false
+  Run = pSonarFilter    @ NewConsole = false
 }
 
 //------------------------------------------------
@@ -42,16 +43,26 @@ ProcessConfig = pSurveyPath
   CommsTick = 10
 
   Op_Region = $(OP_WKT)
-  first_side = Stbd
-  //first_line = -1663,4653:-4729,-3130
-  overlap_percent = 20
-  path_interval = 10
-  turn_pt_offset = 15
-  alignment_line_len = 20
+  first_side = $(FIRST_SIDE)
+  first_line = $(FIRST_LINE)
+  overlap_percent = 10
+  path_interval = 20
+  turn_pt_offset = 100
+  alignment_line_len = 80
+  max_bend_angle = 70
 
   term_reporting = true
 }
 
+ProcessConfig = pSonarFilter
+{
+   AppTick   = 15
+   CommsTick = 15
+
+   FilterLen  = 4  //seconds approx
+   StDevLimit = 2
+   SimSwathAngle = 64 //RESON 7125
+}
 
 //------------------------------------------
 // uProcessWatch config block
@@ -69,8 +80,8 @@ ProcessConfig = pSurveyPath
 
 ProcessConfig = uSimMarine
 {
-  AppTick	= 4
-  CommsTick	= 4
+  AppTick	= 10
+  CommsTick	= 10
 
   // SH 15 Northern Region
   // start_x       = 4107
@@ -85,9 +96,6 @@ ProcessConfig = uSimMarine
   // start_y = -4379
 
   START_POS = $(START_POS)
-
-  // start_heading = 180
-  // start_speed   = 0
 
   prefix        = NAV
 
@@ -143,12 +151,12 @@ ProcessConfig = pMarineViewer
   set_pan_x            = $(PAN_X)
   set_pan_y            = $(PAN_Y)
   zoom                 = $(ZOOM)
-  vehicle_shape_scale  = 1.5
+  vehicle_shape_scale  = 3
   hash_delta           = 100
   hash_shade           = 0.4
   hash_viewable        = false
 
-  trails_point_size   = 3
+  trails_point_size   = 4
   trails_length = 10000
 
   // Appcast configuration

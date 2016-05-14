@@ -29,6 +29,7 @@ typedef std::list<EPoint> PathList;
 typedef boost::geometry::model::d2::point_xy<double> BPoint;
 typedef boost::geometry::model::polygon<BPoint> BPolygon;
 typedef boost::geometry::model::linestring<BPoint> BLinestring;
+typedef boost::geometry::model::ring<BPoint> BRing;
 
 /**
  * @struct XYPt
@@ -47,7 +48,7 @@ class PathPlan
 {
   public:
     PathPlan(const RecordSwath &last_swath, BoatSide side, BPolygon op_region,
-      double margin=0.2, bool restrict_to_region = true);
+      double margin=0.2, double max_bend_angle=60, bool restrict_to_region = true);
     ~PathPlan() {};
     /**
      * Generates an offset path
@@ -96,6 +97,8 @@ class PathPlan
      */
     std::pair<bool, bool> ClipToRegion(std::list<EPoint> &path_pts);
 
+    std::pair<bool, bool> ClipToRegion2(std::list<EPoint> &path_pts);
+
     /**
      * Extends a path to meet the edges of a region if it does not already.
      * Adds to the last segment, extending it as a ray from the end.  Can
@@ -135,6 +138,8 @@ class PathPlan
     double Cross2d(EPoint vec1, EPoint vec2);
 
     EPoint EPointFromBPoint(BPoint boost_point);
+
+    std::vector<BPoint> SegmentRingIntersect(BPoint seg_pt1, BPoint seg_pt2, BRing ring);
 
     /**
      * Determines whether segments are counter clockwise in smalles angle with
@@ -193,6 +198,8 @@ class PathPlan
 
     BPolygon XYPolygonToBoostPolygon(XYPolygon& poly);
 
+    XYSegList GetRawPath() { return m_raw_path; }
+
     /**
      * @brief Selects specific elements from a list by index.
      * @details Replicates the select by index functionality of numpy or
@@ -241,6 +248,7 @@ class PathPlan
     BoatSide m_planning_side;
     // PointList m_next_path_pts;
     std::list<Eigen::Vector2d> m_next_path_pts;
+    XYSegList m_raw_path;
 };
 
 #endif

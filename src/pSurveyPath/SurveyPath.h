@@ -34,9 +34,11 @@ class SurveyPath : public AppCastingMOOSApp
    BoatSide AdvanceSide(BoatSide side);
    bool InjestSwathMessage(std::string msg);
    void PostSurveyRegion();
+   void PostTurnPoint();
    bool DetermineStartAndTurn(XYSegList& next_pts, bool post_turn = false);
    void CreateNewPath();
    void PostSwathSide();
+   bool SwathOutsideRegion();
 
  private: // Configuration variables
   BoatSide m_first_swath_side;
@@ -45,6 +47,7 @@ class SurveyPath : public AppCastingMOOSApp
   double m_turn_pt_offset;
   bool m_remove_in_coverage;
   double m_swath_overlap;
+  double m_max_bend_angle;
 
  private: // State variables
   //BoatSide m_next_swath_side;
@@ -65,13 +68,16 @@ class SurveyPath : public AppCastingMOOSApp
   std::map<std::string, double> m_swath_info;
   std::string m_posted_path_str;
   XYSegList m_survey_path;
+  XYSegList m_raw_survey_path;
   XYPoint m_turn_pt;
   bool m_turn_pt_set;
   bool m_post_turn_when_ready;
   bool m_path_plan_done;
+  bool m_execute_path_plan;
   XYSegList m_alignment_line;
 
   std::thread m_path_plan_thread;
+  bool m_plan_thread_running;
 };
 
 #endif
