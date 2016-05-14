@@ -39,7 +39,7 @@ double SpeedControl::Run(double desired_speed, double speed, double desired_head
                          double course_over_ground) {
   if (DEBUG)
     MOOSTrace("Speed Control: Desired Speed = %.2f\n", desired_speed);
-  if (isnan(desired_speed) || !m_thrust_map_set) {
+  if (std::isnan(desired_speed) || !m_thrust_map_set) {
     if (DEBUG)
       MOOSTrace("Speed Control: Passed NaN Desired Speed or No Thrust Map\n");
     return m_thrust_output;
