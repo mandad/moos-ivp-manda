@@ -10,7 +10,7 @@
 #include "CourseKeepMRAS.h"
 #include <math.h>
 
-#define KP_LIMIT 2.5
+#define KP_LIMIT 100
 #define KI_ROT_THRESHOLD 0.15 //percent
 #define MIN_SPEED 0.5
 #define MIN_ADAPT_RUDDER 0.25  //percent

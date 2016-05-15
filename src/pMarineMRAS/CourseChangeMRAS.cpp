@@ -13,7 +13,7 @@
 #define USE_SERIES_MODEL true
 #define LIMIT_ROT_INC true
 #define RESET_THRESHOLD 5
-#define KP_LIMIT 2.5
+#define KP_LIMIT 5
 
 using namespace std;
 
