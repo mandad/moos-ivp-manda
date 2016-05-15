@@ -32,7 +32,7 @@ ProcessConfig = ANTLER
   Run = uTimerScript    @ NewConsole = false ~ uTS_StartTimer
   Run = uTimerScript    @ NewConsole = false ~ uTS_TurnTimer
   Run = pMarineMRAS     @ NewConsole = false
-  Run = pMarinePID      @ NewConsole = false
+  //Run = pMarinePID      @ NewConsole = false
   Run = pEchoVar        @ NewConsole = false
 
   one = --size=1400x800
@@ -49,9 +49,9 @@ ProcessConfig = pMarineMRAS
    //K_Star = 1.65 //1.65 
    //Tau_Star = 0.95 //0.95
    // For Course Change Model
-   K_Star = 1.6  //1.5 or 2.7?
-   Tau_Star = 0.9  //0.15
-   DampingRatio = 0.2
+   K_Star = 2.0  //1.5 or 2.7?
+   Tau_Star = 1.4  //0.15
+   DampingRatio = 0.6
    NaturalFrequency = 1.3 //1.3 for Kp = 1.2
 
    //Adaptation parameters
@@ -59,8 +59,8 @@ ProcessConfig = pMarineMRAS
    //Beta =  0.00005     //Speed of Kp or Km/Tm adaptation
    //Alpha = 0.00001    //Speed of Kd or 1/Tm adaptation
    //For Course Change
-   Beta =  0     //Speed of Kp or Km/Tm adaptation
-   Alpha = 0    //Speed of Kd or 1/Tm adaptation
+   Beta =  0.01     //Speed of Kp or Km/Tm adaptation
+   Alpha = 0.05    //Speed of Kd or 1/Tm adaptation
 
    Gamma = 0    //Speed of Ki adaptation
    Xi = 0.9   // <= 1, not used if DecreaseAdaptation = false
@@ -74,16 +74,17 @@ ProcessConfig = pMarineMRAS
    RudderLimit = 45  //should be deg (but Sim uses 100 as limit)
    RudderDeadband = 0
    RudderSpeed = 90 // deg/s
-   CruisingSpeed = 1.6 // m/s
-   Length = 2 //m
+   CruisingSpeed = 3.6 // m/s
+   Length = 45 //m
    MaxROT = 100
    DiscardLargeROT = false;
 
    //Speed settings (use one or the other)
    //ThrustPercent = 50
-   //Speed_Factor = 31.25
+   Speed_Factor = 13.89 //31.25
    MaxThrust = 100
-   thrust_map = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
+   //thrust_map = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
+   //thrust_map = 0:0, 19:2, 30:2.6, 50:3.6, 58:4, 77:5, 100:6.2
 
    NoOutput = false  //used to record data
 
@@ -111,7 +112,8 @@ ProcessConfig = uSimNomoto
   max_acceleration = 0.5
   max_deceleration = 0.3
   
-  thrust_map    = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
+  //thrust_map    = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
+  thrust_map    = 0:0, 19:2, 30:2.6, 50:3.6, 58:4, 77:5, 100:6.2
   thrust_reflect = true
 
   //drift_vector = 90, 0.5
@@ -124,9 +126,9 @@ ProcessConfig = uSimNomoto
   wave_direction = 45   // degrees
 
   //Nomoto model settings
-  k_star = 1.6
-  tau_star = 0.8 
-  vessel_length = 2.0   // m
+  k_star = 2.0
+  tau_star = 1.4 
+  vessel_length = 45.0   // m
   rudder_offset = 0
 
   noise_sim = false
@@ -340,10 +342,10 @@ ProcessConfig = uTS_TurnTimer
   reset_time  = end
   upon_awake = restart
 
-  event = var=CONST_HDG_UPDATES, val=heading=90, time=30
-  event = var=CONST_HDG_UPDATES, val=heading=270, time=60
-  event = var=CONST_HDG_UPDATES, val=heading=10, time=90
-  event = var=CONST_HDG_UPDATES, val=heading=-170, time=120
+  event = var=CONST_HDG_UPDATES, val=heading=90, time=120
+  event = var=CONST_HDG_UPDATES, val=heading=-90, time=480
+  event = var=CONST_HDG_UPDATES, val=heading=10, time=840
+  event = var=CONST_HDG_UPDATES, val=heading=-170, time=1200
 }
 
 //------------------------------------------

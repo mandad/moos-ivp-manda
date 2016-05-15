@@ -40,7 +40,7 @@ Behavior = BHV_ConstantSpeed
    // ------------------------------------
             basewidth = 0.2         
              duration = no-time-limit
-                speed = 1.6
+                speed = 3.6
             peakwidth = 0            
           summitdelta = 0            
  }

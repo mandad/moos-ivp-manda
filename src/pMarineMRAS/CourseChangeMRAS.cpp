@@ -170,6 +170,7 @@ bool CourseChangeMRAS::NewHeading(double dfSpeed) {
 
     //from literature:
     //m_dfKp0 = 2.5 * m_dfCruisingSpeed / dfSpeed;
+    // Better for small boats
     m_dfKp0 = 1.2 * m_dfCruisingSpeed / dfSpeed;
     if (m_dfKp0 > KP_LIMIT) {
         m_dfKp0 = KP_LIMIT;
@@ -177,7 +178,7 @@ bool CourseChangeMRAS::NewHeading(double dfSpeed) {
 
     //This equation is incorrect in Van Amerongen
     m_dfKd0 = (m_dfShipLength * 2 * m_dfZ * sqrt(m_dfKp0 * m_dfKStar * m_dfTauStar) - 1) /
-        (dfSpeed * m_dfKStar);
+        (dfSpeed * m_dfKStar * 6);
     /*if (m_dfKd0 < m_dfKp0) {
         m_dfKd0 = m_dfKp0;
     } else */
@@ -202,7 +203,7 @@ bool CourseChangeMRAS::NewHeading(double dfSpeed) {
 }
 
 void CourseChangeMRAS::ComputeModelParameters() {
-  m_dfTauM = m_dfTauStar * m_dfShipLength / m_dfCruisingSpeed; //* 0.5 from lit
+  m_dfTauM = 0.3 * m_dfTauStar * m_dfShipLength / m_dfCruisingSpeed; //* 0.5 from lit
   m_dfKpm = 1 / (4 * m_dfZ * m_dfZ * m_dfTauM);
   m_dfP12 = 0.0615 * m_dfTauM / m_dfKpm;
   m_dfP22 = m_dfTauM * (0.02 + m_dfP12);

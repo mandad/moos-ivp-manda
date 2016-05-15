@@ -157,10 +157,10 @@ void SimEngine::propagateSpeed(NodeRecord& record, const ThrustMap& tmap,
   double prev_speed  = record.getSpeed();
 
   // Apply a slowing penalty proportional to the rudder/turn
-  rudder = vclip(rudder, -100, 100);
-  double rudder_magnitude = fabs(rudder);
-  double vpct = (rudder_magnitude / 100) * 0.85;
-  next_speed *= (1.0 - vpct);
+  // rudder = vclip(rudder, -100, 100);
+  // double rudder_magnitude = fabs(rudder);
+  // double vpct = (rudder_magnitude / 100) * 0.85;
+  // next_speed *= (1.0 - vpct);
   if (wave_sim && next_speed != 0) {
     double gamma = angle180(angle180(record.getHeading()) - angle180(m_wave_dir)) * M_PI/180;
     // Waves effect speed the most head on, just a guess on the scaling factor
