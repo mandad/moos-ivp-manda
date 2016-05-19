@@ -143,7 +143,7 @@ void SimEngine::propagateDepth(NodeRecord& record,
 void SimEngine::propagateSpeed(NodeRecord& record, const ThrustMap& tmap,
 			       double delta_time, double thrust,
 			       double rudder, double max_accel, 
-			       double max_decel, bool wave_sim)
+			       double max_decel, bool wave_sim, double vessel_len)
 {
   if(delta_time <= 0)
     return;
@@ -157,14 +157,14 @@ void SimEngine::propagateSpeed(NodeRecord& record, const ThrustMap& tmap,
   double prev_speed  = record.getSpeed();
 
   // Apply a slowing penalty proportional to the rudder/turn
-  // rudder = vclip(rudder, -100, 100);
-  // double rudder_magnitude = fabs(rudder);
-  // double vpct = (rudder_magnitude / 100) * 0.85;
-  // next_speed *= (1.0 - vpct);
+  rudder = vclip(rudder, -100, 100);
+  double rudder_magnitude = fabs(rudder);
+  double vpct = (rudder_magnitude / 100) * 0.85;
+  next_speed *= (1.0 - vpct);
   if (wave_sim && next_speed != 0) {
     double gamma = angle180(angle180(record.getHeading()) - angle180(m_wave_dir)) * M_PI/180;
     // Waves effect speed the most head on, just a guess on the scaling factor
-    next_speed += m_wave_out[0] * cos(gamma) * 0.15;
+    next_speed += m_wave_out[0] * cos(gamma) * 0.15 * 2 / vessel_len;
   }
 
   if(next_speed > prev_speed) {
@@ -245,7 +245,7 @@ void SimEngine::propagateHeading(NodeRecord& record,
   m_rot += m_dfModelPhiDotDot * delta_time;
   if (wave_sim && speed != 0) {
     double gamma = angle180(angle180(prev_heading) - angle180(m_wave_dir)) * M_PI/180;
-    m_rot += m_wave_out[0] * sin(2 * gamma);
+    m_rot += m_wave_out[0] * sin(2 * gamma) * 1.3 * 2 / vessel_len;
   }
   if (noise_sim && speed != 0) {
     m_rot += m_sensor_noise[0] * noise_magnitude;
@@ -282,7 +282,7 @@ void SimEngine::propagateSpeedDiffMode(NodeRecord& record, const ThrustMap& tmap
   double rudder = (thrust_lft - thrust_rgt) / 2;
 
   propagateSpeed(record, tmap, delta_time, thrust, rudder, max_accel, max_decel, 
-    false);  
+    false, 10);  
 }
 
 

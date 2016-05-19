@@ -565,7 +565,7 @@ void USM_MOOSApp::postNodeRecordUpdate(string prefix,
   }
 
   double new_speed = record.getSpeed();
-  new_speed = snapToStep(new_speed, 0.01);
+  //new_speed = snapToStep(new_speed, 0.01);
 
   Notify(prefix+"_HEADING", record.getHeading(), m_curr_time);
   Notify(prefix+"_SPEED", new_speed, m_curr_time);

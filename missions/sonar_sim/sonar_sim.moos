@@ -47,8 +47,8 @@ ProcessConfig = pSurveyPath
   first_line = $(FIRST_LINE)
   overlap_percent = 10
   path_interval = 20
-  turn_pt_offset = 100
-  alignment_line_len = 80
+  turn_pt_offset = 60
+  alignment_line_len = 40
   max_bend_angle = 70
 
   term_reporting = true

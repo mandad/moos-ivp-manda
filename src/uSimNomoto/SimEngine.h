@@ -55,8 +55,8 @@ public:
                 double m_max_depth_rate_speed);
 
   void propagateSpeed(NodeRecord&, const ThrustMap&, double delta_time, 
-                double thrust, double rudder,
-                double max_accel, double max_decel, bool wave_sim);
+                double thrust, double rudder, double max_accel, 
+                double max_decel, bool wave_sim, double vessel_len);
 
  void propagateHeading(NodeRecord& record,
                 double delta_time, double rudder, double thrust,

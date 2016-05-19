@@ -177,8 +177,9 @@ bool CourseChangeMRAS::NewHeading(double dfSpeed) {
     }
 
     //This equation is incorrect in Van Amerongen
+    // divided by 6 seems to be about right for some reason
     m_dfKd0 = (m_dfShipLength * 2 * m_dfZ * sqrt(m_dfKp0 * m_dfKStar * m_dfTauStar) - 1) /
-        (dfSpeed * m_dfKStar * 6);
+        (dfSpeed * m_dfKStar);
     /*if (m_dfKd0 < m_dfKp0) {
         m_dfKd0 = m_dfKp0;
     } else */

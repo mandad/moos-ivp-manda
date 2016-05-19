@@ -2,7 +2,7 @@
 #-------------------------------------------------------
 #  Part 1: Check for and handle command-line arguments
 #-------------------------------------------------------
-TIME_WARP=15
+TIME_WARP=10
 SCENARIO=3
 JUST_MAKE="no"
 for ARGI; do
@@ -109,7 +109,8 @@ elif [ $SCENARIO = 5 ]; then
   ZOOM=0.60
   FIRST_SIDE=Stbd
   FIRST_LINE=Auto
-  OP_WKT="POLYGON_((4075_-650,3293_-2464,2405_-2259,3180_-387))"
+  #OP_WKT="POLYGON_((4075_-650,3293_-2464,2405_-2259,3180_-387))"
+  OP_WKT="POLYGON_((3801_-1298,3293_-2464,2405_-2259,2973_-882))"
   # Python Stuff
   BATHY_GRID="'../path_planning/terrain/SH15_Surface.tif'"
   X_OFFSET=353408.656
@@ -130,6 +131,22 @@ elif [ $SCENARIO = 6 ]; then
   BATHY_GRID="'../path_planning/terrain/SH15_Surface.tif'"
   X_OFFSET=353408.656
   Y_OFFSET=6083.832+4753335.914
+elif [ $SCENARIO = 7 ]; then
+  #MOOS Stuff
+  START_POS="x=2509,y=-4328,speed=0,heading=225"
+  LAT_ORIGIN=55.8403068
+  LONG_ORIGIN=-155.6171624
+  TIFF_FILE=H12450_4m_Color.tif
+  PAN_X=258
+  PAN_Y=927
+  ZOOM=0.53
+  FIRST_SIDE=Stbd
+  FIRST_LINE=Auto
+  OP_WKT="POLYGON_((2497.0_-4374.0,1727_-6077,588_-5468,1272_-3864))"
+  # Python Stuff
+  BATHY_GRID="'../path_planning/terrain/H12450_4m_Depths.tiff'"
+  X_OFFSET=336422.000
+  Y_OFFSET=6191214.000
 fi
 # What is nsplug? Type "nsplug --help" or "nsplug --manual" 
 

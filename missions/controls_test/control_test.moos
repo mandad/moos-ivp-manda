@@ -8,7 +8,7 @@ ServerHost = localhost
 ServerPort = 9000
 Community  = asv
 
-MOOSTimeWarp = 5
+MOOSTimeWarp = 10
 
 // Forest Lake
 LatOrigin  = 43.825300 
@@ -49,15 +49,15 @@ ProcessConfig = pMarineMRAS
    //K_Star = 1.65 //1.65 
    //Tau_Star = 0.95 //0.95
    // For Course Change Model
-   K_Star = 1  //1.5 or 2.7?
-   Tau_Star = 0.7  //0.15
-   DampingRatio = 0.6
-   NaturalFrequency = 0.40 //1.3 //1.3 for Kp = 1.2
+   K_Star = 1.56
+   Tau_Star = 0.90  
+   DampingRatio = 1.2
+   NaturalFrequency = 2.5 //1.3 for Kp = 1.2
 
    //Adaptation parameters
    // For Course Keep
-   Beta =  0.05     //Speed of Kp or Km/Tm adaptation
-   Alpha = 0.01    //Speed of Kd or 1/Tm adaptation
+   Beta =  0.00002     //Speed of Kp or Km/Tm adaptation
+   Alpha = 0.00001    //Speed of Kd or 1/Tm adaptation
    //For Course Change
    //Beta =  0.01     //Speed of Kp or Km/Tm adaptation
    //Alpha = 0.05    //Speed of Kd or 1/Tm adaptation
@@ -74,16 +74,16 @@ ProcessConfig = pMarineMRAS
    RudderLimit = 45  //should be deg (but Sim uses 100 as limit)
    RudderDeadband = 0
    RudderSpeed = 90 // deg/s
-   CruisingSpeed = 3.6 // m/s
-   Length = 45 //m
+   CruisingSpeed = 1.6 // m/s
+   Length = 2 //m
    MaxROT = 100
    DiscardLargeROT = false;
 
    //Speed settings (use one or the other)
    //ThrustPercent = 50
-   Speed_Factor = 13.89 //31.25
+   //Speed_Factor = 13.89 //31.25
    MaxThrust = 100
-   //thrust_map = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
+   thrust_map = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
    //thrust_map = 0:0, 19:2, 30:2.6, 50:3.6, 58:4, 77:5, 100:6.2
 
    NoOutput = false  //used to record data
@@ -112,23 +112,23 @@ ProcessConfig = uSimNomoto
   max_acceleration = 0.5
   max_deceleration = 0.3
   
-  //thrust_map    = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
-  thrust_map    = 0:0, 19:2, 30:2.6, 50:3.6, 58:4, 77:5, 100:6.2
+  thrust_map    = 0:0, 25:0.9, 38:1.3, 50:1.6, 68:1.9, 75:2.1, 100:2.25
+  //thrust_map    = 0:0, 19:2, 30:2.6, 50:3.6, 58:4, 77:5, 100:6.2
   thrust_reflect = true
 
   //drift_vector = 90, 0.5
   term_reporting = true
 
   //wave settings
-  wave_sim = false
-  wave_sig_height = 0.2 // m
+  wave_sim = true
+  wave_sig_height = 0.4 // m
   wave_period = 3.5       // seconds
-  wave_direction = 45   // degrees
+  wave_direction = 0   // degrees
 
   //Nomoto model settings
-  k_star = 2.0
-  tau_star = 1.4 
-  vessel_length = 45.0   // m
+  k_star = 1.56
+  tau_star = 0.8 
+  vessel_length = 2.0   // m
   rudder_offset = 0
 
   noise_sim = false
@@ -222,6 +222,7 @@ ProcessConfig = pLogger
   Log = NAV_HEADING_OVER_GROUND @ 0
   Log = MRAS_MODEL_ROT_FILTERED @ 0
   Log = MRAS_RAW_ROT @ 0 
+  Log = USM_WAVE_AMP @ 0
 
   Log = NODE_REPORT_LOCAL @ 0 NOSYNC
   Log = NODE_REPORT @ 0 NOSYNC
@@ -342,10 +343,10 @@ ProcessConfig = uTS_TurnTimer
   reset_time  = end
   upon_awake = restart
 
-  event = var=CONST_HDG_UPDATES, val=heading=90, time=90
-  event = var=CONST_HDG_UPDATES, val=heading=-90, time=180
-  event = var=CONST_HDG_UPDATES, val=heading=10, time=270
-  event = var=CONST_HDG_UPDATES, val=heading=-170, time=360
+  event = var=CONST_HDG_UPDATES, val=heading=90, time=60
+  event = var=CONST_HDG_UPDATES, val=heading=67.5, time=120
+  event = var=CONST_HDG_UPDATES, val=heading=45, time=180
+  event = var=CONST_HDG_UPDATES, val=heading=0, time=240
 }
 
 //------------------------------------------
@@ -367,7 +368,7 @@ ProcessConfig = pMarineViewer
   hash_viewable        = false
 
   trails_point_size   = 1
-  trails_length       = 1000
+  trails_length       = 2000
 
   // Appcast configuration
   appcast_height       = 75
@@ -412,10 +413,10 @@ ProcessConfig = pMarineViewer
 
 ProcessConfig = pNodeReporter
 {
-  AppTick    = 2
-  CommsTick	 = 2
+  AppTick    = 5
+  CommsTick	 = 5
 
-  platform_type   = KAYAK
-  platform_length = 4
+  platform_type   = SHIP
+  platform_length = 5
 }
 

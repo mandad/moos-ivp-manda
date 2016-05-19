@@ -527,7 +527,7 @@ void USM_Model::propagateNodeRecord(NodeRecord& record,
     }
     m_sim_engine.propagateSpeed(record, m_thrust_map, delta_time,
 				m_thrust, m_rudder, m_max_acceleration,
-				m_max_deceleration, m_wave_sim);
+				m_max_deceleration, m_wave_sim, m_vessel_len);
     m_sim_engine.propagateHeading(record, delta_time, m_rudder, 
 				  m_thrust, m_turn_rate, m_rotate_speed, m_k_star, m_tau_star, 
           m_vessel_len, m_rudder_offset, m_wave_sim, m_noise_sim, 
