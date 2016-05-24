@@ -87,7 +87,7 @@ public:
   WaveParameters determineWaveParameters(NodeRecord& record, double wave_height, 
             double wave_period, double sample_T);
 
-  void PreFillWaves(WaveParameters params);
+  void PreFillWaves(WaveParameters params, double wave_period, double sample_T);
 
   bool m_thrust_mode_reverse;
   double m_rot;
@@ -100,6 +100,9 @@ public:
   std::deque<double> m_sensor_noise;
   std::default_random_engine m_rand_gen;
   std::normal_distribution<double> m_distribution;
+  // Low pass filter coeffs
+  std::vector<double> m_n;
+  std::vector<double> m_d;
 
   double m_wave_dir;
 };

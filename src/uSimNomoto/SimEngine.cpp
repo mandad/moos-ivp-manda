@@ -200,10 +200,6 @@ void SimEngine::propagateHeading(NodeRecord& record,
          double noise_magnitude)
 {
 
-  // double vessel_len = 2;
-  // double km_star = 1.66;
-  // double tm_star = 0.76;
-
   // Assumption is that the thruster and rudder are on the same
   // actuator, e.g., like the kayaks, or typical UUVs. A rotated
   // thruster contributes nothing to a turn unless the prop is 
@@ -334,9 +330,9 @@ void SimEngine::propagateHeadingDiffMode(NodeRecord& record,
 WaveParameters SimEngine::determineWaveParameters(NodeRecord& record, 
   double wave_height, double wave_period, double sample_T)
 {
-  double H = wave_height * 1/1.4; // H_s of the waves (m)
+  double H = wave_height / 1.4; // H_s of the waves (m)
   double T = wave_period;   // Average period (s)
-  double A = 172.75 * H*H / pow(T, 4);
+  double A = 172.75 * wave_height * wave_height / pow(T, 4);
   double B = 691 / pow(T, 4);
   double w0 = pow(4 * B / 5, 0.25);
 
@@ -351,7 +347,8 @@ WaveParameters SimEngine::determineWaveParameters(NodeRecord& record,
   // damping of the filter, choses so the variance is the same as waves
   // z = 0.05 in Amerongen
   // Smaller = more regular
-  double BW =  1/(10 * T) * 2 * M_PI; // hz in rads
+  // the bandwidth was found by experimentation
+  double BW =  0.017 * 2 * M_PI; // hz in rad/s
   double Q = we / BW;
   double zeta = 1/(2 * Q);
 
@@ -377,7 +374,7 @@ void SimEngine::propagateWaveSim(NodeRecord& record, double delta_time,
 
   // On first run through the function, spin up the filter
   if (m_noise.size() == 0)
-    PreFillWaves(p);
+    PreFillWaves(p, wave_period, sample_T);
 
   #if DEBUG
   cout << "b1: " << p.b1 << " b2: " << p.b2 << " a2: " << p.a2 << " a3 " << p.a3 << endl;
@@ -387,8 +384,8 @@ void SimEngine::propagateWaveSim(NodeRecord& record, double delta_time,
   m_noise.push_front(m_distribution(m_rand_gen));
 
   //Apply low pass filter, wc = 0.5 Hz (2 sec period)
-  m_filt_noise.push_front(0.0055 * m_noise[0] + 0.0111 * m_noise[1] 
-    + 0.0055 * m_noise[2] + 1.7786 * m_filt_noise[0] - 0.8008 * m_filt_noise[1]);
+  m_filt_noise.push_front(m_n[0] * m_noise[0] + m_n[1] * m_noise[1] 
+     + m_n[2] * m_noise[2] - m_d[1] * m_filt_noise[0] - m_d[2] * m_filt_noise[1]);
 
   // Turn the noise into waves with a bandpass filter
   m_wave_out.push_front(p.b1*m_filt_noise[0] + p.b2*m_filt_noise[1]
@@ -403,20 +400,39 @@ void SimEngine::propagateWaveSim(NodeRecord& record, double delta_time,
   #endif
 }
 
-void SimEngine::PreFillWaves(WaveParameters params) {
+void SimEngine::PreFillWaves(WaveParameters params, double wave_period, 
+    double sample_T) {
   // Fill the wave array
   m_noise.clear();
   #if DEBUG
   std::cout << "Waves prefilling" << endl;
   #endif
+  // Determine the coefficients of the filter
+  // set the cutoff to be T/3, it is unusual to have many higher than this
+  double fc = 3 / wave_period; //Hz
+  double wc = 2 * M_PI * fc;
+  double c = cos(wc * sample_T * 0.5)/sin(wc * sample_T * 0.5);
+
+  // Second order butterworth low pass
+  double c_sq = c * c;
+  double sq_2c = sqrt(2)*c;
+  m_n = {1, 2, 1};
+  m_d = {c_sq + sq_2c + 1, -2 * (c_sq - 1), c_sq - sq_2c + 1};
+  double factor = 1/m_d[0];
+  // Assumes n and d are the same size
+  for (int i = 0; i < m_n.size(); i++) {
+    m_n[i] *= factor;
+    m_d[i] *= factor;
+  }
+
   for (int i = 0; i < 2; i++) {
     m_noise.push_front(m_distribution(m_rand_gen));
     if (i == 0) {
-      m_filt_noise.push_front(0.0201 * m_noise[0]);
+      m_filt_noise.push_front(m_n[0] * m_noise[0]);
       m_wave_out.push_front(params.b1*m_filt_noise[0]);
     } else if (i == 1) {
-      m_filt_noise.push_front(0.0201 * m_noise[0] + 0.0402 * m_noise[1] 
-        + 1.5610 * m_filt_noise[0]);
+      m_filt_noise.push_front(m_n[0] * m_noise[0] + m_n[1] * m_noise[1] 
+        - m_d[1] * m_filt_noise[0]);
       m_wave_out.push_front(params.b1*m_filt_noise[0] + params.b2*m_filt_noise[1]
         - params.a2*m_wave_out[0]);
     }
@@ -435,7 +451,7 @@ void SimEngine::propagateNoiseSim(double sample_T, bool wave_sim, double fc) {
   double c = cos(wc * sample_T * 0.5)/sin(wc * sample_T * 0.5);
   
   //filter coefficients
-  // Second order butterworth
+  // Second order butterworth high pass
   double c_sq = c * c;
   double sq_2c = sqrt(2)*c;
   vector<double> n{c_sq, -2 * c_sq, c_sq};

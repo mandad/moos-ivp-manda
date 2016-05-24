@@ -333,7 +333,7 @@ bool USM_MOOSApp::OnStartUp()
       reportUnhandledConfigWarning(orig);
   }
 
-  m_model.setAppPeriod(1/m_dfFreq);
+  m_model.setAppPeriod(1/GetAppFreq());
 
   // look for latitude, longitude global variables
   double latOrigin, longOrigin;
