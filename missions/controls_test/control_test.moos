@@ -117,7 +117,7 @@ ProcessConfig = uSimNomoto
   term_reporting = true
 
   //wave settings
-  wave_sim = true
+  wave_sim = false
   wave_sig_height = 0.4 // m
   wave_period = 4       // seconds
   wave_direction = 0   // degrees

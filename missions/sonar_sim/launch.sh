@@ -31,6 +31,7 @@ done
 # 4 = H12472 Shumagins
 # 5 = Summer Hydro 2015 North Region
 # 6 = SH 15 South Region
+# 7 = H12450 Chirikof
 if [ $SCENARIO = 1 ]; then
   #MOOS Stuff
   START_POS="x=705,y=-4379,speed=0,heading=180"
@@ -100,7 +101,8 @@ elif [ $SCENARIO = 4 ]; then
   Y_OFFSET=6084894.000
 elif [ $SCENARIO = 5 ]; then
   #MOOS Stuff
-  START_POS="x=4107,y=-589,speed=0,heading=225"
+  # START_POS="x=4107,y=-589,speed=0,heading=225"
+  START_POS="x=3837,y=-1224,speed=0,heading=225"
   LAT_ORIGIN=42.97373611
   LONG_ORIGIN=-70.7968875
   TIFF_FILE=SH_2015.tif
@@ -133,20 +135,22 @@ elif [ $SCENARIO = 6 ]; then
   Y_OFFSET=6083.832+4753335.914
 elif [ $SCENARIO = 7 ]; then
   #MOOS Stuff
-  START_POS="x=2509,y=-4328,speed=0,heading=225"
+  START_POS="x=8079,y=10357,speed=0,heading=315"
   LAT_ORIGIN=55.8403068
   LONG_ORIGIN=-155.6171624
   TIFF_FILE=H12450_4m_Color.tif
-  PAN_X=258
-  PAN_Y=927
-  ZOOM=0.53
+  PAN_X=-663
+  PAN_Y=-992
+  ZOOM=0.57
   FIRST_SIDE=Stbd
   FIRST_LINE=Auto
-  OP_WKT="POLYGON_((2497.0_-4374.0,1727_-6077,588_-5468,1272_-3864))"
+  OP_WKT="POLYGON_((8002_10463,5837_13928,6195_13928,6547_13996,6848_14083,7099_14238,7229_14479,8707_12208,8662_10841))"
   # Python Stuff
   BATHY_GRID="'../path_planning/terrain/H12450_4m_Depths.tiff'"
-  X_OFFSET=336422.000
-  Y_OFFSET=6191214.000
+  # X_OFFSET=336422.000
+  # Y_OFFSET=6191214.000
+  X_OFFSET=336975.000
+  Y_OFFSET=6190995.000
 fi
 # What is nsplug? Type "nsplug --help" or "nsplug --manual" 
 
