@@ -344,7 +344,10 @@ void SurveyPath::PostTurnPoint() {
   MOOSTrace("pSurveyPath: Posting Turn Point\n");
   #endif
   SetMOOSVar("TurnPoint", "point=" + m_turn_pt.get_spec(), MOOSTime());
-  SetMOOSVar("Stop", "false", MOOSTime());
+  // Don't restart the survey if there are no points
+  if (m_survey_path.size() > 2) {
+    SetMOOSVar("Stop", "false", MOOSTime());
+  }
   if (m_raw_survey_path.size() > 0) {
     Notify("VIEW_SEGLIST", m_raw_survey_path.get_spec_pts(2) + ",label=raw_path," +
       "label_color=darkgoldenrod,edge_color=darkgoldenrod,vertex_color=yellow,edge_size=2," +
