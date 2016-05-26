@@ -41,7 +41,7 @@ LLTrackUpdate::~LLTrackUpdate()
 bool LLTrackUpdate::OnNewMail(MOOSMSG_LIST &NewMail)
 {
   MOOSMSG_LIST::iterator p;
-   
+
   for(p=NewMail.begin(); p!=NewMail.end(); p++) {
     CMOOSMsg &msg = *p;
 
@@ -76,14 +76,14 @@ bool LLTrackUpdate::OnNewMail(MOOSMSG_LIST &NewMail)
     string key   = msg.GetKey();
     string comm  = msg.GetCommunity();
     double dval  = msg.GetDouble();
-    string sval  = msg.GetString(); 
+    string sval  = msg.GetString();
     string msrc  = msg.GetSource();
     double mtime = msg.GetTime();
     bool   mdbl  = msg.IsDouble();
     bool   mstr  = msg.IsString();
 #endif
    }
-	
+
    return(true);
 }
 
@@ -96,7 +96,7 @@ bool LLTrackUpdate::OnConnectToServer()
    // possibly look at the mission file?
    // m_MissionReader.GetConfigurationParam("Name", <string>);
    // m_Comms.Register("VARNAME", 0);
-	
+
    RegisterVariables();
    return(true);
 }
@@ -130,6 +130,9 @@ bool LLTrackUpdate::Iterate()
     m_Comms.Notify("START_UPDATE", points_post, dfTimeNow);
     m_alignment_update = false;
   }
+
+  MOOSTrace("Origin UTM: %0.2f, %0.2f\n", m_Geodesy.GetOriginEasting(),
+    m_Geodesy.GetOriginNorthing());
   return(true);
 }
 
@@ -172,7 +175,7 @@ bool LLTrackUpdate::OnStartUp()
       string original_line = *p;
       string param = stripBlankEnds(toupper(biteString(*p, '=')));
       string value = stripBlankEnds(*p);
-      
+
       if(param == "FOO") {
         //handled
       }
@@ -181,10 +184,10 @@ bool LLTrackUpdate::OnStartUp()
       }
     }
   }
-  
+
   m_timewarp = GetMOOSTimeWarp();
 
-  RegisterVariables();	
+  RegisterVariables();
   return(true);
 }
 

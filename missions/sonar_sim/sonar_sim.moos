@@ -32,6 +32,7 @@ ProcessConfig = ANTLER
   Run = pNodeReporter	  @ NewConsole = false
   Run = pSurveyPath     @ NewConsole = false
   Run = pSonarFilter    @ NewConsole = false
+  //Run = pLLTrackUpdate  @ NewConsole = false
 }
 
 //------------------------------------------------
@@ -46,7 +47,7 @@ ProcessConfig = pSurveyPath
   first_side = $(FIRST_SIDE)
   first_line = $(FIRST_LINE)
   overlap_percent = 10
-  path_interval = 40
+  path_interval = 20
   turn_pt_offset = 60
   alignment_line_len = 40
   max_bend_angle = 70
@@ -61,8 +62,14 @@ ProcessConfig = pSonarFilter
 
    FilterLen  = 4  //seconds approx
    StDevLimit = 2
-   SimSwathAngle = 64 //RESON 7125
-   //SimSwathAngle = 73 //EM2040 (75 max)
+   //SimSwathAngle = 64 //RESON 7125
+   SimSwathAngle = 73 //EM2040 (75 max)
+}
+
+ProcessConfig = pLLTrackUpdate
+{
+   AppTick   = 1
+   CommsTick = 1
 }
 
 //------------------------------------------

@@ -1,6 +1,8 @@
-lat_north = 42.97373611
-lat_south = 42.918975
-lon_east = -70.74305
-lon_west = -70.7968875
-datum_lat = 42.97373611
-datum_lon = -70.7968875 
+lat_north = 42.9737353
+lat_south = 42.9189756
+lon_west = -70.7968869
+lon_east = -70.7430497
+datum_lat = 42.9185596
+datum_lon = -70.7960903
+//x_offset = 353408.656
+//y_offset = 4753335.914
