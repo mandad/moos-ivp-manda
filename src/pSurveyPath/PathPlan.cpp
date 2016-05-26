@@ -564,6 +564,8 @@ std::pair<bool, bool> PathPlan::ClipToRegion(std::list<EPoint> &path_pts) {
     return std::make_pair(false, false);
   }
 
+  //std::cout << "Processing Line" << std::endl;
+
   bool begin_clipped{false}, end_clipped{false};
   auto outer_ring = m_op_region.outer();
   bool any_within = false;
@@ -585,6 +587,7 @@ std::pair<bool, bool> PathPlan::ClipToRegion(std::list<EPoint> &path_pts) {
   int clip_mode = 0;    // 1 = out to in, 2 = in to out
   int count_in = 0;
 
+  //Within is only true if it is fully contained, not on the border
   bool first_intersects = boost::geometry::intersects(last_pt, outer_ring);
   bool first_within = boost::geometry::within(last_pt, outer_ring);
   if (first_intersects && !first_within)
@@ -594,6 +597,7 @@ std::pair<bool, bool> PathPlan::ClipToRegion(std::list<EPoint> &path_pts) {
     insert_loc = first_point;
     clip_mode = 2;
     any_within = true;
+    // Give this a bonus so two inside when starting counts
     count_in = 1;
   } else {
     clip_mode = 1;
@@ -609,21 +613,30 @@ std::pair<bool, bool> PathPlan::ClipToRegion(std::list<EPoint> &path_pts) {
       any_within = true;
 
     if (clip_mode == 1 && point_inside) {
+      //std::cout << "Clip Out to In, (" << point->x() << ", " << point->y() << ")" << std::endl;
       end_erase = point;
       insert_loc = path_pts.erase(start_erase, end_erase);
       auto intersect_pts = SegmentRingIntersect(last_pt, this_pt, outer_ring);
       if (intersect_pts.size() > 0) {
         insert_loc = path_pts.insert(insert_loc, EPointFromBPoint(intersect_pts[0]));
+        count_in = 0;
+      } else if (boost::geometry::intersects(last_pt, outer_ring)){
+        // Last point is on the edge, re-insert it
+        insert_loc = path_pts.insert(insert_loc, EPointFromBPoint(last_pt));
+        count_in = 0;
+      } else {
+        // If no inserting, we skip this point for next test
+        count_in = 1;
       }
       any_within = true;
       begin_clipped = true;
-      count_in = 1;
       clip_mode = 2;
       // Insert loc is the intersection, next pt is inside (but may not have
       // inserted).  So this will duplicate a point in tests
       point = std::next(insert_loc);
     } else if (clip_mode == 2 && !point_inside) {
       auto insert_out = point;
+      //std::cout << "Clip In to Out, " << count_in << "pts (" << point->x() << ", " << point->y() << ")" << std::endl;
       if (count_in > 2) {
         start_erase = point;
         auto intersect_pts = SegmentRingIntersect(last_pt, this_pt, outer_ring);

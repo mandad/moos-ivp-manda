@@ -277,15 +277,15 @@ TEST_CASE("Line Clipping to polygon") {
   PathPlan planner = GetPolygonPlan(poly);
 
   SECTION("One outside each side") {
-    std::list<EPoint> path = {EPoint(-1, 1), EPoint(1, 3), EPoint(3, 3),
-      EPoint(5, 3)};
+    std::list<EPoint> path = {EPoint(-1, 1), EPoint(1, 3), EPoint(2, 3),
+      EPoint(3, 3), EPoint(5, 3)};
 
     std::pair<bool, bool> clipped = planner.ClipToRegion(path);
 
     INFO(PrintPath(path));
 
     REQUIRE(clipped.first);
-    REQUIRE(path.size() == 4);
+    REQUIRE(path.size() == 5);
     auto first_pt = path.front();
     REQUIRE(first_pt.x() == 0);
     REQUIRE(first_pt.y() == 2);
@@ -311,14 +311,14 @@ TEST_CASE("Line Clipping to polygon") {
 
   SECTION("Two outside in front") {
     std::list<EPoint> path = {EPoint(-3, 2), EPoint(-1, 1), EPoint(1, 3),
-      EPoint(3, 3), EPoint(5, 3)};
+      EPoint(2, 3), EPoint(3, 3), EPoint(5, 3)};
 
     std::pair<bool, bool> clipped = planner.ClipToRegion(path);
 
     INFO(PrintPath(path));
 
     REQUIRE(clipped.first);
-    REQUIRE(path.size() == 4);
+    REQUIRE(path.size() == 5);
     auto first_pt = path.front();
     REQUIRE(first_pt.x() == 0);
     REQUIRE(first_pt.y() == 2);
@@ -331,14 +331,14 @@ TEST_CASE("Line Clipping to polygon") {
 
   SECTION("Multiple outside in back") {
     std::list<EPoint> path = {EPoint(-1, 1), EPoint(1, 3),
-      EPoint(3, 3), EPoint(5, 3), EPoint(6, 2), EPoint(7, 2)};
+      EPoint(2, 3), EPoint(3, 3), EPoint(5, 3), EPoint(6, 2), EPoint(7, 2)};
 
     std::pair<bool, bool> clipped = planner.ClipToRegion(path);
 
     INFO(PrintPath(path));
 
     REQUIRE(clipped.first);
-    REQUIRE(path.size() == 4);
+    REQUIRE(path.size() == 5);
     auto first_pt = path.front();
     REQUIRE(first_pt.x() == 0);
     REQUIRE(first_pt.y() == 2);
@@ -350,18 +350,23 @@ TEST_CASE("Line Clipping to polygon") {
   }
 
   SECTION("Multiple crosses from front") {
-    std::list<EPoint> path = {EPoint(-1, 2), EPoint(0, 1), EPoint(1, 2),
-       EPoint(-1, 3), EPoint(1, 3), EPoint(3, 3), EPoint(5, 3)};
+    std::list<EPoint> path = {EPoint(-1, 2), EPoint(0, 1), EPoint(1, 1),
+       EPoint(1, 1.5), EPoint(1, 2), EPoint(-1, 3), EPoint(1, 3),
+       EPoint(2, 3), EPoint(3, 3), EPoint(5, 3)};
 
     std::pair<bool, bool> clipped = planner.ClipToRegion(path);
 
     INFO(PrintPath(path));
 
     REQUIRE(clipped.first);
-    REQUIRE(path.size() == 4);
+    REQUIRE(path.size() == 10);
     auto first_pt = path.front();
     REQUIRE(first_pt.x() == 0);
-    REQUIRE(first_pt.y() == 3);
+    REQUIRE(first_pt.y() == 1);
+
+    auto first_exit = std::next(path.begin(), 4);
+    REQUIRE(first_exit->x() == 0);
+    REQUIRE(first_exit->y() == 2.5);
 
     REQUIRE(clipped.second);
     auto last_pt = path.back();
@@ -427,15 +432,15 @@ TEST_CASE("Line Clipping to polygon") {
   }
 
   SECTION("Last Point On Edge") {
-    std::list<EPoint> path = {EPoint(-1, 2), EPoint(1, 3), EPoint(3, 3),
-      EPoint(4, 3)};
+    std::list<EPoint> path = {EPoint(-1, 2), EPoint(1, 3), EPoint(2, 3),
+      EPoint(3, 3), EPoint(4, 3)};
 
     std::pair<bool, bool> clipped = planner.ClipToRegion(path);
 
     INFO(PrintPath(path));
 
     REQUIRE(clipped.first);
-    REQUIRE(path.size() == 4);
+    REQUIRE(path.size() == 5);
     auto first_pt = path.front();
     REQUIRE(first_pt.x() == 0);
     REQUIRE(first_pt.y() == Approx(2.5));
@@ -484,6 +489,26 @@ TEST_CASE("Line Clipping to polygon") {
     REQUIRE(!clipped.first);
     REQUIRE(path.size() == 0);
     REQUIRE(!clipped.second);
+  }
+
+  SECTION("Only two on first part inside") {
+    std::list<EPoint> path = {EPoint(-1, 0), EPoint(1, 1), EPoint(1, 2),
+       EPoint(-1, 2), EPoint(1, 3), EPoint(2, 3), EPoint(3, 3), EPoint(5, 3)};
+
+    std::pair<bool, bool> clipped = planner.ClipToRegion(path);
+
+    INFO(PrintPath(path));
+
+    REQUIRE(clipped.first);
+    REQUIRE(path.size() == 5);
+    auto first_pt = path.front();
+    REQUIRE(first_pt.x() == 0);
+    REQUIRE(first_pt.y() == 2.5);
+
+    REQUIRE(clipped.second);
+    auto last_pt = path.back();
+    REQUIRE(last_pt.x() == 4);
+    REQUIRE(last_pt.y() == 3);
   }
 
 }

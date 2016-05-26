@@ -112,6 +112,8 @@ bool SurveyPath::OnStartUp()
   AddMOOSVariable("LineEnd", "LINE_END", "", 0);
   AddMOOSVariable("TurnReached", "TURN_REACHED", "", 0);
   AddMOOSVariable("AlignmentLineStart", "ALIGN_LINE", "", 0);
+  AddMOOSVariable("Heading", "NAV_HEADING", "", 0);
+  AddMOOSVariable("DesiredHeading", "DESIRED_HEADING", "", 0);
 
   // Publish variables
   AddMOOSVariable("TurnPoint", "", "TURN_UPDATE", 0);
@@ -196,14 +198,20 @@ bool SurveyPath::Iterate()
   // Need LineBegin for the beginning of the survey, after this it should be
   // triggered by AlignmentLineStart
   if (align_msg->IsFresh() && !m_recording) {
-    begin_msg->SetFresh(false);
-    align_msg->SetFresh(false);
-    if (toupper(align_msg->GetStringVal()) == "TRUE") {
-      #if DEBUG
-      MOOSTrace("**** Line beginning, starting to record swath ****\n");
-      #endif
-      m_recording = true;
-      m_line_end = false;
+    auto heading_msg = GetMOOSVar("Heading");
+    auto desired_msg = GetMOOSVar("DesiredHeading");
+    // Don't start logging until actually aligned
+    if (fabs(desired_msg->GetDoubleVal() - heading_msg->GetDoubleVal()) < 10 ||
+          begin_msg->IsFresh()) {
+      begin_msg->SetFresh(false);
+      align_msg->SetFresh(false);
+      if (toupper(align_msg->GetStringVal()) == "TRUE") {
+        #if DEBUG
+        MOOSTrace("**** Line beginning, starting to record swath ****\n");
+        #endif
+        m_recording = true;
+        m_line_end = false;
+      }
     }
   }
 
