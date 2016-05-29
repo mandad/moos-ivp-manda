@@ -102,7 +102,7 @@ elif [ $SCENARIO = 4 ]; then
 elif [ $SCENARIO = 5 ]; then
   #MOOS Stuff
   # START_POS="x=4107,y=-589,speed=0,heading=225"
-  START_POS="x=3837,y=-1224,speed=0,heading=225"
+  START_POS="x=3758,y=4972,speed=0,heading=225"
   LAT_ORIGIN=42.9185596
   LONG_ORIGIN=-70.7960903
   TIFF_FILE=SH_2015.tif
@@ -112,7 +112,7 @@ elif [ $SCENARIO = 5 ]; then
   FIRST_SIDE=Stbd
   FIRST_LINE=Auto
   #OP_WKT="POLYGON_((4075_-650,3293_-2464,2405_-2259,3180_-387))"
-  OP_WKT="POLYGON_((3801_-1298,3293_-2464,2405_-2259,2973_-882))"
+  OP_WKT="POLYGON_((3739_4927,3232_3763,2341_3956,2910_5317))"
   # Python Stuff
   BATHY_GRID="'../path_planning/terrain/SH15_Surface.tif'"
   X_OFFSET=353408.656

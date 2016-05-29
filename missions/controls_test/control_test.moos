@@ -8,7 +8,7 @@ ServerHost = localhost
 ServerPort = 9000
 Community  = asv
 
-MOOSTimeWarp = 10
+MOOSTimeWarp = 3
 
 // Forest Lake
 LatOrigin  = 43.825300 
@@ -46,10 +46,10 @@ ProcessConfig = pMarineMRAS
 
    // Model parameter initial conditions
    // For Course Change Model
-   K_Star = 1.56 //3.12 //1.56
-   Tau_Star = 1.0  
-   DampingRatio = 1.0
-   NaturalFrequency = 2.5 //1.3 for Kp = 1.2
+   K_Star = 1.6 //3.12 //1.56
+   Tau_Star = 0.95  
+   DampingRatio = 0.6
+   NaturalFrequency = 2.3 //1.3 for Kp = 1.2
 
    //Adaptation parameters
    // For Course Keep
@@ -59,10 +59,10 @@ ProcessConfig = pMarineMRAS
    //Beta =  0.01     //Speed of Kp or Km/Tm adaptation
    //Alpha = 0.05    //Speed of Kd or 1/Tm adaptation
 
-   Gamma = 0    //Speed of Ki adaptation
+   Gamma = 0.01    //Speed of Ki adaptation
    Xi = 0.9   // <= 1, not used if DecreaseAdaptation = false
    DecreaseAdaptation = false
-   ROTFilter = 1  // >= 1, 1 = Don't filter, > 1 = Low Pass Filter
+   ROTFilter = 3  // >= 1, 1 = Don't filter, > 1 = Low Pass Filter
    CourseKeepOnly = true
    CourseChangeOnly = false
    AdaptDuringTurns = true
@@ -117,18 +117,18 @@ ProcessConfig = uSimNomoto
   term_reporting = true
 
   //wave settings
-  wave_sim = false
+  wave_sim = true
   wave_sig_height = 0.4 // m
-  wave_period = 4       // seconds
-  wave_direction = 0   // degrees
+  wave_period = 3.5       // seconds
+  wave_direction = 45   // degrees
 
   //Nomoto model settings
   k_star = 1.56
   tau_star = 0.8 
   vessel_length = 2.0   // m
-  rudder_offset = 0
+  rudder_offset = -5
 
-  noise_sim = false
+  noise_sim =  true
   noise_magnitude = 0.8
 }
 
@@ -341,16 +341,16 @@ ProcessConfig = uTS_TurnTimer
   upon_awake = restart
 
   // For Controller tests
-  //event = var=CONST_HDG_UPDATES, val=heading=90, time=30
-  //event = var=CONST_HDG_UPDATES, val=heading=-90, time=60
-  //event = var=CONST_HDG_UPDATES, val=heading=10, time=90
-  //event = var=CONST_HDG_UPDATES, val=heading=170, time=120
+  event = var=CONST_HDG_UPDATES, val=heading=90, time=30
+  event = var=CONST_HDG_UPDATES, val=heading=-90, time=60
+  event = var=CONST_HDG_UPDATES, val=heading=10, time=90
+  event = var=CONST_HDG_UPDATES, val=heading=170, time=120
 
   // For Wave Effects
-  event = var=CONST_HDG_UPDATES, val=heading=90, time=60
-  event = var=CONST_HDG_UPDATES, val=heading=67.5, time=120
-  event = var=CONST_HDG_UPDATES, val=heading=45, time=180
-  event = var=CONST_HDG_UPDATES, val=heading=0, time=240
+  //event = var=CONST_HDG_UPDATES, val=heading=90, time=60
+  //event = var=CONST_HDG_UPDATES, val=heading=67.5, time=120
+  //event = var=CONST_HDG_UPDATES, val=heading=45, time=180
+  //event = var=CONST_HDG_UPDATES, val=heading=0, time=240
 }
 
 //------------------------------------------

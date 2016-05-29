@@ -131,8 +131,8 @@ bool LLTrackUpdate::Iterate()
     m_alignment_update = false;
   }
 
-  MOOSTrace("Origin UTM: %0.2f, %0.2f\n", m_Geodesy.GetOriginEasting(),
-    m_Geodesy.GetOriginNorthing());
+  // MOOSTrace("Origin UTM: %0.2f, %0.2f\n", m_Geodesy.GetOriginEasting(),
+  //   m_Geodesy.GetOriginNorthing());
   return(true);
 }
 

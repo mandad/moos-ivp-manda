@@ -9,6 +9,7 @@
 #include <regex>
 #include "MBUtils.h"
 #include "ACTable.h"
+#include "AngleUtils.h"
 #include "XYFormatUtilsSegl.h"
 #include "RecordSwath.h"
 #include "PathPlan.h"
@@ -201,8 +202,9 @@ bool SurveyPath::Iterate()
     auto heading_msg = GetMOOSVar("Heading");
     auto desired_msg = GetMOOSVar("DesiredHeading");
     // Don't start logging until actually aligned
-    if (fabs(desired_msg->GetDoubleVal() - heading_msg->GetDoubleVal()) < 10 ||
-          begin_msg->IsFresh()) {
+    double angle_diff = angleDiff(desired_msg->GetDoubleVal(),
+      heading_msg->GetDoubleVal());
+    if (angle_diff < 10 || begin_msg->IsFresh()) {
       begin_msg->SetFresh(false);
       align_msg->SetFresh(false);
       if (toupper(align_msg->GetStringVal()) == "TRUE") {
@@ -212,6 +214,11 @@ bool SurveyPath::Iterate()
         m_recording = true;
         m_line_end = false;
       }
+    } else {
+      #if DEBUG
+      MOOSTrace("Turning to line, difference from desired heading: %0.1f\n",
+        angle_diff);
+      #endif
     }
   }
 

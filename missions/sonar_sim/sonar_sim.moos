@@ -61,9 +61,9 @@ ProcessConfig = pSonarFilter
    CommsTick = 15
 
    FilterLen  = 4  //seconds approx
-   StDevLimit = 2
+   StDevLimit = 3
    //SimSwathAngle = 64 //RESON 7125
-   SimSwathAngle = 73 //EM2040 (75 max)
+   SimSwathAngle = 74 //EM2040 (75 max)
 }
 
 ProcessConfig = pLLTrackUpdate
