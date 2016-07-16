@@ -255,12 +255,14 @@ bool SurveyPath::Iterate()
         SetMOOSVar("Stop", "true", MOOSTime());
         m_post_turn_when_ready = true;
 
-        // If we still don't have the swath outside the region, plan anyway
-        #if DEBUG
-        MOOSTrace("**** Ending Recording ****\n");
-        #endif
-        m_recording = false;
-        m_execute_path_plan = true;
+        if (m_recording) {
+          // If we still don't have the swath outside the region, plan anyway
+          #if DEBUG
+          MOOSTrace("**** Ending Recording ****\n");
+          #endif
+          m_recording = false;
+          m_execute_path_plan = true;
+        }
       }
     } else if (m_post_turn_when_ready && m_path_plan_done) {
       PostTurnPoint();
@@ -284,13 +286,16 @@ bool SurveyPath::Iterate()
     #if DEBUG
     MOOSTrace("pSurveyPath: Launching Path Processing Thread\n");
     #endif
-    //I 'm sure there must be something non threadsafe about this, I haven't
-    // thought it through much
-    m_plan_thread_running = true;
-    /*m_path_plan_thread = */std::thread(&SurveyPath::CreateNewPath, this).detach();
-    #if DEBUG
-    MOOSTrace("pSurveyPath: Thread Launched\n");
-    #endif
+    // Don't restart if already running (shouldn't happen, but for safety)
+    if (!m_plan_thread_running) {
+      m_plan_thread_running = true;
+      // I  bet there must be something non threadsafe about this, I haven't
+      // thought it through much
+      /*m_path_plan_thread = */std::thread(&SurveyPath::CreateNewPath, this).detach();
+      #if DEBUG
+      MOOSTrace("pSurveyPath: Thread Launched\n");
+      #endif
+    }
     //m_path_plan_thread.join();
   }
 
