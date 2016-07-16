@@ -280,7 +280,7 @@ void PathPlan::RemoveBends(std::list<EPoint> &path_pts) {
   while (next_seg[1] < last_index) {
     #if DEBUG
     std::cout << "Looping through path: (" << this_seg[0] << "," << this_seg[1] << ")";
-    std::cout << " - " << next_seg[0] << "," << next_seg[1] << ")\n";
+    std::cout << " - (" << next_seg[0] << "," << next_seg[1] << ")\n";
     #endif
     EPoint this_vec = v_pts[this_seg[1]] - v_pts[this_seg[0]];
     EPoint next_vec = v_pts[next_seg[1]] - v_pts[next_seg[0]];
@@ -356,13 +356,59 @@ void PathPlan::RemoveBends(std::list<EPoint> &path_pts) {
         }
       }
 
+      // -- Method 3: Remove in Both Directions [Maybe Most preferable?] --
+      std:size_t pts_elim3 = std::max(pts_elim1, pts_elim2) + 1;
+      double fwd_angle = 500;
+      double back_angle = 500;
+      SegIndex test_fwd = next_seg;
+      SegIndex test_back = this_seg;
+      //SegIndex inc_both = {1, 1};
+      bool move_fwd = false;
+      bool move_back = false;
+      bool meth3_found_soln = true;
+      #if DEBUG
+      //std::cout << "Running Method 3\n";
+      #endif
+      while (fwd_angle > m_max_bend_angle || back_angle > m_max_bend_angle) {
+        move_fwd = false;
+        move_back = false;
+        if (test_fwd[1] < last_index) {
+          test_fwd += 1;
+          move_fwd = true;
+        }
+        if (test_back[0] > 0) {
+          test_back -= 1;
+          move_back = true;
+        }
+        #if DEBUG
+        //std::cout << "Test_Fwd: (" << test_fwd[0] << "," << test_fwd[1] << ")";
+        //std::cout << " - Test_Back (" << test_back[0] << "," << test_back[1] << ")\n";
+        #endif
+        if (!move_back && !move_fwd) {
+          // Reached both ends
+          meth3_found_soln = false;
+          break;
+        }
+        EPoint fwd_vec = VectorFromSegment(v_pts, test_fwd);
+        EPoint back_vec = VectorFromSegment(v_pts, test_back);
+        EPoint btwn_vec = VectorFromSegment(v_pts, SegIndex{test_back[1], 
+                                            test_fwd[0]});
+        fwd_angle = VectorAngle(btwn_vec, fwd_vec);
+        back_angle = VectorAngle(back_vec, btwn_vec);
+      }
+      if (meth3_found_soln)
+        pts_elim3 = test_fwd[0] - test_back[0];
+
       // Make the new vector to check next
-      if (pts_elim1 <= pts_elim2) {
+      if (pts_elim1 <= pts_elim2 && pts_elim1 <= pts_elim3) {
         this_seg = test_seg;
         next_seg = SegIndex{test_seg[1], test_seg[1]+1};
-      } else {
+      } else if (pts_elim2 <= pts_elim3) {
         this_seg = test2_seg2;
         next_seg = SegIndex{test2_seg2[1], test2_seg2[1]+1};
+      } else {
+        this_seg = test_fwd;
+        next_seg = SegIndex{test_fwd[1], test_fwd[1]+1};
       }
     } else {
       this_seg = next_seg;
