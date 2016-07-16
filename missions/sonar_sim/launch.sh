@@ -2,8 +2,8 @@
 #-------------------------------------------------------
 #  Part 1: Check for and handle command-line arguments
 #-------------------------------------------------------
-TIME_WARP=10
-SCENARIO=3
+TIME_WARP=20
+SCENARIO=8
 JUST_MAKE="no"
 for ARGI; do
     if [ "${ARGI}" = "--help" -o "${ARGI}" = "-h" ] ; then
@@ -32,6 +32,7 @@ done
 # 5 = Summer Hydro 2015 North Region
 # 6 = SH 15 South Region
 # 7 = H12450 Chirikof
+# 8 = H12898 S Kodiak Estimate
 if [ $SCENARIO = 1 ]; then
   #MOOS Stuff
   START_POS="x=705,y=-4379,speed=0,heading=180"
@@ -151,6 +152,22 @@ elif [ $SCENARIO = 7 ]; then
   # Y_OFFSET=6191214.000
   X_OFFSET=336975.000
   Y_OFFSET=6190995.000
+elif [ $SCENARIO = 8 ]; then
+  #MOOS Stuff
+  START_POS="x=27327,y=-7660,speed=0,heading=225"
+  LAT_ORIGIN=56.9294949
+  LONG_ORIGIN=-153.8841530
+  TIFF_FILE=OPR_P335_View.tif
+  PAN_X=-55
+  PAN_Y=26
+  ZOOM=0.30
+  FIRST_SIDE=Stbd
+  FIRST_LINE=Auto
+  OP_WKT="POLYGON_((26697_-8133,10595_-20057,6734_-14830,9544_-13333,9334_-12676,23230_-2223))"
+  # Python Stuff
+  BATHY_GRID="'../path_planning/terrain/OPR_P335_Prior_Depth.tiff'"
+  #X_OFFSET=336975.000
+  #Y_OFFSET=6190995.000
 fi
 # What is nsplug? Type "nsplug --help" or "nsplug --manual" 
 

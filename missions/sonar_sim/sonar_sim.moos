@@ -46,11 +46,11 @@ ProcessConfig = pSurveyPath
   Op_Region = $(OP_WKT)
   first_side = $(FIRST_SIDE)
   first_line = $(FIRST_LINE)
-  overlap_percent = 10
-  path_interval = 20
-  turn_pt_offset = 60
-  alignment_line_len = 40
-  max_bend_angle = 70
+  overlap_percent = 20
+  path_interval = 100
+  turn_pt_offset = 200
+  alignment_line_len = 150
+  max_bend_angle = 60
 
   term_reporting = true
 }
@@ -63,7 +63,8 @@ ProcessConfig = pSonarFilter
    FilterLen  = 4  //seconds approx
    StDevLimit = 3
    //SimSwathAngle = 64 //RESON 7125
-   SimSwathAngle = 74 //EM2040 (75 max)
+   //SimSwathAngle = 74 //EM2040 (75 max)
+   SimSwathAngle = 65 //FA 710 Setting
 }
 
 ProcessConfig = pLLTrackUpdate
