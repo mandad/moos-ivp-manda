@@ -23,6 +23,10 @@ PathPlan::PathPlan(const RecordSwath &last_swath, BoatSide side, BPolygon op_reg
   m_planning_side(side), m_margin(margin), m_op_region{op_region} {
 
   //m_op_region = XYPolygonToBoostPolygon(op_region);
+  //1 is half stepping, we don't really need to go larger
+  if (m_margin > 1) {
+    m_margin = 1;
+  }
 
 }
 
